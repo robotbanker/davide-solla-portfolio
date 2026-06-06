@@ -120,55 +120,8 @@ const galleries = {
   }
 };
 
-const imageDimensions = {
-  "assets/images/roxana-01.jpg": [1920, 1280],
-  "assets/images/roxana-02.jpg": [1920, 1103],
-  "assets/images/roxana-03.jpg": [1920, 1440],
-  "assets/images/cosmic-01.jpg": [1365, 2048],
-  "assets/images/cosmic-02.jpg": [1920, 1355],
-  "assets/images/cosmic-03.jpg": [1365, 2048],
-  "assets/images/cosmic-04.jpg": [1365, 2048],
-  "assets/images/cosmic-05.jpg": [1365, 2048],
-  "assets/images/julia-01.jpg": [1536, 2048],
-  "assets/images/julia-02.jpg": [1920, 1280],
-  "assets/images/julia-03.jpg": [1920, 1267],
-  "assets/images/soho-01.jpg": [1920, 1280],
-  "assets/images/soho-02.jpg": [1920, 1389],
-  "assets/images/soho-03.jpg": [1920, 1280],
-  "assets/images/harvey-01.jpg": [1528, 2048],
-  "assets/images/harvey-02.jpg": [1328, 2048],
-  "assets/images/harvey-03.jpg": [1920, 1300],
-  "assets/images/studio-01.jpg": [1241, 2048],
-  "assets/images/studio-02.jpg": [1754, 2048],
-  "assets/images/studio-03.jpg": [1920, 1280],
-  "assets/images/studio-04.jpg": [1783, 2048],
-  "assets/images/fine-art-01.jpg": [1352, 2048],
-  "assets/images/kintsugi-01.jpg": [1365, 2048],
-  "assets/images/kintsugi-02.jpg": [1365, 2048],
-  "assets/images/kintsugi-03.jpg": [1365, 2048],
-  "assets/images/kintsugi-04.jpg": [1352, 2048],
-  "assets/images/fine-art-02.jpg": [1366, 2048]
-};
-
-const getGalleryFrameClass = (src) => {
-  const dimensions = imageDimensions[src];
-
-  if (!dimensions) {
-    return "gallery-frame gallery-frame-portrait";
-  }
-
-  const [width, height] = dimensions;
-  const ratio = width / height;
-
-  if (ratio > 1.18) {
-    return "gallery-frame gallery-frame-landscape";
-  }
-
-  if (ratio > 0.88) {
-    return "gallery-frame gallery-frame-square";
-  }
-
-  return "gallery-frame gallery-frame-portrait";
+const galleryPreviewPositions = {
+  "assets/images/cosmic-01.jpg": "50% 18%"
 };
 
 const setHeaderState = () => {
@@ -196,21 +149,21 @@ const openGallery = (galleryId) => {
 
   gallery.images.forEach(([src, alt], index) => {
     const frame = document.createElement("button");
-    frame.className = getGalleryFrameClass(src);
+    frame.className = index === 0
+      ? `gallery-frame gallery-frame-featured gallery-frame-${galleryId}-featured`
+      : "gallery-frame";
     frame.type = "button";
     frame.setAttribute("aria-label", `Open ${alt}`);
     frame.addEventListener("click", () => openImageLightbox(src, alt));
-
-    const dimensions = imageDimensions[src];
-
-    if (dimensions) {
-      frame.style.aspectRatio = `${dimensions[0]} / ${dimensions[1]}`;
-    }
 
     const image = document.createElement("img");
     image.src = src;
     image.alt = alt;
     image.loading = "eager";
+
+    if (galleryPreviewPositions[src]) {
+      image.style.objectPosition = galleryPreviewPositions[src];
+    }
 
     frame.append(image);
     galleryStrip.append(frame);
