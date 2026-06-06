@@ -421,23 +421,29 @@ h2 {
 
 .services-band {
   background: #f3f3f0;
-  color: var(--porcelain);
+  color: #070707;
   overflow: hidden;
-  padding: 32px 0;
+  padding: 36px clamp(44px, 6vw, 104px);
 }
 
 .services-band div {
-  display: flex;
-  gap: 42px;
-  justify-content: center;
-  min-width: max-content;
+  display: grid;
+  gap: clamp(22px, 2.5vw, 46px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1480px;
+  min-width: 0;
 }
 
 .services-band span {
-  color: #070707;
-  font-size: 32px;
+  color: inherit;
+  font-size: clamp(18px, 1.65vw, 28px);
   font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.05;
+  text-align: center;
   text-transform: uppercase;
+  white-space: normal;
 }
 
 .fine-art-section {
@@ -965,19 +971,35 @@ h2 {
   }
 
   .services-band {
-    padding: 24px 0;
+    padding: 26px 20px;
   }
 
   .services-band div {
-    flex-wrap: wrap;
-    gap: 14px 28px;
-    justify-content: flex-start;
-    min-width: 0;
-    padding: 0 20px;
+    display: grid;
+    gap: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+    padding: 0;
   }
 
   .services-band span {
-    font-size: 24px;
+    align-items: center;
+    border-bottom: 1px solid rgba(7, 7, 7, 0.22);
+    display: flex;
+    font-size: 15px;
+    justify-content: center;
+    min-height: 58px;
+    padding: 0 12px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .services-band span:nth-child(odd) {
+    border-right: 1px solid rgba(7, 7, 7, 0.22);
+  }
+
+  .services-band span:nth-last-child(-n + 2) {
+    border-bottom: 0;
   }
 
   .contact {
