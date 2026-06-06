@@ -753,13 +753,12 @@ h2 {
   position: relative;
 }
 
-.gallery-frame-featured {
-  aspect-ratio: 16 / 10;
+.gallery-frame-landscape {
   grid-column: span 8;
 }
 
-.gallery-frame-studio-featured {
-  aspect-ratio: 1241 / 2048;
+.gallery-frame-portrait,
+.gallery-frame-square {
   grid-column: span 4;
 }
 
@@ -1042,8 +1041,10 @@ h2 {
   }
 
   .gallery-frame,
-  .gallery-frame-featured {
-    aspect-ratio: auto;
+  .gallery-frame-landscape,
+  .gallery-frame-portrait,
+  .gallery-frame-square {
+    aspect-ratio: auto !important;
     grid-column: 1 / -1;
   }
 
