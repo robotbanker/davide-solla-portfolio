@@ -758,6 +758,11 @@ h2 {
   grid-column: span 8;
 }
 
+.gallery-frame-studio-featured {
+  aspect-ratio: 1241 / 2048;
+  grid-column: span 4;
+}
+
 .gallery-frame img {
   height: 100%;
   object-fit: cover;

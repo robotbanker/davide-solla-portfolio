@@ -145,7 +145,9 @@ const openGallery = (galleryId) => {
 
   gallery.images.forEach(([src, alt], index) => {
     const frame = document.createElement("button");
-    frame.className = index === 0 ? "gallery-frame gallery-frame-featured" : "gallery-frame";
+    frame.className = index === 0
+      ? `gallery-frame gallery-frame-featured gallery-frame-${galleryId}-featured`
+      : "gallery-frame";
     frame.type = "button";
     frame.setAttribute("aria-label", `Open ${alt}`);
     frame.addEventListener("click", () => openImageLightbox(src, alt));
