@@ -106,9 +106,16 @@ const galleries = {
       ["assets/images/fine-art-01.jpg", "Kintsugi fine art portrait"],
       ["assets/images/kintsugi-01.jpg", "Kintsugi fine art study one"],
       ["assets/images/kintsugi-02.jpg", "Kintsugi fine art study two"],
-      ["assets/images/fine-art-02.jpg", "Kintsugi dramatic portrait"],
       ["assets/images/kintsugi-03.jpg", "Kintsugi fine art study three"],
       ["assets/images/kintsugi-04.jpg", "Kintsugi fine art study four"]
+    ]
+  },
+  petals: {
+    title: "Petals",
+    kicker: "Fine art portrait",
+    description: "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
+    images: [
+      ["assets/images/fine-art-02.jpg", "Fine art portrait with rose petals on white silk"]
     ]
   }
 };
