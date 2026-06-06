@@ -481,6 +481,14 @@ h2 {
   grid-column: span 2;
 }
 
+.fine-portrait {
+  aspect-ratio: 2 / 3;
+}
+
+.fine-portrait img {
+  object-fit: contain;
+}
+
 .about {
   align-items: center;
   background: #f3f3f0;
@@ -968,6 +976,10 @@ h2 {
   .tile-wide,
   .fine-wide {
     aspect-ratio: 4 / 5;
+  }
+
+  .fine-portrait {
+    aspect-ratio: 2 / 3;
   }
 
   .services-band {
