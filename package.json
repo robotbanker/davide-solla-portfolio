@@ -1,0 +1,12 @@
+{
+  "name": "davide-solla-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check script.js && node --check admin.js && node --check server.js && node --check lib/admin-store.js && node --check api/admin.js"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0"
+  }
+}

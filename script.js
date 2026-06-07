@@ -12,8 +12,144 @@ const imageLightbox = document.querySelector("[data-image-lightbox]");
 const imageLightboxImage = document.querySelector("[data-image-lightbox-image]");
 const imageLightboxCaption = document.querySelector("[data-image-lightbox-caption]");
 const imageLightboxClose = document.querySelector("[data-image-lightbox-close]");
+const editorialGrid = document.querySelector("[data-editorial-grid]");
+const fineGrid = document.querySelector("[data-fine-grid]");
+const servicesList = document.querySelector("[data-services-list]");
 const form = document.querySelector(".inquiry-form");
 const statusMessage = document.querySelector("[data-form-status]");
+
+let galleries = {};
+
+const defaultSiteData = {
+  sections: {
+    work: {
+      kicker: "Selected editorials",
+      heading: "Portraits, beauty stories, and cinematic fashion work."
+    },
+    fineArt: {
+      kicker: "Fine art",
+      heading: "Self-produced studies in beauty, fracture, and transformation.",
+      intro: "Available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces."
+    },
+    services: [
+      "Fashion editorials",
+      "Beauty portraits",
+      "Model portfolios",
+      "Personal campaigns"
+    ]
+  },
+  albums: [
+    {
+      id: "roxana",
+      section: "editorials",
+      title: "Roxana",
+      kicker: "Editorial story",
+      description: "A polished beauty-led story shaped with soft glamour, reflective colour, and poised studio direction.",
+      covers: [{ src: "assets/images/roxana-01.jpg", alt: "Editorial fashion portrait in warm directional light", className: "tile-large" }],
+      images: [
+        { src: "assets/images/roxana-01.jpg", alt: "Roxana editorial portrait in warm directional light" },
+        { src: "assets/images/roxana-02.jpg", alt: "Roxana fashion portrait with refined styling" },
+        { src: "assets/images/roxana-03.jpg", alt: "Roxana beauty portrait with cinematic colour" }
+      ]
+    },
+    {
+      id: "cosmic",
+      section: "editorials",
+      title: "Cosmic Girl",
+      kicker: "Fashion editorial",
+      description: "Blue-red studio light, metallic texture, and a futuristic beauty mood built around gaze and gesture.",
+      covers: [{ src: "assets/images/cosmic-01.jpg", alt: "Portrait with saturated blue fashion lighting", className: "" }],
+      images: [
+        { src: "assets/images/cosmic-01.jpg", alt: "Cosmic Girl full-length fashion portrait", previewPosition: "50% 18%" },
+        { src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic close portrait" },
+        { src: "assets/images/cosmic-03.jpg", alt: "Cosmic Girl blue-lit editorial pose" },
+        { src: "assets/images/cosmic-04.jpg", alt: "Cosmic Girl beauty detail" },
+        { src: "assets/images/cosmic-05.jpg", alt: "Cosmic Girl atmospheric portrait" }
+      ]
+    },
+    {
+      id: "julia",
+      section: "editorials",
+      title: "Julia",
+      kicker: "Portrait story",
+      description: "A quiet fashion portrait series with winter styling, direct expression, and a restrained editorial palette.",
+      covers: [{ src: "assets/images/julia-01.jpg", alt: "Studio portrait with refined styling", className: "" }],
+      images: [
+        { src: "assets/images/julia-01.jpg", alt: "Julia studio portrait with elegant styling" },
+        { src: "assets/images/julia-02.jpg", alt: "Julia editorial portrait" },
+        { src: "assets/images/julia-03.jpg", alt: "Julia fashion portrait study" }
+      ]
+    },
+    {
+      id: "sophie",
+      section: "editorials",
+      title: "Sophie",
+      kicker: "Night editorial",
+      description: "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
+      covers: [{ src: "assets/images/soho-01.jpg", alt: "Nocturnal editorial portrait in Soho", className: "tile-wide" }],
+      images: [
+        { src: "assets/images/soho-01.jpg", alt: "Sophie nocturnal portrait in Soho" },
+        { src: "assets/images/soho-02.jpg", alt: "Sophie editorial street portrait" },
+        { src: "assets/images/soho-03.jpg", alt: "Sophie cinematic night portrait" }
+      ]
+    },
+    {
+      id: "harvey",
+      section: "editorials",
+      title: "Harvey",
+      kicker: "Menswear portrait",
+      description: "A masculine portrait study with low-key light, sculptural shadow, and an intimate studio mood.",
+      covers: [{ src: "assets/images/harvey-01.jpg", alt: "Male fashion portrait with moody studio light", className: "" }],
+      images: [
+        { src: "assets/images/harvey-01.jpg", alt: "Harvey male fashion portrait" },
+        { src: "assets/images/harvey-02.jpg", alt: "Harvey studio portrait" },
+        { src: "assets/images/harvey-03.jpg", alt: "Harvey menswear portrait study" }
+      ]
+    },
+    {
+      id: "studio",
+      section: "editorials",
+      title: "Studio",
+      kicker: "Studio fashion",
+      description: "Controlled studio portraits built around posture, styling, and a clean high-fashion atmosphere.",
+      covers: [{ src: "assets/images/studio-02.jpg", alt: "Fashion portrait from a studio session", className: "" }],
+      images: [
+        { src: "assets/images/studio-01.jpg", alt: "Studio fashion portrait" },
+        { src: "assets/images/studio-02.jpg", alt: "Studio editorial portrait" },
+        { src: "assets/images/studio-03.jpg", alt: "Studio beauty portrait" },
+        { src: "assets/images/studio-04.jpg", alt: "Studio fashion study" }
+      ]
+    },
+    {
+      id: "kintsugi",
+      section: "fine-art",
+      title: "Kintsugi",
+      kicker: "Fine art collection",
+      description: "Self-produced fine-art studies in beauty, fracture, repair, and transformation.",
+      covers: [
+        { src: "assets/images/fine-art-01.jpg", alt: "Fine art portrait with sculptural styling", className: "fine-tall" },
+        { src: "assets/images/kintsugi-01.jpg", alt: "Fine art portrait study with delicate texture", className: "" },
+        { src: "assets/images/kintsugi-02.jpg", alt: "Fine art portrait study with contemplative pose", className: "" }
+      ],
+      images: [
+        { src: "assets/images/fine-art-01.jpg", alt: "Kintsugi fine art portrait" },
+        { src: "assets/images/kintsugi-01.jpg", alt: "Kintsugi fine art study one" },
+        { src: "assets/images/kintsugi-02.jpg", alt: "Kintsugi fine art study two" },
+        { src: "assets/images/kintsugi-03.jpg", alt: "Kintsugi fine art study three" },
+        { src: "assets/images/kintsugi-04.jpg", alt: "Kintsugi fine art study four" }
+      ]
+    },
+    {
+      id: "petals",
+      section: "fine-art",
+      title: "Petals",
+      kicker: "Fine art portrait",
+      description: "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
+      covers: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk", className: "fine-portrait" }],
+      images: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk" }]
+    }
+  ]
+};
 
 const scrollToTarget = (hash, smooth = true) => {
   if (!hash || hash === "#") {
@@ -34,94 +170,105 @@ const scrollToTarget = (hash, smooth = true) => {
   return true;
 };
 
-const galleries = {
-  roxana: {
-    title: "Roxana",
-    kicker: "Editorial story",
-    description: "A polished beauty-led story shaped with soft glamour, reflective colour, and poised studio direction.",
-    images: [
-      ["assets/images/roxana-01.jpg", "Roxana editorial portrait in warm directional light"],
-      ["assets/images/roxana-02.jpg", "Roxana fashion portrait with refined styling"],
-      ["assets/images/roxana-03.jpg", "Roxana beauty portrait with cinematic colour"]
-    ]
-  },
-  cosmic: {
-    title: "Cosmic Girl",
-    kicker: "Fashion editorial",
-    description: "Blue-red studio light, metallic texture, and a futuristic beauty mood built around gaze and gesture.",
-    images: [
-      ["assets/images/cosmic-01.jpg", "Cosmic Girl full-length fashion portrait"],
-      ["assets/images/cosmic-02.jpg", "Cosmic Girl cinematic close portrait"],
-      ["assets/images/cosmic-03.jpg", "Cosmic Girl blue-lit editorial pose"],
-      ["assets/images/cosmic-04.jpg", "Cosmic Girl beauty detail"],
-      ["assets/images/cosmic-05.jpg", "Cosmic Girl atmospheric portrait"]
-    ]
-  },
-  julia: {
-    title: "Julia",
-    kicker: "Portrait story",
-    description: "A quiet fashion portrait series with winter styling, direct expression, and a restrained editorial palette.",
-    images: [
-      ["assets/images/julia-01.jpg", "Julia studio portrait with elegant styling"],
-      ["assets/images/julia-02.jpg", "Julia editorial portrait"],
-      ["assets/images/julia-03.jpg", "Julia fashion portrait study"]
-    ]
-  },
-  sophie: {
-    title: "Sophie",
-    kicker: "Night editorial",
-    description: "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
-    images: [
-      ["assets/images/soho-01.jpg", "Sophie nocturnal portrait in Soho"],
-      ["assets/images/soho-02.jpg", "Sophie editorial street portrait"],
-      ["assets/images/soho-03.jpg", "Sophie cinematic night portrait"]
-    ]
-  },
-  harvey: {
-    title: "Harvey",
-    kicker: "Menswear portrait",
-    description: "A masculine portrait study with low-key light, sculptural shadow, and an intimate studio mood.",
-    images: [
-      ["assets/images/harvey-01.jpg", "Harvey male fashion portrait"],
-      ["assets/images/harvey-02.jpg", "Harvey studio portrait"],
-      ["assets/images/harvey-03.jpg", "Harvey menswear portrait study"]
-    ]
-  },
-  studio: {
-    title: "Studio",
-    kicker: "Studio fashion",
-    description: "Controlled studio portraits built around posture, styling, and a clean high-fashion atmosphere.",
-    images: [
-      ["assets/images/studio-01.jpg", "Studio fashion portrait"],
-      ["assets/images/studio-02.jpg", "Studio editorial portrait"],
-      ["assets/images/studio-03.jpg", "Studio beauty portrait"],
-      ["assets/images/studio-04.jpg", "Studio fashion study"]
-    ]
-  },
-  kintsugi: {
-    title: "Kintsugi",
-    kicker: "Fine art collection",
-    description: "Self-produced fine-art studies in beauty, fracture, repair, and transformation.",
-    images: [
-      ["assets/images/fine-art-01.jpg", "Kintsugi fine art portrait"],
-      ["assets/images/kintsugi-01.jpg", "Kintsugi fine art study one"],
-      ["assets/images/kintsugi-02.jpg", "Kintsugi fine art study two"],
-      ["assets/images/kintsugi-03.jpg", "Kintsugi fine art study three"],
-      ["assets/images/kintsugi-04.jpg", "Kintsugi fine art study four"]
-    ]
-  },
-  petals: {
-    title: "Petals",
-    kicker: "Fine art portrait",
-    description: "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
-    images: [
-      ["assets/images/fine-art-02.jpg", "Fine art portrait with rose petals on white silk"]
-    ]
+const setText = (selector, value) => {
+  const element = document.querySelector(selector);
+
+  if (element && value) {
+    element.textContent = value;
   }
 };
 
-const galleryPreviewPositions = {
-  "assets/images/cosmic-01.jpg": "50% 18%"
+const createImageButton = (item, baseClass) => {
+  const button = document.createElement("button");
+  button.className = [baseClass, item.className].filter(Boolean).join(" ");
+  button.type = "button";
+  button.dataset.gallery = item.galleryId;
+  button.setAttribute("aria-label", `Open ${item.title} gallery`);
+
+  const image = document.createElement("img");
+  image.src = item.src;
+  image.alt = item.alt || item.title;
+  image.loading = item.loading || "lazy";
+
+  if (item.previewPosition) {
+    image.style.objectPosition = item.previewPosition;
+  }
+
+  button.append(image);
+
+  if (item.label) {
+    const label = document.createElement("span");
+    label.textContent = item.label;
+    button.append(label);
+  }
+
+  return button;
+};
+
+const normaliseCover = (album, cover) => ({
+  galleryId: album.id,
+  title: album.title,
+  label: album.section === "editorials" ? album.title : "",
+  src: cover.src,
+  alt: cover.alt || album.title,
+  className: cover.className || "",
+  previewPosition: cover.previewPosition || "",
+  loading: album.section === "fine-art" ? "eager" : "lazy"
+});
+
+const renderPortfolio = (siteData) => {
+  const data = siteData && Array.isArray(siteData.albums) ? siteData : defaultSiteData;
+  const sections = data.sections || defaultSiteData.sections;
+
+  setText("[data-work-kicker]", sections.work?.kicker);
+  setText("[data-work-heading]", sections.work?.heading);
+  setText("[data-fine-art-kicker]", sections.fineArt?.kicker);
+  setText("[data-fine-art-heading]", sections.fineArt?.heading);
+  setText("[data-fine-art-intro]", sections.fineArt?.intro);
+
+  galleries = data.albums.reduce((collection, album) => {
+    collection[album.id] = album;
+    return collection;
+  }, {});
+
+  if (editorialGrid) {
+    editorialGrid.innerHTML = "";
+    data.albums
+      .filter((album) => album.section === "editorials")
+      .flatMap((album) => (album.covers || []).map((cover) => normaliseCover(album, cover)))
+      .forEach((cover) => editorialGrid.append(createImageButton(cover, "work-tile")));
+  }
+
+  if (fineGrid) {
+    fineGrid.innerHTML = "";
+    data.albums
+      .filter((album) => album.section === "fine-art")
+      .flatMap((album) => (album.covers || []).map((cover) => normaliseCover(album, cover)))
+      .forEach((cover) => fineGrid.append(createImageButton(cover, "fine-image")));
+  }
+
+  if (servicesList && Array.isArray(sections.services)) {
+    servicesList.innerHTML = "";
+    sections.services.forEach((service) => {
+      const item = document.createElement("span");
+      item.textContent = service;
+      servicesList.append(item);
+    });
+  }
+};
+
+const loadSiteData = async () => {
+  try {
+    const response = await fetch(`data/site.json?v=${Date.now()}`, { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("Site data unavailable");
+    }
+
+    renderPortfolio(await response.json());
+  } catch (error) {
+    renderPortfolio(defaultSiteData);
+  }
 };
 
 const setHeaderState = () => {
@@ -147,22 +294,22 @@ const openGallery = (galleryId) => {
   galleryDescription.textContent = gallery.description;
   galleryStrip.innerHTML = "";
 
-  gallery.images.forEach(([src, alt], index) => {
+  gallery.images.forEach((item, index) => {
     const frame = document.createElement("button");
     frame.className = index === 0
       ? `gallery-frame gallery-frame-featured gallery-frame-${galleryId}-featured`
       : "gallery-frame";
     frame.type = "button";
-    frame.setAttribute("aria-label", `Open ${alt}`);
-    frame.addEventListener("click", () => openImageLightbox(src, alt));
+    frame.setAttribute("aria-label", `Open ${item.alt || gallery.title}`);
+    frame.addEventListener("click", () => openImageLightbox(item.src, item.alt || gallery.title));
 
     const image = document.createElement("img");
-    image.src = src;
-    image.alt = alt;
+    image.src = item.src;
+    image.alt = item.alt || gallery.title;
     image.loading = "eager";
 
-    if (galleryPreviewPositions[src]) {
-      image.style.objectPosition = galleryPreviewPositions[src];
+    if (item.previewPosition) {
+      image.style.objectPosition = item.previewPosition;
     }
 
     frame.append(image);
@@ -226,8 +373,12 @@ nav.addEventListener("click", (event) => {
   }
 });
 
-document.querySelectorAll("[data-gallery]").forEach((item) => {
-  item.addEventListener("click", () => openGallery(item.dataset.gallery));
+document.addEventListener("click", (event) => {
+  const item = event.target.closest("[data-gallery]");
+
+  if (item) {
+    openGallery(item.dataset.gallery);
+  }
 });
 
 galleryCloseButtons.forEach((button) => {
@@ -285,6 +436,7 @@ form.addEventListener("submit", (event) => {
 });
 
 setHeaderState();
+loadSiteData();
 window.addEventListener("scroll", setHeaderState, { passive: true });
 
 const restoreHashScroll = () => {

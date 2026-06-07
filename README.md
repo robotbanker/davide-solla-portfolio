@@ -1,13 +1,37 @@
 # Davide Solla Website Rebuild
 
-Static portfolio website for Davide Solla, rebuilt from the public Adobe Portfolio content into a refined fashion-photography presentation.
+Portfolio website for Davide Solla, rebuilt from the public Adobe Portfolio content into a refined fashion-photography presentation.
 
 ## Files
 
 - `index.html` - single-page website structure and SEO metadata
 - `styles.css` - responsive editorial design system
-- `script.js` - mobile navigation, image lightbox, and contact mail draft
+- `script.js` - mobile navigation, data-driven albums, image lightbox, and contact mail draft
+- `data/site.json` - editable portfolio albums, covers, section text, and gallery image lists
+- `admin.html` - protected admin portal for editing albums and uploading images
+- `server.js` / `api/admin.js` - local and Vercel admin backend endpoints
 - `assets/images/` - curated local portfolio images from the current public site
+
+## Admin Portal
+
+Run locally:
+
+```bash
+npm install
+npm start
+```
+
+Open `http://localhost:4173/admin.html`. The local default password is `admin`.
+
+For production, set these Vercel environment variables:
+
+- `ADMIN_PASSWORD` - the password for the admin portal
+- `GITHUB_TOKEN` - a fine-grained GitHub token with Contents read/write access to this repo
+- `GITHUB_OWNER` - `robotbanker`
+- `GITHUB_REPO` - `davide-solla-portfolio`
+- `GITHUB_BRANCH` - `main`
+
+Production uploads are committed to GitHub under `assets/images/uploads/`, and album/text edits update `data/site.json`.
 
 ## Before Publishing
 
