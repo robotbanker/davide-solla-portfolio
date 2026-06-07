@@ -212,6 +212,42 @@
       ]
     },
     {
+      "id": "dark-baroque",
+      "section": "editorials",
+      "title": "Dark Baroque",
+      "kicker": "Fashion editorial",
+      "description": "A theatrical red-room story shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
+      "covers": [
+        {
+          "src": "assets/images/dark-baroque-01.jpg",
+          "alt": "Dark Baroque fashion portrait on a leather chaise beneath a chandelier",
+          "className": "tile-wide"
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/images/dark-baroque-01.jpg",
+          "alt": "Dark Baroque reclining portrait with red velvet drapery and chandelier"
+        },
+        {
+          "src": "assets/images/dark-baroque-02.jpg",
+          "alt": "Dark Baroque staged fashion portrait with blue satin and ivory floral prop"
+        },
+        {
+          "src": "assets/images/dark-baroque-03.jpg",
+          "alt": "Dark Baroque vertical editorial portrait beneath a chandelier"
+        },
+        {
+          "src": "assets/images/dark-baroque-04.jpg",
+          "alt": "Dark Baroque intimate portrait with pearls and sculptural ivory prop"
+        },
+        {
+          "src": "assets/images/dark-baroque-05.jpg",
+          "alt": "Dark Baroque motion portrait with red fan and sweeping satin"
+        }
+      ]
+    },
+    {
       "id": "kintsugi",
       "section": "fine-art",
       "title": "Kintsugi",
@@ -278,5 +314,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-07T10:04:50.397Z"
+  "updatedAt": "2026-06-07T17:01:11.300Z"
 }
