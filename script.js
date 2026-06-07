@@ -12,6 +12,8 @@ const imageLightbox = document.querySelector("[data-image-lightbox]");
 const imageLightboxImage = document.querySelector("[data-image-lightbox-image]");
 const imageLightboxCaption = document.querySelector("[data-image-lightbox-caption]");
 const imageLightboxClose = document.querySelector("[data-image-lightbox-close]");
+const imageLightboxPrevButton = document.querySelector("[data-image-lightbox-prev]");
+const imageLightboxNextButton = document.querySelector("[data-image-lightbox-next]");
 const editorialGrid = document.querySelector("[data-editorial-grid]");
 const fineGrid = document.querySelector("[data-fine-grid]");
 const servicesList = document.querySelector("[data-services-list]");
@@ -19,6 +21,13 @@ const form = document.querySelector(".inquiry-form");
 const statusMessage = document.querySelector("[data-form-status]");
 
 let galleries = {};
+let activeGallery = null;
+let activeGalleryIndex = -1;
+let galleryScrollFrame = null;
+let galleryTouchStartX = 0;
+let galleryTouchStartY = 0;
+let lightboxTouchStartX = 0;
+let lightboxTouchStartY = 0;
 
 const defaultSiteData = {
   sections: {
@@ -285,6 +294,158 @@ const closeMenu = () => {
   menuToggle.setAttribute("aria-label", "Open navigation");
 };
 
+const galleryImageCount = () => activeGallery?.images?.length || 0;
+
+const setNavButtonState = (button, disabled) => {
+  if (button) {
+    button.disabled = disabled;
+  }
+};
+
+const updateGalleryNavigation = () => {
+  const count = galleryImageCount();
+  const atStart = activeGalleryIndex <= 0;
+  const atEnd = activeGalleryIndex >= count - 1;
+  const disabled = count < 2;
+
+  setNavButtonState(imageLightboxPrevButton, disabled || atStart);
+  setNavButtonState(imageLightboxNextButton, disabled || atEnd);
+};
+
+const setActiveGalleryIndex = (index) => {
+  const count = galleryImageCount();
+
+  if (!count) {
+    activeGalleryIndex = -1;
+    updateGalleryNavigation();
+    return activeGalleryIndex;
+  }
+
+  activeGalleryIndex = Math.min(Math.max(index, 0), count - 1);
+  updateGalleryNavigation();
+  return activeGalleryIndex;
+};
+
+const getGalleryFrames = () => [...galleryStrip.querySelectorAll(".gallery-frame")];
+
+const scrollToGalleryImage = (index, smooth = true) => {
+  const frames = getGalleryFrames();
+  const nextIndex = setActiveGalleryIndex(index);
+  const frame = frames[nextIndex];
+
+  if (frame) {
+    frame.scrollIntoView({
+      behavior: smooth ? "smooth" : "auto",
+      block: "center",
+      inline: "nearest"
+    });
+  }
+};
+
+const stepGalleryImage = (direction) => {
+  const count = galleryImageCount();
+
+  if (!count) {
+    return;
+  }
+
+  if (activeGalleryIndex < 0 && direction < 0) {
+    return;
+  }
+
+  const baseIndex = activeGalleryIndex < 0 && direction > 0 ? -1 : activeGalleryIndex;
+  const nextIndex = Math.min(Math.max(baseIndex + direction, 0), count - 1);
+
+  if (nextIndex !== activeGalleryIndex || activeGalleryIndex < 0) {
+    scrollToGalleryImage(nextIndex);
+  }
+};
+
+const showLightboxImage = (index) => {
+  const count = galleryImageCount();
+
+  if (!count) {
+    return;
+  }
+
+  const nextIndex = setActiveGalleryIndex(index);
+  const item = activeGallery.images[nextIndex];
+
+  imageLightboxImage.src = item.src;
+  imageLightboxImage.alt = item.alt || activeGallery.title;
+  imageLightboxCaption.textContent = item.alt || activeGallery.title;
+};
+
+const stepLightboxImage = (direction) => {
+  const count = galleryImageCount();
+
+  if (count < 2) {
+    return;
+  }
+
+  const nextIndex = Math.min(Math.max(activeGalleryIndex + direction, 0), count - 1);
+
+  if (nextIndex !== activeGalleryIndex) {
+    showLightboxImage(nextIndex);
+  }
+};
+
+const syncGalleryIndexToViewport = () => {
+  galleryScrollFrame = null;
+
+  if (!galleryModal.classList.contains("is-open") || imageLightbox.classList.contains("is-open")) {
+    return;
+  }
+
+  const frames = getGalleryFrames();
+  const viewportCenter = window.innerHeight / 2;
+  let closestIndex = -1;
+  let closestDistance = Infinity;
+
+  frames.forEach((frame, index) => {
+    const rect = frame.getBoundingClientRect();
+
+    if (rect.bottom < 0 || rect.top > window.innerHeight) {
+      return;
+    }
+
+    const frameCenter = rect.top + rect.height / 2;
+    const distance = Math.abs(frameCenter - viewportCenter);
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestIndex = index;
+    }
+  });
+
+  if (closestIndex >= 0 && closestIndex !== activeGalleryIndex) {
+    setActiveGalleryIndex(closestIndex);
+  }
+};
+
+const queueGalleryIndexSync = () => {
+  if (!galleryScrollFrame) {
+    galleryScrollFrame = requestAnimationFrame(syncGalleryIndexToViewport);
+  }
+};
+
+const handleSwipe = (startX, startY, endX, endY, onPrevious, onNext) => {
+  const deltaX = endX - startX;
+  const deltaY = endY - startY;
+
+  if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) {
+    return false;
+  }
+
+  if (deltaX > 0) {
+    onPrevious();
+  } else {
+    onNext();
+  }
+
+  return true;
+};
+
 const openGallery = (galleryId) => {
   const gallery = galleries[galleryId];
 
@@ -292,6 +453,8 @@ const openGallery = (galleryId) => {
     return;
   }
 
+  activeGallery = gallery;
+  activeGalleryIndex = -1;
   galleryTitle.textContent = gallery.title;
   galleryKicker.textContent = gallery.kicker;
   galleryDescription.textContent = gallery.description;
@@ -303,8 +466,10 @@ const openGallery = (galleryId) => {
       ? `gallery-frame gallery-frame-featured gallery-frame-${galleryId}-featured`
       : "gallery-frame";
     frame.type = "button";
+    frame.dataset.galleryIndex = String(index);
     frame.setAttribute("aria-label", `Open ${item.alt || gallery.title}`);
-    frame.addEventListener("click", () => openImageLightbox(item.src, item.alt || gallery.title));
+    frame.addEventListener("click", () => openImageLightbox(index));
+    frame.addEventListener("focus", () => setActiveGalleryIndex(index));
 
     const image = document.createElement("img");
     image.src = item.src;
@@ -323,12 +488,11 @@ const openGallery = (galleryId) => {
   galleryModal.setAttribute("aria-hidden", "false");
   body.classList.add("gallery-open");
   galleryModal.scrollTo(0, 0);
+  updateGalleryNavigation();
 };
 
-const openImageLightbox = (src, alt) => {
-  imageLightboxImage.src = src;
-  imageLightboxImage.alt = alt;
-  imageLightboxCaption.textContent = alt;
+const openImageLightbox = (index) => {
+  showLightboxImage(index);
   imageLightbox.classList.add("is-open");
   imageLightbox.setAttribute("aria-hidden", "false");
   body.classList.add("image-open");
@@ -348,6 +512,9 @@ const closeGallery = () => {
   galleryModal.classList.remove("is-open");
   galleryModal.setAttribute("aria-hidden", "true");
   body.classList.remove("gallery-open");
+  activeGallery = null;
+  activeGalleryIndex = -1;
+  updateGalleryNavigation();
 };
 
 menuToggle.addEventListener("click", () => {
@@ -394,7 +561,47 @@ galleryModal.addEventListener("click", (event) => {
   }
 });
 
+galleryModal.addEventListener("scroll", queueGalleryIndexSync, { passive: true });
+
+galleryStrip.addEventListener("touchstart", (event) => {
+  const touch = event.changedTouches[0];
+  galleryTouchStartX = touch.clientX;
+  galleryTouchStartY = touch.clientY;
+}, { passive: true });
+
+galleryStrip.addEventListener("touchend", (event) => {
+  const touch = event.changedTouches[0];
+  handleSwipe(
+    galleryTouchStartX,
+    galleryTouchStartY,
+    touch.clientX,
+    touch.clientY,
+    () => stepGalleryImage(-1),
+    () => stepGalleryImage(1)
+  );
+}, { passive: true });
+
 imageLightboxClose.addEventListener("click", closeImageLightbox);
+imageLightboxPrevButton.addEventListener("click", () => stepLightboxImage(-1));
+imageLightboxNextButton.addEventListener("click", () => stepLightboxImage(1));
+
+imageLightbox.addEventListener("touchstart", (event) => {
+  const touch = event.changedTouches[0];
+  lightboxTouchStartX = touch.clientX;
+  lightboxTouchStartY = touch.clientY;
+}, { passive: true });
+
+imageLightbox.addEventListener("touchend", (event) => {
+  const touch = event.changedTouches[0];
+  handleSwipe(
+    lightboxTouchStartX,
+    lightboxTouchStartY,
+    touch.clientX,
+    touch.clientY,
+    () => stepLightboxImage(-1),
+    () => stepLightboxImage(1)
+  );
+}, { passive: true });
 
 imageLightbox.addEventListener("click", (event) => {
   if (event.target === imageLightbox) {
@@ -403,6 +610,30 @@ imageLightbox.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if ((event.key === "ArrowRight" || event.key === "ArrowDown") && galleryModal.classList.contains("is-open")) {
+    event.preventDefault();
+
+    if (imageLightbox.classList.contains("is-open")) {
+      stepLightboxImage(1);
+    } else {
+      stepGalleryImage(1);
+    }
+
+    return;
+  }
+
+  if ((event.key === "ArrowLeft" || event.key === "ArrowUp") && galleryModal.classList.contains("is-open")) {
+    event.preventDefault();
+
+    if (imageLightbox.classList.contains("is-open")) {
+      stepLightboxImage(-1);
+    } else {
+      stepGalleryImage(-1);
+    }
+
+    return;
+  }
+
   if (event.key === "Escape") {
     if (imageLightbox.classList.contains("is-open")) {
       closeImageLightbox();
