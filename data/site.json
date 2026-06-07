@@ -43,6 +43,10 @@
         {
           "src": "assets/images/roxana-03.jpg",
           "alt": "Roxana beauty portrait with cinematic colour"
+        },
+        {
+          "src": "assets/images/roxana-04.jpg",
+          "alt": "Roxana editorial portrait with sculptural styling"
         }
       ]
     },
@@ -80,6 +84,14 @@
         {
           "src": "assets/images/cosmic-05.jpg",
           "alt": "Cosmic Girl atmospheric portrait"
+        },
+        {
+          "src": "assets/images/cosmic-06.jpg",
+          "alt": "Cosmic Girl blue-lit fashion portrait"
+        },
+        {
+          "src": "assets/images/cosmic-07.jpg",
+          "alt": "Cosmic Girl futuristic editorial portrait"
         }
       ]
     },

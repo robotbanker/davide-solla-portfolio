@@ -49,7 +49,8 @@ const defaultSiteData = {
       images: [
         { src: "assets/images/roxana-01.jpg", alt: "Roxana editorial portrait in warm directional light" },
         { src: "assets/images/roxana-02.jpg", alt: "Roxana fashion portrait with refined styling" },
-        { src: "assets/images/roxana-03.jpg", alt: "Roxana beauty portrait with cinematic colour" }
+        { src: "assets/images/roxana-03.jpg", alt: "Roxana beauty portrait with cinematic colour" },
+        { src: "assets/images/roxana-04.jpg", alt: "Roxana editorial portrait with sculptural styling" }
       ]
     },
     {
@@ -64,7 +65,9 @@ const defaultSiteData = {
         { src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic close portrait" },
         { src: "assets/images/cosmic-03.jpg", alt: "Cosmic Girl blue-lit editorial pose" },
         { src: "assets/images/cosmic-04.jpg", alt: "Cosmic Girl beauty detail" },
-        { src: "assets/images/cosmic-05.jpg", alt: "Cosmic Girl atmospheric portrait" }
+        { src: "assets/images/cosmic-05.jpg", alt: "Cosmic Girl atmospheric portrait" },
+        { src: "assets/images/cosmic-06.jpg", alt: "Cosmic Girl blue-lit fashion portrait" },
+        { src: "assets/images/cosmic-07.jpg", alt: "Cosmic Girl futuristic editorial portrait" }
       ]
     },
     {
