@@ -99,6 +99,42 @@ textarea {
   text-transform: uppercase;
 }
 
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  position: relative;
+  z-index: 32;
+}
+
+.header-social {
+  align-items: center;
+  color: currentColor;
+  display: none;
+  height: 30px;
+  justify-content: center;
+  opacity: 0.88;
+  transition: opacity 180ms ease, transform 180ms ease;
+  width: 30px;
+}
+
+.header-social svg {
+  display: block;
+  fill: none;
+  height: 22px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+  width: 22px;
+}
+
+.header-social:hover,
+.header-social:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
 .site-nav {
   align-items: center;
   display: flex;
@@ -975,6 +1011,10 @@ h2 {
 @media (max-width: 720px) {
   .site-header {
     padding: 18px 20px;
+  }
+
+  .header-social {
+    display: inline-flex;
   }
 
   .menu-toggle {
