@@ -85,11 +85,13 @@ const defaultSiteData = {
       title: "Julia",
       kicker: "Portrait story",
       description: "A quiet fashion portrait series with winter styling, direct expression, and a restrained editorial palette.",
-      covers: [{ src: "assets/images/julia-01.jpg", alt: "Studio portrait with refined styling", className: "" }],
+      covers: [{ src: "assets/images/julia-01.jpg", alt: "Julia editorial portrait", className: "" }],
       images: [
-        { src: "assets/images/julia-01.jpg", alt: "Julia studio portrait with elegant styling" },
-        { src: "assets/images/julia-02.jpg", alt: "Julia editorial portrait" },
-        { src: "assets/images/julia-03.jpg", alt: "Julia fashion portrait study" }
+        { src: "assets/images/julia-01.jpg", alt: "Julia editorial portrait 1" },
+        { src: "assets/images/julia-02.jpg", alt: "Julia editorial portrait 2" },
+        { src: "assets/images/julia-03.jpg", alt: "Julia editorial portrait 3" },
+        { src: "assets/images/julia-04.jpg", alt: "Julia editorial portrait 4" },
+        { src: "assets/images/julia-05.jpg", alt: "Julia editorial portrait 5" }
       ]
     },
     {
@@ -98,11 +100,17 @@ const defaultSiteData = {
       title: "Sophie",
       kicker: "Night editorial",
       description: "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
-      covers: [{ src: "assets/images/soho-01.jpg", alt: "Nocturnal editorial portrait in Soho", className: "tile-wide" }],
+      covers: [{ src: "assets/images/sophie-01.jpg", alt: "Sophie editorial portrait", className: "tile-wide" }],
       images: [
-        { src: "assets/images/soho-01.jpg", alt: "Sophie nocturnal portrait in Soho" },
-        { src: "assets/images/soho-02.jpg", alt: "Sophie editorial street portrait" },
-        { src: "assets/images/soho-03.jpg", alt: "Sophie cinematic night portrait" }
+        { src: "assets/images/sophie-01.jpg", alt: "Sophie editorial portrait 1" },
+        { src: "assets/images/sophie-08.jpg", alt: "Sophie editorial portrait 2" },
+        { src: "assets/images/sophie-02.jpg", alt: "Sophie editorial portrait 3" },
+        { src: "assets/images/sophie-03.jpg", alt: "Sophie editorial portrait 4" },
+        { src: "assets/images/sophie-07.jpg", alt: "Sophie editorial portrait 5" },
+        { src: "assets/images/sophie-06.jpg", alt: "Sophie editorial portrait 6" },
+        { src: "assets/images/sophie-09.jpg", alt: "Sophie editorial portrait 7" },
+        { src: "assets/images/sophie-11.jpg", alt: "Sophie editorial portrait 8" },
+        { src: "assets/images/sophie-04.jpg", alt: "Sophie editorial portrait 9" }
       ]
     },
     {
@@ -129,7 +137,24 @@ const defaultSiteData = {
         { src: "assets/images/studio-01.jpg", alt: "Studio fashion portrait" },
         { src: "assets/images/studio-02.jpg", alt: "Studio editorial portrait" },
         { src: "assets/images/studio-03.jpg", alt: "Studio beauty portrait" },
-        { src: "assets/images/studio-04.jpg", alt: "Studio fashion study" }
+        { src: "assets/images/studio-04.jpg", alt: "Studio fashion study" },
+        { src: "assets/images/studio-05.jpg", alt: "Studio editorial portrait 5" }
+      ]
+    },
+    {
+      id: "dark-baroque",
+      section: "editorials",
+      title: "Dark Baroque",
+      kicker: "Fashion editorial",
+      description: "A theatrical red-room story shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
+      covers: [{ src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque fashion portrait on a leather chaise beneath a chandelier", className: "tile-wide" }],
+      images: [
+        { src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque reclining portrait with red velvet drapery and chandelier" },
+        { src: "assets/images/dark-baroque-02.jpg", alt: "Dark Baroque staged fashion portrait with blue satin and ivory floral prop" },
+        { src: "assets/images/dark-baroque-03.jpg", alt: "Dark Baroque vertical editorial portrait beneath a chandelier" },
+        { src: "assets/images/dark-baroque-04.jpg", alt: "Dark Baroque intimate portrait with pearls and sculptural ivory prop" },
+        { src: "assets/images/dark-baroque-05.jpg", alt: "Dark Baroque motion portrait with red fan and sweeping satin" },
+        { src: "assets/images/dark-baroque-06.jpg", alt: "Dark Baroque editorial portrait 6" }
       ]
     },
     {
@@ -158,7 +183,11 @@ const defaultSiteData = {
       kicker: "Fine art portrait",
       description: "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
       covers: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk", className: "fine-portrait" }],
-      images: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk" }]
+      images: [
+        { src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk" },
+        { src: "assets/images/petals-02.jpg", alt: "Petals fine art portrait 1" },
+        { src: "assets/images/petals-03.jpg", alt: "Petals fine art portrait 2" }
+      ]
     }
   ]
 };
