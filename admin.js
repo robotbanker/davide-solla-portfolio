@@ -8,12 +8,14 @@ const albumEditor = document.querySelector("[data-album-editor]");
 const sectionEditor = document.querySelector("[data-section-editor]");
 const saveButton = document.querySelector("[data-save-site]");
 const createAlbumButton = document.querySelector("[data-create-album]");
+const createAlbumForm = document.querySelector("[data-create-album-form]");
 const logoutButton = document.querySelector("[data-logout]");
 
 let site = null;
 let selectedAlbumId = "";
 let activeUploadAbort = false;
 let dragTarget = null;
+let pendingDeleteAlbumId = "";
 
 const storageKey = "davide-admin-password";
 const defaultCoverStyle = "fine-portrait";
@@ -336,7 +338,12 @@ const renderAlbumEditor = () => {
       </div>
       <div class="row-actions">
         <button class="secondary" type="button" data-duplicate-album>Duplicate</button>
-        <button class="danger" type="button" data-delete-album>Delete</button>
+        ${pendingDeleteAlbumId === album.id ? `
+          <button class="danger" type="button" data-confirm-delete-album>Confirm delete</button>
+          <button class="secondary" type="button" data-cancel-delete-album>Cancel</button>
+        ` : `
+          <button class="danger" type="button" data-delete-album>Delete</button>
+        `}
       </div>
     </div>
 
@@ -424,6 +431,7 @@ const renderAlbumEditor = () => {
             <textarea data-remote-urls placeholder="Paste direct image URLs, one per line"></textarea>
           </label>
           <div class="row-actions">
+            <button type="button" data-import-lightroom>Import Lightroom gallery</button>
             <button class="secondary" type="button" data-add-remote-images>Add URLs to gallery</button>
           </div>
         </div>
@@ -556,6 +564,25 @@ const addImagesToAlbum = (album, images, asCover = "no") => {
   }
 };
 
+const createAlbum = (title) => {
+  const id = slugify(title);
+  const uniqueId = site.albums.some((album) => album.id === id) ? `${id}-${Date.now().toString(36)}` : id;
+
+  site.albums.push({
+    id: uniqueId,
+    section: "editorials",
+    title,
+    kicker: "Editorial story",
+    description: "",
+    lightroomUrl: "",
+    covers: [],
+    images: []
+  });
+  selectedAlbumId = uniqueId;
+  markDirty();
+  render();
+};
+
 const renderSelectedFiles = async (input) => {
   const preview = document.querySelector("[data-upload-preview]");
 
@@ -616,38 +643,42 @@ logoutButton.addEventListener("click", () => {
 });
 
 createAlbumButton.addEventListener("click", () => {
-  const title = window.prompt("Album title");
+  createAlbumForm.hidden = false;
+  createAlbumForm.elements.title.focus();
+});
+
+createAlbumForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const title = new FormData(createAlbumForm).get("title")?.trim();
 
   if (!title) {
     return;
   }
 
-  const id = slugify(title);
-  site.albums.push({
-    id,
-    section: "editorials",
-    title,
-    kicker: "Editorial story",
-    description: "",
-    lightroomUrl: "",
-    covers: [],
-    images: []
-  });
-  selectedAlbumId = id;
-  markDirty();
-  render();
+  createAlbum(title);
+  createAlbumForm.reset();
+  createAlbumForm.hidden = true;
 });
 
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
   const selectButton = event.target.closest("[data-select-album]");
   const removeButton = event.target.closest("[data-remove-media]");
   const promoteButton = event.target.closest("[data-promote-image]");
   const addCoverButton = event.target.closest("[data-add-cover]");
   const moveButton = event.target.closest("[data-move-media]");
   const addRemoteButton = event.target.closest("[data-add-remote-images]");
+  const importLightroomButton = event.target.closest("[data-import-lightroom]");
+  const cancelCreateAlbumButton = event.target.closest("[data-cancel-create-album]");
+
+  if (cancelCreateAlbumButton) {
+    createAlbumForm.reset();
+    createAlbumForm.hidden = true;
+    return;
+  }
 
   if (selectButton) {
     selectedAlbumId = selectButton.dataset.selectAlbum;
+    pendingDeleteAlbumId = "";
     render();
     return;
   }
@@ -723,13 +754,60 @@ document.addEventListener("click", (event) => {
     return;
   }
 
-  if (event.target.closest("[data-delete-album]")) {
-    if (window.confirm(`Delete ${album.title}?`)) {
-      site.albums = site.albums.filter((item) => item.id !== album.id);
-      selectedAlbumId = site.albums[0]?.id || "";
+  if (importLightroomButton) {
+    const url = album.lightroomUrl?.trim();
+
+    if (!url) {
+      setStatus("Add the Lightroom shared gallery link first.");
+      return;
+    }
+
+    try {
+      importLightroomButton.disabled = true;
+      setStatus("Importing Lightroom gallery...");
+      const response = await api("lightroom", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+      const images = response.imported || [];
+      addImagesToAlbum(album, images, album.covers.length ? "no" : "first");
+      album.lightroomUrl = response.lightroomUrl || url;
+
+      if (response.albumTitle && !album.title) {
+        album.title = response.albumTitle;
+      }
+
       markDirty();
       render();
+      setStatus(`${images.length} Lightroom image${images.length === 1 ? "" : "s"} imported. Save changes to publish.`);
+    } catch (error) {
+      setStatus(error.message);
+      importLightroomButton.disabled = false;
     }
+
+    return;
+  }
+
+  if (event.target.closest("[data-delete-album]")) {
+    pendingDeleteAlbumId = album.id;
+    render();
+    setStatus(`Confirm deletion of ${album.title}.`);
+    return;
+  }
+
+  if (event.target.closest("[data-cancel-delete-album]")) {
+    pendingDeleteAlbumId = "";
+    render();
+    return;
+  }
+
+  if (event.target.closest("[data-confirm-delete-album]")) {
+    site.albums = site.albums.filter((item) => item.id !== album.id);
+    selectedAlbumId = site.albums[0]?.id || "";
+    pendingDeleteAlbumId = "";
+    markDirty();
+    render();
     return;
   }
 
@@ -739,6 +817,7 @@ document.addEventListener("click", (event) => {
     clone.title = `${album.title} Copy`;
     site.albums.push(clone);
     selectedAlbumId = clone.id;
+    pendingDeleteAlbumId = "";
     markDirty();
     render();
   }

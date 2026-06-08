@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Davide Solla Studio Manager</title>
     <meta name="robots" content="noindex, nofollow">
-    <link rel="stylesheet" href="admin.css?v=1">
+    <link rel="stylesheet" href="admin.css?v=4">
   </head>
   <body class="admin-body">
     <main class="admin-root">
@@ -43,6 +43,16 @@
               <h2>Albums</h2>
               <button type="button" data-create-album>New</button>
             </div>
+            <form class="new-album-form" data-create-album-form hidden>
+              <label>
+                <span>New album title</span>
+                <input name="title" type="text" autocomplete="off" required>
+              </label>
+              <div class="row-actions">
+                <button type="submit">Create</button>
+                <button class="secondary" type="button" data-cancel-create-album>Cancel</button>
+              </div>
+            </form>
             <div class="album-list" data-album-list></div>
           </aside>
 
@@ -58,6 +68,6 @@
       </section>
     </main>
 
-    <script src="admin.js?v=2"></script>
+    <script src="admin.js?v=5"></script>
   </body>
 </html>
