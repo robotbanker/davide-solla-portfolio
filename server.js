@@ -20,6 +20,13 @@ const mimeTypes = {
 const serveStatic = (req, res) => {
   const requestUrl = new URL(req.url, `http://localhost:${port}`);
   const pathname = requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname;
+
+  if (pathname === "/data/admin-site.json") {
+    res.statusCode = 404;
+    res.end("Not found");
+    return;
+  }
+
   const filePath = path.normalize(path.join(rootDir, pathname));
 
   if (!filePath.startsWith(rootDir)) {

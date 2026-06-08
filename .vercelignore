@@ -1,5 +1,6 @@
 .DS_Store
 assets/.DS_Store
 verification-lightbox.png
+data/admin-site.json
 .git/
 node_modules/
