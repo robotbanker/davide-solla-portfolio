@@ -12,8 +12,18 @@ const logoutButton = document.querySelector("[data-logout]");
 
 let site = null;
 let selectedAlbumId = "";
+let activeUploadAbort = false;
+let dragTarget = null;
 
 const storageKey = "davide-admin-password";
+const defaultCoverStyle = "fine-portrait";
+const coverStyles = [
+  ["", "Standard"],
+  ["tile-large", "Large editorial"],
+  ["tile-wide", "Wide editorial"],
+  ["fine-tall", "Tall fine art"],
+  ["fine-portrait", "Portrait fine art"]
+];
 
 const escapeHtml = (value = "") => String(value)
   .replace(/&/g, "&amp;")
@@ -21,14 +31,34 @@ const escapeHtml = (value = "") => String(value)
   .replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;");
 
-const slugify = (value) => value
+const slugify = (value) => String(value)
   .toLowerCase()
   .trim()
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-+|-+$/g, "") || "new-album";
 
+const clamp = (value, min = 0, max = 100) => Math.min(Math.max(Number(value) || 0, min), max);
+
+const parsePosition = (value = "50% 50%") => {
+  const matches = String(value).match(/(-?\d+(?:\.\d+)?)%?/g) || [];
+  return {
+    x: clamp(String(matches[0] ?? 50).replace("%", "")),
+    y: clamp(String(matches[1] ?? 50).replace("%", ""))
+  };
+};
+
+const formatPosition = (x, y) => `${Math.round(clamp(x))}% ${Math.round(clamp(y))}%`;
+
 const setStatus = (message, target = adminStatus) => {
   target.textContent = message;
+};
+
+const markDirty = () => {
+  saveButton.dataset.dirty = "true";
+};
+
+const markClean = () => {
+  delete saveButton.dataset.dirty;
 };
 
 const password = () => sessionStorage.getItem(storageKey) || "";
@@ -55,13 +85,102 @@ const api = async (action, options = {}) => {
 
 const selectedAlbum = () => site?.albums.find((album) => album.id === selectedAlbumId);
 
-const styleOptions = (selected = "") => [
-  ["", "Standard"],
-  ["tile-large", "Large editorial"],
-  ["tile-wide", "Wide editorial"],
-  ["fine-tall", "Tall fine art"],
-  ["fine-portrait", "Portrait fine art"]
-].map(([value, label]) => `<option value="${value}" ${value === selected ? "selected" : ""}>${label}</option>`).join("");
+const ensureAlbumShape = (album) => {
+  album.covers = Array.isArray(album.covers) ? album.covers : [];
+  album.images = Array.isArray(album.images) ? album.images : [];
+  return album;
+};
+
+const imageCountLabel = (album) => {
+  const count = album.images?.length || 0;
+  return `${count} image${count === 1 ? "" : "s"}`;
+};
+
+const coverCountLabel = (album) => {
+  const count = album.covers?.length || 0;
+  return `${count} cover${count === 1 ? "" : "s"}`;
+};
+
+const styleOptions = (selected = "") => coverStyles
+  .map(([value, label]) => `<option value="${value}" ${value === selected ? "selected" : ""}>${label}</option>`)
+  .join("");
+
+const imageName = (src = "") => {
+  const clean = String(src).split("?")[0].split("#")[0];
+  return decodeURIComponent(clean.split("/").pop() || "image");
+};
+
+const normaliseImageUrlInput = (value = "") => String(value)
+  .split(/\n|,/)
+  .map((item) => item.trim())
+  .filter(Boolean);
+
+const readImageAsDataUrl = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = () => reject(new Error("Could not read image"));
+  reader.readAsDataURL(file);
+});
+
+const loadPreviewImage = (file) => new Promise((resolve, reject) => {
+  const image = new Image();
+  image.onload = () => resolve(image);
+  image.onerror = () => reject(new Error("Could not prepare image preview"));
+  image.src = URL.createObjectURL(file);
+});
+
+const resizeImageFile = async (file, maxEdge, quality) => {
+  if (!maxEdge || maxEdge === "original" || !file.type.startsWith("image/")) {
+    return file;
+  }
+
+  let image;
+
+  try {
+    image = await loadPreviewImage(file);
+  } catch (error) {
+    return file;
+  }
+
+  const scale = Math.min(1, Number(maxEdge) / Math.max(image.naturalWidth, image.naturalHeight));
+
+  if (scale >= 1) {
+    URL.revokeObjectURL(image.src);
+    return file;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(image.naturalWidth * scale);
+  canvas.height = Math.round(image.naturalHeight * scale);
+  const context = canvas.getContext("2d", { alpha: false });
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  URL.revokeObjectURL(image.src);
+
+  const blob = await new Promise((resolve) => {
+    canvas.toBlob(resolve, "image/jpeg", Number(quality) || 0.86);
+  });
+
+  if (!blob) {
+    return file;
+  }
+
+  const baseName = imageName(file.name).replace(/\.[a-z0-9]+$/i, "");
+  return new File([blob], `${baseName}.jpg`, {
+    type: "image/jpeg",
+    lastModified: Date.now()
+  });
+};
+
+const setNested = (target, field, value) => {
+  if (field === "services") {
+    target.sections.services = value.split("\n").map((item) => item.trim()).filter(Boolean);
+    return;
+  }
+
+  const [group, key] = field.split(".");
+  target.sections[group] = target.sections[group] || {};
+  target.sections[group][key] = value;
+};
 
 const renderSections = () => {
   const sections = site.sections || {};
@@ -98,49 +217,104 @@ const renderSections = () => {
 const renderAlbumList = () => {
   albumList.innerHTML = site.albums.map((album) => `
     <button type="button" class="${album.id === selectedAlbumId ? "is-active" : ""}" data-select-album="${escapeHtml(album.id)}">
-      ${escapeHtml(album.title || album.id)}
+      <span>${escapeHtml(album.title || album.id)}</span>
+      <small>${escapeHtml(album.section || "editorials")} - ${imageCountLabel(album)}</small>
     </button>
   `).join("");
 };
 
-const renderMediaRows = (album, type) => {
-  const items = album[type] || [];
-  const isCover = type === "covers";
+const renderCropFrame = (item, album, type, index, label) => {
+  const position = parsePosition(item.previewPosition);
 
-  if (!items.length) {
-    return `<p class="admin-status">No ${isCover ? "covers" : "images"} yet.</p>`;
+  return `
+    <button class="crop-frame" type="button" data-crop-target="${type}:${index}" aria-label="Reposition ${escapeHtml(label)} preview">
+      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || album.title)}" style="object-position: ${formatPosition(position.x, position.y)}">
+      <span>${escapeHtml(label)}</span>
+    </button>
+  `;
+};
+
+const renderCoverCards = (album) => {
+  if (!album.covers.length) {
+    return `<p class="empty-state">Choose any gallery image as a cover, or upload new images and add them as covers.</p>`;
   }
 
-  return items.map((item, index) => `
-    <div class="media-row" data-media-type="${type}" data-media-index="${index}">
-      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || album.title)}">
-      <div class="media-fields">
-        <label class="span-all">
-          <span>Image path</span>
-          <input data-media-field="src" value="${escapeHtml(item.src)}">
-        </label>
-        <label>
-          <span>Alt text</span>
-          <input data-media-field="alt" value="${escapeHtml(item.alt)}">
-        </label>
-        ${isCover ? `
+  return album.covers.map((cover, index) => {
+    const position = parsePosition(cover.previewPosition);
+
+    return `
+      <article class="media-card cover-card" data-media-type="covers" data-media-index="${index}">
+        ${renderCropFrame(cover, album, "covers", index, `Cover ${index + 1}`)}
+        <div class="card-fields">
           <label>
-            <span>Cover style</span>
-            <select data-media-field="className">${styleOptions(item.className || "")}</select>
+            <span>Alt text</span>
+            <input data-media-field="alt" value="${escapeHtml(cover.alt || "")}">
           </label>
-        ` : `
           <label>
-            <span>Preview crop</span>
-            <input data-media-field="previewPosition" placeholder="50% 50%" value="${escapeHtml(item.previewPosition)}">
+            <span>Cover shape</span>
+            <select data-media-field="className">${styleOptions(cover.className || "")}</select>
           </label>
-        `}
-        <div class="row-actions span-all">
-          ${isCover ? "" : `<button class="secondary" type="button" data-promote-image="${index}">Use as cover</button>`}
-          <button class="danger" type="button" data-remove-media="${type}:${index}">Remove</button>
+          <label>
+            <span>Left/right</span>
+            <input type="range" min="0" max="100" value="${position.x}" data-position-axis="x">
+          </label>
+          <label>
+            <span>Up/down</span>
+            <input type="range" min="0" max="100" value="${position.y}" data-position-axis="y">
+          </label>
+          <label class="span-all">
+            <span>Image source</span>
+            <input data-media-field="src" value="${escapeHtml(cover.src || "")}">
+          </label>
         </div>
-      </div>
-    </div>
-  `).join("");
+        <div class="card-actions">
+          <button class="secondary icon-button" type="button" title="Move cover earlier" data-move-media="covers:${index}:-1">Up</button>
+          <button class="secondary icon-button" type="button" title="Move cover later" data-move-media="covers:${index}:1">Down</button>
+          <button class="danger" type="button" data-remove-media="covers:${index}">Remove</button>
+        </div>
+      </article>
+    `;
+  }).join("");
+};
+
+const renderImageCards = (album) => {
+  if (!album.images.length) {
+    return `<p class="empty-state">Drop images into the upload area to build this gallery.</p>`;
+  }
+
+  return album.images.map((image, index) => {
+    const position = parsePosition(image.previewPosition);
+
+    return `
+      <article class="media-card" data-media-type="images" data-media-index="${index}">
+        ${renderCropFrame(image, album, "images", index, imageName(image.src))}
+        <div class="card-fields">
+          <label class="span-all">
+            <span>Alt text</span>
+            <input data-media-field="alt" value="${escapeHtml(image.alt || "")}">
+          </label>
+          <label>
+            <span>Left/right</span>
+            <input type="range" min="0" max="100" value="${position.x}" data-position-axis="x">
+          </label>
+          <label>
+            <span>Up/down</span>
+            <input type="range" min="0" max="100" value="${position.y}" data-position-axis="y">
+          </label>
+          <details class="source-details span-all">
+            <summary>Source</summary>
+            <input data-media-field="src" value="${escapeHtml(image.src || "")}">
+          </details>
+        </div>
+        <div class="card-actions">
+          <button class="secondary" type="button" data-promote-image="${index}">Make cover</button>
+          <button class="secondary icon-button" type="button" title="Move image earlier" data-move-media="images:${index}:-1">Up</button>
+          <button class="secondary icon-button" type="button" title="Move image later" data-move-media="images:${index}:1">Down</button>
+          <button class="danger" type="button" data-remove-media="images:${index}">Remove</button>
+        </div>
+      </article>
+    `;
+  }).join("");
 };
 
 const renderAlbumEditor = () => {
@@ -151,11 +325,14 @@ const renderAlbumEditor = () => {
     return;
   }
 
+  ensureAlbumShape(album);
+
   albumEditor.innerHTML = `
     <div class="editor-head">
       <div>
-        <p class="admin-kicker">${escapeHtml(album.section)}</p>
+        <p class="admin-kicker">${escapeHtml(album.section || "editorials")}</p>
         <h2>${escapeHtml(album.title || album.id)}</h2>
+        <p class="editor-meta">${imageCountLabel(album)} - ${coverCountLabel(album)}</p>
       </div>
       <div class="row-actions">
         <button class="secondary" type="button" data-duplicate-album>Duplicate</button>
@@ -163,57 +340,116 @@ const renderAlbumEditor = () => {
       </div>
     </div>
 
-    <div class="album-fields">
-      <label>
-        <span>Album id</span>
-        <input data-album-field="id" value="${escapeHtml(album.id)}">
-      </label>
-      <label>
-        <span>Section</span>
-        <select data-album-field="section">
-          <option value="editorials" ${album.section === "editorials" ? "selected" : ""}>Editorials</option>
-          <option value="fine-art" ${album.section === "fine-art" ? "selected" : ""}>Fine art</option>
-        </select>
-      </label>
-      <label>
-        <span>Title</span>
-        <input data-album-field="title" value="${escapeHtml(album.title)}">
-      </label>
-      <label>
-        <span>Kicker</span>
-        <input data-album-field="kicker" value="${escapeHtml(album.kicker)}">
-      </label>
-      <label class="span-all">
-        <span>Description</span>
-        <textarea data-album-field="description">${escapeHtml(album.description)}</textarea>
-      </label>
+    <div class="portal-grid">
+      <section class="control-panel">
+        <h3>Album</h3>
+        <div class="album-fields">
+          <label>
+            <span>Album id</span>
+            <input data-album-field="id" value="${escapeHtml(album.id)}">
+          </label>
+          <label>
+            <span>Section</span>
+            <select data-album-field="section">
+              <option value="editorials" ${album.section === "editorials" ? "selected" : ""}>Editorials</option>
+              <option value="fine-art" ${album.section === "fine-art" ? "selected" : ""}>Fine art</option>
+            </select>
+          </label>
+          <label>
+            <span>Title</span>
+            <input data-album-field="title" value="${escapeHtml(album.title || "")}">
+          </label>
+          <label>
+            <span>Kicker</span>
+            <input data-album-field="kicker" value="${escapeHtml(album.kicker || "")}">
+          </label>
+          <label class="span-all">
+            <span>Description</span>
+            <textarea data-album-field="description">${escapeHtml(album.description || "")}</textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="control-panel upload-panel">
+        <h3>Upload</h3>
+        <form class="upload-box" data-upload-form>
+          <label class="drop-zone" data-drop-zone>
+            <span>Drop photos or choose files</span>
+            <input name="photo" type="file" accept="image/*" multiple required>
+          </label>
+          <div class="upload-options">
+            <label>
+              <span>Resize long edge</span>
+              <select name="maxEdge">
+                <option value="2400">2400 px</option>
+                <option value="3000">3000 px</option>
+                <option value="1800">1800 px</option>
+                <option value="original">Original</option>
+              </select>
+            </label>
+            <label>
+              <span>JPEG quality</span>
+              <input name="quality" type="number" min="0.55" max="0.95" step="0.01" value="0.86">
+            </label>
+            <label>
+              <span>Alt prefix</span>
+              <input name="alt" type="text" value="${escapeHtml(album.title || "")}">
+            </label>
+            <label>
+              <span>Also create covers</span>
+              <select name="asCover">
+                <option value="first">First image only</option>
+                <option value="no">No</option>
+                <option value="all">Every image</option>
+              </select>
+            </label>
+          </div>
+          <div class="upload-preview" data-upload-preview></div>
+          <button type="submit">Upload selected</button>
+        </form>
+      </section>
+
+      <section class="control-panel lightroom-panel span-all">
+        <h3>Lightroom</h3>
+        <div class="lightroom-grid">
+          <label>
+            <span>Shared gallery link</span>
+            <input data-album-field="lightroomUrl" placeholder="https://lightroom.adobe.com/..." value="${escapeHtml(album.lightroomUrl || "")}">
+          </label>
+          <a class="button-link secondary ${album.lightroomUrl ? "" : "is-disabled"}" href="${escapeHtml(album.lightroomUrl || "#")}" target="_blank" rel="noreferrer">Open Lightroom</a>
+        </div>
+        <div class="remote-import">
+          <label>
+            <span>Import image URLs</span>
+            <textarea data-remote-urls placeholder="Paste direct image URLs, one per line"></textarea>
+          </label>
+          <div class="row-actions">
+            <button class="secondary" type="button" data-add-remote-images>Add URLs to gallery</button>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <h3>Covers</h3>
-    <div class="media-list">${renderMediaRows(album, "covers")}</div>
-    <button class="secondary" type="button" data-add-cover>Add cover slot</button>
+    <section class="gallery-workbench">
+      <div class="section-head">
+        <div>
+          <h3>Covers</h3>
+          <p>Drag a preview or use the sliders to set the crop shown on the home page.</p>
+        </div>
+        <button class="secondary" type="button" data-add-cover>Add cover slot</button>
+      </div>
+      <div class="cover-grid">${renderCoverCards(album)}</div>
+    </section>
 
-    <h3>Sub-gallery images</h3>
-    <div class="media-list">${renderMediaRows(album, "images")}</div>
-
-    <form class="upload-box" data-upload-form>
-      <label>
-        <span>Upload photo</span>
-        <input name="photo" type="file" accept="image/*" required>
-      </label>
-      <label>
-        <span>Alt text</span>
-        <input name="alt" type="text" value="${escapeHtml(album.title)}">
-      </label>
-      <label>
-        <span>Add as cover</span>
-        <select name="asCover">
-          <option value="no">No</option>
-          <option value="yes">Yes</option>
-        </select>
-      </label>
-      <button type="submit">Upload and add</button>
-    </form>
+    <section class="gallery-workbench">
+      <div class="section-head">
+        <div>
+          <h3>Gallery images</h3>
+          <p>Order images, write alt text, and tune each preview position without editing JSON by hand.</p>
+        </div>
+      </div>
+      <div class="image-grid">${renderImageCards(album)}</div>
+    </section>
   `;
 };
 
@@ -231,28 +467,129 @@ const loadSite = async () => {
   loginPanel.hidden = true;
   adminShell.hidden = false;
   render();
+  markClean();
   setStatus("Content loaded.");
 };
 
 const saveSite = async () => {
   setStatus("Saving changes...");
-  await api("site", {
+  const response = await api("site", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ site })
   });
+  site = response.site || site;
+  markClean();
   setStatus("Saved. If this is production, Vercel will redeploy from GitHub.");
 };
 
-const setNested = (target, field, value) => {
-  if (field === "services") {
-    target.sections.services = value.split("\n").map((item) => item.trim()).filter(Boolean);
+const updatePositionControls = (container, position) => {
+  const image = container.querySelector(".crop-frame img");
+  const xInput = container.querySelector('[data-position-axis="x"]');
+  const yInput = container.querySelector('[data-position-axis="y"]');
+
+  if (image) {
+    image.style.objectPosition = formatPosition(position.x, position.y);
+  }
+
+  if (xInput) {
+    xInput.value = position.x;
+  }
+
+  if (yInput) {
+    yInput.value = position.y;
+  }
+};
+
+const updateMediaPosition = (card, nextPosition) => {
+  const album = selectedAlbum();
+
+  if (!album || !card) {
     return;
   }
 
-  const [group, key] = field.split(".");
-  target.sections[group] = target.sections[group] || {};
-  target.sections[group][key] = value;
+  const item = album[card.dataset.mediaType]?.[Number(card.dataset.mediaIndex)];
+
+  if (!item) {
+    return;
+  }
+
+  const position = {
+    x: clamp(nextPosition.x),
+    y: clamp(nextPosition.y)
+  };
+
+  item.previewPosition = formatPosition(position.x, position.y);
+  updatePositionControls(card, position);
+  markDirty();
+};
+
+const moveMedia = (album, type, index, direction) => {
+  const items = album[type];
+  const nextIndex = index + direction;
+
+  if (!items || nextIndex < 0 || nextIndex >= items.length) {
+    return;
+  }
+
+  const [item] = items.splice(index, 1);
+  items.splice(nextIndex, 0, item);
+};
+
+const buildCoverFromImage = (album, image) => ({
+  src: image.src,
+  alt: image.alt || album.title,
+  previewPosition: image.previewPosition || "50% 50%",
+  className: album.section === "fine-art" ? defaultCoverStyle : ""
+});
+
+const addImagesToAlbum = (album, images, asCover = "no") => {
+  ensureAlbumShape(album);
+  album.images.push(...images);
+
+  if (asCover === "first" && images[0]) {
+    album.covers.push(buildCoverFromImage(album, images[0]));
+  }
+
+  if (asCover === "all") {
+    album.covers.push(...images.map((image) => buildCoverFromImage(album, image)));
+  }
+};
+
+const renderSelectedFiles = async (input) => {
+  const preview = document.querySelector("[data-upload-preview]");
+
+  if (!preview) {
+    return;
+  }
+
+  const files = [...(input.files || [])];
+  preview.innerHTML = "";
+
+  for (const file of files.slice(0, 10)) {
+    const item = document.createElement("div");
+    item.className = "upload-thumb";
+    item.textContent = imageName(file.name);
+
+    try {
+      const src = await readImageAsDataUrl(file);
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = "";
+      item.prepend(image);
+    } catch (error) {
+      item.dataset.noPreview = "true";
+    }
+
+    preview.append(item);
+  }
+
+  if (files.length > 10) {
+    const more = document.createElement("div");
+    more.className = "upload-thumb more-thumb";
+    more.textContent = `+${files.length - 10}`;
+    preview.append(more);
+  }
 };
 
 loginForm.addEventListener("submit", async (event) => {
@@ -292,10 +629,12 @@ createAlbumButton.addEventListener("click", () => {
     title,
     kicker: "Editorial story",
     description: "",
+    lightroomUrl: "",
     covers: [],
     images: []
   });
   selectedAlbumId = id;
+  markDirty();
   render();
 });
 
@@ -304,6 +643,8 @@ document.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-remove-media]");
   const promoteButton = event.target.closest("[data-promote-image]");
   const addCoverButton = event.target.closest("[data-add-cover]");
+  const moveButton = event.target.closest("[data-move-media]");
+  const addRemoteButton = event.target.closest("[data-add-remote-images]");
 
   if (selectButton) {
     selectedAlbumId = selectButton.dataset.selectAlbum;
@@ -317,34 +658,68 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  ensureAlbumShape(album);
+
   if (removeButton) {
     const [type, index] = removeButton.dataset.removeMedia.split(":");
     album[type].splice(Number(index), 1);
+    markDirty();
+    render();
+    return;
+  }
+
+  if (moveButton) {
+    const [type, index, direction] = moveButton.dataset.moveMedia.split(":");
+    moveMedia(album, type, Number(index), Number(direction));
+    markDirty();
     render();
     return;
   }
 
   if (promoteButton) {
     const image = album.images[Number(promoteButton.dataset.promoteImage)];
-    album.covers = album.covers || [];
-    album.covers[0] = {
-      src: image.src,
-      alt: image.alt || album.title,
-      className: album.section === "fine-art" ? "fine-portrait" : ""
-    };
-    render();
+
+    if (image) {
+      album.covers.push(buildCoverFromImage(album, image));
+      markDirty();
+      render();
+    }
+
     return;
   }
 
   if (addCoverButton) {
     const firstImage = album.images[0] || {};
-    album.covers = album.covers || [];
     album.covers.push({
       src: firstImage.src || "",
       alt: firstImage.alt || album.title,
-      className: album.section === "fine-art" ? "fine-portrait" : ""
+      previewPosition: firstImage.previewPosition || "50% 50%",
+      className: album.section === "fine-art" ? defaultCoverStyle : ""
     });
+    markDirty();
     render();
+    return;
+  }
+
+  if (addRemoteButton) {
+    const textarea = document.querySelector("[data-remote-urls]");
+    const urls = normaliseImageUrlInput(textarea?.value);
+
+    if (!urls.length) {
+      setStatus("Paste at least one image URL first.");
+      return;
+    }
+
+    const images = urls.map((src, index) => ({
+      src,
+      alt: `${album.title || "Gallery"} ${album.images.length + index + 1}`,
+      previewPosition: "50% 50%"
+    }));
+
+    addImagesToAlbum(album, images, "no");
+    markDirty();
+    render();
+    setStatus(`${images.length} remote image URL${images.length === 1 ? "" : "s"} added. Save changes to publish.`);
     return;
   }
 
@@ -352,6 +727,7 @@ document.addEventListener("click", (event) => {
     if (window.confirm(`Delete ${album.title}?`)) {
       site.albums = site.albums.filter((item) => item.id !== album.id);
       selectedAlbumId = site.albums[0]?.id || "";
+      markDirty();
       render();
     }
     return;
@@ -363,6 +739,7 @@ document.addEventListener("click", (event) => {
     clone.title = `${album.title} Copy`;
     site.albums.push(clone);
     selectedAlbumId = clone.id;
+    markDirty();
     render();
   }
 });
@@ -375,9 +752,17 @@ const handleEditableChange = (event) => {
   const sectionField = event.target.closest("[data-section-field]");
   const albumField = event.target.closest("[data-album-field]");
   const mediaField = event.target.closest("[data-media-field]");
+  const positionAxis = event.target.closest("[data-position-axis]");
+  const fileInput = event.target.closest('[data-upload-form] input[type="file"]');
+
+  if (fileInput) {
+    renderSelectedFiles(fileInput);
+    return;
+  }
 
   if (sectionField) {
     setNested(site, sectionField.dataset.sectionField, sectionField.value);
+    markDirty();
     return;
   }
 
@@ -394,6 +779,8 @@ const handleEditableChange = (event) => {
     if (albumField.dataset.albumField === "id") {
       selectedAlbumId = album.id || previousId;
     }
+
+    markDirty();
     return;
   }
 
@@ -401,6 +788,15 @@ const handleEditableChange = (event) => {
     const row = mediaField.closest("[data-media-type]");
     const item = album[row.dataset.mediaType][Number(row.dataset.mediaIndex)];
     item[mediaField.dataset.mediaField] = mediaField.value;
+    markDirty();
+    return;
+  }
+
+  if (positionAxis) {
+    const card = positionAxis.closest("[data-media-type]");
+    const current = parsePosition(album[card.dataset.mediaType][Number(card.dataset.mediaIndex)]?.previewPosition);
+    current[positionAxis.dataset.positionAxis] = Number(positionAxis.value);
+    updateMediaPosition(card, current);
   }
 };
 
@@ -415,33 +811,142 @@ document.addEventListener("submit", async (event) => {
   }
 
   event.preventDefault();
+  activeUploadAbort = false;
   const album = selectedAlbum();
   const formData = new FormData(uploadForm);
+  const fileInput = uploadForm.querySelector('input[type="file"]');
+  const files = [...(fileInput.files || [])];
+
+  if (!album || !files.length) {
+    setStatus("Choose at least one image to upload.");
+    return;
+  }
 
   try {
-    setStatus("Uploading image...");
-    const response = await api("upload", {
-      method: "POST",
-      body: formData
-    });
-    const image = {
-      src: response.src,
-      alt: formData.get("alt") || album.title
-    };
+    const maxEdge = formData.get("maxEdge");
+    const quality = formData.get("quality");
+    const uploadData = new FormData();
 
-    album.images.push(image);
+    for (let index = 0; index < files.length; index += 1) {
+      if (activeUploadAbort) {
+        return;
+      }
 
-    if (formData.get("asCover") === "yes") {
-      album.covers.push({
-        ...image,
-        className: album.section === "fine-art" ? "fine-portrait" : ""
-      });
+      setStatus(`Preparing ${index + 1} of ${files.length}...`);
+      const resized = await resizeImageFile(files[index], maxEdge, quality);
+      uploadData.append("photo", resized, resized.name);
     }
 
+    setStatus(`Uploading ${files.length} image${files.length === 1 ? "" : "s"}...`);
+    const response = await api("upload", {
+      method: "POST",
+      body: uploadData
+    });
+    const uploaded = response.files?.length ? response.files : [{ src: response.src }];
+    const altPrefix = formData.get("alt") || album.title || "Gallery image";
+    const images = uploaded.map((item, index) => ({
+      src: item.src,
+      alt: files.length === 1 ? altPrefix : `${altPrefix} ${album.images.length + index + 1}`,
+      previewPosition: "50% 50%"
+    }));
+
+    addImagesToAlbum(album, images, formData.get("asCover"));
+    uploadForm.reset();
+    markDirty();
     render();
-    setStatus("Image uploaded and added. Save changes to publish the album update.");
+    setStatus(`${images.length} image${images.length === 1 ? "" : "s"} uploaded and added. Save changes to publish.`);
   } catch (error) {
     setStatus(error.message);
+  }
+});
+
+document.addEventListener("dragover", (event) => {
+  const dropZone = event.target.closest("[data-drop-zone]");
+
+  if (dropZone) {
+    event.preventDefault();
+    dropZone.classList.add("is-dragging");
+  }
+});
+
+document.addEventListener("dragleave", (event) => {
+  const dropZone = event.target.closest("[data-drop-zone]");
+
+  if (dropZone) {
+    dropZone.classList.remove("is-dragging");
+  }
+});
+
+document.addEventListener("drop", (event) => {
+  const dropZone = event.target.closest("[data-drop-zone]");
+
+  if (!dropZone) {
+    return;
+  }
+
+  event.preventDefault();
+  dropZone.classList.remove("is-dragging");
+  const input = dropZone.querySelector('input[type="file"]');
+
+  if (!input) {
+    return;
+  }
+
+  input.files = event.dataTransfer.files;
+  renderSelectedFiles(input);
+});
+
+document.addEventListener("pointerdown", (event) => {
+  const cropButton = event.target.closest("[data-crop-target]");
+
+  if (!cropButton) {
+    return;
+  }
+
+  const card = cropButton.closest("[data-media-type]");
+  const album = selectedAlbum();
+  const item = album?.[card.dataset.mediaType]?.[Number(card.dataset.mediaIndex)];
+
+  if (!card || !item) {
+    return;
+  }
+
+  event.preventDefault();
+  cropButton.setPointerCapture(event.pointerId);
+  dragTarget = {
+    pointerId: event.pointerId,
+    button: cropButton,
+    card,
+    startX: event.clientX,
+    startY: event.clientY,
+    startPosition: parsePosition(item.previewPosition)
+  };
+});
+
+document.addEventListener("pointermove", (event) => {
+  if (!dragTarget || event.pointerId !== dragTarget.pointerId) {
+    return;
+  }
+
+  const rect = dragTarget.button.getBoundingClientRect();
+  const nextPosition = {
+    x: dragTarget.startPosition.x - ((event.clientX - dragTarget.startX) / rect.width) * 100,
+    y: dragTarget.startPosition.y - ((event.clientY - dragTarget.startY) / rect.height) * 100
+  };
+
+  updateMediaPosition(dragTarget.card, nextPosition);
+});
+
+document.addEventListener("pointerup", (event) => {
+  if (dragTarget && event.pointerId === dragTarget.pointerId) {
+    dragTarget = null;
+  }
+});
+
+window.addEventListener("beforeunload", (event) => {
+  if (saveButton.dataset.dirty === "true") {
+    event.preventDefault();
+    event.returnValue = "";
   }
 });
 

@@ -1,13 +1,17 @@
 :root {
-  --ink: #f8f7f2;
-  --muted: #b8b5ad;
-  --dim: #77746d;
-  --paper: #070707;
-  --panel: #131313;
-  --field: #1c1c1c;
-  --line: rgba(248, 247, 242, 0.16);
-  --accent: #20c7d9;
-  --danger: #e33b42;
+  --ink: #f7f3ea;
+  --muted: #b7b0a3;
+  --dim: #817b72;
+  --paper: #080807;
+  --panel: #141311;
+  --panel-strong: #1d1b18;
+  --field: #22201d;
+  --line: rgba(247, 243, 234, 0.15);
+  --line-strong: rgba(247, 243, 234, 0.28);
+  --accent: #26c8d8;
+  --accent-ink: #061718;
+  --danger: #e4525d;
+  --success: #b8d66e;
   --sans: "Avenir Next", "Neue Haas Grotesk Text", "Helvetica Neue", Arial, sans-serif;
   --display: "Didot", "Bodoni 72", "Baskerville", "Times New Roman", serif;
 }
@@ -37,7 +41,9 @@ a {
 }
 
 .admin-body {
-  background: var(--paper);
+  background:
+    linear-gradient(135deg, rgba(38, 200, 216, 0.08), transparent 28rem),
+    var(--paper);
   color: var(--ink);
   font-family: var(--sans);
 }
@@ -54,10 +60,13 @@ a {
 }
 
 .login-form {
+  background: rgba(20, 19, 17, 0.86);
+  border: 1px solid var(--line);
   display: grid;
   gap: 20px;
   margin: 0 auto;
   max-width: 430px;
+  padding: 28px;
   width: 100%;
 }
 
@@ -78,7 +87,7 @@ p {
 
 h1 {
   font-family: var(--display);
-  font-size: clamp(44px, 7vw, 86px);
+  font-size: clamp(42px, 6vw, 76px);
   font-weight: 400;
   line-height: 0.92;
   margin-bottom: 8px;
@@ -98,7 +107,7 @@ label {
   display: grid;
   gap: 8px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
@@ -118,16 +127,23 @@ textarea {
   resize: vertical;
 }
 
+input[type="range"] {
+  accent-color: var(--accent);
+  min-height: 28px;
+  padding: 0;
+}
+
 button,
-.admin-actions a {
+.admin-actions a,
+.button-link {
   align-items: center;
   background: var(--ink);
   border: 1px solid var(--ink);
-  color: #070707;
+  color: #080807;
   cursor: pointer;
   display: inline-flex;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 900;
   justify-content: center;
   padding: 0 16px;
   text-decoration: none;
@@ -135,15 +151,34 @@ button,
 }
 
 button.secondary,
-.admin-actions a {
+.admin-actions a,
+.button-link.secondary {
   background: transparent;
   color: var(--ink);
 }
 
 button.danger {
   background: transparent;
-  border-color: rgba(227, 59, 66, 0.7);
-  color: #ff8085;
+  border-color: rgba(228, 82, 93, 0.78);
+  color: #ff9aa0;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.icon-button {
+  min-width: 74px;
+}
+
+.is-disabled {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 .admin-status {
@@ -152,7 +187,7 @@ button.danger {
 }
 
 .admin-shell {
-  padding: clamp(20px, 3vw, 42px);
+  padding: clamp(18px, 3vw, 42px);
 }
 
 .admin-topbar {
@@ -165,29 +200,38 @@ button.danger {
 }
 
 .admin-actions,
-.row-actions {
+.row-actions,
+.card-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
+[data-save-site][data-dirty="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
 .admin-layout {
   display: grid;
-  gap: 26px;
-  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 24px;
+  grid-template-columns: 300px minmax(0, 1fr);
   margin-top: 28px;
 }
 
 .album-sidebar,
 .settings-block,
-.album-editor {
-  background: var(--panel);
+.album-editor,
+.control-panel,
+.gallery-workbench {
+  background: rgba(20, 19, 17, 0.94);
   border: 1px solid var(--line);
 }
 
 .album-sidebar {
   align-self: start;
-  padding: 18px;
+  padding: 16px;
   position: sticky;
   top: 20px;
 }
@@ -209,13 +253,28 @@ button.danger {
 }
 
 .album-list button {
+  align-items: start;
   background: transparent;
   border-color: var(--line);
   color: var(--ink);
-  justify-content: flex-start;
+  display: grid;
+  gap: 5px;
+  justify-content: stretch;
+  min-height: 58px;
+  padding: 11px 12px;
+  text-align: left;
+  text-transform: none;
+}
+
+.album-list button small {
+  color: var(--dim);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .album-list button.is-active {
+  background: rgba(38, 200, 216, 0.08);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -232,14 +291,16 @@ button.danger {
 summary {
   cursor: pointer;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
 }
 
 .settings-grid,
-.album-fields {
+.album-fields,
+.upload-options,
+.lightroom-grid {
   display: grid;
-  gap: 16px;
+  gap: 14px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 18px;
 }
@@ -249,70 +310,265 @@ summary {
 }
 
 .album-editor {
+  display: grid;
+  gap: 18px;
   padding: 20px;
 }
 
 .editor-head {
   align-items: start;
+  border-bottom: 1px solid var(--line);
   display: flex;
   gap: 18px;
   justify-content: space-between;
+  padding-bottom: 16px;
 }
 
-.media-list {
-  display: grid;
-  gap: 12px;
-  margin: 22px 0;
+.editor-meta,
+.section-head p,
+.empty-state {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 0;
 }
 
-.media-row {
-  align-items: start;
-  background: #0d0d0d;
-  border: 1px solid var(--line);
+.portal-grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: 120px minmax(0, 1fr);
-  padding: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.media-row img {
-  aspect-ratio: 4 / 5;
-  background: #000;
+.control-panel,
+.gallery-workbench {
+  padding: 18px;
+}
+
+.control-panel h3,
+.gallery-workbench h3 {
+  margin-bottom: 12px;
+}
+
+.upload-box {
+  display: grid;
+  gap: 14px;
+}
+
+.drop-zone {
+  align-items: center;
+  background: #0f0e0c;
+  border: 1px dashed var(--line-strong);
+  color: var(--ink);
+  cursor: pointer;
+  min-height: 132px;
+  place-items: center;
+  text-align: center;
+}
+
+.drop-zone.is-dragging {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.drop-zone input {
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.upload-preview {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+}
+
+.upload-thumb {
+  background: #0f0e0c;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  display: grid;
+  font-size: 10px;
+  gap: 6px;
+  min-height: 96px;
+  overflow: hidden;
+  padding: 6px;
+  text-transform: none;
+}
+
+.upload-thumb img {
+  aspect-ratio: 1;
   height: auto;
   object-fit: cover;
   width: 100%;
 }
 
-.media-fields {
+.more-thumb {
+  align-items: center;
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 900;
+  justify-items: center;
+}
+
+.lightroom-grid {
+  align-items: end;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-top: 0;
+}
+
+.remote-import {
   display: grid;
   gap: 12px;
+  margin-top: 14px;
+}
+
+.section-head {
+  align-items: end;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cover-grid,
+.image-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.cover-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.image-grid {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.media-card {
+  background: #0f0e0c;
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px;
+}
+
+.cover-card {
+  background: var(--panel-strong);
+}
+
+.crop-frame {
+  aspect-ratio: 4 / 5;
+  background: #050505;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  display: block;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  text-align: left;
+  text-transform: none;
+  touch-action: none;
+  width: 100%;
+}
+
+.crop-frame img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  width: 100%;
+}
+
+.crop-frame span {
+  background: rgba(8, 8, 7, 0.72);
+  bottom: 8px;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 900;
+  left: 8px;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+  padding: 6px 8px;
+  position: absolute;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.card-fields {
+  display: grid;
+  gap: 10px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.upload-box {
-  border-top: 1px solid var(--line);
-  display: grid;
-  gap: 14px;
-  margin-top: 24px;
-  padding-top: 22px;
+.source-details {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  padding: 10px;
 }
 
-@media (max-width: 900px) {
-  .admin-topbar,
-  .editor-head {
-    align-items: stretch;
-    flex-direction: column;
-  }
+.source-details summary {
+  color: var(--muted);
+  font-size: 12px;
+}
 
-  .admin-layout,
-  .settings-grid,
-  .album-fields,
-  .media-row,
-  .media-fields {
+.source-details input {
+  margin-top: 10px;
+}
+
+.card-actions {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.empty-state {
+  background: #0f0e0c;
+  border: 1px dashed var(--line);
+  padding: 18px;
+}
+
+@media (max-width: 1120px) {
+  .portal-grid,
+  .admin-layout {
     grid-template-columns: 1fr;
   }
 
   .album-sidebar {
     position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-topbar,
+  .editor-head,
+  .section-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .settings-grid,
+  .album-fields,
+  .upload-options,
+  .lightroom-grid,
+  .card-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-actions,
+  .row-actions,
+  .card-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .cover-grid,
+  .image-grid {
+    grid-template-columns: 1fr;
   }
 }
