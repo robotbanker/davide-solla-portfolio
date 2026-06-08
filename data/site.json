@@ -28,7 +28,14 @@
         {
           "src": "assets/images/roxana-01.jpg",
           "alt": "Editorial fashion portrait in warm directional light",
-          "className": "tile-large"
+          "className": "tile-large",
+          "previewPosition": "48% 34%"
+        },
+        {
+          "src": "assets/images/roxana-04.jpg",
+          "alt": "Roxana editorial portrait with sculptural styling",
+          "previewPosition": "57% 41%",
+          "className": ""
         }
       ],
       "images": [
@@ -46,7 +53,8 @@
         },
         {
           "src": "assets/images/roxana-04.jpg",
-          "alt": "Roxana editorial portrait with sculptural styling"
+          "alt": "Roxana editorial portrait with sculptural styling",
+          "previewPosition": "57% 41%"
         }
       ]
     },
@@ -362,5 +370,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-07T17:01:11.300Z"
+  "updatedAt": "2026-06-08T20:23:02.139Z"
 }
