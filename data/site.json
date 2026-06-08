@@ -26,12 +26,6 @@
       "description": "A polished beauty-led story shaped with soft glamour, reflective colour, and poised studio direction.",
       "covers": [
         {
-          "src": "assets/images/roxana-01.jpg",
-          "alt": "Editorial fashion portrait in warm directional light",
-          "className": "tile-large",
-          "previewPosition": "48% 34%"
-        },
-        {
           "src": "assets/images/roxana-04.jpg",
           "alt": "Roxana editorial portrait with sculptural styling",
           "previewPosition": "57% 41%",
@@ -370,5 +364,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-08T20:23:02.139Z"
+  "updatedAt": "2026-06-08T20:23:52.841Z"
 }
