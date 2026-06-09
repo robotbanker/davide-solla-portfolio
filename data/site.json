@@ -28,8 +28,8 @@
         {
           "src": "assets/images/roxana-01.jpg",
           "alt": "London editorial beauty portrait in warm directional light",
-          "previewPosition": "50% 52%",
-          "className": "tile-large"
+          "previewPosition": "50% 50%",
+          "className": "tile-wide"
         }
       ],
       "images": [
@@ -60,9 +60,9 @@
       "description": "A futuristic fashion editorial with blue-red studio light, metallic texture, and a beauty mood built around gaze and gesture.",
       "covers": [
         {
-          "src": "assets/images/cosmic-02.jpg",
-          "alt": "Cosmic Girl cinematic fashion close portrait with blue-red light",
-          "previewPosition": "50% 52%",
+          "src": "assets/images/cosmic-01.jpg",
+          "alt": "Cosmic Girl full-length fashion portrait with futuristic styling",
+          "previewPosition": "49% 38%",
           "className": ""
         }
       ],
@@ -108,8 +108,8 @@
         {
           "src": "assets/images/julia-01.jpg",
           "alt": "Quiet editorial portrait with refined winter styling",
-          "previewPosition": "50% 38%",
-          "className": ""
+          "className": "",
+          "previewPosition": "50% 38%"
         }
       ],
       "images": [
@@ -145,8 +145,8 @@
         {
           "src": "assets/images/sophie-01.jpg",
           "alt": "Nocturnal Soho fashion editorial portrait in London",
-          "previewPosition": "50% 43%",
-          "className": "tile-wide"
+          "className": "tile-wide",
+          "previewPosition": "50% 43%"
         }
       ],
       "images": [
@@ -198,8 +198,8 @@
         {
           "src": "assets/images/harvey-01.jpg",
           "alt": "Menswear portrait with moody London studio light",
-          "previewPosition": "50% 38%",
-          "className": ""
+          "className": "",
+          "previewPosition": "50% 38%"
         }
       ],
       "images": [
@@ -225,32 +225,29 @@
       "description": "Controlled London studio fashion portraits built around posture, styling, and a clean high-fashion atmosphere.",
       "covers": [
         {
-          "src": "assets/images/studio-02.jpg",
-          "alt": "Controlled studio fashion portrait for a London portfolio session",
-          "previewPosition": "50% 38%",
-          "className": ""
+          "src": "assets/images/studio-05.jpg",
+          "alt": "London studio editorial portrait with poised styling",
+          "previewPosition": "2% 46%",
+          "className": "tile-wide"
         }
       ],
       "images": [
         {
-          "src": "assets/images/studio-01.jpg",
-          "alt": "London studio fashion portrait with elegant styling"
-        },
-        {
-          "src": "assets/images/studio-02.jpg",
-          "alt": "Studio editorial portrait for a model portfolio"
-        },
-        {
           "src": "assets/images/studio-03.jpg",
           "alt": "Studio beauty portrait with controlled light"
+        },
+        {
+          "src": "assets/images/studio-05.jpg",
+          "alt": "London studio editorial portrait with poised styling",
+          "previewPosition": "3% 50%"
         },
         {
           "src": "assets/images/studio-04.jpg",
           "alt": "Studio fashion study with clean high-fashion atmosphere"
         },
         {
-          "src": "assets/images/studio-05.jpg",
-          "alt": "London studio editorial portrait with poised styling"
+          "src": "assets/images/studio-01.jpg",
+          "alt": "London studio fashion portrait with elegant styling"
         }
       ]
     },
@@ -262,10 +259,10 @@
       "description": "A theatrical fashion editorial shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
       "covers": [
         {
-          "src": "assets/images/dark-baroque-01.jpg",
-          "alt": "Dark Baroque fashion portrait on a leather chaise beneath a chandelier",
-          "previewPosition": "50% 42%",
-          "className": "tile-wide"
+          "src": "assets/images/dark-baroque-05.jpg",
+          "alt": "Dark Baroque motion portrait with red fan and sweeping satin",
+          "previewPosition": "54% 49%",
+          "className": ""
         }
       ],
       "images": [
@@ -370,5 +367,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-09T05:37:06.863Z"
+  "updatedAt": "2026-06-09T10:24:07.596Z"
 }

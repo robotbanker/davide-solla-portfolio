@@ -36,14 +36,14 @@
       <image:caption>Roxana editorial portrait with sculptural styling</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/cosmic-02.jpg</image:loc>
-      <image:title>Cosmic Girl by Davide Solla</image:title>
-      <image:caption>Cosmic Girl cinematic fashion close portrait with blue-red light</image:caption>
-    </image:image>
-    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/cosmic-01.jpg</image:loc>
       <image:title>Cosmic Girl by Davide Solla</image:title>
       <image:caption>Cosmic Girl full-length fashion portrait with futuristic styling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/cosmic-02.jpg</image:loc>
+      <image:title>Cosmic Girl by Davide Solla</image:title>
+      <image:caption>Cosmic Girl cinematic close portrait with blue-red studio light</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/cosmic-03.jpg</image:loc>
@@ -156,14 +156,9 @@
       <image:caption>Harvey menswear portrait study for editorial portfolio</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/studio-02.jpg</image:loc>
+      <image:loc>https://www.davidesolla.com/assets/images/studio-05.jpg</image:loc>
       <image:title>Studio by Davide Solla</image:title>
-      <image:caption>Controlled studio fashion portrait for a London portfolio session</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/studio-01.jpg</image:loc>
-      <image:title>Studio by Davide Solla</image:title>
-      <image:caption>London studio fashion portrait with elegant styling</image:caption>
+      <image:caption>London studio editorial portrait with poised styling</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/studio-03.jpg</image:loc>
@@ -176,14 +171,19 @@
       <image:caption>Studio fashion study with clean high-fashion atmosphere</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/studio-05.jpg</image:loc>
+      <image:loc>https://www.davidesolla.com/assets/images/studio-01.jpg</image:loc>
       <image:title>Studio by Davide Solla</image:title>
-      <image:caption>London studio editorial portrait with poised styling</image:caption>
+      <image:caption>London studio fashion portrait with elegant styling</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-05.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque motion portrait with red fan and sweeping satin</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-01.jpg</image:loc>
       <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque fashion portrait on a leather chaise beneath a chandelier</image:caption>
+      <image:caption>Dark Baroque reclining portrait with red velvet drapery and chandelier</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-02.jpg</image:loc>
@@ -199,11 +199,6 @@
       <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-04.jpg</image:loc>
       <image:title>Dark Baroque by Davide Solla</image:title>
       <image:caption>Dark Baroque intimate portrait with pearls and sculptural ivory prop</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-05.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque motion portrait with red fan and sweeping satin</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-06.jpg</image:loc>
