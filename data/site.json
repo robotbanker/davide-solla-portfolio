@@ -225,7 +225,7 @@
           "src": "assets/images/studio-05.jpg",
           "alt": "Studio editorial portrait 5",
           "previewPosition": "2% 46%",
-          "className": "tile-large"
+          "className": "tile-wide"
         }
       ],
       "images": [
@@ -366,5 +366,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-09T08:09:20.555Z"
+  "updatedAt": "2026-06-09T08:13:17.836Z"
 }
