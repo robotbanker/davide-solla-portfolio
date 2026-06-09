@@ -259,9 +259,9 @@
       "description": "A theatrical red-room story shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
       "covers": [
         {
-          "src": "assets/images/dark-baroque-06.jpg",
-          "alt": "Dark Baroque editorial portrait 6",
-          "previewPosition": "50% 50%",
+          "src": "assets/images/dark-baroque-05.jpg",
+          "alt": "Dark Baroque motion portrait with red fan and sweeping satin",
+          "previewPosition": "54% 49%",
           "className": ""
         }
       ],
@@ -367,5 +367,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-09T08:16:39.613Z"
+  "updatedAt": "2026-06-09T08:17:52.193Z"
 }
