@@ -32,10 +32,14 @@ For production, set these Vercel environment variables:
 - `GITHUB_REPO` - `davide-solla-portfolio`
 - `GITHUB_BRANCH` - `main`
 - `VERCEL_DEPLOY_HOOK_URL` - Vercel Deploy Hook URL for the production branch
-- `RESEND_API_KEY` - Resend API key used by the contact form
-- `CONTACT_TO_EMAIL` - private recipient address for enquiries
-- `CONTACT_FROM_EMAIL` - verified sender address, for example `Website <hello@yourdomain.com>`
+- `SMTP_USER` - Gmail address used to send website enquiries
+- `SMTP_PASS` - Gmail app password for the website enquiry sender
+- `SMTP_HOST` - optional SMTP host, defaults to `smtp.gmail.com`
+- `SMTP_PORT` - optional SMTP port, defaults to `465`
+- `CONTACT_TO_EMAIL` - private recipient address for enquiries, defaults to `SMTP_USER`
+- `CONTACT_FROM_EMAIL` - sender address, for example `Davide Solla Website <davidesollastudios@gmail.com>`
 - `CONTACT_SUBJECT_PREFIX` - optional email subject prefix, defaults to `Website enquiry`
+- `RESEND_API_KEY` - optional fallback provider key if SMTP is not configured
 
 Production uploads are committed to GitHub under `assets/images/uploads/`, and album/text edits update `data/site.json`.
 Album/text edits also refresh `sitemap.xml` so newly published portfolio images can be discovered through the image sitemap.
@@ -47,4 +51,4 @@ Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. 
 
 The public form posts to `/api/contact`, so the visitor never sees the recipient address in the page HTML. Configure the recipient and sender with `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in the hosting environment.
 
-The backend currently sends through Resend. Set `RESEND_API_KEY` before publishing the contact form.
+The backend sends through Gmail SMTP when `SMTP_USER` and `SMTP_PASS` are set. Use a Gmail app password for `SMTP_PASS`, not the normal account password. If SMTP is not configured, the backend falls back to Resend when `RESEND_API_KEY` is available.
