@@ -363,61 +363,7 @@
           "alt": "Petals fine art portrait 2"
         }
       ]
-    },
-    {
-      "id": "connie",
-      "section": "editorials",
-      "title": "Connie",
-      "kicker": "Editorial story",
-      "description": "A newly imported portrait series ready for curation.",
-      "lightroomUrl": "https://lightroom.adobe.com/shares/19a4719bb5da4f2da338872aead211a6",
-      "covers": [
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0660-fdfbbda8.jpg",
-          "alt": "Connie 1",
-          "previewPosition": "50% 50%",
-          "className": ""
-        }
-      ],
-      "images": [
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0660-fdfbbda8.jpg",
-          "alt": "Connie 1",
-          "previewPosition": "50% 50%",
-          "lightroomAssetId": "196d2f42628943b4bf4bcb8746f0c4c9"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0669-ed34891b.jpg",
-          "alt": "Connie 2",
-          "previewPosition": "50% 50%",
-          "lightroomAssetId": "df5addbdfc03443b8a9b18bfc1bbe921"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0687-1000c619.jpg",
-          "alt": "Connie 3",
-          "previewPosition": "50% 50%",
-          "lightroomAssetId": "2a937f99353b44bcb3c01e60440e4301"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0688-cee17a91.jpg",
-          "alt": "Connie 4",
-          "previewPosition": "50% 50%",
-          "lightroomAssetId": "73ee6209a178421d8649e2214b61478d"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0694-bb853afc.jpg",
-          "alt": "Connie 5",
-          "previewPosition": "50% 50%",
-          "lightroomAssetId": "72dd52d805814a5da63b26243608d3a5"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-08/dsc-0704-3664aa92.jpg",
-          "alt": "Connie 6",
-          "previewPosition": "50% 50%",
-          "lightroomAssetId": "1b304b75bd8f46ac82b663a98cae0983"
-        }
-      ]
     }
   ],
-  "updatedAt": "2026-06-08T21:11:28.678Z"
+  "updatedAt": "2026-06-09T05:37:04.008Z"
 }
