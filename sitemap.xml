@@ -236,14 +236,14 @@
       <image:caption>Fine-art portrait with rose petals on white silk</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/petals-02.jpg</image:loc>
-      <image:title>Petals by Davide Solla</image:title>
-      <image:caption>Petals fine-art portrait with softness and body</image:caption>
-    </image:image>
-    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/petals-03.jpg</image:loc>
       <image:title>Petals by Davide Solla</image:title>
       <image:caption>Petals fine-art portrait with white silk and rose petals</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/petals-02.jpg</image:loc>
+      <image:title>Petals by Davide Solla</image:title>
+      <image:caption>Petals fine-art portrait with softness and body</image:caption>
     </image:image>
   </url>
 </urlset>
