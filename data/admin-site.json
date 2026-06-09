@@ -230,24 +230,21 @@
       ],
       "images": [
         {
-          "src": "assets/images/studio-01.jpg",
-          "alt": "Studio fashion portrait"
-        },
-        {
-          "src": "assets/images/studio-02.jpg",
-          "alt": "Studio editorial portrait"
-        },
-        {
           "src": "assets/images/studio-03.jpg",
           "alt": "Studio beauty portrait"
+        },
+        {
+          "src": "assets/images/studio-05.jpg",
+          "alt": "Studio editorial portrait 5",
+          "previewPosition": "3% 50%"
         },
         {
           "src": "assets/images/studio-04.jpg",
           "alt": "Studio fashion study"
         },
         {
-          "src": "assets/images/studio-05.jpg",
-          "alt": "Studio editorial portrait 5"
+          "src": "assets/images/studio-01.jpg",
+          "alt": "Studio fashion portrait"
         }
       ]
     },
@@ -367,5 +364,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-09T09:38:15.987Z"
+  "updatedAt": "2026-06-09T10:24:07.596Z"
 }
