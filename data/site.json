@@ -349,6 +349,12 @@
           "src": "assets/images/fine-art-02.jpg",
           "alt": "Fine-art portrait with rose petals on white silk",
           "className": "fine-portrait"
+        },
+        {
+          "src": "assets/images/petals-03.jpg",
+          "alt": "Petals fine-art portrait with white silk and rose petals",
+          "previewPosition": "50% 48%",
+          "className": "fine-tall"
         }
       ],
       "images": [
@@ -367,5 +373,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-09T10:24:07.596Z"
+  "updatedAt": "2026-06-09T17:16:18.429Z"
 }
