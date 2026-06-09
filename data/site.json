@@ -29,7 +29,7 @@
           "src": "assets/images/roxana-01.jpg",
           "alt": "Roxana editorial portrait in warm directional light",
           "previewPosition": "50% 50%",
-          "className": ""
+          "className": "tile-wide"
         }
       ],
       "images": [
@@ -366,5 +366,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-09T08:13:17.836Z"
+  "updatedAt": "2026-06-09T08:14:28.094Z"
 }
