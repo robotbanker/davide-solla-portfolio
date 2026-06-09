@@ -30,8 +30,12 @@ For production, set these Vercel environment variables:
 - `GITHUB_OWNER` - `robotbanker`
 - `GITHUB_REPO` - `davide-solla-portfolio`
 - `GITHUB_BRANCH` - `main`
+- `VERCEL_DEPLOY_HOOK_URL` - Vercel Deploy Hook URL for the production branch
 
 Production uploads are committed to GitHub under `assets/images/uploads/`, and album/text edits update `data/site.json`.
+After each admin save, the backend calls `VERCEL_DEPLOY_HOOK_URL` so Vercel starts a fresh deployment immediately.
+
+Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
 
 ## Before Publishing
 

@@ -488,7 +488,18 @@ const saveSite = async () => {
   });
   site = response.site || site;
   markClean();
-  setStatus("Saved. If this is production, Vercel will redeploy from GitHub.");
+
+  if (response.deployment?.triggered) {
+    setStatus("Saved. Vercel deployment started.");
+    return;
+  }
+
+  if (response.deployment?.configured) {
+    setStatus(`Saved. Vercel deployment was not started: ${response.deployment.error || "check the deploy hook"}.`);
+    return;
+  }
+
+  setStatus("Saved. Add a Vercel deploy hook URL to start deployments immediately.");
 };
 
 const updatePositionControls = (container, position) => {
