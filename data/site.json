@@ -3,18 +3,18 @@
   "sections": {
     "work": {
       "kicker": "Selected editorials",
-      "heading": "Portraits, beauty stories, and cinematic fashion work."
+      "heading": "London fashion editorials, beauty stories, and cinematic portrait work."
     },
     "fineArt": {
       "kicker": "Fine art",
-      "heading": "Self-produced studies in beauty, fracture, and transformation.",
+      "heading": "Fine-art portrait studies in beauty, fracture, and transformation.",
       "intro": "Available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces."
     },
     "services": [
-      "Fashion editorials",
+      "Fashion editorials in London",
       "Beauty portraits",
-      "Model portfolios",
-      "Personal campaigns"
+      "Model portfolio tests",
+      "Fine-art portrait commissions"
     ]
   },
   "albums": [
@@ -23,23 +23,23 @@
       "section": "editorials",
       "title": "Roxana",
       "kicker": "Editorial story",
-      "description": "A polished beauty-led story shaped with soft glamour, reflective colour, and poised studio direction.",
+      "description": "A polished London beauty editorial shaped with soft glamour, reflective colour, and poised studio direction.",
       "covers": [
         {
           "src": "assets/images/roxana-01.jpg",
-          "alt": "Roxana editorial portrait in warm directional light",
-          "previewPosition": "50% 50%",
-          "className": ""
+          "alt": "London editorial beauty portrait in warm directional light",
+          "previewPosition": "50% 52%",
+          "className": "tile-large"
         }
       ],
       "images": [
         {
           "src": "assets/images/roxana-01.jpg",
-          "alt": "Roxana editorial portrait in warm directional light"
+          "alt": "Roxana editorial beauty portrait in warm directional light"
         },
         {
           "src": "assets/images/roxana-02.jpg",
-          "alt": "Roxana fashion portrait with refined styling"
+          "alt": "Roxana London fashion portrait with refined styling"
         },
         {
           "src": "assets/images/roxana-03.jpg",
@@ -57,24 +57,24 @@
       "section": "editorials",
       "title": "Cosmic Girl",
       "kicker": "Fashion editorial",
-      "description": "Blue-red studio light, metallic texture, and a futuristic beauty mood built around gaze and gesture.",
+      "description": "A futuristic fashion editorial with blue-red studio light, metallic texture, and a beauty mood built around gaze and gesture.",
       "covers": [
         {
           "src": "assets/images/cosmic-02.jpg",
-          "alt": "Cosmic Girl cinematic close portrait",
-          "previewPosition": "50% 50%",
+          "alt": "Cosmic Girl cinematic fashion close portrait with blue-red light",
+          "previewPosition": "50% 52%",
           "className": ""
         }
       ],
       "images": [
         {
           "src": "assets/images/cosmic-01.jpg",
-          "alt": "Cosmic Girl full-length fashion portrait",
+          "alt": "Cosmic Girl full-length fashion portrait with futuristic styling",
           "previewPosition": "50% 18%"
         },
         {
           "src": "assets/images/cosmic-02.jpg",
-          "alt": "Cosmic Girl cinematic close portrait"
+          "alt": "Cosmic Girl cinematic close portrait with blue-red studio light"
         },
         {
           "src": "assets/images/cosmic-03.jpg",
@@ -82,11 +82,11 @@
         },
         {
           "src": "assets/images/cosmic-04.jpg",
-          "alt": "Cosmic Girl beauty detail"
+          "alt": "Cosmic Girl beauty detail with metallic texture"
         },
         {
           "src": "assets/images/cosmic-05.jpg",
-          "alt": "Cosmic Girl atmospheric portrait"
+          "alt": "Cosmic Girl atmospheric fashion portrait"
         },
         {
           "src": "assets/images/cosmic-06.jpg",
@@ -107,30 +107,31 @@
       "covers": [
         {
           "src": "assets/images/julia-01.jpg",
-          "alt": "Julia editorial portrait",
+          "alt": "Quiet editorial portrait with refined winter styling",
+          "previewPosition": "50% 38%",
           "className": ""
         }
       ],
       "images": [
         {
           "src": "assets/images/julia-01.jpg",
-          "alt": "Julia editorial portrait 1"
+          "alt": "Julia quiet editorial portrait with winter styling"
         },
         {
           "src": "assets/images/julia-02.jpg",
-          "alt": "Julia editorial portrait 2"
+          "alt": "Julia studio portrait with direct expression"
         },
         {
           "src": "assets/images/julia-03.jpg",
-          "alt": "Julia editorial portrait 3"
+          "alt": "Julia fashion portrait with restrained editorial styling"
         },
         {
           "src": "assets/images/julia-04.jpg",
-          "alt": "Julia editorial portrait 4"
+          "alt": "Julia portrait with soft cinematic light"
         },
         {
           "src": "assets/images/julia-05.jpg",
-          "alt": "Julia editorial portrait 5"
+          "alt": "Julia editorial beauty portrait"
         }
       ]
     },
@@ -143,46 +144,47 @@
       "covers": [
         {
           "src": "assets/images/sophie-01.jpg",
-          "alt": "Sophie editorial portrait",
+          "alt": "Nocturnal Soho fashion editorial portrait in London",
+          "previewPosition": "50% 43%",
           "className": "tile-wide"
         }
       ],
       "images": [
         {
           "src": "assets/images/sophie-01.jpg",
-          "alt": "Sophie editorial portrait 1"
+          "alt": "Sophie nocturnal Soho editorial portrait"
         },
         {
           "src": "assets/images/sophie-08.jpg",
-          "alt": "Sophie editorial portrait 2"
+          "alt": "Sophie London fashion portrait with cinematic street light"
         },
         {
           "src": "assets/images/sophie-02.jpg",
-          "alt": "Sophie editorial portrait 3"
+          "alt": "Sophie after-dark editorial portrait with motion"
         },
         {
           "src": "assets/images/sophie-03.jpg",
-          "alt": "Sophie editorial portrait 4"
+          "alt": "Sophie night portrait with urban fashion styling"
         },
         {
           "src": "assets/images/sophie-07.jpg",
-          "alt": "Sophie editorial portrait 5"
+          "alt": "Sophie editorial portrait with Soho location light"
         },
         {
           "src": "assets/images/sophie-06.jpg",
-          "alt": "Sophie editorial portrait 6"
+          "alt": "Sophie cinematic fashion portrait in London"
         },
         {
           "src": "assets/images/sophie-09.jpg",
-          "alt": "Sophie editorial portrait 7"
+          "alt": "Sophie nocturnal portrait with after-dark styling"
         },
         {
           "src": "assets/images/sophie-11.jpg",
-          "alt": "Sophie editorial portrait 8"
+          "alt": "Sophie London editorial portrait with dramatic light"
         },
         {
           "src": "assets/images/sophie-04.jpg",
-          "alt": "Sophie editorial portrait 9"
+          "alt": "Sophie fashion portrait with cinematic city mood"
         }
       ]
     },
@@ -195,22 +197,23 @@
       "covers": [
         {
           "src": "assets/images/harvey-01.jpg",
-          "alt": "Male fashion portrait with moody studio light",
+          "alt": "Menswear portrait with moody London studio light",
+          "previewPosition": "50% 38%",
           "className": ""
         }
       ],
       "images": [
         {
           "src": "assets/images/harvey-01.jpg",
-          "alt": "Harvey male fashion portrait"
+          "alt": "Harvey menswear fashion portrait with low-key light"
         },
         {
           "src": "assets/images/harvey-02.jpg",
-          "alt": "Harvey studio portrait"
+          "alt": "Harvey intimate studio portrait with sculptural shadow"
         },
         {
           "src": "assets/images/harvey-03.jpg",
-          "alt": "Harvey menswear portrait study"
+          "alt": "Harvey menswear portrait study for editorial portfolio"
         }
       ]
     },
@@ -219,34 +222,35 @@
       "section": "editorials",
       "title": "Studio",
       "kicker": "Studio fashion",
-      "description": "Controlled studio portraits built around posture, styling, and a clean high-fashion atmosphere.",
+      "description": "Controlled London studio fashion portraits built around posture, styling, and a clean high-fashion atmosphere.",
       "covers": [
         {
           "src": "assets/images/studio-02.jpg",
-          "alt": "Fashion portrait from a studio session",
+          "alt": "Controlled studio fashion portrait for a London portfolio session",
+          "previewPosition": "50% 38%",
           "className": ""
         }
       ],
       "images": [
         {
           "src": "assets/images/studio-01.jpg",
-          "alt": "Studio fashion portrait"
+          "alt": "London studio fashion portrait with elegant styling"
         },
         {
           "src": "assets/images/studio-02.jpg",
-          "alt": "Studio editorial portrait"
+          "alt": "Studio editorial portrait for a model portfolio"
         },
         {
           "src": "assets/images/studio-03.jpg",
-          "alt": "Studio beauty portrait"
+          "alt": "Studio beauty portrait with controlled light"
         },
         {
           "src": "assets/images/studio-04.jpg",
-          "alt": "Studio fashion study"
+          "alt": "Studio fashion study with clean high-fashion atmosphere"
         },
         {
           "src": "assets/images/studio-05.jpg",
-          "alt": "Studio editorial portrait 5"
+          "alt": "London studio editorial portrait with poised styling"
         }
       ]
     },
@@ -255,11 +259,12 @@
       "section": "editorials",
       "title": "Dark Baroque",
       "kicker": "Fashion editorial",
-      "description": "A theatrical red-room story shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
+      "description": "A theatrical fashion editorial shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
       "covers": [
         {
           "src": "assets/images/dark-baroque-01.jpg",
           "alt": "Dark Baroque fashion portrait on a leather chaise beneath a chandelier",
+          "previewPosition": "50% 42%",
           "className": "tile-wide"
         }
       ],
@@ -286,7 +291,7 @@
         },
         {
           "src": "assets/images/dark-baroque-06.jpg",
-          "alt": "Dark Baroque editorial portrait 6"
+          "alt": "Dark Baroque fashion portrait with theatrical red-room styling"
         }
       ]
     },
@@ -295,44 +300,44 @@
       "section": "fine-art",
       "title": "Kintsugi",
       "kicker": "Fine art collection",
-      "description": "Self-produced fine-art studies in beauty, fracture, repair, and transformation.",
+      "description": "Self-produced fine-art portrait studies in beauty, fracture, repair, and transformation.",
       "covers": [
         {
           "src": "assets/images/fine-art-01.jpg",
-          "alt": "Fine art portrait with sculptural styling",
+          "alt": "Fine-art portrait with sculptural styling and transformation theme",
           "className": "fine-tall"
         },
         {
           "src": "assets/images/kintsugi-01.jpg",
-          "alt": "Fine art portrait study with delicate texture",
+          "alt": "Kintsugi fine-art portrait study with delicate texture",
           "className": ""
         },
         {
           "src": "assets/images/kintsugi-02.jpg",
-          "alt": "Fine art portrait study with contemplative pose",
+          "alt": "Kintsugi fine-art portrait study with contemplative pose",
           "className": ""
         }
       ],
       "images": [
         {
           "src": "assets/images/fine-art-01.jpg",
-          "alt": "Kintsugi fine art portrait"
+          "alt": "Kintsugi fine-art portrait with sculptural styling"
         },
         {
           "src": "assets/images/kintsugi-01.jpg",
-          "alt": "Kintsugi fine art study one"
+          "alt": "Kintsugi fine-art portrait study with delicate texture"
         },
         {
           "src": "assets/images/kintsugi-02.jpg",
-          "alt": "Kintsugi fine art study two"
+          "alt": "Kintsugi fine-art portrait study with contemplative pose"
         },
         {
           "src": "assets/images/kintsugi-03.jpg",
-          "alt": "Kintsugi fine art study three"
+          "alt": "Kintsugi fine-art portrait study in repair and transformation"
         },
         {
           "src": "assets/images/kintsugi-04.jpg",
-          "alt": "Kintsugi fine art study four"
+          "alt": "Kintsugi fine-art portrait study with symbolic texture"
         }
       ]
     },
@@ -345,22 +350,22 @@
       "covers": [
         {
           "src": "assets/images/fine-art-02.jpg",
-          "alt": "Fine art portrait with rose petals on white silk",
+          "alt": "Fine-art portrait with rose petals on white silk",
           "className": "fine-portrait"
         }
       ],
       "images": [
         {
           "src": "assets/images/fine-art-02.jpg",
-          "alt": "Fine art portrait with rose petals on white silk"
+          "alt": "Fine-art portrait with rose petals on white silk"
         },
         {
           "src": "assets/images/petals-02.jpg",
-          "alt": "Petals fine art portrait 1"
+          "alt": "Petals fine-art portrait with softness and body"
         },
         {
           "src": "assets/images/petals-03.jpg",
-          "alt": "Petals fine art portrait 2"
+          "alt": "Petals fine-art portrait with white silk and rose petals"
         }
       ]
     }

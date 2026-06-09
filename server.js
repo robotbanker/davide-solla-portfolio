@@ -2,6 +2,7 @@ const fs = require("fs");
 const http = require("http");
 const path = require("path");
 const { handleAdminRequest } = require("./lib/admin-store");
+const { handleContactRequest } = require("./lib/contact");
 
 const rootDir = __dirname;
 const port = Number(process.env.PORT || 4173);
@@ -13,7 +14,9 @@ const mimeTypes = {
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".png": "image/png",
+  ".txt": "text/plain; charset=utf-8",
   ".webp": "image/webp",
+  ".xml": "application/xml; charset=utf-8",
   ".svg": "image/svg+xml"
 };
 
@@ -51,6 +54,11 @@ const serveStatic = (req, res) => {
 const server = http.createServer((req, res) => {
   if (req.url.startsWith("/api/admin")) {
     handleAdminRequest(req, res);
+    return;
+  }
+
+  if (req.url.startsWith("/api/contact")) {
+    handleContactRequest(req, res);
     return;
   }
 

@@ -28,23 +28,25 @@ let galleryTouchStartX = 0;
 let galleryTouchStartY = 0;
 let lightboxTouchStartX = 0;
 let lightboxTouchStartY = 0;
+let lastGalleryTrigger = null;
+let lastLightboxTrigger = null;
 
 const defaultSiteData = {
   sections: {
     work: {
       kicker: "Selected editorials",
-      heading: "Portraits, beauty stories, and cinematic fashion work."
+      heading: "London fashion editorials, beauty stories, and cinematic portrait work."
     },
     fineArt: {
       kicker: "Fine art",
-      heading: "Self-produced studies in beauty, fracture, and transformation.",
+      heading: "Fine-art portrait studies in beauty, fracture, and transformation.",
       intro: "Available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces."
     },
     services: [
-      "Fashion editorials",
+      "Fashion editorials in London",
       "Beauty portraits",
-      "Model portfolios",
-      "Personal campaigns"
+      "Model portfolio tests",
+      "Fine-art portrait commissions"
     ]
   },
   albums: [
@@ -53,11 +55,11 @@ const defaultSiteData = {
       section: "editorials",
       title: "Roxana",
       kicker: "Editorial story",
-      description: "A polished beauty-led story shaped with soft glamour, reflective colour, and poised studio direction.",
-      covers: [{ src: "assets/images/roxana-01.jpg", alt: "Editorial fashion portrait in warm directional light", className: "tile-large" }],
+      description: "A polished London beauty editorial shaped with soft glamour, reflective colour, and poised studio direction.",
+      covers: [{ src: "assets/images/roxana-01.jpg", alt: "London editorial beauty portrait in warm directional light", className: "tile-large", previewPosition: "50% 52%" }],
       images: [
-        { src: "assets/images/roxana-01.jpg", alt: "Roxana editorial portrait in warm directional light" },
-        { src: "assets/images/roxana-02.jpg", alt: "Roxana fashion portrait with refined styling" },
+        { src: "assets/images/roxana-01.jpg", alt: "Roxana editorial beauty portrait in warm directional light" },
+        { src: "assets/images/roxana-02.jpg", alt: "Roxana London fashion portrait with refined styling" },
         { src: "assets/images/roxana-03.jpg", alt: "Roxana beauty portrait with cinematic colour" },
         { src: "assets/images/roxana-04.jpg", alt: "Roxana editorial portrait with sculptural styling" }
       ]
@@ -67,14 +69,14 @@ const defaultSiteData = {
       section: "editorials",
       title: "Cosmic Girl",
       kicker: "Fashion editorial",
-      description: "Blue-red studio light, metallic texture, and a futuristic beauty mood built around gaze and gesture.",
-      covers: [{ src: "assets/images/cosmic-01.jpg", alt: "Portrait with saturated blue fashion lighting", className: "" }],
+      description: "A futuristic fashion editorial with blue-red studio light, metallic texture, and a beauty mood built around gaze and gesture.",
+      covers: [{ src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic fashion close portrait with blue-red light", className: "", previewPosition: "50% 52%" }],
       images: [
-        { src: "assets/images/cosmic-01.jpg", alt: "Cosmic Girl full-length fashion portrait", previewPosition: "50% 18%" },
-        { src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic close portrait" },
+        { src: "assets/images/cosmic-01.jpg", alt: "Cosmic Girl full-length fashion portrait with futuristic styling", previewPosition: "50% 18%" },
+        { src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic close portrait with blue-red studio light" },
         { src: "assets/images/cosmic-03.jpg", alt: "Cosmic Girl blue-lit editorial pose" },
-        { src: "assets/images/cosmic-04.jpg", alt: "Cosmic Girl beauty detail" },
-        { src: "assets/images/cosmic-05.jpg", alt: "Cosmic Girl atmospheric portrait" },
+        { src: "assets/images/cosmic-04.jpg", alt: "Cosmic Girl beauty detail with metallic texture" },
+        { src: "assets/images/cosmic-05.jpg", alt: "Cosmic Girl atmospheric fashion portrait" },
         { src: "assets/images/cosmic-06.jpg", alt: "Cosmic Girl blue-lit fashion portrait" },
         { src: "assets/images/cosmic-07.jpg", alt: "Cosmic Girl futuristic editorial portrait" }
       ]
@@ -85,13 +87,13 @@ const defaultSiteData = {
       title: "Julia",
       kicker: "Portrait story",
       description: "A quiet fashion portrait series with winter styling, direct expression, and a restrained editorial palette.",
-      covers: [{ src: "assets/images/julia-01.jpg", alt: "Julia editorial portrait", className: "" }],
+      covers: [{ src: "assets/images/julia-01.jpg", alt: "Quiet editorial portrait with refined winter styling", className: "", previewPosition: "50% 38%" }],
       images: [
-        { src: "assets/images/julia-01.jpg", alt: "Julia editorial portrait 1" },
-        { src: "assets/images/julia-02.jpg", alt: "Julia editorial portrait 2" },
-        { src: "assets/images/julia-03.jpg", alt: "Julia editorial portrait 3" },
-        { src: "assets/images/julia-04.jpg", alt: "Julia editorial portrait 4" },
-        { src: "assets/images/julia-05.jpg", alt: "Julia editorial portrait 5" }
+        { src: "assets/images/julia-01.jpg", alt: "Julia quiet editorial portrait with winter styling" },
+        { src: "assets/images/julia-02.jpg", alt: "Julia studio portrait with direct expression" },
+        { src: "assets/images/julia-03.jpg", alt: "Julia fashion portrait with restrained editorial styling" },
+        { src: "assets/images/julia-04.jpg", alt: "Julia portrait with soft cinematic light" },
+        { src: "assets/images/julia-05.jpg", alt: "Julia editorial beauty portrait" }
       ]
     },
     {
@@ -100,17 +102,17 @@ const defaultSiteData = {
       title: "Sophie",
       kicker: "Night editorial",
       description: "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
-      covers: [{ src: "assets/images/sophie-01.jpg", alt: "Sophie editorial portrait", className: "tile-wide" }],
+      covers: [{ src: "assets/images/sophie-01.jpg", alt: "Nocturnal Soho fashion editorial portrait in London", className: "tile-wide", previewPosition: "50% 43%" }],
       images: [
-        { src: "assets/images/sophie-01.jpg", alt: "Sophie editorial portrait 1" },
-        { src: "assets/images/sophie-08.jpg", alt: "Sophie editorial portrait 2" },
-        { src: "assets/images/sophie-02.jpg", alt: "Sophie editorial portrait 3" },
-        { src: "assets/images/sophie-03.jpg", alt: "Sophie editorial portrait 4" },
-        { src: "assets/images/sophie-07.jpg", alt: "Sophie editorial portrait 5" },
-        { src: "assets/images/sophie-06.jpg", alt: "Sophie editorial portrait 6" },
-        { src: "assets/images/sophie-09.jpg", alt: "Sophie editorial portrait 7" },
-        { src: "assets/images/sophie-11.jpg", alt: "Sophie editorial portrait 8" },
-        { src: "assets/images/sophie-04.jpg", alt: "Sophie editorial portrait 9" }
+        { src: "assets/images/sophie-01.jpg", alt: "Sophie nocturnal Soho editorial portrait" },
+        { src: "assets/images/sophie-08.jpg", alt: "Sophie London fashion portrait with cinematic street light" },
+        { src: "assets/images/sophie-02.jpg", alt: "Sophie after-dark editorial portrait with motion" },
+        { src: "assets/images/sophie-03.jpg", alt: "Sophie night portrait with urban fashion styling" },
+        { src: "assets/images/sophie-07.jpg", alt: "Sophie editorial portrait with Soho location light" },
+        { src: "assets/images/sophie-06.jpg", alt: "Sophie cinematic fashion portrait in London" },
+        { src: "assets/images/sophie-09.jpg", alt: "Sophie nocturnal portrait with after-dark styling" },
+        { src: "assets/images/sophie-11.jpg", alt: "Sophie London editorial portrait with dramatic light" },
+        { src: "assets/images/sophie-04.jpg", alt: "Sophie fashion portrait with cinematic city mood" }
       ]
     },
     {
@@ -119,11 +121,11 @@ const defaultSiteData = {
       title: "Harvey",
       kicker: "Menswear portrait",
       description: "A masculine portrait study with low-key light, sculptural shadow, and an intimate studio mood.",
-      covers: [{ src: "assets/images/harvey-01.jpg", alt: "Male fashion portrait with moody studio light", className: "" }],
+      covers: [{ src: "assets/images/harvey-01.jpg", alt: "Menswear portrait with moody London studio light", className: "", previewPosition: "50% 38%" }],
       images: [
-        { src: "assets/images/harvey-01.jpg", alt: "Harvey male fashion portrait" },
-        { src: "assets/images/harvey-02.jpg", alt: "Harvey studio portrait" },
-        { src: "assets/images/harvey-03.jpg", alt: "Harvey menswear portrait study" }
+        { src: "assets/images/harvey-01.jpg", alt: "Harvey menswear fashion portrait with low-key light" },
+        { src: "assets/images/harvey-02.jpg", alt: "Harvey intimate studio portrait with sculptural shadow" },
+        { src: "assets/images/harvey-03.jpg", alt: "Harvey menswear portrait study for editorial portfolio" }
       ]
     },
     {
@@ -131,14 +133,14 @@ const defaultSiteData = {
       section: "editorials",
       title: "Studio",
       kicker: "Studio fashion",
-      description: "Controlled studio portraits built around posture, styling, and a clean high-fashion atmosphere.",
-      covers: [{ src: "assets/images/studio-02.jpg", alt: "Fashion portrait from a studio session", className: "" }],
+      description: "Controlled London studio fashion portraits built around posture, styling, and a clean high-fashion atmosphere.",
+      covers: [{ src: "assets/images/studio-02.jpg", alt: "Controlled studio fashion portrait for a London portfolio session", className: "", previewPosition: "50% 38%" }],
       images: [
-        { src: "assets/images/studio-01.jpg", alt: "Studio fashion portrait" },
-        { src: "assets/images/studio-02.jpg", alt: "Studio editorial portrait" },
-        { src: "assets/images/studio-03.jpg", alt: "Studio beauty portrait" },
-        { src: "assets/images/studio-04.jpg", alt: "Studio fashion study" },
-        { src: "assets/images/studio-05.jpg", alt: "Studio editorial portrait 5" }
+        { src: "assets/images/studio-01.jpg", alt: "London studio fashion portrait with elegant styling" },
+        { src: "assets/images/studio-02.jpg", alt: "Studio editorial portrait for a model portfolio" },
+        { src: "assets/images/studio-03.jpg", alt: "Studio beauty portrait with controlled light" },
+        { src: "assets/images/studio-04.jpg", alt: "Studio fashion study with clean high-fashion atmosphere" },
+        { src: "assets/images/studio-05.jpg", alt: "London studio editorial portrait with poised styling" }
       ]
     },
     {
@@ -146,15 +148,15 @@ const defaultSiteData = {
       section: "editorials",
       title: "Dark Baroque",
       kicker: "Fashion editorial",
-      description: "A theatrical red-room story shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
-      covers: [{ src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque fashion portrait on a leather chaise beneath a chandelier", className: "tile-wide" }],
+      description: "A theatrical fashion editorial shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
+      covers: [{ src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque fashion portrait on a leather chaise beneath a chandelier", className: "tile-wide", previewPosition: "50% 42%" }],
       images: [
         { src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque reclining portrait with red velvet drapery and chandelier" },
         { src: "assets/images/dark-baroque-02.jpg", alt: "Dark Baroque staged fashion portrait with blue satin and ivory floral prop" },
         { src: "assets/images/dark-baroque-03.jpg", alt: "Dark Baroque vertical editorial portrait beneath a chandelier" },
         { src: "assets/images/dark-baroque-04.jpg", alt: "Dark Baroque intimate portrait with pearls and sculptural ivory prop" },
         { src: "assets/images/dark-baroque-05.jpg", alt: "Dark Baroque motion portrait with red fan and sweeping satin" },
-        { src: "assets/images/dark-baroque-06.jpg", alt: "Dark Baroque editorial portrait 6" }
+        { src: "assets/images/dark-baroque-06.jpg", alt: "Dark Baroque fashion portrait with theatrical red-room styling" }
       ]
     },
     {
@@ -162,18 +164,18 @@ const defaultSiteData = {
       section: "fine-art",
       title: "Kintsugi",
       kicker: "Fine art collection",
-      description: "Self-produced fine-art studies in beauty, fracture, repair, and transformation.",
+      description: "Self-produced fine-art portrait studies in beauty, fracture, repair, and transformation.",
       covers: [
-        { src: "assets/images/fine-art-01.jpg", alt: "Fine art portrait with sculptural styling", className: "fine-tall" },
-        { src: "assets/images/kintsugi-01.jpg", alt: "Fine art portrait study with delicate texture", className: "" },
-        { src: "assets/images/kintsugi-02.jpg", alt: "Fine art portrait study with contemplative pose", className: "" }
+        { src: "assets/images/fine-art-01.jpg", alt: "Fine-art portrait with sculptural styling and transformation theme", className: "fine-tall" },
+        { src: "assets/images/kintsugi-01.jpg", alt: "Kintsugi fine-art portrait study with delicate texture", className: "" },
+        { src: "assets/images/kintsugi-02.jpg", alt: "Kintsugi fine-art portrait study with contemplative pose", className: "" }
       ],
       images: [
-        { src: "assets/images/fine-art-01.jpg", alt: "Kintsugi fine art portrait" },
-        { src: "assets/images/kintsugi-01.jpg", alt: "Kintsugi fine art study one" },
-        { src: "assets/images/kintsugi-02.jpg", alt: "Kintsugi fine art study two" },
-        { src: "assets/images/kintsugi-03.jpg", alt: "Kintsugi fine art study three" },
-        { src: "assets/images/kintsugi-04.jpg", alt: "Kintsugi fine art study four" }
+        { src: "assets/images/fine-art-01.jpg", alt: "Kintsugi fine-art portrait with sculptural styling" },
+        { src: "assets/images/kintsugi-01.jpg", alt: "Kintsugi fine-art portrait study with delicate texture" },
+        { src: "assets/images/kintsugi-02.jpg", alt: "Kintsugi fine-art portrait study with contemplative pose" },
+        { src: "assets/images/kintsugi-03.jpg", alt: "Kintsugi fine-art portrait study in repair and transformation" },
+        { src: "assets/images/kintsugi-04.jpg", alt: "Kintsugi fine-art portrait study with symbolic texture" }
       ]
     },
     {
@@ -182,14 +184,90 @@ const defaultSiteData = {
       title: "Petals",
       kicker: "Fine art portrait",
       description: "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
-      covers: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk", className: "fine-portrait" }],
+      covers: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine-art portrait with rose petals on white silk", className: "fine-portrait" }],
       images: [
-        { src: "assets/images/fine-art-02.jpg", alt: "Fine art portrait with rose petals on white silk" },
-        { src: "assets/images/petals-02.jpg", alt: "Petals fine art portrait 1" },
-        { src: "assets/images/petals-03.jpg", alt: "Petals fine art portrait 2" }
+        { src: "assets/images/fine-art-02.jpg", alt: "Fine-art portrait with rose petals on white silk" },
+        { src: "assets/images/petals-02.jpg", alt: "Petals fine-art portrait with softness and body" },
+        { src: "assets/images/petals-03.jpg", alt: "Petals fine-art portrait with white silk and rose petals" }
       ]
     }
   ]
+};
+
+const canUseResponsiveDerivative = (src) => {
+  if (!src || !src.startsWith("assets/images/") || src.includes("/uploads/")) {
+    return false;
+  }
+
+  const relativePath = src.slice("assets/images/".length);
+  return !relativePath.includes("/") && /\.(jpe?g)$/i.test(relativePath);
+};
+
+const responsiveDerivative = (src, width) => {
+  const fileName = src.slice(src.lastIndexOf("/") + 1);
+  const extensionIndex = fileName.lastIndexOf(".");
+  const name = fileName.slice(0, extensionIndex);
+  const extension = fileName.slice(extensionIndex);
+
+  return `assets/images/responsive/${name}-${width}${extension}`;
+};
+
+const responsiveFormatDerivative = (src, width, extension) => {
+  const fileName = src.slice(src.lastIndexOf("/") + 1);
+  const extensionIndex = fileName.lastIndexOf(".");
+  const name = fileName.slice(0, extensionIndex);
+
+  return `assets/images/responsive/${name}-${width}.${extension}`;
+};
+
+const setResponsiveImage = (image, src, sizes = "100vw") => {
+  image.src = src;
+
+  if (canUseResponsiveDerivative(src)) {
+    image.srcset = `${responsiveDerivative(src, 720)} 720w, ${responsiveDerivative(src, 1200)} 1200w`;
+    image.sizes = sizes;
+  } else {
+    image.removeAttribute("srcset");
+    image.removeAttribute("sizes");
+  }
+};
+
+const createResponsivePicture = (image, src, sizes = "100vw") => {
+  if (!canUseResponsiveDerivative(src)) {
+    setResponsiveImage(image, src, sizes);
+    return image;
+  }
+
+  const picture = document.createElement("picture");
+
+  [
+    { type: "image/avif", extension: "avif" },
+    { type: "image/webp", extension: "webp" }
+  ].forEach((format) => {
+    const source = document.createElement("source");
+    source.type = format.type;
+    source.srcset = `${responsiveFormatDerivative(src, 720, format.extension)} 720w, ${responsiveFormatDerivative(src, 1200, format.extension)} 1200w`;
+    source.sizes = sizes;
+    picture.append(source);
+  });
+
+  picture.append(image);
+  setResponsiveImage(image, src, sizes);
+  return picture;
+};
+
+const getCoverSizes = (item, baseClass) => {
+  const isFeature = /\b(tile-large|tile-wide|fine-tall|fine-portrait|fine-wide)\b/.test(item.className || "");
+
+  if (baseClass === "work-tile") {
+    return isFeature
+      ? "(max-width: 720px) 100vw, (max-width: 980px) 50vw, 50vw"
+      : "(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw";
+  }
+
+  return isFeature
+    ? "(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw"
+    : "(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw";
 };
 
 const scrollToTarget = (hash, smooth = true) => {
@@ -203,7 +281,8 @@ const scrollToTarget = (hash, smooth = true) => {
     return false;
   }
 
-  const top = target.getBoundingClientRect().top + window.pageYOffset - 92;
+  const headerOffset = header ? header.offsetHeight + 22 : 92;
+  const top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
   const scrollTop = Math.max(0, top);
   document.documentElement.scrollTop = scrollTop;
   document.body.scrollTop = scrollTop;
@@ -227,15 +306,15 @@ const createImageButton = (item, baseClass) => {
   button.setAttribute("aria-label", `Open ${item.title} gallery`);
 
   const image = document.createElement("img");
-  image.src = item.src;
   image.alt = item.alt || item.title;
+  image.decoding = "async";
   image.loading = item.loading || "lazy";
 
   if (item.previewPosition) {
     image.style.objectPosition = item.previewPosition;
   }
 
-  button.append(image);
+  button.append(createResponsivePicture(image, item.src, getCoverSizes(item, baseClass)));
 
   if (item.label) {
     const label = document.createElement("span");
@@ -249,7 +328,7 @@ const createImageButton = (item, baseClass) => {
 const normaliseCover = (album, cover) => ({
   galleryId: album.id,
   title: album.title,
-  label: album.section === "editorials" ? album.title : "",
+  label: cover.label || album.title,
   src: cover.src,
   alt: cover.alt || album.title,
   className: cover.className || "",
@@ -399,10 +478,12 @@ const showLightboxImage = (index) => {
 
   const nextIndex = setActiveGalleryIndex(index);
   const item = activeGallery.images[nextIndex];
+  const caption = item.alt || activeGallery.title;
 
   imageLightboxImage.src = item.src;
-  imageLightboxImage.alt = item.alt || activeGallery.title;
-  imageLightboxCaption.textContent = item.alt || activeGallery.title;
+  imageLightboxImage.removeAttribute("srcset");
+  imageLightboxImage.alt = caption;
+  imageLightboxCaption.textContent = `${nextIndex + 1} / ${count} | ${caption}`;
 };
 
 const stepLightboxImage = (direction) => {
@@ -501,15 +582,19 @@ const openGallery = (galleryId) => {
     frame.addEventListener("focus", () => setActiveGalleryIndex(index));
 
     const image = document.createElement("img");
-    image.src = item.src;
     image.alt = item.alt || gallery.title;
-    image.loading = "eager";
+    image.decoding = "async";
+    image.loading = index < 4 ? "eager" : "lazy";
 
     if (item.previewPosition) {
       image.style.objectPosition = item.previewPosition;
     }
 
-    frame.append(image);
+    const sizes = index === 0
+      ? "(max-width: 720px) 100vw, 66vw"
+      : "(max-width: 720px) 100vw, 33vw";
+
+    frame.append(createResponsivePicture(image, item.src, sizes));
     galleryStrip.append(frame);
   });
 
@@ -518,25 +603,39 @@ const openGallery = (galleryId) => {
   body.classList.add("gallery-open");
   galleryModal.scrollTo(0, 0);
   updateGalleryNavigation();
+  requestAnimationFrame(() => galleryCloseButtons[0]?.focus({ preventScroll: true }));
 };
 
 const openImageLightbox = (index) => {
+  lastLightboxTrigger = document.activeElement;
   showLightboxImage(index);
   imageLightbox.classList.add("is-open");
   imageLightbox.setAttribute("aria-hidden", "false");
   body.classList.add("image-open");
+  requestAnimationFrame(() => imageLightboxClose.focus({ preventScroll: true }));
 };
 
 const closeImageLightbox = () => {
+  const shouldReturnFocus = imageLightbox.classList.contains("is-open") && galleryModal.classList.contains("is-open");
+
   imageLightbox.classList.remove("is-open");
   imageLightbox.setAttribute("aria-hidden", "true");
   body.classList.remove("image-open");
   imageLightboxImage.src = "";
+  imageLightboxImage.removeAttribute("srcset");
   imageLightboxImage.alt = "";
   imageLightboxCaption.textContent = "";
+
+  if (shouldReturnFocus && lastLightboxTrigger) {
+    lastLightboxTrigger.focus({ preventScroll: true });
+  }
+
+  lastLightboxTrigger = null;
 };
 
 const closeGallery = () => {
+  const trigger = lastGalleryTrigger;
+
   closeImageLightbox();
   galleryModal.classList.remove("is-open");
   galleryModal.setAttribute("aria-hidden", "true");
@@ -544,6 +643,12 @@ const closeGallery = () => {
   activeGallery = null;
   activeGalleryIndex = -1;
   updateGalleryNavigation();
+
+  if (trigger) {
+    trigger.focus({ preventScroll: true });
+  }
+
+  lastGalleryTrigger = null;
 };
 
 menuToggle.addEventListener("click", () => {
@@ -576,6 +681,7 @@ document.addEventListener("click", (event) => {
   const item = event.target.closest("[data-gallery]");
 
   if (item) {
+    lastGalleryTrigger = item;
     openGallery(item.dataset.gallery);
   }
 });
@@ -678,36 +784,69 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
+form.addEventListener("invalid", (event) => {
+  form.classList.add("was-submitted");
+  event.target.setAttribute("aria-invalid", "true");
+}, true);
 
-  const data = new FormData(form);
-  const contactEmail = form.dataset.contactEmail;
-  const subject = `Photography enquiry from ${data.get("name")}`;
-  const bodyLines = [
-    `Name: ${data.get("name")}`,
-    `Email: ${data.get("email")}`,
-    `Project type: ${data.get("project")}`,
-    "",
-    data.get("message")
-  ];
-  const mailto = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-
-  window.location.href = mailto;
-  statusMessage.textContent = `Email draft opened for ${contactEmail}.`;
-  form.reset();
+form.addEventListener("input", (event) => {
+  if (event.target.matches("input, textarea, select") && event.target.checkValidity()) {
+    event.target.removeAttribute("aria-invalid");
+  }
 });
 
-setHeaderState();
-loadSiteData();
-window.addEventListener("scroll", setHeaderState, { passive: true });
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  form.classList.add("was-submitted");
+
+  const data = new FormData(form);
+  const submitButton = form.querySelector(".submit-button");
+  const payload = Object.fromEntries(data.entries());
+
+  submitButton.disabled = true;
+  form.setAttribute("aria-busy", "true");
+  statusMessage.textContent = "Sending enquiry...";
+
+  fetch(form.action, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(async (response) => {
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || "Message could not be sent.");
+      }
+
+      statusMessage.textContent = "Thanks, your enquiry has been sent.";
+      form.reset();
+      form.classList.remove("was-submitted");
+    })
+    .catch((error) => {
+      statusMessage.textContent = error.message;
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      form.removeAttribute("aria-busy");
+    });
+});
 
 const restoreHashScroll = () => {
-  requestAnimationFrame(() => scrollToTarget(window.location.hash, false));
+  if (window.location.hash) {
+    requestAnimationFrame(() => scrollToTarget(window.location.hash, false));
+  }
 };
 
-if (document.readyState === "complete") {
+const restoreHashScrollAfterRender = () => {
   restoreHashScroll();
-} else {
-  window.addEventListener("load", restoreHashScroll);
-}
+  window.setTimeout(restoreHashScroll, 250);
+  window.setTimeout(restoreHashScroll, 900);
+};
+
+setHeaderState();
+window.addEventListener("scroll", setHeaderState, { passive: true });
+window.addEventListener("load", restoreHashScrollAfterRender, { once: true });
+loadSiteData().then(restoreHashScrollAfterRender);
