@@ -8,7 +8,7 @@ const clientStatus = document.querySelector("[data-client-status]");
 const gallerySection = document.querySelector("[data-client-gallery]");
 const galleryTitle = document.querySelector("[data-client-gallery-title]");
 const galleryCopy = document.querySelector("[data-client-gallery-copy]");
-const galleryFrame = document.querySelector("[data-client-frame]");
+const galleryGrid = document.querySelector("[data-client-gallery-grid]");
 const downloadLink = document.querySelector("[data-client-download]");
 const logoutButton = document.querySelector("[data-client-logout]");
 const clientStorageKey = "davide-client-gallery";
@@ -52,21 +52,48 @@ const readClientSession = () => {
   }
 };
 
+const escapeHtml = (value = "") => String(value)
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;");
+
+const renderGalleryImages = (client) => {
+  const images = Array.isArray(client.images) ? client.images : [];
+
+  if (!images.length) {
+    galleryGrid.innerHTML = `
+      <div class="client-gallery-empty">
+        <p>${escapeHtml(client.embedError || "The embedded preview is not available right now.")}</p>
+        <a class="text-link text-link-light" href="${escapeHtml(client.lightroomUrl || "#")}" target="_blank" rel="noreferrer">Open Lightroom</a>
+      </div>
+    `;
+    return;
+  }
+
+  galleryGrid.innerHTML = images.map((image, index) => `
+    <figure class="client-gallery-item ${index % 5 === 0 ? "is-wide" : ""}">
+      <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || client.galleryTitle || client.name || "Client gallery image")}" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">
+    </figure>
+  `).join("");
+};
+
 const showGallery = (client) => {
   const name = client.name || "Your";
-  const url = client.embedUrl || client.lightroomUrl;
 
   galleryTitle.textContent = `${name} gallery`;
-  galleryCopy.textContent = "Use the embedded gallery below, or open Lightroom directly for downloads.";
-  downloadLink.href = client.lightroomUrl || url;
-  galleryFrame.src = url;
+  galleryCopy.textContent = client.images?.length
+    ? "Preview the gallery below, or open Lightroom directly for downloads."
+    : "Open Lightroom directly for downloads.";
+  downloadLink.href = client.lightroomUrl || "#";
+  renderGalleryImages(client);
   loginPanel.hidden = true;
   gallerySection.hidden = false;
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 const showLogin = () => {
-  galleryFrame.removeAttribute("src");
+  galleryGrid.innerHTML = '<p class="client-gallery-message">Loading gallery preview...</p>';
   loginPanel.hidden = false;
   gallerySection.hidden = true;
   loginForm.reset();
