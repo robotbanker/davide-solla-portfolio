@@ -1,6 +1,8 @@
 User-agent: *
 Disallow: /admin.html
 Disallow: /api/admin
+Disallow: /api/client
+Disallow: /client-area.html
 Disallow: /data/admin-site.json
 
 Sitemap: https://www.davidesolla.com/sitemap.xml

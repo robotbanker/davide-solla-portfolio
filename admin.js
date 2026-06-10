@@ -6,6 +6,7 @@ const adminStatus = document.querySelector("[data-admin-status]");
 const albumList = document.querySelector("[data-album-list]");
 const albumEditor = document.querySelector("[data-album-editor]");
 const sectionEditor = document.querySelector("[data-section-editor]");
+const clientEditor = document.querySelector("[data-client-editor]");
 const saveButton = document.querySelector("[data-save-site]");
 const createAlbumButton = document.querySelector("[data-create-album]");
 const createAlbumForm = document.querySelector("[data-create-album-form]");
@@ -86,6 +87,15 @@ const api = async (action, options = {}) => {
 };
 
 const selectedAlbum = () => site?.albums.find((album) => album.id === selectedAlbumId);
+
+const ensureSiteShape = () => {
+  site.sections = site.sections || {};
+  site.albums = Array.isArray(site.albums) ? site.albums : [];
+  site.clients = Array.isArray(site.clients) ? site.clients : [];
+  site.clients.forEach((client, index) => {
+    client.id = client.id || `client-${Date.now().toString(36)}-${index + 1}`;
+  });
+};
 
 const ensureAlbumShape = (album) => {
   album.covers = Array.isArray(album.covers) ? album.covers : [];
@@ -213,6 +223,58 @@ const renderSections = () => {
       <span>Services banner, one per line</span>
       <textarea data-section-field="services">${escapeHtml(services)}</textarea>
     </label>
+  `;
+};
+
+const renderClients = () => {
+  const clients = site.clients || [];
+  const clientCards = clients.map((client) => {
+    const hasPassword = Boolean(client.passwordHash || client.password);
+    const hasGallery = Boolean(client.lightroomUrl);
+
+    return `
+      <article class="client-card" data-client-id="${escapeHtml(client.id)}">
+        <div class="client-card-head">
+          <div>
+            <p class="admin-kicker">${escapeHtml(hasGallery ? "Gallery assigned" : "Awaiting gallery")}</p>
+            <h3>${escapeHtml(client.name || client.email || "New client")}</h3>
+          </div>
+          <span class="client-pill ${hasPassword ? "is-ready" : ""}">${hasPassword ? "Password set" : "Needs password"}</span>
+        </div>
+        <div class="client-fields">
+          <label>
+            <span>Client name</span>
+            <input data-client-field="name" value="${escapeHtml(client.name || "")}">
+          </label>
+          <label>
+            <span>Email login</span>
+            <input data-client-field="email" type="email" autocomplete="off" value="${escapeHtml(client.email || "")}">
+          </label>
+          <label>
+            <span>New password</span>
+            <input data-client-password type="password" autocomplete="new-password" placeholder="${hasPassword ? "Leave blank to keep current password" : "Set a password"}">
+          </label>
+          <label>
+            <span>Lightroom gallery link</span>
+            <input data-client-field="lightroomUrl" placeholder="https://lightroom.adobe.com/..." value="${escapeHtml(client.lightroomUrl || "")}">
+          </label>
+        </div>
+        <div class="row-actions client-card-actions">
+          <a class="button-link secondary ${client.lightroomUrl ? "" : "is-disabled"}" href="${escapeHtml(client.lightroomUrl || "#")}" target="_blank" rel="noreferrer">Open gallery</a>
+          <button class="danger" type="button" data-remove-client="${escapeHtml(client.id)}">Remove client</button>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  clientEditor.innerHTML = `
+    <div class="client-toolbar">
+      <p class="editor-meta">Create private logins and assign the Lightroom link each client will see in the Client Area.</p>
+      <button type="button" data-create-client>Create client</button>
+    </div>
+    <div class="client-grid">
+      ${clientCards || `<p class="empty-state">No client logins yet.</p>`}
+    </div>
   `;
 };
 
@@ -462,7 +524,9 @@ const renderAlbumEditor = () => {
 };
 
 const render = () => {
+  ensureSiteShape();
   renderSections();
+  renderClients();
   renderAlbumList();
   renderAlbumEditor();
 };
@@ -471,6 +535,7 @@ const loadSite = async () => {
   setStatus("Loading content...");
   const response = await api("site");
   site = response.site;
+  ensureSiteShape();
   selectedAlbumId = site.albums[0]?.id || "";
   loginPanel.hidden = true;
   adminShell.hidden = false;
@@ -594,6 +659,22 @@ const createAlbum = (title) => {
   render();
 };
 
+const createClient = () => {
+  const id = `client-${Date.now().toString(36)}`;
+
+  site.clients.push({
+    id,
+    name: "New client",
+    email: "",
+    password: "",
+    passwordHash: "",
+    lightroomUrl: ""
+  });
+  markDirty();
+  render();
+  setStatus("Client draft added. Add an email, password, and gallery link, then save changes.");
+};
+
 const renderSelectedFiles = async (input) => {
   const preview = document.querySelector("[data-upload-preview]");
 
@@ -679,6 +760,8 @@ document.addEventListener("click", async (event) => {
   const moveButton = event.target.closest("[data-move-media]");
   const addRemoteButton = event.target.closest("[data-add-remote-images]");
   const importLightroomButton = event.target.closest("[data-import-lightroom]");
+  const createClientButton = event.target.closest("[data-create-client]");
+  const removeClientButton = event.target.closest("[data-remove-client]");
   const cancelCreateAlbumButton = event.target.closest("[data-cancel-create-album]");
 
   if (cancelCreateAlbumButton) {
@@ -691,6 +774,19 @@ document.addEventListener("click", async (event) => {
     selectedAlbumId = selectButton.dataset.selectAlbum;
     pendingDeleteAlbumId = "";
     render();
+    return;
+  }
+
+  if (createClientButton) {
+    createClient();
+    return;
+  }
+
+  if (removeClientButton) {
+    site.clients = site.clients.filter((client) => client.id !== removeClientButton.dataset.removeClient);
+    markDirty();
+    render();
+    setStatus("Client removed. Save changes to publish.");
     return;
   }
 
@@ -840,6 +936,8 @@ const handleEditableChange = (event) => {
   }
 
   const sectionField = event.target.closest("[data-section-field]");
+  const clientField = event.target.closest("[data-client-field]");
+  const clientPassword = event.target.closest("[data-client-password]");
   const albumField = event.target.closest("[data-album-field]");
   const mediaField = event.target.closest("[data-media-field]");
   const positionAxis = event.target.closest("[data-position-axis]");
@@ -852,6 +950,30 @@ const handleEditableChange = (event) => {
 
   if (sectionField) {
     setNested(site, sectionField.dataset.sectionField, sectionField.value);
+    markDirty();
+    return;
+  }
+
+  if (clientField || clientPassword) {
+    const card = event.target.closest("[data-client-id]");
+    const client = site.clients.find((item) => item.id === card?.dataset.clientId);
+
+    if (!client) {
+      return;
+    }
+
+    if (clientField) {
+      client[clientField.dataset.clientField] = clientField.value;
+    }
+
+    if (clientPassword) {
+      if (clientPassword.value) {
+        client.password = clientPassword.value;
+      } else {
+        delete client.password;
+      }
+    }
+
     markDirty();
     return;
   }

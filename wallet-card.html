@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Davide Solla Photography QR Card</title>
+    <style>
+      :root {
+        --ink: #f5f3ee;
+        --soft-ink: #cfcac1;
+        --paper: #030303;
+        --panel: #101012;
+        --accent: #e33b42;
+        --cyan: #48d7df;
+        --line: rgba(246, 246, 243, 0.18);
+        --display: "Didot", "Bodoni 72", "Baskerville", "Times New Roman", serif;
+        --sans: "Avenir Next", "Neue Haas Grotesk Text", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        align-items: center;
+        background:
+          linear-gradient(90deg, rgba(3, 3, 3, 0.94), rgba(3, 3, 3, 0.62)),
+          url("assets/images/hero-cosmic-girl.jpg") center / cover fixed,
+          var(--paper);
+        color: var(--ink);
+        display: grid;
+        font-family: var(--sans);
+        min-height: 100svh;
+        margin: 0;
+        padding: 32px;
+      }
+
+      main {
+        display: grid;
+        gap: 22px;
+        margin: 0 auto;
+        max-width: 1120px;
+        width: 100%;
+      }
+
+      .brand {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        text-transform: uppercase;
+      }
+
+      .brand strong {
+        font-family: var(--display);
+        font-size: clamp(28px, 5vw, 52px);
+        font-weight: 400;
+        line-height: 0.95;
+      }
+
+      .brand span {
+        color: var(--cyan);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        padding-top: 10px;
+        text-align: right;
+      }
+
+      .card-preview {
+        background: rgba(3, 3, 3, 0.58);
+        border: 1px solid var(--line);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.46);
+        padding: clamp(12px, 2.2vw, 22px);
+      }
+
+      .card-preview img {
+        display: block;
+        height: auto;
+        width: 100%;
+      }
+
+      .actions {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .actions a {
+        border: 1px solid rgba(245, 243, 238, 0.72);
+        color: var(--ink);
+        display: inline-flex;
+        font-size: 12px;
+        font-weight: 800;
+        justify-content: center;
+        min-height: 42px;
+        padding: 13px 16px;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .actions a:first-child {
+        background: var(--ink);
+        color: #070707;
+      }
+
+      .note {
+        color: rgba(255, 250, 242, 0.74);
+        line-height: 1.65;
+        margin: 0;
+        max-width: 760px;
+      }
+
+      .note code {
+        color: var(--cyan);
+        font-family: inherit;
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 18px;
+        }
+
+        .brand {
+          display: grid;
+        }
+
+        .brand span {
+          text-align: left;
+        }
+
+        .actions a {
+          width: 100%;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+          display: block;
+          padding: 0;
+        }
+
+        .brand,
+        .actions,
+        .note {
+          display: none;
+        }
+
+        .card-preview {
+          border: 0;
+          box-shadow: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="brand">
+        <strong>Davide Solla</strong>
+        <span>Apple Wallet QR / Photography Business Card</span>
+      </header>
+
+      <section class="card-preview" aria-label="Davide Solla QR business card preview">
+        <img src="assets/wallet/davide-solla-business-card.svg" alt="Davide Solla photography business card with QR code">
+      </section>
+
+      <nav class="actions" aria-label="Downloads">
+        <a href="assets/wallet/davide-solla-business-card.svg" download>Download card SVG</a>
+        <a href="assets/wallet/davide-solla-photography-qr.png" download>Download QR PNG</a>
+        <a href="assets/wallet/davide-solla-contact.vcf" download>Add contact</a>
+        <a href="apple-wallet/davide-solla-photography-card/pass.json" download>Wallet pass template</a>
+      </nav>
+
+      <p class="note">The QR code opens <code>https://www.davidesolla.com/</code>. The Apple Wallet source template is ready for signing with an Apple Developer Pass Type ID before it can be installed on an iPhone.</p>
+    </main>
+  </body>
+</html>

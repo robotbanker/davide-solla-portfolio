@@ -1,0 +1,76 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.davidesolla.photography",
+  "serialNumber": "davide-solla-photography-card-001",
+  "teamIdentifier": "REPLACE_WITH_APPLE_TEAM_ID",
+  "organizationName": "Davide Solla Photography",
+  "description": "Davide Solla Photography business card",
+  "logoText": "Davide Solla",
+  "foregroundColor": "rgb(245, 243, 238)",
+  "backgroundColor": "rgb(3, 3, 3)",
+  "labelColor": "rgb(72, 215, 223)",
+  "barcodes": [
+    {
+      "format": "PKBarcodeFormatQR",
+      "message": "https://www.davidesolla.com/",
+      "messageEncoding": "iso-8859-1",
+      "altText": "davidesolla.com"
+    }
+  ],
+  "barcode": {
+    "format": "PKBarcodeFormatQR",
+    "message": "https://www.davidesolla.com/",
+    "messageEncoding": "iso-8859-1",
+    "altText": "davidesolla.com"
+  },
+  "generic": {
+    "primaryFields": [
+      {
+        "key": "name",
+        "label": "Fashion & Editorial Photographer",
+        "value": "Davide Solla"
+      }
+    ],
+    "secondaryFields": [
+      {
+        "key": "location",
+        "label": "Studio",
+        "value": "London / Naples"
+      },
+      {
+        "key": "instagram",
+        "label": "Instagram",
+        "value": "@davide.studios"
+      }
+    ],
+    "auxiliaryFields": [
+      {
+        "key": "phone",
+        "label": "Phone",
+        "value": "+44 (0) 7493429959"
+      },
+      {
+        "key": "email",
+        "label": "Email",
+        "value": "davidesolla@outlook.it"
+      }
+    ],
+    "backFields": [
+      {
+        "key": "website",
+        "label": "Photography page",
+        "value": "https://www.davidesolla.com/"
+      },
+      {
+        "key": "contact",
+        "label": "Contact",
+        "value": "Phone: +44 (0) 7493429959\nEmail: davidesolla@outlook.it\nInstagram: @davide.studios"
+      },
+      {
+        "key": "services",
+        "label": "Services",
+        "value": "Fashion editorials, beauty portraits, model portfolio tests and fine-art portrait commissions."
+      }
+    ]
+  }
+}

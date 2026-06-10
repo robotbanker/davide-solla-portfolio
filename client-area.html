@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Client Area | Davide Solla Photography</title>
+    <meta name="description" content="Private client gallery access for Davide Solla Photography.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preload" as="image" href="assets/images/responsive/studio-05-1200.avif" imagesrcset="assets/images/responsive/studio-05-720.avif 720w, assets/images/responsive/studio-05-1200.avif 1200w" imagesizes="100vw" type="image/avif" fetchpriority="high">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="styles.css?v=19">
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="index.html#top" aria-label="Davide Solla home">
+        <span>Davide Solla</span>
+        <small>London / Naples</small>
+      </a>
+
+      <div class="header-actions">
+        <a class="header-social" href="https://www.instagram.com/davide.studios/" target="_blank" rel="noreferrer" aria-label="Davide Solla on Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle cx="17.3" cy="6.7" r="1.2"></circle>
+          </svg>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-toggle>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <nav class="site-nav" data-nav aria-label="Main navigation">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#fine-art">Fine Art</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+        <a href="client-area.html" aria-current="page">Client Area</a>
+        <a class="social-link" href="https://www.instagram.com/davide.studios/" target="_blank" rel="noreferrer" aria-label="Davide Solla on Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle cx="17.3" cy="6.7" r="1.2"></circle>
+          </svg>
+        </a>
+      </nav>
+    </header>
+
+    <main id="top" class="client-area-main">
+      <section class="client-login-section" data-client-login-panel aria-labelledby="client-login-heading">
+        <div class="client-login-media">
+          <picture>
+            <source type="image/avif" srcset="assets/images/responsive/studio-05-720.avif 720w, assets/images/responsive/studio-05-1200.avif 1200w" sizes="100vw">
+            <source type="image/webp" srcset="assets/images/responsive/studio-05-720.webp 720w, assets/images/responsive/studio-05-1200.webp 1200w" sizes="100vw">
+            <img src="assets/images/studio-05.jpg" srcset="assets/images/responsive/studio-05-720.jpg 720w, assets/images/responsive/studio-05-1200.jpg 1200w, assets/images/studio-05.jpg 1365w" sizes="100vw" alt="Studio fashion portrait by Davide Solla" width="1365" height="2048" fetchpriority="high" decoding="async">
+          </picture>
+        </div>
+        <div class="client-login-shade"></div>
+
+        <div class="client-login-content">
+          <div class="client-login-copy">
+            <p class="eyebrow">Private gallery</p>
+            <h1 id="client-login-heading">Client Area</h1>
+            <p class="hero-copy">Sign in to view your private gallery and open the Lightroom download link assigned to your session.</p>
+          </div>
+
+          <form class="client-login-form" data-client-login-form>
+            <label>
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" required>
+            </label>
+            <label>
+              <span>Password</span>
+              <input name="password" type="password" autocomplete="current-password" required>
+            </label>
+            <button class="submit-button" type="submit">View gallery</button>
+            <p class="form-status" data-client-status aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="client-gallery-section section-pad" data-client-gallery hidden aria-labelledby="client-gallery-heading">
+        <div class="client-gallery-intro">
+          <div>
+            <p class="section-kicker">Client gallery</p>
+            <h2 id="client-gallery-heading" data-client-gallery-title>Your private gallery</h2>
+            <p data-client-gallery-copy>Use the embedded gallery below, or open Lightroom directly for downloads.</p>
+          </div>
+          <div class="client-gallery-actions">
+            <a class="submit-button client-download" href="#" target="_blank" rel="noreferrer" data-client-download>Download gallery</a>
+            <button class="gallery-back" type="button" data-client-logout>Log out</button>
+          </div>
+        </div>
+
+        <div class="client-embed-shell">
+          <iframe data-client-frame title="Client Lightroom gallery" loading="lazy"></iframe>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Davide Solla</p>
+      <p>Private client gallery access</p>
+      <a href="index.html#top">Back to home</a>
+    </footer>
+
+    <script src="client-area.js?v=1"></script>
+  </body>
+</html>

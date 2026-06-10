@@ -349,6 +349,73 @@ summary {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.client-editor {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.client-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.client-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.client-card {
+  background: #0f0e0c;
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.client-card-head {
+  align-items: start;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.client-card-head h3 {
+  margin: 4px 0 0;
+}
+
+.client-pill {
+  border: 1px solid rgba(228, 82, 93, 0.48);
+  color: #ff9aa0;
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  padding: 8px 9px;
+  text-transform: uppercase;
+}
+
+.client-pill.is-ready {
+  border-color: rgba(184, 214, 110, 0.56);
+  color: var(--success);
+}
+
+.client-fields {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.client-card-actions {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
 .control-panel,
 .gallery-workbench {
   padding: 18px;
@@ -566,6 +633,7 @@ summary {
   .album-fields,
   .upload-options,
   .lightroom-grid,
+  .client-fields,
   .card-fields {
     grid-template-columns: 1fr;
   }
@@ -575,6 +643,12 @@ summary {
   .card-actions {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .client-toolbar,
+  .client-card-head {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .cover-grid,

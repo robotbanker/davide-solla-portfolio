@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Solla;Davide;;;
+FN:Davide Solla
+ORG:Davide Solla Photography
+TITLE:Fashion and Editorial Photographer
+TEL;TYPE=CELL,VOICE:+447493429959
+EMAIL;TYPE=INTERNET:davidesolla@outlook.it
+URL:https://www.davidesolla.com/
+X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/davide.studios/
+ADR;TYPE=WORK:;;London;;;United Kingdom
+NOTE:Cinematic fashion, beauty, portrait and fine-art photography.
+END:VCARD

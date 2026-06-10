@@ -1,7 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
-const { handleAdminRequest } = require("./lib/admin-store");
+const { handleAdminRequest, handleClientRequest } = require("./lib/admin-store");
 const { handleContactRequest } = require("./lib/contact");
 
 const rootDir = __dirname;
@@ -59,6 +59,11 @@ const server = http.createServer((req, res) => {
 
   if (req.url.startsWith("/api/contact")) {
     handleContactRequest(req, res);
+    return;
+  }
+
+  if (req.url.startsWith("/api/client")) {
+    handleClientRequest(req, res);
     return;
   }
 

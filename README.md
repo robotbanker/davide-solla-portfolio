@@ -4,12 +4,13 @@ Portfolio website for Davide Solla, rebuilt from the public Adobe Portfolio cont
 
 ## Files
 
-- `index.html` - single-page website structure and SEO metadata
+- `index.html` - homepage structure and SEO metadata
+- `client-area.html` / `client-area.js` - private client login and embedded gallery page
 - `styles.css` - responsive editorial design system
 - `script.js` - mobile navigation, data-driven albums, image lightbox, and contact form submission
 - `data/site.json` - editable portfolio albums, covers, section text, and gallery image lists
 - `admin.html` - protected admin portal for editing albums and uploading images
-- `server.js` / `api/admin.js` - local and Vercel admin backend endpoints
+- `server.js` / `api/admin.js` / `api/client.js` - local and Vercel backend endpoints
 - `robots.txt` / `sitemap.xml` - crawler guidance and image sitemap for SEO
 - `assets/images/` - curated local portfolio images from the current public site
 
@@ -46,6 +47,12 @@ Album/text edits also refresh `sitemap.xml` so newly published portfolio images 
 After each admin save, the backend calls `VERCEL_DEPLOY_HOOK_URL` so Vercel starts a fresh deployment immediately.
 
 Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
+
+## Client Area
+
+Use the Client area block in `admin.html` to create a client login, set or reset the password, and paste the client's Lightroom shared gallery link. Client passwords are stored as hashes in `data/admin-site.json`, and client records are removed from the public `data/site.json`.
+
+Clients open `client-area.html`, sign in with their email and password, then view the embedded gallery or open the Lightroom link directly for downloads.
 
 ## Contact Form
 
