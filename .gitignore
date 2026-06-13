@@ -1,6 +1,12 @@
 .DS_Store
 assets/.DS_Store
 verification-lightbox.png
+.playwright-cli/
+output/
 node_modules/
+.env
+.env.local
+.env.*.local
+!.env.example
 .vercel/
 .vercel

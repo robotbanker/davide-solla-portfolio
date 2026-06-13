@@ -234,7 +234,7 @@
         <div class="hero-content">
           <p class="eyebrow">London fashion & editorial photographer</p>
           <h1>Davide Solla</h1>
-          <p class="hero-copy">Cinematic fashion, beauty, and portrait photography in London, shaped with controlled light, colour, and a fine-art sense of story.</p>
+          <p class="hero-copy">Cinematic fashion, beauty, and portrait photography shaped with controlled light, colour, and a fine-art sense of story.</p>
           <div class="hero-actions">
             <a class="text-link text-link-light hero-secondary" href="#work">View work</a>
             <a class="text-link text-link-light hero-primary" href="#contact">Book a shoot</a>
@@ -242,9 +242,7 @@
         </div>
 
         <div class="hero-notes" aria-label="Studio summary">
-          <span>London photographer</span>
-          <span>Italian visual language</span>
-          <span>Fashion / Beauty / Model portfolios</span>
+          <span>London / Naples · Fashion · Beauty · Model portfolios</span>
         </div>
       </section>
 
@@ -318,6 +316,7 @@
             <p>Atmospheric portrait studies and print-led work for collectors, interiors, curated spaces, and selected creative collaborations.</p>
           </article>
         </div>
+        <a class="text-link text-link-light section-cta" href="#contact">Discuss a shoot</a>
       </section>
 
       <section class="section-pad fine-art-section" id="fine-art">
@@ -326,7 +325,10 @@
             <p class="section-kicker" data-fine-art-kicker>Fine art</p>
             <h2 data-fine-art-heading>Fine-art portrait studies in beauty, fracture, and transformation.</h2>
           </div>
-          <p data-fine-art-intro>Available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces.</p>
+          <div class="fine-art-copy">
+            <p data-fine-art-intro>Selected works are available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces.</p>
+            <a class="text-link text-link-light" href="#contact">Enquire about prints</a>
+          </div>
         </div>
 
         <div class="fine-grid" data-fine-grid>
@@ -349,6 +351,25 @@
         </div>
       </section>
 
+      <section class="print-shop section-pad" id="print-shop" aria-labelledby="print-shop-heading">
+        <div class="print-shop-layout">
+          <div class="print-shop-copy">
+            <p class="section-kicker">Collector prints</p>
+            <h2 id="print-shop-heading">Selected works produced as gallery-quality editions.</h2>
+            <p>Fine-art and editorial studies are available as made-to-order prints, produced by theprintspace through Creativehub with UK-first fulfilment.</p>
+          </div>
+
+          <div class="print-shop-note" aria-label="Print fulfilment summary">
+            <span>Made to order</span>
+            <span>Archival papers</span>
+            <span>UK-first fulfilment</span>
+          </div>
+        </div>
+
+        <div class="print-shop-grid" data-print-shop-grid></div>
+        <p class="print-shop-status" data-print-shop-status aria-live="polite"></p>
+      </section>
+
       <section class="about section-pad" id="about">
         <div class="about-copy">
           <p class="section-kicker">About</p>
@@ -358,11 +379,11 @@
         </div>
         <figure class="about-image">
           <picture>
-            <source type="image/avif" srcset="assets/images/responsive/studio-01-720.avif 720w, assets/images/responsive/studio-01-1200.avif 1200w" sizes="(max-width: 980px) 520px, 38vw">
-            <source type="image/webp" srcset="assets/images/responsive/studio-01-720.webp 720w, assets/images/responsive/studio-01-1200.webp 1200w" sizes="(max-width: 980px) 520px, 38vw">
-            <img src="assets/images/studio-01.jpg" srcset="assets/images/responsive/studio-01-720.jpg 720w, assets/images/responsive/studio-01-1200.jpg 1200w, assets/images/studio-01.jpg 1241w" sizes="(max-width: 980px) 520px, 38vw" alt="London studio fashion portrait with elegant styling by Davide Solla" loading="lazy" decoding="async">
+            <source type="image/avif" srcset="assets/images/responsive/about-portrait-720.avif 720w, assets/images/responsive/about-portrait-1200.avif 1200w" sizes="(max-width: 980px) 520px, 38vw">
+            <source type="image/webp" srcset="assets/images/responsive/about-portrait-720.webp 720w, assets/images/responsive/about-portrait-1200.webp 1200w" sizes="(max-width: 980px) 520px, 38vw">
+            <img src="assets/images/about-portrait.jpg" srcset="assets/images/responsive/about-portrait-720.jpg 720w, assets/images/responsive/about-portrait-1200.jpg 1200w, assets/images/about-portrait.jpg 1241w" sizes="(max-width: 980px) 520px, 38vw" alt="Davide Solla outdoor portrait at sunset" loading="lazy" decoding="async">
           </picture>
-          <figcaption>Studio fashion and portrait photography, London.</figcaption>
+          <figcaption>Davide Solla, London / Naples.</figcaption>
         </figure>
       </section>
 
@@ -390,6 +411,7 @@
               <option>Beauty portrait</option>
               <option>Model portfolio</option>
               <option>Fine art print</option>
+              <option>Print purchase</option>
               <option>Creative collaboration</option>
             </select>
           </label>
@@ -413,6 +435,80 @@
       <a href="#top">Back to top</a>
     </footer>
 
+    <div class="print-order-modal" data-print-order-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="print-order-title">
+      <div class="print-order-panel">
+        <button class="print-order-close" type="button" aria-label="Close print order" data-print-order-close></button>
+
+        <div class="print-order-summary">
+          <figure class="print-order-image" data-print-order-image></figure>
+          <div class="print-order-heading">
+            <p class="section-kicker" data-print-order-series>Print shop</p>
+            <h2 id="print-order-title" data-print-order-title>Order print</h2>
+            <p data-print-order-price></p>
+          </div>
+        </div>
+
+        <form class="print-order-form" data-print-order-form novalidate>
+          <input type="hidden" name="productId" data-print-order-product-id>
+
+          <div class="print-order-fields">
+            <label>
+              <span>Print size</span>
+              <select name="printOptionId" data-print-order-option required></select>
+            </label>
+            <label>
+              <span>Quantity</span>
+              <input name="quantity" type="number" min="1" max="10" value="1" required>
+            </label>
+            <label>
+              <span>First name</span>
+              <input name="firstName" type="text" autocomplete="given-name" required>
+            </label>
+            <label>
+              <span>Last name</span>
+              <input name="lastName" type="text" autocomplete="family-name" required>
+            </label>
+            <label>
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" required>
+            </label>
+            <label>
+              <span>Phone</span>
+              <input name="phone" type="tel" autocomplete="tel" required>
+            </label>
+            <label class="print-order-wide">
+              <span>Address</span>
+              <input name="line1" type="text" autocomplete="address-line1" required>
+            </label>
+            <label class="print-order-wide">
+              <span>Address line 2</span>
+              <input name="line2" type="text" autocomplete="address-line2">
+            </label>
+            <label>
+              <span>Town / city</span>
+              <input name="town" type="text" autocomplete="address-level2" required>
+            </label>
+            <label>
+              <span>County</span>
+              <input name="county" type="text" autocomplete="address-level1">
+            </label>
+            <label>
+              <span>Postcode</span>
+              <input name="postCode" type="text" autocomplete="postal-code" required>
+            </label>
+            <label>
+              <span>Country</span>
+              <input name="country" type="text" value="United Kingdom" readonly>
+            </label>
+          </div>
+
+          <div class="print-order-delivery" data-print-order-delivery hidden></div>
+          <button class="shop-buy-button print-order-submit" type="submit">Continue to delivery</button>
+          <p class="print-order-status" data-print-order-status aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
     <div class="gallery-modal" data-gallery-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gallery-title">
       <div class="gallery-panel">
         <header class="gallery-header">
@@ -422,9 +518,14 @@
         <div class="gallery-intro">
           <p class="section-kicker" data-gallery-kicker></p>
           <h2 id="gallery-title" data-gallery-title></h2>
+          <dl class="gallery-meta" data-gallery-meta></dl>
           <p data-gallery-description></p>
         </div>
         <div class="gallery-strip" data-gallery-strip></div>
+        <nav class="gallery-project-nav" aria-label="Project navigation">
+          <button class="gallery-back" type="button" data-gallery-prev-project>Previous story</button>
+          <button class="gallery-back" type="button" data-gallery-next-project>Next story</button>
+        </nav>
       </div>
     </div>
 
@@ -438,6 +539,6 @@
       </figure>
     </div>
 
-    <script src="script.js?v=17"></script>
+    <script src="script.js?v=21"></script>
   </body>
 </html>

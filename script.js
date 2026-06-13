@@ -5,9 +5,12 @@ const nav = document.querySelector("[data-nav]");
 const galleryModal = document.querySelector("[data-gallery-modal]");
 const galleryTitle = document.querySelector("[data-gallery-title]");
 const galleryKicker = document.querySelector("[data-gallery-kicker]");
+const galleryMeta = document.querySelector("[data-gallery-meta]");
 const galleryDescription = document.querySelector("[data-gallery-description]");
 const galleryStrip = document.querySelector("[data-gallery-strip]");
 const galleryCloseButtons = document.querySelectorAll("[data-gallery-close]");
+const galleryPrevProjectButton = document.querySelector("[data-gallery-prev-project]");
+const galleryNextProjectButton = document.querySelector("[data-gallery-next-project]");
 const imageLightbox = document.querySelector("[data-image-lightbox]");
 const imageLightboxImage = document.querySelector("[data-image-lightbox-image]");
 const imageLightboxCaption = document.querySelector("[data-image-lightbox-caption]");
@@ -17,10 +20,25 @@ const imageLightboxNextButton = document.querySelector("[data-image-lightbox-nex
 const editorialGrid = document.querySelector("[data-editorial-grid]");
 const fineGrid = document.querySelector("[data-fine-grid]");
 const servicesList = document.querySelector("[data-services-list]");
+const printShopGrid = document.querySelector("[data-print-shop-grid]");
+const printShopStatus = document.querySelector("[data-print-shop-status]");
+const printOrderModal = document.querySelector("[data-print-order-modal]");
+const printOrderForm = document.querySelector("[data-print-order-form]");
+const printOrderClose = document.querySelector("[data-print-order-close]");
+const printOrderImage = document.querySelector("[data-print-order-image]");
+const printOrderSeries = document.querySelector("[data-print-order-series]");
+const printOrderTitle = document.querySelector("[data-print-order-title]");
+const printOrderPrice = document.querySelector("[data-print-order-price]");
+const printOrderOption = document.querySelector("[data-print-order-option]");
+const printOrderProductId = document.querySelector("[data-print-order-product-id]");
+const printOrderDelivery = document.querySelector("[data-print-order-delivery]");
+const printOrderStatus = document.querySelector("[data-print-order-status]");
 const form = document.querySelector(".inquiry-form");
 const statusMessage = document.querySelector("[data-form-status]");
+const sectionNavLinks = [...document.querySelectorAll('.site-nav a[href^="#"]')];
 
 let galleries = {};
+let galleryOrder = [];
 let activeGallery = null;
 let activeGalleryIndex = -1;
 let galleryScrollFrame = null;
@@ -30,6 +48,11 @@ let lightboxTouchStartX = 0;
 let lightboxTouchStartY = 0;
 let lastGalleryTrigger = null;
 let lastLightboxTrigger = null;
+let printProducts = [];
+let activePrintOrderProduct = null;
+let activePrintOrderDraft = null;
+let activeDeliveryOption = null;
+let lastPrintOrderTrigger = null;
 
 const defaultSiteData = {
   sections: {
@@ -40,7 +63,7 @@ const defaultSiteData = {
     fineArt: {
       kicker: "Fine art",
       heading: "Fine-art portrait studies in beauty, fracture, and transformation.",
-      intro: "Available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces."
+      intro: "Selected works are available as large-format, gallery-quality prints for private collectors, interiors, and curated spaces."
     },
     services: [
       "Fashion editorials in London",
@@ -194,6 +217,49 @@ const defaultSiteData = {
   ]
 };
 
+const projectOrder = [
+  "cosmic",
+  "sophie",
+  "kintsugi",
+  "julia",
+  "roxana",
+  "harvey",
+  "studio",
+  "dark-baroque",
+  "petals"
+];
+
+const categoryByGallery = {
+  roxana: "Beauty",
+  cosmic: "Fashion",
+  julia: "Portrait",
+  sophie: "Fashion",
+  harvey: "Portrait",
+  studio: "Model portfolio",
+  "dark-baroque": "Fashion",
+  kintsugi: "Fine Art",
+  petals: "Fine Art"
+};
+
+const locationByGallery = {
+  roxana: "London",
+  cosmic: "London studio",
+  julia: "London",
+  sophie: "Soho, London",
+  harvey: "London studio",
+  studio: "London studio",
+  "dark-baroque": "London",
+  kintsugi: "London",
+  petals: "London"
+};
+
+const featureClassByGallery = {
+  cosmic: "tile-large",
+  sophie: "tile-wide",
+  kintsugi: "tile-large",
+  julia: "tile-tall"
+};
+
 const canUseResponsiveDerivative = (src) => {
   if (!src || !src.startsWith("assets/images/") || src.includes("/uploads/")) {
     return false;
@@ -257,11 +323,11 @@ const createResponsivePicture = (image, src, sizes = "100vw") => {
 };
 
 const getCoverSizes = (item, baseClass) => {
-  const isFeature = /\b(tile-large|tile-wide|fine-tall|fine-portrait|fine-wide)\b/.test(item.className || "");
+  const isFeature = /\b(tile-large|tile-wide|tile-tall|fine-tall|fine-portrait|fine-wide)\b/.test(item.className || "");
 
   if (baseClass === "work-tile") {
     return isFeature
-      ? "(max-width: 720px) 100vw, (max-width: 980px) 50vw, 50vw"
+      ? "(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw"
       : "(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw";
   }
 
@@ -317,21 +383,456 @@ const createImageButton = (item, baseClass) => {
   button.append(createResponsivePicture(image, item.src, getCoverSizes(item, baseClass)));
 
   if (item.label) {
-    const label = document.createElement("span");
-    label.textContent = item.label;
-    button.append(label);
+    const caption = document.createElement("span");
+    caption.className = "tile-caption";
+
+    const category = document.createElement("span");
+    category.className = "tile-category";
+    category.textContent = item.category || item.kicker || "Portfolio";
+
+    const title = document.createElement("span");
+    title.className = "tile-title";
+    title.textContent = item.label;
+
+    const action = document.createElement("span");
+    action.className = "tile-action";
+    action.textContent = "View story";
+
+    caption.append(category, title, action);
+    button.append(caption);
   }
 
   return button;
 };
 
-const normaliseCover = (album, cover) => ({
+const formatPrintMoney = (amount, currencyCode = "GBP") => {
+  const numericAmount = Number(amount);
+
+  if (!Number.isFinite(numericAmount)) {
+    return "";
+  }
+
+  try {
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: currencyCode || "GBP",
+      maximumFractionDigits: numericAmount % 1 === 0 ? 0 : 2
+    }).format(numericAmount);
+  } catch (error) {
+    return `${currencyCode || "GBP"} ${numericAmount.toFixed(numericAmount % 1 === 0 ? 0 : 2)}`;
+  }
+};
+
+const printOptionLabel = (option) => {
+  const details = [
+    option.size,
+    option.frame
+  ].filter(Boolean).join(" / ");
+  const price = formatPrintMoney(option.price, option.currencyCode || "GBP");
+
+  return [details || "Print option", price].filter(Boolean).join(" - ");
+};
+
+const createPrintProductCard = (product) => {
+  const article = document.createElement("article");
+  article.className = "print-card";
+
+  const figure = document.createElement("figure");
+  figure.className = "print-card-image";
+
+  const image = document.createElement("img");
+  image.alt = product.alt || product.title;
+  image.decoding = "async";
+  image.loading = "lazy";
+
+  if (product.image) {
+    figure.append(createResponsivePicture(image, product.image, "(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw"));
+  } else {
+    const placeholder = document.createElement("div");
+    placeholder.className = "print-card-placeholder";
+    placeholder.textContent = product.series || "Creativehub print";
+    figure.append(placeholder);
+  }
+
+  const content = document.createElement("div");
+  content.className = "print-card-content";
+
+  const series = document.createElement("p");
+  series.className = "print-card-series";
+  series.textContent = product.series || "Fine art print";
+
+  const title = document.createElement("h3");
+  title.textContent = product.title;
+
+  const description = document.createElement("p");
+  description.className = "print-card-description";
+  description.textContent = product.description || "";
+
+  const specs = document.createElement("dl");
+  specs.className = "print-card-specs";
+
+  [
+    ["Paper", product.paper],
+    ["Edition", product.edition],
+    ["Sizes", Array.isArray(product.sizes) ? product.sizes.join(" / ") : product.sizes],
+    ["Fulfilment", product.fulfillment]
+  ].forEach(([term, value]) => {
+    if (!value) {
+      return;
+    }
+
+    const dt = document.createElement("dt");
+    const dd = document.createElement("dd");
+    dt.textContent = term;
+    dd.textContent = value;
+    specs.append(dt, dd);
+  });
+
+  const purchase = document.createElement("div");
+  purchase.className = "print-card-purchase";
+
+  const price = document.createElement("p");
+  price.className = "print-card-price";
+  price.textContent = product.fromPrice || "Price on request";
+
+  const button = document.createElement("button");
+  button.className = "shop-buy-button";
+  button.type = "button";
+  button.dataset.printOrder = product.id;
+  button.disabled = !Array.isArray(product.printOptions) || !product.printOptions.length;
+  button.textContent = "Order print";
+  button.setAttribute("aria-label", `Order print: ${product.title}`);
+  purchase.append(price, button);
+
+  content.append(series, title, description, specs, purchase);
+  article.append(figure, content);
+
+  return article;
+};
+
+const resetPrintOrderFeedback = () => {
+  activePrintOrderDraft = null;
+  activeDeliveryOption = null;
+
+  if (printOrderStatus) {
+    printOrderStatus.textContent = "";
+  }
+
+  if (printOrderDelivery) {
+    printOrderDelivery.hidden = true;
+    printOrderDelivery.innerHTML = "";
+  }
+
+  const submitButton = printOrderForm?.querySelector(".print-order-submit");
+
+  if (submitButton) {
+    submitButton.disabled = false;
+    submitButton.textContent = "Continue to delivery";
+  }
+};
+
+const closePrintOrder = () => {
+  if (!printOrderModal) {
+    return;
+  }
+
+  const trigger = lastPrintOrderTrigger;
+  printOrderModal.classList.remove("is-open");
+  printOrderModal.setAttribute("aria-hidden", "true");
+  body.classList.remove("print-order-open");
+  activePrintOrderProduct = null;
+  printOrderForm?.reset();
+  resetPrintOrderFeedback();
+
+  if (trigger) {
+    trigger.focus({ preventScroll: true });
+  }
+
+  lastPrintOrderTrigger = null;
+};
+
+const populatePrintOrderOptions = (product) => {
+  if (!printOrderOption) {
+    return;
+  }
+
+  printOrderOption.innerHTML = "";
+  (product.printOptions || []).forEach((option) => {
+    const item = document.createElement("option");
+    item.value = option.id;
+    item.textContent = printOptionLabel(option);
+    printOrderOption.append(item);
+  });
+};
+
+const openPrintOrder = (product, trigger) => {
+  if (!printOrderModal || !printOrderForm || !product) {
+    return;
+  }
+
+  activePrintOrderProduct = product;
+  lastPrintOrderTrigger = trigger;
+  printOrderForm.reset();
+  resetPrintOrderFeedback();
+  populatePrintOrderOptions(product);
+
+  if (printOrderProductId) {
+    printOrderProductId.value = product.creativehubProductId || "";
+  }
+
+  if (printOrderSeries) {
+    printOrderSeries.textContent = product.series || "Print shop";
+  }
+
+  if (printOrderTitle) {
+    printOrderTitle.textContent = product.title;
+  }
+
+  if (printOrderPrice) {
+    printOrderPrice.textContent = product.fromPrice || "Price on request";
+  }
+
+  if (printOrderImage) {
+    printOrderImage.innerHTML = "";
+
+    if (product.image) {
+      const image = document.createElement("img");
+      image.alt = product.alt || product.title;
+      image.decoding = "async";
+      image.loading = "eager";
+      printOrderImage.append(createResponsivePicture(image, product.image, "(max-width: 720px) 100vw, 38vw"));
+    }
+  }
+
+  printOrderModal.classList.add("is-open");
+  printOrderModal.setAttribute("aria-hidden", "false");
+  body.classList.add("print-order-open");
+  requestAnimationFrame(() => printOrderOption?.focus({ preventScroll: true }));
+};
+
+const renderPrintOrderDelivery = (result) => {
+  if (!printOrderDelivery) {
+    return;
+  }
+
+  activePrintOrderDraft = result;
+  activeDeliveryOption = null;
+  printOrderDelivery.innerHTML = "";
+
+  const summary = document.createElement("div");
+  summary.className = "print-order-costs";
+
+  const subtotal = document.createElement("p");
+  subtotal.textContent = `Print subtotal ${result.retailSubtotalLabel || ""}`.trim();
+  summary.append(subtotal);
+
+  const options = Array.isArray(result.deliveryOptions) ? result.deliveryOptions : [];
+
+  if (options.length) {
+    const list = document.createElement("fieldset");
+    list.className = "print-order-delivery-options";
+    const legend = document.createElement("legend");
+    legend.textContent = "Delivery options";
+    list.append(legend);
+
+    options.forEach((option, index) => {
+      const label = document.createElement("label");
+      label.className = "print-order-delivery-option";
+
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "deliveryOptionId";
+      input.value = String(option.id);
+      input.required = true;
+      input.dataset.deliveryIndex = String(index);
+
+      const text = document.createElement("span");
+      const method = [option.method, option.deliveryTime].filter(Boolean).join(" / ");
+      text.textContent = `${method || "Delivery"} ${option.priceLabel || ""}`.trim();
+
+      input.addEventListener("change", () => {
+        activeDeliveryOption = option;
+        const total = Number((Number(result.retailSubtotal || 0) + Number(option.price || 0)).toFixed(2));
+
+        if (printOrderStatus) {
+          printOrderStatus.textContent = `Delivery selected. Order total: ${formatPrintMoney(total, result.option?.currencyCode || "GBP")}.`;
+        }
+
+        const submitButton = printOrderForm?.querySelector(".print-order-submit");
+
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = "Continue to payment";
+        }
+      });
+
+      label.append(input, text);
+      list.append(label);
+    });
+
+    summary.append(list);
+  }
+
+  const note = document.createElement("p");
+  note.className = "print-order-note";
+  note.textContent = "Choose a delivery option to continue.";
+  summary.append(note);
+  printOrderDelivery.append(summary);
+  printOrderDelivery.hidden = false;
+
+  const submitButton = printOrderForm?.querySelector(".print-order-submit");
+
+  if (submitButton) {
+    submitButton.disabled = options.length > 0;
+    submitButton.textContent = options.length ? "Choose delivery option" : "Continue";
+  }
+};
+
+const submitPrintOrder = async () => {
+  if (!printOrderForm || !activePrintOrderProduct) {
+    return;
+  }
+
+  if (activePrintOrderDraft) {
+    if (!activeDeliveryOption) {
+      if (printOrderStatus) {
+        printOrderStatus.textContent = "Choose a delivery option before continuing.";
+      }
+
+      return;
+    }
+
+    const submitButton = printOrderForm.querySelector(".print-order-submit");
+    submitButton.disabled = true;
+    printOrderForm.setAttribute("aria-busy", "true");
+
+    if (printOrderStatus) {
+      printOrderStatus.textContent = "Opening secure payment checkout...";
+    }
+
+    try {
+      const response = await fetch("/api/prints", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+          action: "createPayment",
+          orderToken: activePrintOrderDraft.orderToken,
+          deliveryOptionId: activeDeliveryOption.id
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.redirectUrl) {
+        throw new Error(result.error || "Payment checkout is not available yet.");
+      }
+
+      window.location.href = result.redirectUrl;
+    } catch (error) {
+      if (printOrderStatus) {
+        printOrderStatus.textContent = error.message;
+      }
+
+      submitButton.disabled = false;
+      printOrderForm.removeAttribute("aria-busy");
+    }
+
+    return;
+  }
+
+  if (!printOrderForm.reportValidity()) {
+    return;
+  }
+
+  const submitButton = printOrderForm.querySelector(".print-order-submit");
+  const data = Object.fromEntries(new FormData(printOrderForm).entries());
+  const payload = {
+    action: "createOrder",
+    productId: Number(data.productId || activePrintOrderProduct.creativehubProductId),
+    printOptionId: Number(data.printOptionId),
+    quantity: Number(data.quantity || 1),
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    phone: data.phone,
+    shippingAddress: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      line1: data.line1,
+      line2: data.line2,
+      town: data.town,
+      county: data.county,
+      postCode: data.postCode,
+      phone: data.phone
+    }
+  };
+
+  submitButton.disabled = true;
+  printOrderForm.setAttribute("aria-busy", "true");
+  resetPrintOrderFeedback();
+
+  if (printOrderStatus) {
+    printOrderStatus.textContent = "Checking Creativehub delivery...";
+  }
+
+  try {
+    const response = await fetch("/api/prints", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.error || "Creativehub could not create the print order right now.");
+    }
+
+    renderPrintOrderDelivery(result);
+
+    if (printOrderStatus) {
+      printOrderStatus.textContent = Array.isArray(result.deliveryOptions) && result.deliveryOptions.length
+        ? "Choose a delivery option to continue."
+        : "Creativehub order details are ready.";
+    }
+  } catch (error) {
+    if (printOrderStatus) {
+      printOrderStatus.textContent = error.message;
+    }
+  } finally {
+    submitButton.disabled = Boolean(activePrintOrderDraft && !activeDeliveryOption);
+    printOrderForm.removeAttribute("aria-busy");
+  }
+};
+
+const albumSortIndex = (album) => {
+  const index = projectOrder.indexOf(album.id);
+  return index === -1 ? projectOrder.length : index;
+};
+
+const scopedCoverClass = (baseClass, className = "") => {
+  const allowedPattern = baseClass === "work-tile"
+    ? /\b(tile-large|tile-wide|tile-tall)\b/g
+    : /\b(fine-tall|fine-wide|fine-portrait)\b/g;
+
+  return [...String(className).matchAll(allowedPattern)]
+    .map((match) => match[1])
+    .join(" ");
+};
+
+const normaliseCover = (album, cover, baseClass = "work-tile") => ({
   galleryId: album.id,
   title: album.title,
   label: cover.label || album.title,
   src: cover.src,
   alt: cover.alt || album.title,
-  className: cover.className || "",
+  kicker: album.kicker,
+  category: album.category || categoryByGallery[album.id] || album.kicker,
+  className: baseClass === "work-tile"
+    ? scopedCoverClass(baseClass, cover.workClassName || featureClassByGallery[album.id] || cover.className)
+    : scopedCoverClass(baseClass, cover.fineClassName || cover.className),
   previewPosition: cover.previewPosition || "",
   loading: album.section === "fine-art" ? "eager" : "lazy"
 });
@@ -351,11 +852,17 @@ const renderPortfolio = (siteData) => {
     return collection;
   }, {});
 
+  galleryOrder = [...data.albums]
+    .filter((album) => album.section === "editorials" || album.section === "fine-art")
+    .sort((a, b) => albumSortIndex(a) - albumSortIndex(b))
+    .map((album) => album.id);
+
   if (editorialGrid) {
     editorialGrid.innerHTML = "";
-    data.albums
-      .filter((album) => album.section === "editorials")
-      .flatMap((album) => (album.covers || []).map((cover) => normaliseCover(album, cover)))
+    [...data.albums]
+      .filter((album) => album.section === "editorials" || album.id === "kintsugi")
+      .sort((a, b) => albumSortIndex(a) - albumSortIndex(b))
+      .flatMap((album) => (album.covers || []).slice(0, 1).map((cover) => normaliseCover(album, cover, "work-tile")))
       .forEach((cover) => editorialGrid.append(createImageButton(cover, "work-tile")));
   }
 
@@ -363,7 +870,7 @@ const renderPortfolio = (siteData) => {
     fineGrid.innerHTML = "";
     data.albums
       .filter((album) => album.section === "fine-art")
-      .flatMap((album) => (album.covers || []).map((cover) => normaliseCover(album, cover)))
+      .flatMap((album) => (album.covers || []).map((cover) => normaliseCover(album, cover, "fine-image")))
       .forEach((cover) => fineGrid.append(createImageButton(cover, "fine-image")));
   }
 
@@ -373,6 +880,53 @@ const renderPortfolio = (siteData) => {
       const item = document.createElement("span");
       item.textContent = service;
       servicesList.append(item);
+    });
+  }
+};
+
+const renderPrintShop = (printData) => {
+  if (!printShopGrid) {
+    return;
+  }
+
+  const data = printData && Array.isArray(printData.prints)
+    ? printData
+    : { prints: [], settings: { leadTime: "Creativehub products could not be loaded right now." } };
+  printProducts = data.prints.filter((product) => product && product.id && product.title);
+  printShopGrid.innerHTML = "";
+
+  if (printProducts.length) {
+    printProducts.forEach((product) => {
+      printShopGrid.append(createPrintProductCard(product));
+    });
+  } else {
+    const empty = document.createElement("p");
+    empty.className = "print-shop-empty";
+    empty.textContent = data.configured === false
+      ? "Creativehub API connection pending."
+      : data.error || "No Creativehub print products are currently listed.";
+    printShopGrid.append(empty);
+  }
+
+  if (printShopStatus) {
+    printShopStatus.textContent = data.error || data.settings?.leadTime || "";
+  }
+};
+
+const loadPrintShopData = async () => {
+  try {
+    const response = await fetch(`/api/prints?v=${Date.now()}`, { cache: "no-store" });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Creativehub products could not be loaded right now.");
+    }
+
+    renderPrintShop(data);
+  } catch (error) {
+    renderPrintShop({
+      error: error.message,
+      prints: []
     });
   }
 };
@@ -400,6 +954,41 @@ const closeMenu = () => {
   header.classList.remove("is-open");
   menuToggle.setAttribute("aria-expanded", "false");
   menuToggle.setAttribute("aria-label", "Open navigation");
+};
+
+const setActiveNavLink = (hash) => {
+  sectionNavLinks.forEach((link) => {
+    if (link.hash === hash) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+};
+
+const initActiveNav = () => {
+  if (!sectionNavLinks.length || !("IntersectionObserver" in window)) {
+    return;
+  }
+
+  const observedSections = sectionNavLinks
+    .map((link) => document.querySelector(link.hash))
+    .filter(Boolean);
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+    if (visible?.target?.id) {
+      setActiveNavLink(`#${visible.target.id}`);
+    }
+  }, {
+    rootMargin: "-38% 0px -54% 0px",
+    threshold: [0, 0.18, 0.4]
+  });
+
+  observedSections.forEach((section) => observer.observe(section));
 };
 
 const galleryImageCount = () => activeGallery?.images?.length || 0;
@@ -556,6 +1145,57 @@ const handleSwipe = (startX, startY, endX, endY, onPrevious, onNext) => {
   return true;
 };
 
+const renderGalleryMeta = (gallery) => {
+  if (!galleryMeta) {
+    return;
+  }
+
+  galleryMeta.innerHTML = "";
+
+  [
+    ["Category", gallery.category || categoryByGallery[gallery.id] || gallery.kicker],
+    ["Location", gallery.location || locationByGallery[gallery.id]],
+    ["Year", gallery.year],
+    ["Credits", gallery.credits]
+  ].forEach(([term, value]) => {
+    if (!value) {
+      return;
+    }
+
+    const dt = document.createElement("dt");
+    const dd = document.createElement("dd");
+    dt.textContent = term;
+    dd.textContent = value;
+    galleryMeta.append(dt, dd);
+  });
+};
+
+const updateProjectNavigation = () => {
+  const currentIndex = galleryOrder.indexOf(activeGallery?.id);
+  const hasMultipleProjects = galleryOrder.length > 1 && currentIndex >= 0;
+
+  [galleryPrevProjectButton, galleryNextProjectButton].forEach((button) => {
+    if (button) {
+      button.disabled = !hasMultipleProjects;
+    }
+  });
+};
+
+const stepProject = (direction) => {
+  if (!activeGallery || galleryOrder.length < 2) {
+    return;
+  }
+
+  const currentIndex = galleryOrder.indexOf(activeGallery.id);
+
+  if (currentIndex === -1) {
+    return;
+  }
+
+  const nextIndex = (currentIndex + direction + galleryOrder.length) % galleryOrder.length;
+  openGallery(galleryOrder[nextIndex]);
+};
+
 const openGallery = (galleryId) => {
   const gallery = galleries[galleryId];
 
@@ -568,6 +1208,7 @@ const openGallery = (galleryId) => {
   galleryTitle.textContent = gallery.title;
   galleryKicker.textContent = gallery.kicker;
   galleryDescription.textContent = gallery.description;
+  renderGalleryMeta(gallery);
   galleryStrip.innerHTML = "";
 
   gallery.images.forEach((item, index) => {
@@ -603,6 +1244,7 @@ const openGallery = (galleryId) => {
   body.classList.add("gallery-open");
   galleryModal.scrollTo(0, 0);
   updateGalleryNavigation();
+  updateProjectNavigation();
   requestAnimationFrame(() => galleryCloseButtons[0]?.focus({ preventScroll: true }));
 };
 
@@ -666,6 +1308,7 @@ nav.addEventListener("click", (event) => {
     closeMenu();
 
     if (scrollToTarget(link.hash)) {
+      setActiveNavLink(link.hash);
       history.pushState(null, "", link.hash);
     }
 
@@ -684,10 +1327,33 @@ document.addEventListener("click", (event) => {
     lastGalleryTrigger = item;
     openGallery(item.dataset.gallery);
   }
+
+  const printButton = event.target.closest("[data-print-order]");
+
+  if (printButton) {
+    const product = printProducts.find((item) => item.id === printButton.dataset.printOrder);
+    openPrintOrder(product, printButton);
+  }
 });
 
 galleryCloseButtons.forEach((button) => {
   button.addEventListener("click", closeGallery);
+});
+
+galleryPrevProjectButton?.addEventListener("click", () => stepProject(-1));
+galleryNextProjectButton?.addEventListener("click", () => stepProject(1));
+
+printOrderClose?.addEventListener("click", closePrintOrder);
+
+printOrderModal?.addEventListener("click", (event) => {
+  if (event.target === printOrderModal) {
+    closePrintOrder();
+  }
+});
+
+printOrderForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  submitPrintOrder();
 });
 
 galleryModal.addEventListener("click", (event) => {
@@ -770,6 +1436,11 @@ document.addEventListener("keydown", (event) => {
   }
 
   if (event.key === "Escape") {
+    if (printOrderModal?.classList.contains("is-open")) {
+      closePrintOrder();
+      return;
+    }
+
     if (imageLightbox.classList.contains("is-open")) {
       closeImageLightbox();
       return;
@@ -847,6 +1518,8 @@ const restoreHashScrollAfterRender = () => {
 };
 
 setHeaderState();
+initActiveNav();
 window.addEventListener("scroll", setHeaderState, { passive: true });
 window.addEventListener("load", restoreHashScrollAfterRender, { once: true });
 loadSiteData().then(restoreHashScrollAfterRender);
+loadPrintShopData().then(restoreHashScrollAfterRender);

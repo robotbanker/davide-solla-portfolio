@@ -3,6 +3,7 @@ const http = require("http");
 const path = require("path");
 const { handleAdminRequest, handleClientRequest } = require("./lib/admin-store");
 const { handleContactRequest } = require("./lib/contact");
+const { handlePrintsRequest, handleStripeWebhookRequest } = require("./lib/creativehub");
 
 const rootDir = __dirname;
 const port = Number(process.env.PORT || 4173);
@@ -11,6 +12,7 @@ const mimeTypes = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".avif": "image/avif",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".png": "image/png",
@@ -59,6 +61,16 @@ const server = http.createServer((req, res) => {
 
   if (req.url.startsWith("/api/contact")) {
     handleContactRequest(req, res);
+    return;
+  }
+
+  if (req.url.startsWith("/api/prints")) {
+    handlePrintsRequest(req, res);
+    return;
+  }
+
+  if (req.url.startsWith("/api/stripe-webhook")) {
+    handleStripeWebhookRequest(req, res);
     return;
   }
 

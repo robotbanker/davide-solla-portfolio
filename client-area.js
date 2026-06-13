@@ -93,7 +93,7 @@ const showGallery = (client) => {
 };
 
 const showLogin = () => {
-  galleryGrid.innerHTML = '<p class="client-gallery-message">Loading gallery preview...</p>';
+  galleryGrid.innerHTML = '<p class="client-gallery-message is-loading">Preparing your private gallery preview.</p>';
   loginPanel.hidden = false;
   gallerySection.hidden = true;
   loginForm.reset();

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "check": "node --check script.js && node --check admin.js && node --check client-area.js && node --check server.js && node --check lib/admin-store.js && node --check lib/contact.js && node --check lib/seo.js && node --check api/admin.js && node --check api/client.js && node --check api/contact.js"
+    "check": "node --check script.js && node --check admin.js && node --check client-area.js && node --check server.js && node --check lib/admin-store.js && node --check lib/contact.js && node --check lib/creativehub.js && node --check lib/env.js && node --check lib/seo.js && node --check api/admin.js && node --check api/client.js && node --check api/contact.js && node --check api/prints.js && node --check api/stripe-webhook.js"
   },
   "dependencies": {
     "busboy": "^1.6.0",
