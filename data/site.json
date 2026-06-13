@@ -262,7 +262,7 @@
           "src": "assets/images/dark-baroque-05.jpg",
           "alt": "Dark Baroque motion portrait with red fan and sweeping satin",
           "previewPosition": "54% 49%",
-          "className": "tile-large"
+          "className": "fine-tall"
         }
       ],
       "images": [
@@ -373,5 +373,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-13T14:21:16.700Z"
+  "updatedAt": "2026-06-13T14:23:10.055Z"
 }
