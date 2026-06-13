@@ -262,7 +262,7 @@
           "src": "assets/images/dark-baroque-05.jpg",
           "alt": "Dark Baroque motion portrait with red fan and sweeping satin",
           "previewPosition": "54% 49%",
-          "className": ""
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -373,7 +373,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-10T19:12:19.214Z",
+  "updatedAt": "2026-06-13T14:21:16.700Z",
   "clients": [
     {
       "id": "client-mq8fvobk",
@@ -381,7 +381,7 @@
       "email": "inna@outlook.it",
       "passwordHash": "scrypt:36c0a570fcac868d0f0b4648b320509c:e01e6bed1c57df5f863b17a4681b40ef1fd07e645b2f8412e62ea172a85371c6",
       "lightroomUrl": "https://adobe.ly/4utSWwP",
-      "updatedAt": "2026-06-10T19:09:09.932Z"
+      "updatedAt": "2026-06-13T14:21:16.704Z"
     },
     {
       "id": "client-mq8fxmy4",
@@ -389,15 +389,7 @@
       "email": "",
       "passwordHash": "",
       "lightroomUrl": "",
-      "updatedAt": "2026-06-10T19:09:09.932Z"
-    },
-    {
-      "id": "client-mq8fzsr3",
-      "name": "New client",
-      "email": "",
-      "passwordHash": "",
-      "lightroomUrl": "",
-      "updatedAt": "2026-06-10T19:09:09.932Z"
+      "updatedAt": "2026-06-13T14:21:16.704Z"
     }
   ]
 }
