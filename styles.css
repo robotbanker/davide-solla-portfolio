@@ -490,7 +490,7 @@ h2 {
   display: grid;
   gap: 18px;
   grid-auto-flow: dense;
-  grid-auto-rows: 92px;
+  grid-auto-rows: 8px;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   min-height: 0;
 }
@@ -509,7 +509,7 @@ h2 {
 .work-tile {
   aspect-ratio: auto;
   grid-column: span 3;
-  grid-row: span 4;
+  grid-row: span var(--tile-rows, 52);
   min-height: 0;
 }
 
@@ -531,6 +531,10 @@ h2 {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+.work-tile.is-letterboxed img {
+  object-fit: contain;
 }
 
 .work-tile::after {
@@ -613,17 +617,14 @@ h2 {
 
 .tile-large {
   grid-column: span 6;
-  grid-row: span 7;
 }
 
 .tile-wide {
   grid-column: span 6;
-  grid-row: span 4;
 }
 
 .tile-tall {
   grid-column: span 3;
-  grid-row: span 6;
 }
 
 .services-band {
@@ -1979,28 +1980,24 @@ h2 {
 
   .editorial-grid {
     gap: 16px;
-    grid-auto-rows: 82px;
+    grid-auto-rows: 8px;
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
   .work-tile {
     grid-column: span 3;
-    grid-row: span 4;
   }
 
   .tile-large {
     grid-column: span 6;
-    grid-row: span 7;
   }
 
   .tile-wide {
     grid-column: span 6;
-    grid-row: span 4;
   }
 
   .tile-tall {
     grid-column: span 3;
-    grid-row: span 5;
   }
 
   .fine-grid {
@@ -2199,6 +2196,7 @@ h2 {
   .work-tile {
     grid-column: auto;
     grid-row: auto;
+    --tile-rows: initial;
   }
 
   .fine-grid {

@@ -53,6 +53,7 @@ let activePrintOrderProduct = null;
 let activePrintOrderDraft = null;
 let activeDeliveryOption = null;
 let lastPrintOrderTrigger = null;
+let editorialLayoutFrame = null;
 
 const defaultSiteData = {
   sections: {
@@ -345,6 +346,79 @@ const setText = (selector, value) => {
   }
 };
 
+const editorialFallbackRatio = (tile) => {
+  if (tile.classList.contains("tile-wide")) {
+    return 1.45;
+  }
+
+  if (tile.classList.contains("tile-large")) {
+    return 0.72;
+  }
+
+  return 0.74;
+};
+
+const editorialTileHeight = (tile, imageRatio) => {
+  const width = tile.getBoundingClientRect().width;
+  const ratio = Number.isFinite(imageRatio) && imageRatio > 0
+    ? imageRatio
+    : editorialFallbackRatio(tile);
+
+  if (!width) {
+    return { height: width || 320, letterboxed: false };
+  }
+
+  const desiredHeight = width / ratio;
+  const minHeight = width * 0.55;
+  const maxHeight = width * 1.65;
+  const height = Math.min(Math.max(desiredHeight, minHeight), maxHeight);
+
+  return {
+    height,
+    letterboxed: Math.abs(height - desiredHeight) > 8
+  };
+};
+
+const layoutEditorialGrid = () => {
+  editorialLayoutFrame = null;
+
+  if (!editorialGrid) {
+    return;
+  }
+
+  const tiles = [...editorialGrid.querySelectorAll(".work-tile")];
+
+  if (window.matchMedia("(max-width: 720px)").matches) {
+    tiles.forEach((tile) => {
+      tile.style.removeProperty("--tile-rows");
+      tile.classList.remove("is-letterboxed");
+    });
+    return;
+  }
+
+  const styles = window.getComputedStyle(editorialGrid);
+  const rowHeight = Number.parseFloat(styles.gridAutoRows) || 8;
+  const rowGap = Number.parseFloat(styles.rowGap) || 0;
+
+  tiles.forEach((tile) => {
+    const image = tile.querySelector("img");
+    const ratio = image?.naturalWidth && image?.naturalHeight
+      ? image.naturalWidth / image.naturalHeight
+      : 0;
+    const { height, letterboxed } = editorialTileHeight(tile, ratio);
+    const rowSpan = Math.max(8, Math.round((height + rowGap) / (rowHeight + rowGap)));
+
+    tile.style.setProperty("--tile-rows", String(rowSpan));
+    tile.classList.toggle("is-letterboxed", letterboxed);
+  });
+};
+
+const queueEditorialLayout = () => {
+  if (!editorialLayoutFrame) {
+    editorialLayoutFrame = requestAnimationFrame(layoutEditorialGrid);
+  }
+};
+
 const createImageButton = (item, baseClass) => {
   const button = document.createElement("button");
   button.className = [baseClass, item.className].filter(Boolean).join(" ");
@@ -359,6 +433,10 @@ const createImageButton = (item, baseClass) => {
 
   if (item.previewPosition) {
     image.style.objectPosition = item.previewPosition;
+  }
+
+  if (baseClass === "work-tile") {
+    image.addEventListener("load", queueEditorialLayout, { once: true });
   }
 
   button.append(createResponsivePicture(image, item.src, getCoverSizes(item, baseClass)));
@@ -838,6 +916,7 @@ const renderPortfolio = (siteData) => {
       .filter((album) => album.section === "editorials")
       .flatMap((album) => (album.covers || []).slice(0, 1).map((cover) => normaliseCover(album, cover, "work-tile")))
       .forEach((cover) => editorialGrid.append(createImageButton(cover, "work-tile")));
+    queueEditorialLayout();
   }
 
   if (fineGrid) {
@@ -1494,6 +1573,7 @@ const restoreHashScrollAfterRender = () => {
 setHeaderState();
 initActiveNav();
 window.addEventListener("scroll", setHeaderState, { passive: true });
+window.addEventListener("resize", queueEditorialLayout, { passive: true });
 window.addEventListener("load", restoreHashScrollAfterRender, { once: true });
 loadSiteData().then(restoreHashScrollAfterRender);
 loadPrintShopData().then(restoreHashScrollAfterRender);
