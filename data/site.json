@@ -259,9 +259,9 @@
       "description": "A theatrical fashion editorial shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
       "covers": [
         {
-          "src": "assets/images/dark-baroque-05.jpg",
-          "alt": "Dark Baroque motion portrait with red fan and sweeping satin",
-          "previewPosition": "54% 49%",
+          "src": "assets/images/dark-baroque-06.jpg",
+          "alt": "Dark Baroque fashion portrait with theatrical red-room styling",
+          "previewPosition": "50% 50%",
           "className": "fine-tall"
         }
       ],
@@ -373,5 +373,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-13T14:36:44.674Z"
+  "updatedAt": "2026-06-13T14:38:10.940Z"
 }
