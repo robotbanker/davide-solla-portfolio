@@ -250,7 +250,7 @@ textarea:focus-visible {
 
 .album-list {
   display: grid;
-  gap: 8px;
+  gap: 18px;
   margin-top: 18px;
 }
 
@@ -262,10 +262,37 @@ textarea:focus-visible {
   padding-bottom: 16px;
 }
 
-.album-list button {
+.album-list-section {
+  display: grid;
+  gap: 8px;
+}
+
+.album-list-section h3 {
+  color: var(--muted);
+  font-size: 11px;
+  margin: 0;
+}
+
+.album-section-list {
+  display: grid;
+  gap: 8px;
+}
+
+.album-list-item {
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.album-list-item.is-active {
+  background: rgba(38, 200, 216, 0.08);
+  border-color: var(--accent);
+}
+
+.album-select-button {
   align-items: start;
   background: transparent;
-  border-color: var(--line);
+  border: 0;
   color: var(--ink);
   display: grid;
   gap: 5px;
@@ -276,17 +303,38 @@ textarea:focus-visible {
   text-transform: none;
 }
 
-.album-list button small {
+.album-select-button small {
   color: var(--dim);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
 }
 
-.album-list button.is-active {
-  background: rgba(38, 200, 216, 0.08);
-  border-color: var(--accent);
+.album-list-item.is-active .album-select-button {
   color: var(--accent);
+}
+
+.album-order-actions {
+  border-left: 1px solid var(--line);
+  display: grid;
+  min-width: 68px;
+}
+
+.album-order-actions button {
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  min-height: 0;
+  padding: 0 8px;
+}
+
+.album-order-actions button:last-child {
+  border-bottom: 0;
+}
+
+.album-order-actions button:disabled {
+  cursor: default;
+  opacity: 0.32;
 }
 
 .editor-surface {

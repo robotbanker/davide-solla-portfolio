@@ -63,7 +63,7 @@
           "src": "assets/images/cosmic-01.jpg",
           "alt": "Cosmic Girl full-length fashion portrait with futuristic styling",
           "previewPosition": "49% 38%",
-          "className": ""
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -108,7 +108,7 @@
         {
           "src": "assets/images/julia-01.jpg",
           "alt": "Quiet editorial portrait with refined winter styling",
-          "className": "",
+          "className": "tile-tall",
           "previewPosition": "50% 38%"
         }
       ],
@@ -262,7 +262,7 @@
           "src": "assets/images/dark-baroque-06.jpg",
           "alt": "Dark Baroque fashion portrait with theatrical red-room styling",
           "previewPosition": "50% 50%",
-          "className": "fine-tall"
+          "className": ""
         }
       ],
       "images": [

@@ -217,18 +217,6 @@ const defaultSiteData = {
   ]
 };
 
-const projectOrder = [
-  "cosmic",
-  "sophie",
-  "kintsugi",
-  "julia",
-  "roxana",
-  "harvey",
-  "studio",
-  "dark-baroque",
-  "petals"
-];
-
 const categoryByGallery = {
   roxana: "Beauty",
   cosmic: "Fashion",
@@ -251,13 +239,6 @@ const locationByGallery = {
   "dark-baroque": "London",
   kintsugi: "London",
   petals: "London"
-};
-
-const featureClassByGallery = {
-  cosmic: "tile-large",
-  sophie: "tile-wide",
-  kintsugi: "tile-large",
-  julia: "tile-tall"
 };
 
 const canUseResponsiveDerivative = (src) => {
@@ -807,11 +788,6 @@ const submitPrintOrder = async () => {
   }
 };
 
-const albumSortIndex = (album) => {
-  const index = projectOrder.indexOf(album.id);
-  return index === -1 ? projectOrder.length : index;
-};
-
 const scopedCoverClass = (baseClass, className = "") => {
   const allowedPattern = baseClass === "work-tile"
     ? /\b(tile-large|tile-wide|tile-tall)\b/g
@@ -831,7 +807,7 @@ const normaliseCover = (album, cover, baseClass = "work-tile") => ({
   kicker: album.kicker,
   category: album.category || categoryByGallery[album.id] || album.kicker,
   className: baseClass === "work-tile"
-    ? scopedCoverClass(baseClass, cover.workClassName || featureClassByGallery[album.id] || cover.className)
+    ? scopedCoverClass(baseClass, cover.workClassName || cover.className)
     : scopedCoverClass(baseClass, cover.fineClassName || cover.className),
   previewPosition: cover.previewPosition || "",
   loading: album.section === "fine-art" ? "eager" : "lazy"
@@ -854,14 +830,12 @@ const renderPortfolio = (siteData) => {
 
   galleryOrder = [...data.albums]
     .filter((album) => album.section === "editorials" || album.section === "fine-art")
-    .sort((a, b) => albumSortIndex(a) - albumSortIndex(b))
     .map((album) => album.id);
 
   if (editorialGrid) {
     editorialGrid.innerHTML = "";
     [...data.albums]
-      .filter((album) => album.section === "editorials" || album.id === "kintsugi")
-      .sort((a, b) => albumSortIndex(a) - albumSortIndex(b))
+      .filter((album) => album.section === "editorials")
       .flatMap((album) => (album.covers || []).slice(0, 1).map((cover) => normaliseCover(album, cover, "work-tile")))
       .forEach((cover) => editorialGrid.append(createImageButton(cover, "work-tile")));
   }

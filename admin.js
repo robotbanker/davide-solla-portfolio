@@ -24,8 +24,14 @@ const coverStyles = [
   ["", "Standard"],
   ["tile-large", "Large editorial"],
   ["tile-wide", "Wide editorial"],
+  ["tile-tall", "Tall editorial"],
   ["fine-tall", "Tall fine art"],
   ["fine-portrait", "Portrait fine art"]
+];
+
+const albumSections = [
+  ["editorials", "Editorials"],
+  ["fine-art", "Fine Art"]
 ];
 
 const escapeHtml = (value = "") => String(value)
@@ -88,6 +94,8 @@ const api = async (action, options = {}) => {
 
 const selectedAlbum = () => site?.albums.find((album) => album.id === selectedAlbumId);
 
+const sectionLabel = (section = "editorials") => albumSections.find(([value]) => value === section)?.[1] || "Editorials";
+
 const ensureSiteShape = () => {
   site.sections = site.sections || {};
   site.albums = Array.isArray(site.albums) ? site.albums : [];
@@ -113,9 +121,16 @@ const coverCountLabel = (album) => {
   return `${count} cover${count === 1 ? "" : "s"}`;
 };
 
-const styleOptions = (selected = "") => coverStyles
-  .map(([value, label]) => `<option value="${value}" ${value === selected ? "selected" : ""}>${label}</option>`)
+const styleOptions = (selected = "", section = "editorials") => {
+  const allowedValues = section === "fine-art"
+    ? ["", "fine-tall", "fine-portrait"]
+    : ["", "tile-large", "tile-wide", "tile-tall"];
+
+  return coverStyles
+    .filter(([value]) => allowedValues.includes(value))
+    .map(([value, label]) => `<option value="${value}" ${value === selected ? "selected" : ""}>${label}</option>`)
   .join("");
+};
 
 const imageName = (src = "") => {
   const clean = String(src).split("?")[0].split("#")[0];
@@ -278,13 +293,54 @@ const renderClients = () => {
   `;
 };
 
-const renderAlbumList = () => {
-  albumList.innerHTML = site.albums.map((album) => `
-    <button type="button" class="${album.id === selectedAlbumId ? "is-active" : ""}" data-select-album="${escapeHtml(album.id)}">
+const albumSectionItems = (section) => site.albums.filter((album) => (album.section || "editorials") === section);
+
+const canMoveAlbum = (album, direction) => {
+  const sectionAlbums = albumSectionItems(album.section || "editorials");
+  const index = sectionAlbums.findIndex((item) => item.id === album.id);
+  return direction < 0 ? index > 0 : index >= 0 && index < sectionAlbums.length - 1;
+};
+
+const sanitizeAlbumCoverClasses = (album) => {
+  const allowedValues = album.section === "fine-art"
+    ? ["", "fine-tall", "fine-portrait"]
+    : ["", "tile-large", "tile-wide", "tile-tall"];
+
+  ensureAlbumShape(album).covers.forEach((cover) => {
+    if (!allowedValues.includes(cover.className || "")) {
+      cover.className = "";
+    }
+  });
+};
+
+const renderAlbumItem = (album) => `
+  <article class="album-list-item ${album.id === selectedAlbumId ? "is-active" : ""}">
+    <button type="button" class="album-select-button" data-select-album="${escapeHtml(album.id)}">
       <span>${escapeHtml(album.title || album.id)}</span>
-      <small>${escapeHtml(album.section || "editorials")} - ${imageCountLabel(album)}</small>
+      <small>${imageCountLabel(album)}</small>
     </button>
-  `).join("");
+    <div class="album-order-actions" aria-label="Move ${escapeHtml(album.title || album.id)} album">
+      <button class="secondary" type="button" data-move-album="${escapeHtml(album.id)}:-1" ${canMoveAlbum(album, -1) ? "" : "disabled"}>Up</button>
+      <button class="secondary" type="button" data-move-album="${escapeHtml(album.id)}:1" ${canMoveAlbum(album, 1) ? "" : "disabled"}>Down</button>
+    </div>
+  </article>
+`;
+
+const renderAlbumSection = ([section, label]) => {
+  const albums = albumSectionItems(section);
+
+  return `
+    <section class="album-list-section" data-album-section="${escapeHtml(section)}">
+      <h3>${escapeHtml(label)}</h3>
+      <div class="album-section-list">
+        ${albums.length ? albums.map(renderAlbumItem).join("") : `<p class="empty-state">No ${escapeHtml(label.toLowerCase())} albums yet.</p>`}
+      </div>
+    </section>
+  `;
+};
+
+const renderAlbumList = () => {
+  albumList.innerHTML = albumSections.map(renderAlbumSection).join("");
 };
 
 const renderCropFrame = (item, album, type, index, label) => {
@@ -316,7 +372,7 @@ const renderCoverCards = (album) => {
           </label>
           <label>
             <span>Cover shape</span>
-            <select data-media-field="className">${styleOptions(cover.className || "")}</select>
+            <select data-media-field="className">${styleOptions(cover.className || "", album.section)}</select>
           </label>
           <label>
             <span>Left/right</span>
@@ -394,7 +450,7 @@ const renderAlbumEditor = () => {
   albumEditor.innerHTML = `
     <div class="editor-head">
       <div>
-        <p class="admin-kicker">${escapeHtml(album.section || "editorials")}</p>
+        <p class="admin-kicker">${escapeHtml(sectionLabel(album.section))}</p>
         <h2>${escapeHtml(album.title || album.id)}</h2>
         <p class="editor-meta">${imageCountLabel(album)} - ${coverCountLabel(album)}</p>
       </div>
@@ -620,6 +676,31 @@ const moveMedia = (album, type, index, direction) => {
   items.splice(nextIndex, 0, item);
 };
 
+const moveAlbum = (albumId, direction) => {
+  const album = site.albums.find((item) => item.id === albumId);
+
+  if (!album) {
+    return false;
+  }
+
+  const section = album.section || "editorials";
+  const sectionIndexes = site.albums
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) => (item.section || "editorials") === section);
+  const sectionPosition = sectionIndexes.findIndex(({ item }) => item.id === albumId);
+  const targetPosition = sectionPosition + direction;
+
+  if (sectionPosition < 0 || targetPosition < 0 || targetPosition >= sectionIndexes.length) {
+    return false;
+  }
+
+  const currentIndex = sectionIndexes[sectionPosition].index;
+  const targetIndex = sectionIndexes[targetPosition].index;
+  [site.albums[currentIndex], site.albums[targetIndex]] = [site.albums[targetIndex], site.albums[currentIndex]];
+  selectedAlbumId = albumId;
+  return true;
+};
+
 const buildCoverFromImage = (album, image) => ({
   src: image.src,
   alt: image.alt || album.title,
@@ -763,6 +844,7 @@ document.addEventListener("click", async (event) => {
   const createClientButton = event.target.closest("[data-create-client]");
   const removeClientButton = event.target.closest("[data-remove-client]");
   const cancelCreateAlbumButton = event.target.closest("[data-cancel-create-album]");
+  const moveAlbumButton = event.target.closest("[data-move-album]");
 
   if (cancelCreateAlbumButton) {
     createAlbumForm.reset();
@@ -774,6 +856,18 @@ document.addEventListener("click", async (event) => {
     selectedAlbumId = selectButton.dataset.selectAlbum;
     pendingDeleteAlbumId = "";
     render();
+    return;
+  }
+
+  if (moveAlbumButton) {
+    const [albumId, direction] = moveAlbumButton.dataset.moveAlbum.split(":");
+
+    if (moveAlbum(albumId, Number(direction))) {
+      markDirty();
+      render();
+      setStatus(`${selectedAlbum()?.title || "Album"} moved. Save changes to publish the new order.`);
+    }
+
     return;
   }
 
@@ -992,7 +1086,12 @@ const handleEditableChange = (event) => {
       selectedAlbumId = album.id || previousId;
     }
 
+    if (albumField.dataset.albumField === "section") {
+      sanitizeAlbumCoverClasses(album);
+    }
+
     markDirty();
+    render();
     return;
   }
 
