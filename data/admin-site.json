@@ -262,7 +262,7 @@
           "src": "assets/images/dark-baroque-06.jpg",
           "alt": "Dark Baroque fashion portrait with theatrical red-room styling",
           "previewPosition": "50% 50%",
-          "className": "tile-tall"
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -373,7 +373,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-14T08:43:07.697Z",
+  "updatedAt": "2026-06-14T09:08:18.995Z",
   "clients": [
     {
       "id": "client-mq8fvobk",
@@ -381,7 +381,7 @@
       "email": "inna@outlook.it",
       "passwordHash": "scrypt:36c0a570fcac868d0f0b4648b320509c:e01e6bed1c57df5f863b17a4681b40ef1fd07e645b2f8412e62ea172a85371c6",
       "lightroomUrl": "https://adobe.ly/4utSWwP",
-      "updatedAt": "2026-06-14T08:43:07.698Z"
+      "updatedAt": "2026-06-14T09:08:18.996Z"
     },
     {
       "id": "client-mq8fxmy4",
@@ -389,7 +389,7 @@
       "email": "",
       "passwordHash": "",
       "lightroomUrl": "",
-      "updatedAt": "2026-06-14T08:43:07.698Z"
+      "updatedAt": "2026-06-14T09:08:18.996Z"
     }
   ]
 }
