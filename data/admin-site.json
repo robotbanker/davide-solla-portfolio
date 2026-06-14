@@ -218,40 +218,6 @@
       ]
     },
     {
-      "id": "studio",
-      "section": "editorials",
-      "title": "Studio",
-      "kicker": "Studio fashion",
-      "description": "Controlled London studio fashion portraits built around posture, styling, and a clean high-fashion atmosphere.",
-      "covers": [
-        {
-          "src": "assets/images/studio-05.jpg",
-          "alt": "London studio editorial portrait with poised styling",
-          "previewPosition": "2% 46%",
-          "className": "tile-wide"
-        }
-      ],
-      "images": [
-        {
-          "src": "assets/images/studio-03.jpg",
-          "alt": "Studio beauty portrait with controlled light"
-        },
-        {
-          "src": "assets/images/studio-05.jpg",
-          "alt": "London studio editorial portrait with poised styling",
-          "previewPosition": "3% 50%"
-        },
-        {
-          "src": "assets/images/studio-04.jpg",
-          "alt": "Studio fashion study with clean high-fashion atmosphere"
-        },
-        {
-          "src": "assets/images/studio-01.jpg",
-          "alt": "London studio fashion portrait with elegant styling"
-        }
-      ]
-    },
-    {
       "id": "dark-baroque",
       "section": "editorials",
       "title": "Dark Baroque",
@@ -373,7 +339,7 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-14T09:08:18.995Z",
+  "updatedAt": "2026-06-14T09:13:42.888Z",
   "clients": [
     {
       "id": "client-mq8fvobk",
@@ -381,7 +347,7 @@
       "email": "inna@outlook.it",
       "passwordHash": "scrypt:36c0a570fcac868d0f0b4648b320509c:e01e6bed1c57df5f863b17a4681b40ef1fd07e645b2f8412e62ea172a85371c6",
       "lightroomUrl": "https://adobe.ly/4utSWwP",
-      "updatedAt": "2026-06-14T09:08:18.996Z"
+      "updatedAt": "2026-06-14T09:13:42.889Z"
     },
     {
       "id": "client-mq8fxmy4",
@@ -389,7 +355,7 @@
       "email": "",
       "passwordHash": "",
       "lightroomUrl": "",
-      "updatedAt": "2026-06-14T09:08:18.996Z"
+      "updatedAt": "2026-06-14T09:13:42.889Z"
     }
   ]
 }
