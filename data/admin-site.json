@@ -339,15 +339,15 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-14T09:24:32.792Z",
+  "updatedAt": "2026-06-14T09:26:21.825Z",
   "clients": [
     {
       "id": "client-mq8fvobk",
       "name": "Inna",
       "email": "inna@outlook.it",
-      "passwordHash": "scrypt:36c0a570fcac868d0f0b4648b320509c:e01e6bed1c57df5f863b17a4681b40ef1fd07e645b2f8412e62ea172a85371c6",
-      "lightroomUrl": "",
-      "updatedAt": "2026-06-14T09:24:32.795Z"
+      "passwordHash": "scrypt:9a6c261acbab794d22c16cd11b674a1c:ccf0f4c558a44d3db1ea42202f9787641e916ff10b8be46d03ef95a14e0e2d04",
+      "lightroomUrl": "https://adobe.ly/4uw7Qmp",
+      "updatedAt": "2026-06-14T09:26:21.903Z"
     },
     {
       "id": "client-mq8fxmy4",
@@ -355,7 +355,7 @@
       "email": "",
       "passwordHash": "",
       "lightroomUrl": "",
-      "updatedAt": "2026-06-14T09:24:32.795Z"
+      "updatedAt": "2026-06-14T09:26:21.903Z"
     }
   ]
 }
