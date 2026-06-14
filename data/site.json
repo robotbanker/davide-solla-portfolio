@@ -262,7 +262,7 @@
           "src": "assets/images/dark-baroque-06.jpg",
           "alt": "Dark Baroque fashion portrait with theatrical red-room styling",
           "previewPosition": "50% 50%",
-          "className": "tile-tall"
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -373,5 +373,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-14T08:43:07.697Z"
+  "updatedAt": "2026-06-14T09:08:18.995Z"
 }
