@@ -8,5 +8,6 @@ node_modules/
 .env.local
 .env.*.local
 !.env.example
+data/admin-site.json
 .vercel/
 .vercel

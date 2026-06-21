@@ -23,11 +23,13 @@ npm install
 npm start
 ```
 
-Open `http://localhost:4173/admin.html`. The local default password is `admin`.
+Set `ADMIN_PASSWORD` in `.env.local`, then open `http://localhost:4173/admin.html`. There is no default password.
 
 For production, set these Vercel environment variables:
 
 - `ADMIN_PASSWORD` - the password for the admin portal
+- `ADMIN_SESSION_SECRET` - optional separate key for signing eight-hour admin sessions
+- `ADMIN_DATA_ENCRYPTION_KEY` - encryption key for private client records; keep this stable and backed up
 - `GITHUB_TOKEN` - a fine-grained GitHub token with Contents read/write access to this repo
 - `GITHUB_OWNER` - `robotbanker`
 - `GITHUB_REPO` - `davide-solla-portfolio`
@@ -61,7 +63,7 @@ Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. 
 
 ## Client Area
 
-Use the Client area block in `admin.html` to create a client login, set or reset the password, and paste the client's Lightroom shared gallery link. Client passwords are stored as hashes in `data/admin-site.json`, and client records are removed from the public `data/site.json`.
+Use the Client area block in `admin.html` to create a client login, set or reset the password, and paste the client's Lightroom shared gallery link. Private client records and password hashes are authenticated-encrypted in `data/admin-site.enc`; client records are removed from the public `data/site.json`.
 
 Clients open `client-area.html`, sign in with their email and password, then view the embedded gallery or open the Lightroom link directly for downloads.
 
