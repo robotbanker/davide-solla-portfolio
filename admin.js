@@ -18,7 +18,7 @@ let activeUploadAbort = false;
 let dragTarget = null;
 let pendingDeleteAlbumId = "";
 
-const storageKey = "davide-admin-password";
+const storageKey = "davide-admin-session";
 const defaultCoverStyle = "fine-portrait";
 const coverStyles = [
   ["", "Standard"],
@@ -70,11 +70,11 @@ const markClean = () => {
   delete saveButton.dataset.dirty;
 };
 
-const password = () => sessionStorage.getItem(storageKey) || "";
+const authToken = () => sessionStorage.getItem(storageKey) || "";
 
 const api = async (action, options = {}) => {
   const headers = {
-    "x-admin-password": password(),
+    authorization: `Bearer ${authToken()}`,
     ...(options.headers || {})
   };
 
@@ -794,10 +794,16 @@ const renderSelectedFiles = async (input) => {
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  sessionStorage.setItem(storageKey, new FormData(loginForm).get("password"));
   setStatus("Checking password...", loginStatus);
 
   try {
+    const result = await api("login", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ password: new FormData(loginForm).get("password") })
+    });
+    sessionStorage.setItem(storageKey, result.token);
+    loginForm.reset();
     await loadSite();
     setStatus("", loginStatus);
   } catch (error) {
@@ -1261,7 +1267,7 @@ window.addEventListener("beforeunload", (event) => {
   }
 });
 
-if (password()) {
+if (authToken()) {
   loadSite().catch(() => {
     sessionStorage.removeItem(storageKey);
     loginPanel.hidden = false;
