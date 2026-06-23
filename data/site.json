@@ -99,6 +99,59 @@
       ]
     },
     {
+      "id": "sophie",
+      "section": "editorials",
+      "title": "Sophie",
+      "kicker": "Night editorial",
+      "description": "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
+      "covers": [
+        {
+          "src": "assets/images/sophie-01.jpg",
+          "alt": "Nocturnal Soho fashion editorial portrait in London",
+          "className": "tile-wide",
+          "previewPosition": "50% 43%"
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/images/sophie-01.jpg",
+          "alt": "Sophie nocturnal Soho editorial portrait"
+        },
+        {
+          "src": "assets/images/sophie-08.jpg",
+          "alt": "Sophie London fashion portrait with cinematic street light"
+        },
+        {
+          "src": "assets/images/sophie-02.jpg",
+          "alt": "Sophie after-dark editorial portrait with motion"
+        },
+        {
+          "src": "assets/images/sophie-03.jpg",
+          "alt": "Sophie night portrait with urban fashion styling"
+        },
+        {
+          "src": "assets/images/sophie-07.jpg",
+          "alt": "Sophie editorial portrait with Soho location light"
+        },
+        {
+          "src": "assets/images/sophie-06.jpg",
+          "alt": "Sophie cinematic fashion portrait in London"
+        },
+        {
+          "src": "assets/images/sophie-09.jpg",
+          "alt": "Sophie nocturnal portrait with after-dark styling"
+        },
+        {
+          "src": "assets/images/sophie-11.jpg",
+          "alt": "Sophie London editorial portrait with dramatic light"
+        },
+        {
+          "src": "assets/images/sophie-04.jpg",
+          "alt": "Sophie fashion portrait with cinematic city mood"
+        }
+      ]
+    },
+    {
       "id": "inna",
       "section": "editorials",
       "title": "Inna",
@@ -200,59 +253,6 @@
         {
           "src": "assets/images/julia-05.jpg",
           "alt": "Julia editorial beauty portrait"
-        }
-      ]
-    },
-    {
-      "id": "sophie",
-      "section": "editorials",
-      "title": "Sophie",
-      "kicker": "Night editorial",
-      "description": "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
-      "covers": [
-        {
-          "src": "assets/images/sophie-01.jpg",
-          "alt": "Nocturnal Soho fashion editorial portrait in London",
-          "className": "tile-wide",
-          "previewPosition": "50% 43%"
-        }
-      ],
-      "images": [
-        {
-          "src": "assets/images/sophie-01.jpg",
-          "alt": "Sophie nocturnal Soho editorial portrait"
-        },
-        {
-          "src": "assets/images/sophie-08.jpg",
-          "alt": "Sophie London fashion portrait with cinematic street light"
-        },
-        {
-          "src": "assets/images/sophie-02.jpg",
-          "alt": "Sophie after-dark editorial portrait with motion"
-        },
-        {
-          "src": "assets/images/sophie-03.jpg",
-          "alt": "Sophie night portrait with urban fashion styling"
-        },
-        {
-          "src": "assets/images/sophie-07.jpg",
-          "alt": "Sophie editorial portrait with Soho location light"
-        },
-        {
-          "src": "assets/images/sophie-06.jpg",
-          "alt": "Sophie cinematic fashion portrait in London"
-        },
-        {
-          "src": "assets/images/sophie-09.jpg",
-          "alt": "Sophie nocturnal portrait with after-dark styling"
-        },
-        {
-          "src": "assets/images/sophie-11.jpg",
-          "alt": "Sophie London editorial portrait with dramatic light"
-        },
-        {
-          "src": "assets/images/sophie-04.jpg",
-          "alt": "Sophie fashion portrait with cinematic city mood"
         }
       ]
     },
@@ -407,5 +407,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-23T20:54:29.748Z"
+  "updatedAt": "2026-06-23T20:55:52.916Z"
 }
