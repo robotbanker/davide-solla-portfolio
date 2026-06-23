@@ -231,6 +231,11 @@
       <image:caption>Inna Gallery 1</image:caption>
     </image:image>
     <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 8</image:caption>
+    </image:image>
+    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg</image:loc>
       <image:title>Inna by Davide Solla</image:title>
       <image:caption>Inna Gallery 2</image:caption>
@@ -246,11 +251,6 @@
       <image:caption>Inna Gallery 4</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-5-0d70602f.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 5</image:caption>
-    </image:image>
-    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg</image:loc>
       <image:title>Inna by Davide Solla</image:title>
       <image:caption>Inna Gallery 6</image:caption>
@@ -261,54 +261,14 @@
       <image:caption>Inna Gallery 7</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 8</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-9-37813a0f.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 9</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-10-1c5fc909.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 10</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-11-4082b807.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 11</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-12-183e2b65.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 12</image:caption>
-    </image:image>
-    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg</image:loc>
       <image:title>Inna by Davide Solla</image:title>
       <image:caption>Inna Gallery 13</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-14-e68cf82d.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 14</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-15-15d3b6ce.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 15</image:caption>
-    </image:image>
-    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg</image:loc>
       <image:title>Inna by Davide Solla</image:title>
       <image:caption>Inna Gallery 16</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-17-4ba8b320.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 17</image:caption>
     </image:image>
   </url>
 </urlset>
