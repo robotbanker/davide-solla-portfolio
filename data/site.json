@@ -192,7 +192,7 @@
       "id": "harvey",
       "section": "editorials",
       "title": "Harvey",
-      "kicker": "Menswear portrait",
+      "kicker": "Studio Portrait",
       "description": "A masculine portrait study with low-key light, sculptural shadow, and an intimate studio mood.",
       "covers": [
         {
@@ -337,7 +337,16 @@
           "alt": "Petals fine-art portrait with white silk and rose petals"
         }
       ]
+    },
+    {
+      "id": "inna",
+      "section": "editorials",
+      "title": "Inna",
+      "kicker": "Studio Portrait",
+      "description": "",
+      "covers": [],
+      "images": []
     }
   ],
-  "updatedAt": "2026-06-14T09:55:50.658Z"
+  "updatedAt": "2026-06-23T20:24:10.661Z"
 }
