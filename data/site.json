@@ -162,7 +162,7 @@
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
           "alt": "Inna Gallery 1",
           "previewPosition": "50% 50%",
-          "className": "tile-tall"
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -401,5 +401,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-23T20:59:19.159Z"
+  "updatedAt": "2026-06-23T21:00:43.678Z"
 }
