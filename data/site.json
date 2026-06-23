@@ -156,7 +156,7 @@
       "section": "editorials",
       "title": "Inna",
       "kicker": "Studio Portrait",
-      "description": "A Lightroom editorial gallery imported from the shared Inna Gallery collection.",
+      "description": "A portraiture experiment between light and emotions",
       "covers": [
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
@@ -396,5 +396,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-23T21:01:28.314Z"
+  "updatedAt": "2026-06-23T21:33:36.309Z"
 }
