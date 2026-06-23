@@ -71,6 +71,51 @@
       <image:caption>Cosmic Girl futuristic editorial portrait</image:caption>
     </image:image>
     <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 1</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 8</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 2</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-3-4c2c263a.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 3</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-4-22adb185.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 4</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 6</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-7-eb03a908.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 7</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 13</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg</image:loc>
+      <image:title>Inna by Davide Solla</image:title>
+      <image:caption>Inna Gallery 16</image:caption>
+    </image:image>
+    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/julia-01.jpg</image:loc>
       <image:title>Julia by Davide Solla</image:title>
       <image:caption>Quiet editorial portrait with refined winter styling</image:caption>
@@ -156,36 +201,6 @@
       <image:caption>Harvey menswear portrait study for editorial portfolio</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-06.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque fashion portrait with theatrical red-room styling</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-01.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque reclining portrait with red velvet drapery and chandelier</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-02.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque staged fashion portrait with blue satin and ivory floral prop</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-03.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque vertical editorial portrait beneath a chandelier</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-04.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque intimate portrait with pearls and sculptural ivory prop</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-05.jpg</image:loc>
-      <image:title>Dark Baroque by Davide Solla</image:title>
-      <image:caption>Dark Baroque motion portrait with red fan and sweeping satin</image:caption>
-    </image:image>
-    <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/fine-art-01.jpg</image:loc>
       <image:title>Kintsugi by Davide Solla</image:title>
       <image:caption>Fine-art portrait with sculptural styling and transformation theme</image:caption>
@@ -226,49 +241,34 @@
       <image:caption>Petals fine-art portrait with softness and body</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 1</image:caption>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-06.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque fashion portrait with theatrical red-room styling</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 8</image:caption>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-01.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque reclining portrait with red velvet drapery and chandelier</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 2</image:caption>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-02.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque staged fashion portrait with blue satin and ivory floral prop</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-3-4c2c263a.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 3</image:caption>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-03.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque vertical editorial portrait beneath a chandelier</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-4-22adb185.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 4</image:caption>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-04.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque intimate portrait with pearls and sculptural ivory prop</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 6</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-7-eb03a908.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 7</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 13</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg</image:loc>
-      <image:title>Inna by Davide Solla</image:title>
-      <image:caption>Inna Gallery 16</image:caption>
+      <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-05.jpg</image:loc>
+      <image:title>Dark Baroque by Davide Solla</image:title>
+      <image:caption>Dark Baroque motion portrait with red fan and sweeping satin</image:caption>
     </image:image>
   </url>
 </urlset>
