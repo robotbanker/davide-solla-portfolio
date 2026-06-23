@@ -349,6 +349,12 @@
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
           "alt": "Inna Gallery 1",
           "previewPosition": "50% 50%",
+          "className": "tile-large"
+        },
+        {
+          "src": "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg",
+          "alt": "Inna Gallery 8",
+          "previewPosition": "50% 50%",
           "className": ""
         }
       ],
@@ -374,11 +380,6 @@
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-5-0d70602f.jpg",
-          "alt": "Inna Gallery 5",
-          "previewPosition": "50% 50%"
-        },
-        {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg",
           "alt": "Inna Gallery 6",
           "previewPosition": "50% 50%"
@@ -394,52 +395,17 @@
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-9-37813a0f.jpg",
-          "alt": "Inna Gallery 9",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-10-1c5fc909.jpg",
-          "alt": "Inna Gallery 10",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-11-4082b807.jpg",
-          "alt": "Inna Gallery 11",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-12-183e2b65.jpg",
-          "alt": "Inna Gallery 12",
-          "previewPosition": "50% 50%"
-        },
-        {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg",
           "alt": "Inna Gallery 13",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-14-e68cf82d.jpg",
-          "alt": "Inna Gallery 14",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-15-15d3b6ce.jpg",
-          "alt": "Inna Gallery 15",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg",
           "alt": "Inna Gallery 16",
           "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-17-4ba8b320.jpg",
-          "alt": "Inna Gallery 17",
-          "previewPosition": "50% 50%"
         }
       ]
     }
   ],
-  "updatedAt": "2026-06-23T20:44:44.077Z"
+  "updatedAt": "2026-06-23T20:52:55.649Z"
 }
