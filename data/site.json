@@ -159,16 +159,16 @@
       "description": "A Lightroom editorial gallery imported from the shared Inna Gallery collection.",
       "covers": [
         {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
-          "alt": "Inna Gallery 1",
-          "previewPosition": "50% 50%",
-          "className": "tile-large"
-        },
-        {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg",
           "alt": "Inna Gallery 8",
           "previewPosition": "50% 50%",
-          "className": ""
+          "className": "tile-tall"
+        },
+        {
+          "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
+          "alt": "Inna Gallery 1",
+          "previewPosition": "50% 50%",
+          "className": "tile-tall"
         }
       ],
       "images": [
@@ -407,5 +407,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-23T20:56:55.602Z"
+  "updatedAt": "2026-06-23T20:57:57.739Z"
 }
