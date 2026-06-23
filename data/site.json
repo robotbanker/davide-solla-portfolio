@@ -192,11 +192,6 @@
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-06-23/inna-gallery-7-eb03a908.jpg",
-          "alt": "Inna Gallery 7",
-          "previewPosition": "50% 50%"
-        },
-        {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg",
           "alt": "Inna Gallery 8",
           "previewPosition": "50% 50%"
@@ -401,5 +396,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-06-23T21:00:43.678Z"
+  "updatedAt": "2026-06-23T21:01:28.314Z"
 }
