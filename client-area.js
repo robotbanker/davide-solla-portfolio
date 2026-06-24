@@ -13,6 +13,8 @@ const downloadLink = document.querySelector("[data-client-download]");
 const logoutButton = document.querySelector("[data-client-logout]");
 const clientStorageKey = "davide-client-gallery";
 const clientSessionMs = 8 * 60 * 60 * 1000;
+const protectedImageSelector = "img, picture, source";
+const clientGallerySelector = "[data-client-gallery]";
 
 const setHeaderState = () => {
   header?.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -57,6 +59,11 @@ const escapeHtml = (value = "") => String(value)
   .replace(/</g, "&lt;")
   .replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;");
+
+const isProtectedImageTarget = (target) => {
+  const imageTarget = target.closest(protectedImageSelector);
+  return Boolean(imageTarget && !imageTarget.closest(clientGallerySelector));
+};
 
 const renderGalleryImages = (client) => {
   const images = Array.isArray(client.images) ? client.images : [];
@@ -111,6 +118,18 @@ menuToggle?.addEventListener("click", () => {
 nav?.addEventListener("click", (event) => {
   if (event.target.closest("a")) {
     closeMenu();
+  }
+});
+
+document.addEventListener("contextmenu", (event) => {
+  if (isProtectedImageTarget(event.target)) {
+    event.preventDefault();
+  }
+});
+
+document.addEventListener("dragstart", (event) => {
+  if (isProtectedImageTarget(event.target)) {
+    event.preventDefault();
   }
 });
 

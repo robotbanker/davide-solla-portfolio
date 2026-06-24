@@ -36,6 +36,7 @@ const printOrderStatus = document.querySelector("[data-print-order-status]");
 const form = document.querySelector(".inquiry-form");
 const statusMessage = document.querySelector("[data-form-status]");
 const sectionNavLinks = [...document.querySelectorAll('.site-nav a[href^="#"]')];
+const protectedImageSelector = "img, picture, source";
 
 let galleries = {};
 let galleryOrder = [];
@@ -269,6 +270,7 @@ const responsiveFormatDerivative = (src, width, extension) => {
 };
 
 const setResponsiveImage = (image, src, sizes = "100vw") => {
+  image.draggable = false;
   image.src = src;
 
   if (canUseResponsiveDerivative(src)) {
@@ -279,6 +281,8 @@ const setResponsiveImage = (image, src, sizes = "100vw") => {
     image.removeAttribute("sizes");
   }
 };
+
+const isProtectedImageTarget = (target) => Boolean(target.closest(protectedImageSelector));
 
 const createResponsivePicture = (image, src, sizes = "100vw") => {
   if (!canUseResponsiveDerivative(src)) {
@@ -1405,6 +1409,18 @@ document.addEventListener("click", (event) => {
   if (printButton) {
     const product = printProducts.find((item) => item.id === printButton.dataset.printOrder);
     openPrintOrder(product, printButton);
+  }
+});
+
+document.addEventListener("contextmenu", (event) => {
+  if (isProtectedImageTarget(event.target)) {
+    event.preventDefault();
+  }
+});
+
+document.addEventListener("dragstart", (event) => {
+  if (isProtectedImageTarget(event.target)) {
+    event.preventDefault();
   }
 });
 
