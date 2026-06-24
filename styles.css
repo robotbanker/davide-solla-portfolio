@@ -1310,12 +1310,6 @@ h2 {
   grid-template-columns: minmax(0, 0.82fr) minmax(380px, 0.72fr);
 }
 
-.contact-story {
-  align-content: start;
-  display: grid;
-  gap: 42px;
-}
-
 .contact h2 {
   margin-bottom: 26px;
 }
@@ -1333,24 +1327,6 @@ h2 {
 
 .contact .text-link {
   margin-top: 18px;
-}
-
-.contact-image {
-  border-top: 1px solid var(--warm-line);
-  margin: 0;
-  max-width: 560px;
-  padding-top: 24px;
-}
-
-.contact-image img {
-  aspect-ratio: 16 / 11;
-  height: auto;
-  object-fit: cover;
-  object-position: center 32%;
-}
-
-.contact-image picture {
-  display: block;
 }
 
 .client-login-form,
@@ -2112,10 +2088,6 @@ h2 {
 
   .client-gallery-actions {
     justify-content: flex-start;
-  }
-
-  .contact-image {
-    max-width: none;
   }
 }
 
