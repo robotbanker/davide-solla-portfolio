@@ -296,7 +296,7 @@ body.menu-open .menu-toggle span:last-child {
   background: var(--charcoal);
   color: var(--porcelain);
   display: grid;
-  min-height: 94svh;
+  min-height: 84svh;
   overflow: hidden;
   position: relative;
 }
@@ -329,7 +329,7 @@ body.menu-open .menu-toggle span:last-child {
 .hero-content {
   align-self: end;
   max-width: 760px;
-  padding: 164px max(28px, calc((100vw - 1560px) / 2 + 34px)) 142px;
+  padding: 154px max(28px, calc((100vw - 1560px) / 2 + 34px)) 122px;
   position: relative;
   z-index: 1;
 }
@@ -460,7 +460,7 @@ h2 {
 }
 
 .section-pad {
-  padding: 118px max(28px, calc((100vw - 1480px) / 2 + 34px));
+  padding: 108px max(28px, calc((100vw - 1480px) / 2 + 34px));
 }
 
 #work,
@@ -473,7 +473,7 @@ h2 {
 }
 
 .section-heading {
-  margin-bottom: 54px;
+  margin-bottom: 46px;
   max-width: 820px;
 }
 
@@ -817,12 +817,21 @@ h2 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.print-shop-grid.is-single {
+  grid-template-columns: minmax(0, 980px);
+}
+
 .print-card {
   background: rgba(241, 237, 230, 0.035);
   border: 1px solid var(--line);
   display: grid;
   grid-template-rows: auto 1fr;
   min-width: 0;
+}
+
+.print-shop-grid.is-single .print-card {
+  grid-template-columns: minmax(260px, 0.42fr) minmax(0, 1fr);
+  grid-template-rows: auto;
 }
 
 .print-card-image {
@@ -983,15 +992,17 @@ h2 {
 }
 
 .print-order-modal {
+  align-items: start;
   background: rgba(8, 8, 7, 0.84);
   color: var(--porcelain);
   display: grid;
   inset: 0;
+  justify-items: center;
   opacity: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 28px;
   pointer-events: none;
-  place-items: center;
   position: fixed;
   transition: opacity 220ms ease;
   z-index: 70;
@@ -1006,6 +1017,7 @@ h2 {
   background: var(--panel);
   border: 1px solid var(--line);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  margin: 0 auto;
   max-width: 980px;
   min-height: 0;
   padding: 28px;
@@ -1294,8 +1306,14 @@ h2 {
   border-top: 1px solid var(--line);
   color: var(--porcelain);
   display: grid;
-  gap: 70px;
-  grid-template-columns: minmax(0, 0.85fr) minmax(320px, 0.75fr);
+  gap: 76px;
+  grid-template-columns: minmax(0, 0.82fr) minmax(380px, 0.72fr);
+}
+
+.contact-story {
+  align-content: start;
+  display: grid;
+  gap: 42px;
 }
 
 .contact h2 {
@@ -1317,10 +1335,34 @@ h2 {
   margin-top: 18px;
 }
 
+.contact-image {
+  border-top: 1px solid var(--warm-line);
+  margin: 0;
+  max-width: 560px;
+  padding-top: 24px;
+}
+
+.contact-image img {
+  aspect-ratio: 16 / 11;
+  height: auto;
+  object-fit: cover;
+  object-position: center 32%;
+}
+
+.contact-image picture {
+  display: block;
+}
+
 .client-login-form,
 .inquiry-form {
   display: grid;
   gap: 20px;
+}
+
+.inquiry-form {
+  align-self: start;
+  border-top: 1px solid var(--warm-line);
+  padding-top: 24px;
 }
 
 .client-login-form label,
@@ -2021,6 +2063,10 @@ h2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .print-shop-grid.is-single .print-card {
+    grid-template-columns: 1fr;
+  }
+
   .print-order-summary {
     align-items: start;
     grid-template-columns: minmax(160px, 0.36fr) minmax(0, 1fr);
@@ -2066,6 +2112,10 @@ h2 {
 
   .client-gallery-actions {
     justify-content: flex-start;
+  }
+
+  .contact-image {
+    max-width: none;
   }
 }
 
@@ -2118,8 +2168,7 @@ h2 {
   }
 
   .site-nav .social-link {
-    height: 44px;
-    width: 44px;
+    display: none;
   }
 
   .site-nav .social-link svg {

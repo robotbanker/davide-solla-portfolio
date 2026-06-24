@@ -329,7 +329,9 @@ const scrollToTarget = (hash, smooth = true) => {
     return false;
   }
 
-  const headerOffset = header ? header.offsetHeight + 22 : 92;
+  const headerOffset = header
+    ? (window.matchMedia("(max-width: 720px)").matches ? 66 : 68)
+    : 92;
   const top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
   const scrollTop = Math.max(0, top);
   document.documentElement.scrollTop = scrollTop;
@@ -946,6 +948,7 @@ const renderPrintShop = (printData) => {
     ? printData
     : { prints: [], settings: { leadTime: "Creativehub products could not be loaded right now." } };
   printProducts = data.prints.filter((product) => product && product.id && product.title);
+  printShopGrid.classList.toggle("is-single", printProducts.length === 1);
   printShopGrid.innerHTML = "";
 
   if (printProducts.length) {
@@ -1374,6 +1377,22 @@ nav.addEventListener("click", (event) => {
 });
 
 document.addEventListener("click", (event) => {
+  if (!event.defaultPrevented) {
+    const anchor = event.target.closest('a[href^="#"]');
+
+    if (anchor && anchor.hash) {
+      event.preventDefault();
+      closeMenu();
+
+      if (scrollToTarget(anchor.hash)) {
+        setActiveNavLink(anchor.hash);
+        history.pushState(null, "", anchor.hash);
+      }
+
+      return;
+    }
+  }
+
   const item = event.target.closest("[data-gallery]");
 
   if (item) {
