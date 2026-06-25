@@ -3,6 +3,8 @@ const loginForm = document.querySelector("[data-login-form]");
 const loginStatus = document.querySelector("[data-login-status]");
 const adminShell = document.querySelector("[data-admin-shell]");
 const adminStatus = document.querySelector("[data-admin-status]");
+const adminTabButtons = [...document.querySelectorAll("[data-admin-tab]")];
+const adminPanels = [...document.querySelectorAll("[data-admin-panel]")];
 const albumList = document.querySelector("[data-album-list]");
 const albumEditor = document.querySelector("[data-album-editor]");
 const sectionEditor = document.querySelector("[data-section-editor]");
@@ -19,6 +21,8 @@ let dragTarget = null;
 let pendingDeleteAlbumId = "";
 
 const storageKey = "davide-admin-session";
+const adminTabIds = new Set(adminTabButtons.map((button) => button.dataset.adminTab));
+let activeAdminTab = adminTabIds.has(window.location.hash.slice(1)) ? window.location.hash.slice(1) : "design";
 const defaultCoverStyle = "fine-portrait";
 const coverStyles = [
   ["", "Standard"],
@@ -60,6 +64,28 @@ const formatPosition = (x, y) => `${Math.round(clamp(x))}% ${Math.round(clamp(y)
 
 const setStatus = (message, target = adminStatus) => {
   target.textContent = message;
+};
+
+const setAdminTab = (tab, syncHash = true) => {
+  if (!adminTabIds.has(tab)) {
+    return;
+  }
+
+  activeAdminTab = tab;
+
+  adminTabButtons.forEach((button) => {
+    const isActive = button.dataset.adminTab === tab;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+
+  adminPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.adminPanel !== tab;
+  });
+
+  if (syncHash) {
+    history.replaceState(null, "", `#${tab}`);
+  }
 };
 
 const markDirty = () => {
@@ -596,6 +622,7 @@ const loadSite = async () => {
   loginPanel.hidden = true;
   adminShell.hidden = false;
   render();
+  setAdminTab(activeAdminTab, false);
   markClean();
   setStatus("Content loaded.");
 };
@@ -738,6 +765,7 @@ const createAlbum = (title) => {
   selectedAlbumId = uniqueId;
   markDirty();
   render();
+  setAdminTab("gallery");
 };
 
 const createClient = () => {
@@ -753,6 +781,7 @@ const createClient = () => {
   });
   markDirty();
   render();
+  setAdminTab("clients");
   setStatus("Client draft added. Add an email, password, and gallery link, then save changes.");
 };
 
@@ -840,6 +869,7 @@ createAlbumForm.addEventListener("submit", (event) => {
 });
 
 document.addEventListener("click", async (event) => {
+  const adminTabButton = event.target.closest("[data-admin-tab]");
   const selectButton = event.target.closest("[data-select-album]");
   const removeButton = event.target.closest("[data-remove-media]");
   const promoteButton = event.target.closest("[data-promote-image]");
@@ -851,6 +881,11 @@ document.addEventListener("click", async (event) => {
   const removeClientButton = event.target.closest("[data-remove-client]");
   const cancelCreateAlbumButton = event.target.closest("[data-cancel-create-album]");
   const moveAlbumButton = event.target.closest("[data-move-album]");
+
+  if (adminTabButton) {
+    setAdminTab(adminTabButton.dataset.adminTab);
+    return;
+  }
 
   if (cancelCreateAlbumButton) {
     createAlbumForm.reset();

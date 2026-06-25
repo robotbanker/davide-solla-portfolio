@@ -1,0 +1,19 @@
+{
+  "appId": "com.davidesolla.websitebuilder",
+  "appName": "Davide Solla",
+  "webDir": "app-shell",
+  "server": {
+    "url": "https://www.davidesolla.com",
+    "cleartext": false,
+    "allowNavigation": [
+      "www.davidesolla.com",
+      "davidesolla.com",
+      "checkout.stripe.com",
+      "*.stripe.com",
+      "www.instagram.com",
+      "instagram.com",
+      "lightroom.adobe.com",
+      "*.adobe.com"
+    ]
+  }
+}

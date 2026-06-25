@@ -61,6 +61,24 @@ After each admin save, the backend calls `VERCEL_DEPLOY_HOOK_URL` so Vercel star
 
 Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
 
+## iPhone App
+
+The `ios/` folder is a Capacitor iOS app that opens the live site at `https://www.davidesolla.com`. The app uses the hosted site because admin login, client galleries, contact forms, print checkout, and uploads depend on the Vercel/Node API endpoints.
+
+Run after changing Capacitor config or native dependencies:
+
+```bash
+npm run ios:sync
+```
+
+Open the native project in Xcode:
+
+```bash
+npm run ios:open
+```
+
+From Xcode, choose a signing team and run the `App` scheme on an iPhone simulator or connected device.
+
 ## Client Area
 
 Use the Client area block in `admin.html` to create a client login, set or reset the password, and paste the client's Lightroom shared gallery link. Private client records and password hashes are authenticated-encrypted in `data/admin-site.enc`; client records are removed from the public `data/site.json`.

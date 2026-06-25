@@ -4,10 +4,18 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
+    "ios:sync": "cap sync ios",
+    "ios:open": "cap open ios",
+    "ios:run": "cap run ios",
     "check": "node --check script.js && node --check admin.js && node --check client-area.js && node --check server.js && node --check lib/admin-store.js && node --check lib/contact.js && node --check lib/creativehub.js && node --check lib/env.js && node --check lib/security.js && node --check lib/seo.js && node --check api/admin.js && node --check api/client.js && node --check api/contact.js && node --check api/prints.js && node --check api/stripe-webhook.js"
   },
   "dependencies": {
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1",
     "busboy": "^1.6.0",
     "nodemailer": "^9.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.4.1"
   }
 }

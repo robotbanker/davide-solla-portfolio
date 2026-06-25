@@ -183,6 +183,7 @@ textarea:focus-visible {
 
 .admin-status {
   color: var(--muted);
+  margin: 14px 0 0;
   min-height: 24px;
 }
 
@@ -199,6 +200,42 @@ textarea:focus-visible {
   padding-bottom: 24px;
 }
 
+.admin-tabs {
+  align-items: center;
+  background: rgba(8, 8, 7, 0.82);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+  display: flex;
+  gap: 6px;
+  margin: 18px auto 0;
+  max-width: 760px;
+  padding: 6px;
+  position: sticky;
+  top: 14px;
+  z-index: 20;
+}
+
+.admin-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.admin-tab.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #080807;
+}
+
+.admin-tab:not(.is-active):hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
 .admin-actions,
 .row-actions,
 .card-actions {
@@ -213,11 +250,28 @@ textarea:focus-visible {
   color: var(--accent-ink);
 }
 
+.admin-panel {
+  margin-top: 18px;
+}
+
+.panel-head {
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+}
+
+.panel-head h2 {
+  margin: 4px 0 0;
+}
+
 .admin-layout {
   display: grid;
   gap: 24px;
   grid-template-columns: 300px minmax(0, 1fr);
-  margin-top: 28px;
 }
 
 .album-sidebar,
@@ -400,7 +454,6 @@ summary {
 .client-editor {
   display: grid;
   gap: 16px;
-  margin-top: 18px;
 }
 
 .client-toolbar {
@@ -672,11 +725,49 @@ summary {
 @media (max-width: 760px) {
   .admin-topbar,
   .editor-head,
-  .section-head {
+  .section-head,
+  .panel-head {
     align-items: stretch;
     flex-direction: column;
   }
 
+  .admin-tabs {
+    max-width: none;
+    overflow-x: auto;
+    padding: 5px;
+    scroll-snap-type: x proximity;
+    top: 8px;
+  }
+
+  .admin-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-tab {
+    flex: 0 0 auto;
+    min-width: max-content;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 430px) {
+  .admin-tabs {
+    margin-left: -2px;
+    margin-right: -2px;
+    max-width: none;
+    top: 8px;
+  }
+
+  .admin-tab {
+    flex: 1 1 0;
+    font-size: 9px;
+    min-width: 0;
+    padding: 0 4px;
+  }
+}
+
+@media (max-width: 760px) {
   .settings-grid,
   .album-fields,
   .upload-options,

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Davide Solla Studio Manager</title>
     <meta name="robots" content="noindex, nofollow">
-    <link rel="stylesheet" href="admin.css?v=6">
+    <link rel="stylesheet" href="admin.css?v=7">
   </head>
   <body class="admin-body">
     <main class="admin-root">
@@ -35,44 +35,67 @@
           </div>
         </header>
 
+        <nav class="admin-tabs" role="tablist" aria-label="Admin sections">
+          <button id="admin-tab-design" class="admin-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="admin-panel-design" data-admin-tab="design">Overall design</button>
+          <button id="admin-tab-gallery" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-gallery" data-admin-tab="gallery">Gallery builder</button>
+          <button id="admin-tab-clients" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-clients" data-admin-tab="clients">Client management</button>
+        </nav>
+
         <p class="admin-status" data-admin-status aria-live="polite"></p>
 
-        <div class="admin-layout">
-          <aside class="album-sidebar">
-            <div class="sidebar-head">
-              <h2>Albums</h2>
-              <button type="button" data-create-album>New</button>
+        <section id="admin-panel-design" class="admin-panel" role="tabpanel" aria-labelledby="admin-tab-design" data-admin-panel="design">
+          <div class="panel-head">
+            <div>
+              <p class="admin-kicker">Overall design</p>
+              <h2>Site presentation</h2>
             </div>
-            <form class="new-album-form" data-create-album-form hidden>
-              <label>
-                <span>New album title</span>
-                <input name="title" type="text" autocomplete="off" required>
-              </label>
-              <div class="row-actions">
-                <button type="submit">Create</button>
-                <button class="secondary" type="button" data-cancel-create-album>Cancel</button>
+          </div>
+          <details class="settings-block" open>
+            <summary>Site text</summary>
+            <div class="settings-grid" data-section-editor></div>
+          </details>
+        </section>
+
+        <section id="admin-panel-gallery" class="admin-panel" role="tabpanel" aria-labelledby="admin-tab-gallery" data-admin-panel="gallery" hidden>
+          <div class="admin-layout">
+            <aside class="album-sidebar">
+              <div class="sidebar-head">
+                <h2>Albums</h2>
+                <button type="button" data-create-album>New</button>
               </div>
-            </form>
-            <div class="album-list" data-album-list></div>
-          </aside>
+              <form class="new-album-form" data-create-album-form hidden>
+                <label>
+                  <span>New album title</span>
+                  <input name="title" type="text" autocomplete="off" required>
+                </label>
+                <div class="row-actions">
+                  <button type="submit">Create</button>
+                  <button class="secondary" type="button" data-cancel-create-album>Cancel</button>
+                </div>
+              </form>
+              <div class="album-list" data-album-list></div>
+            </aside>
 
-          <section class="editor-surface">
-            <details class="settings-block" open>
-              <summary>Site text</summary>
-              <div class="settings-grid" data-section-editor></div>
-            </details>
+            <section class="editor-surface">
+              <div class="album-editor" data-album-editor></div>
+            </section>
+          </div>
+        </section>
 
-            <details class="settings-block" open>
-              <summary>Client area</summary>
-              <div class="client-editor" data-client-editor></div>
-            </details>
-
-            <div class="album-editor" data-album-editor></div>
-          </section>
-        </div>
+        <section id="admin-panel-clients" class="admin-panel" role="tabpanel" aria-labelledby="admin-tab-clients" data-admin-panel="clients" hidden>
+          <div class="panel-head">
+            <div>
+              <p class="admin-kicker">Client management</p>
+              <h2>Private galleries</h2>
+            </div>
+          </div>
+          <div class="settings-block">
+            <div class="client-editor" data-client-editor></div>
+          </div>
+        </section>
       </section>
     </main>
 
-    <script src="admin.js?v=7"></script>
+    <script src="admin.js?v=8"></script>
   </body>
 </html>
