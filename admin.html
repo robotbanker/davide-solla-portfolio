@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Davide Solla Studio Manager</title>
     <meta name="robots" content="noindex, nofollow">
-    <link rel="stylesheet" href="admin.css?v=7">
+    <link rel="stylesheet" href="admin.css?v=8">
   </head>
   <body class="admin-body">
     <main class="admin-root">
@@ -39,6 +39,7 @@
           <button id="admin-tab-design" class="admin-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="admin-panel-design" data-admin-tab="design">Overall design</button>
           <button id="admin-tab-gallery" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-gallery" data-admin-tab="gallery">Gallery builder</button>
           <button id="admin-tab-clients" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-clients" data-admin-tab="clients">Client management</button>
+          <button id="admin-tab-newsletter" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-newsletter" data-admin-tab="newsletter">Newsletter</button>
         </nav>
 
         <p class="admin-status" data-admin-status aria-live="polite"></p>
@@ -93,9 +94,53 @@
             <div class="client-editor" data-client-editor></div>
           </div>
         </section>
+
+        <section id="admin-panel-newsletter" class="admin-panel" role="tabpanel" aria-labelledby="admin-tab-newsletter" data-admin-panel="newsletter" hidden>
+          <div class="panel-head">
+            <div>
+              <p class="admin-kicker">Newsletter backend</p>
+              <h2>Monthly issues</h2>
+            </div>
+            <div class="newsletter-picker">
+              <label>
+                <span>Newsletter</span>
+                <select data-newsletter-issue-select></select>
+              </label>
+              <button class="secondary" type="button" data-newsletter-load-issue>Load</button>
+              <a class="button-link secondary" data-newsletter-preview-link href="newsletter-preview.html" target="_blank" rel="noreferrer">Preview</a>
+            </div>
+          </div>
+
+          <div class="newsletter-workspace">
+            <aside class="newsletter-section-rail" aria-label="Newsletter sections">
+              <button type="button" data-newsletter-section-tab="overview" aria-pressed="true">Overview</button>
+              <button type="button" data-newsletter-section-tab="art" aria-pressed="false">01 Art</button>
+              <button type="button" data-newsletter-section-tab="fashion" aria-pressed="false">02 Fashion</button>
+              <button type="button" data-newsletter-section-tab="field" aria-pressed="false">03 On the Field</button>
+              <button type="button" data-newsletter-section-tab="footer" aria-pressed="false">Footer</button>
+              <button type="button" data-newsletter-section-tab="json" aria-pressed="false">Full JSON</button>
+            </aside>
+
+            <section class="newsletter-editor-panel">
+              <div class="newsletter-editor-actions">
+                <p class="admin-status" data-newsletter-status aria-live="polite">Loading newsletters...</p>
+                <div>
+                  <button type="button" data-newsletter-save-section>Save section</button>
+                  <button type="button" data-newsletter-save-all>Save all</button>
+                  <button class="secondary" type="button" data-newsletter-build-email>Build email</button>
+                </div>
+              </div>
+
+              <form data-newsletter-editor-form>
+                <div data-newsletter-editor-root></div>
+              </form>
+            </section>
+          </div>
+        </section>
       </section>
     </main>
 
-    <script src="admin.js?v=8"></script>
+    <script src="admin.js?v=9"></script>
+    <script src="newsletter-admin.js?v=1"></script>
   </body>
 </html>

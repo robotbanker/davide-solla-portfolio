@@ -5,6 +5,11 @@ const loadButton = document.querySelector("[data-load-issue]");
 const productionLink = document.querySelector("[data-production-link]");
 const dataLink = document.querySelector("[data-data-link]");
 const sourcesLink = document.querySelector("[data-sources-link]");
+const requestedIssue = new URLSearchParams(window.location.search).get("issue");
+
+if (requestedIssue) {
+  issueInput.value = requestedIssue;
+}
 
 const escapeHtml = (value = "") => String(value)
   .replace(/&/g, "&amp;")
@@ -149,6 +154,7 @@ const setLinks = (issueId) => {
 
 const loadIssue = async () => {
   const issueId = issueInput.value.trim() || "2026-07";
+  issueInput.value = issueId;
   setLinks(issueId);
   statusMessage.textContent = "Loading issue...";
 
