@@ -29,6 +29,11 @@ const issueIdFromUrl = () => new URLSearchParams(window.location.search).get("is
 
 const issuePath = (issueId) => `newsletter/data/issues/${encodeURIComponent(issueId)}.json`;
 
+const cleanIssueTitle = (title = "") => String(title)
+  .replace(/^Davide Studios:\s*/i, "")
+  .replace(/^Monthly Newsletter\s*[—-]\s*/i, "")
+  .trim();
+
 const renderCta = (label, url) => {
   if (!isUrl(url)) {
     return "";
@@ -63,7 +68,7 @@ const renderImage = (image, issue) => {
 
   return `
     <figure class="field-image">
-      <img src="${escapeHtml(src)}" alt="${escapeHtml(image.alt || "")}" loading="eager" decoding="async">
+      <img src="${escapeHtml(src)}" alt="${escapeHtml(image.alt || "")}" loading="lazy" decoding="async">
       ${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}
     </figure>
   `;
@@ -91,7 +96,7 @@ const renderIssue = (issue) => {
     <header class="issue-head">
       <div>
         <p class="section-kicker">${escapeHtml(issue.month)} ${escapeHtml(issue.year)}</p>
-        <h2>${escapeHtml(issue.title.replace(/^Davide Studios:\s*/i, ""))}</h2>
+        <h2>${escapeHtml(cleanIssueTitle(issue.title))}</h2>
         <p>${escapeHtml(issue.openingNote)}</p>
       </div>
       <div class="issue-actions">
