@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-06",
+  "dateChecked": "2026-06-28",
+  "status": "research-approved",
+  "manifestNotes": "All facts were checked against official museum, gallery, organiser, studio or brand sources on 28 June 2026. External imagery from official pages should be cleared through source-owner press permissions before live email distribution where required.",
+  "sources": [
+    {
+      "section": "Art",
+      "storyTitle": "Project a Black Planet: The Art and Culture of Panafrica",
+      "officialSourceUrl": "https://www.barbican.org.uk/whats-on/2026/event/project-a-black-planet-the-art-and-culture-of-panafrica",
+      "bookingUrl": "https://www.barbican.org.uk/whats-on/2026/event/project-a-black-planet-the-art-and-culture-of-panafrica",
+      "imageCredit": "Project a Black Planet installation view, 11 June - 6 September 2026. Image: Thomas Adank, Barbican Art Gallery.",
+      "usageStatus": "Official Barbican exhibition-page image embedded and browser-verified for preview. Confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The exhibition directly connects contemporary art, posters, film, journals, archives, photography and visual culture through Pan-Africanism."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Japanese Women Photographers: From 1950s to Now",
+      "officialSourceUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+      "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+      "imageCredit": "No newsletter image used; official exhibition images and credits remain on The Photographers' Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "A photography-led June opening with strong relevance to authorship, publishing, moving image and women-led visual histories."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Marilyn Monroe: A Portrait",
+      "officialSourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
+      "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
+      "imageCredit": "No newsletter image used; official exhibition images and credits remain on the National Portrait Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "A portraiture-led exhibition with strong relevance to celebrity image construction, photography and visual agency."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "M.C. Escher. The Exhibition",
+      "officialSourceUrl": "https://www.somersethouse.org.uk/whats-on/mc-escher-the-exhibition",
+      "bookingUrl": "https://feverup.com/m/637982",
+      "imageCredit": "No newsletter image used; official exhibition images and credits remain on the Somerset House page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "Escher's graphic precision and spatial illusion are useful references for composition, pattern and visual instability."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Herbert Smith Freehills Kramer Portrait Award 2026",
+      "officialSourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+      "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+      "imageCredit": "No newsletter image used; official exhibition images and credits remain on the National Portrait Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "Contemporary portraiture offers a useful counterpoint for photographers thinking about likeness, pose, surface and intimacy."
+    },
+    {
+      "section": "Fashion",
+      "storyTitle": "adidas Originals and Coca-Cola: Originals are the Real Thing",
+      "officialSourceUrl": "https://news.adidas.com/originals/adidas-originals-and-coca-cola--celebrate-the-fifa-world-cup-2026--with-a-collaborative-collection/s/cebf079f-b6f4-4956-bfa3-aad63503e36c",
+      "bookingUrl": null,
+      "imageCredit": "Official adidas Originals x Coca-Cola press image from adidas News.",
+      "usageStatus": "Official adidas News press image embedded and browser-verified for preview. Confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The campaign connects sport, streetwear, casting, summer light and World Cup-adjacent visual culture through a strong public-space image."
+    },
+    {
+      "section": "Fashion",
+      "storyTitle": "H&M Move, H&M Home and Solar Club: A collection of movement and togetherness",
+      "officialSourceUrl": "https://hmgroup.com/news/hm-move-hm-home-and-solar-club-present-a-collection-of-movement-and-togetherness/",
+      "bookingUrl": null,
+      "imageCredit": "Official H&M Group campaign image for H&M Move, H&M Home and Solar Club.",
+      "usageStatus": "Official brand newsroom image embedded and browser-verified for preview. Confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The campaign has a strong visual rhythm around movement, leisure, group styling and coastal social space."
+    },
+    {
+      "section": "Fashion",
+      "storyTitle": "Balenciaga: A New York Minute",
+      "officialSourceUrl": "https://www.balenciaga.com/en-us/a-new-york-minute",
+      "bookingUrl": null,
+      "imageCredit": "Official Balenciaga campaign page asset; campaign directed by Celine Song.",
+      "usageStatus": "Official brand page image embedded and browser-verified for preview. It is a product/page asset from the campaign page, not a film still; confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The campaign turns fashion film production, Manhattan street rhythm and behind-the-scenes structure into the visual idea."
+    },
+    {
+      "section": "On the Field",
+      "storyTitle": "Rotating Davide Studios archive image",
+      "officialSourceUrl": "https://www.davidesolla.com/",
+      "bookingUrl": "https://www.davidesolla.com/",
+      "imageCredit": "Davide Studios archive image selected from the live website image pool.",
+      "usageStatus": "Internal Davide Studios image. The renderer rotates this section image by issue ID from the image pool stored in the issue data.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "Keeps the studio-facing section visual and current without publishing unconfirmed diary entries or partnership notes."
+    }
+  ]
+}

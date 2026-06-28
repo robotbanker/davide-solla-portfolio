@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-06",
+  "status": "research-approved",
+  "allowPlaceholders": false,
+  "month": "June",
+  "year": "2026",
+  "title": "Davide Studios: Monthly Newsletter — June Issue",
+  "preheader": "A June edit of London exhibitions, fashion image-making and studio-adjacent notes from Davide Studios.",
+  "site": {
+    "brandName": "Davide Studios",
+    "baseUrl": "https://www.davidesolla.com",
+    "websiteUrl": "https://www.davidesolla.com/",
+    "instagramUrl": "https://www.instagram.com/davide.studios/",
+    "location": "London",
+    "unsubscribeUrl": "https://www.davidesolla.com/preferences",
+    "preferencesUrl": "https://www.davidesolla.com/preferences"
+  },
+  "research": {
+    "dateChecked": "2026-06-28",
+    "validationStatus": "research-approved",
+    "notes": "All listed stories were checked against official museum, gallery, organiser or brand sources on 28 June 2026. External campaign and exhibition visuals are referenced from official pages; reusable press permissions should still be confirmed before a live audience send."
+  },
+  "openingNote": "A June edit built around images that gather force in public: Pan-African art at the Barbican, Japanese women photographers in Soho, portraiture under close pressure, and fashion campaigns that use summer light, city rhythm and set construction as part of the visual argument.",
+  "sections": {
+    "art": {
+      "label": "01 — Art",
+      "intro": "A London-facing edit for photography, portraiture, contemporary art and image culture.",
+      "featured": {
+        "title": "Project a Black Planet: The Art and Culture of Panafrica",
+        "institution": "Barbican Art Gallery",
+        "dates": "11 June - 6 September 2026",
+        "location": "Level 3, Barbican Centre, Silk Street, London EC2Y 8DS",
+        "description": "Barbican’s exhibition follows Pan-Africanism as a visual, political and cultural force from the 1920s to the present. More than 300 works move across painting, installation, poster, journal and film, with artists including Chris Ofili, Marlene Dumas, Claudette Johnson and Liz Johnson Artur.",
+        "sourceUrl": "https://www.barbican.org.uk/whats-on/2026/event/project-a-black-planet-the-art-and-culture-of-panafrica",
+        "bookingUrl": "https://www.barbican.org.uk/whats-on/2026/event/project-a-black-planet-the-art-and-culture-of-panafrica",
+        "ctaLabel": "Book tickets",
+        "whyItMatters": "It treats image-making as a shared geography of rupture, archive, solidarity and imagination, with photography sitting beside posters, journals, painting and film.",
+        "image": {
+          "type": "official-page-image",
+          "src": "https://www.barbican.org.uk/sites/default/files/styles/gallery/public/images/2026-06/2.jpg?itok=9RSQllxK",
+          "label": "Official Barbican exhibition image",
+          "alt": "Installation view of Project a Black Planet at Barbican Art Gallery",
+          "credit": "Project a Black Planet installation view, 11 June - 6 September 2026. Image: Thomas Adank, Barbican Art Gallery.",
+          "recommendedSize": "1200 x 760 px"
+        }
+      },
+      "items": [
+        {
+          "title": "Japanese Women Photographers: From 1950s to Now",
+          "institution": "The Photographers' Gallery",
+          "dates": "24 June - 27 September 2026",
+          "location": "16-18 Ramillies Street, London W1F 7LW",
+          "description": "The Photographers' Gallery places 27 Japanese women artists across post-war, contemporary and experimental practice, with more than 200 photographs, videos, installations and rare photobooks. The exhibition, organised with Aperture and Rencontres d'Arles, rewrites a history often told through a narrower lens.",
+          "sourceUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+          "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+          "ctaLabel": "Book tickets",
+          "whyItMatters": "It opens a wide photographic field around authorship, social change, intimacy, colour, publication and the politics of who gets to define a national visual history."
+        },
+        {
+          "title": "Marilyn Monroe: A Portrait",
+          "institution": "National Portrait Gallery",
+          "dates": "4 June - 6 September 2026",
+          "location": "Floor 0, National Portrait Gallery, St Martin's Place, London WC2H 0HE",
+          "description": "Built around Monroe's centenary, this exhibition studies a public image made through collaboration with photographers, artists and stylists. The National Portrait Gallery foregrounds agency as much as iconography, moving from early pin-ups to Warhol, Boty, Avedon, Beaton, Eve Arnold and Sam Shaw.",
+          "sourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
+          "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
+          "ctaLabel": "Book tickets",
+          "whyItMatters": "It is a compact study in how celebrity portraiture is built through gaze, repetition, authorship, styling and the delicate politics of being looked at."
+        },
+        {
+          "title": "M.C. Escher. The Exhibition",
+          "institution": "Somerset House",
+          "dates": "5 June - 6 September 2026",
+          "location": "Embankment Galleries, South Wing, Somerset House, Strand, London WC2R 1LA",
+          "description": "Somerset House brings M.C. Escher to London in a major summer presentation co-produced by Arthemisia and Fever. The exhibition foregrounds impossible structures, spatial illusion, repeat pattern and graphic precision, making it useful for anyone studying how composition can make logic feel unstable.",
+          "sourceUrl": "https://www.somersethouse.org.uk/whats-on/mc-escher-the-exhibition",
+          "bookingUrl": "https://feverup.com/m/637982",
+          "ctaLabel": "Book tickets",
+          "whyItMatters": "Escher's visual language sharpens questions of pattern, perspective, optical tension and the moment a flat image begins to behave like architecture."
+        },
+        {
+          "title": "Herbert Smith Freehills Kramer Portrait Award 2026",
+          "institution": "National Portrait Gallery",
+          "dates": "25 June - 7 October 2026",
+          "location": "Floor 2, National Portrait Gallery, St Martin's Place, London WC2H 0HE",
+          "description": "The National Portrait Gallery's annual portrait award gathers contemporary painted portraits selected from international submissions. The 2026 display offers a useful counterpoint to photography: close observation, likeness, surface and sitter psychology slowed down through paint rather than captured through lens time.",
+          "sourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+          "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+          "ctaLabel": "View exhibition",
+          "whyItMatters": "For photographers, painted portraiture sharpens questions of pose, scale, intimacy, expression and what a face can hold after the instant has passed."
+        }
+      ]
+    },
+    "fashion": {
+      "label": "02 — Fashion",
+      "intro": "A compact visual edit of campaigns, launches and creative direction selected for image-making rather than product noise.",
+      "stories": [
+        {
+          "brand": "adidas Originals and Coca-Cola",
+          "title": "Originals are the Real Thing",
+          "releaseTiming": "Collection launches 6 June 2026",
+          "commentary": "The adidas Originals and Coca-Cola campaign turns football anticipation into a summer street scene: a bus, a group of characters, red-and-white graphics and 2000s sportswear energy. The styling works because it keeps the collection close to movement, heat, public space and collective memory rather than presenting it as isolated product.",
+          "sourceUrl": "https://news.adidas.com/originals/adidas-originals-and-coca-cola--celebrate-the-fifa-world-cup-2026--with-a-collaborative-collection/s/cebf079f-b6f4-4956-bfa3-aad63503e36c",
+          "imageCredit": "Official adidas Originals x Coca-Cola press image from adidas News.",
+          "image": {
+            "type": "official-page-image",
+            "src": "https://preview.thenewsmarket.com/Previews/ADID/StillAssets/1920x1080/725150_v2.jpg",
+            "label": "Official adidas Originals x Coca-Cola campaign image",
+            "alt": "adidas Originals and Coca-Cola campaign image showing a group gathered around a red bus",
+            "recommendedSize": "1200 x 900 px"
+          }
+        },
+        {
+          "brand": "H&M Move, H&M Home and Solar Club",
+          "title": "A collection of movement and togetherness",
+          "releaseTiming": "Published 4 June 2026",
+          "commentary": "H&M Group's Solar Club collaboration brings movement, table culture and coastal light into one visual world. The campaign imagery shifts between bodies in motion and bodies gathered around food, which makes the collection feel less like an activewear drop and more like a study of rhythm, leisure and communal styling.",
+          "sourceUrl": "https://hmgroup.com/news/hm-move-hm-home-and-solar-club-present-a-collection-of-movement-and-togetherness/",
+          "imageCredit": "Official H&M Group campaign image for H&M Move, H&M Home and Solar Club.",
+          "image": {
+            "type": "official-page-image",
+            "src": "https://hmgroup.com/wp-content/uploads/2026/06/Solar_PRESS-SITE_TEASER-IMAGE_1920x1080.jpg",
+            "label": "Official H&M Group campaign image",
+            "alt": "H&M Move, H&M Home and Solar Club campaign image showing runners and a coastal table scene",
+            "recommendedSize": "1200 x 900 px"
+          }
+        },
+        {
+          "brand": "Balenciaga",
+          "title": "A New York Minute",
+          "releaseTiming": "Launched 27 May 2026",
+          "commentary": "Balenciaga's campaign is directed by Celine Song and built as three sixty-second Manhattan films around Sarah Pidgeon, Fall 26 pieces and the Le City, Le 7 Bowling and Rodeo bags. Its best idea is structural: it lets the city, film crew and behind-the-scenes mechanics become part of the fashion image.",
+          "sourceUrl": "https://www.balenciaga.com/en-us/a-new-york-minute",
+          "imageCredit": "Official Balenciaga campaign page asset from the brand page; campaign directed by Celine Song.",
+          "image": {
+            "type": "official-page-image",
+            "src": "https://balenciaga.dam.kering.com/asset/9515b28c-d560-4b17-a4fa-155a567842b0/Large/8657622ACFH1000_F.jpg?v=3",
+            "label": "Official Balenciaga campaign page image",
+            "alt": "Balenciaga Le City bag image from the official A New York Minute campaign page",
+            "recommendedSize": "1200 x 900 px"
+          }
+        }
+      ]
+    },
+    "onTheField": {
+      "label": "03 — On the Field",
+      "intro": "Studio-facing notes from the live creative ecosystem around Davide Studios.",
+      "note": "A rotating image from the Davide Studios website archive, chosen each month to keep the studio note alive without inventing diary entries or partnership news.",
+      "cta": {
+        "label": "Visit Davide Studios",
+        "url": "https://www.davidesolla.com/"
+      },
+      "imageRotation": {
+        "strategy": "issue-id-month-index",
+        "notes": "The renderer selects one image from this website-image pool using the issue ID, so the visual rotates automatically for each monthly issue.",
+        "pool": [
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/hero-cosmic-girl-1200.jpg",
+            "alt": "Davide Studios cinematic fashion portrait with blue and red studio light",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/roxana-01-1200.jpg",
+            "alt": "Davide Studios editorial beauty portrait in warm directional light",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/sophie-08-1200.jpg",
+            "alt": "Davide Studios nocturnal London fashion portrait with cinematic street light",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/julia-04-1200.jpg",
+            "alt": "Davide Studios quiet editorial portrait with restrained styling",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/dark-baroque-04-1200.jpg",
+            "alt": "Davide Studios dark baroque fashion portrait with theatrical styling",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/kintsugi-03-1200.jpg",
+            "alt": "Davide Studios fine-art portrait study with symbolic texture",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/soho-01-1200.jpg",
+            "alt": "Davide Studios Soho fashion image from the website archive",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          },
+          {
+            "type": "internal",
+            "src": "assets/images/responsive/fine-art-02-1200.jpg",
+            "alt": "Davide Studios fine-art portrait with rose petals on white silk",
+            "credit": "Image: Davide Studios archive",
+            "recommendedSize": "1200 x 760 px"
+          }
+        ]
+      }
+    }
+  },
+  "footer": {
+    "wordmark": "Davide Studios",
+    "copyright": "© 2026 Davide Studios. All rights reserved."
+  }
+}

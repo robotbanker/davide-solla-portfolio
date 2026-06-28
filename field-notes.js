@@ -29,6 +29,13 @@ const issueIdFromUrl = () => new URLSearchParams(window.location.search).get("is
 
 const issuePath = (issueId) => `newsletter/data/issues/${encodeURIComponent(issueId)}.json`;
 
+const currentIssueCutoff = () => {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+};
+
+const isPublishedIssue = (issue) => String(issue.issueId || "") <= currentIssueCutoff();
+
 const cleanIssueTitle = (title = "") => String(title)
   .replace(/^Davide Studios:\s*/i, "")
   .replace(/^Monthly Newsletter\s*[—-]\s*/i, "")
@@ -191,7 +198,9 @@ const loadFieldNotes = async () => {
     }
 
     const index = await indexResponse.json();
-    const issues = [...(index.issues || [])].sort((a, b) => String(b.issueId).localeCompare(String(a.issueId)));
+    const issues = [...(index.issues || [])]
+      .filter(isPublishedIssue)
+      .sort((a, b) => String(b.issueId).localeCompare(String(a.issueId)));
     const requestedIssueId = issueIdFromUrl();
     const activeIssue = issues.find((issue) => issue.issueId === requestedIssueId) || issues[0];
 
