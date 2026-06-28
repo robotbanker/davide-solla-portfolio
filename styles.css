@@ -86,6 +86,7 @@ textarea:focus-visible {
   align-items: center;
   color: var(--porcelain);
   display: flex;
+  gap: clamp(34px, 5vw, 84px);
   justify-content: space-between;
   left: 0;
   min-height: 84px;
@@ -292,7 +293,23 @@ body.menu-open .menu-toggle span:last-child {
   transform: rotate(-45deg);
 }
 
-@media (max-width: 1560px) {
+@media (max-width: 1560px) and (min-width: 1281px) {
+  .site-header {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .site-nav {
+    font-size: 11px;
+    gap: 18px;
+  }
+
+  .site-header.is-scrolled .brand span {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 1280px) {
   .header-social {
     display: inline-flex;
   }
