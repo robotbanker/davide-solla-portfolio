@@ -25,11 +25,15 @@ const mimeTypes = {
 
 const publicFiles = new Set([
   "admin.css", "admin.html", "admin.js", "client-area.html", "client-area.js",
-  "index.html", "robots.txt", "script.js", "sitemap.xml", "styles.css", "wallet-card.html"
+  "field-notes.css", "field-notes.html", "field-notes.js",
+  "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
+  "robots.txt", "script.js", "sitemap.xml", "styles.css", "wallet-card.html"
 ]);
 
 const isPublicPath = (relativePath) => publicFiles.has(relativePath)
   || relativePath === "data/site.json"
+  || relativePath.startsWith("newsletter/data/")
+  || relativePath.startsWith("newsletter/dist/")
   || relativePath.startsWith("assets/")
   || relativePath.startsWith("apple-wallet/");
 

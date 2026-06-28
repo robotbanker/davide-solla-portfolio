@@ -266,4 +266,15 @@
       <image:caption>Dark Baroque motion portrait with red fan and sweeping satin</image:caption>
     </image:image>
   </url>
+  <url>
+    <loc>https://www.davidesolla.com/field-notes.html</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/soho-01.jpg</image:loc>
+      <image:title>Davide Studios Field Notes</image:title>
+      <image:caption>Monthly visual notes from Davide Studios.</image:caption>
+    </image:image>
+  </url>
 </urlset>

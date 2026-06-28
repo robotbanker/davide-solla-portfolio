@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Davide Studios Newsletter Preview</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="newsletter-preview.css">
+  </head>
+  <body>
+    <header class="preview-header">
+      <a class="preview-brand" href="index.html" aria-label="Davide Studios home">
+        <span>Davide Studios</span>
+        <small>Newsletter preview</small>
+      </a>
+      <nav class="preview-actions" aria-label="Newsletter preview actions">
+        <a href="newsletter/dist/2026-07.html" data-production-link>Production email</a>
+        <a href="newsletter/data/issues/2026-07.json" data-data-link>Issue data</a>
+        <a href="newsletter/data/sources/2026-07.manifest.json" data-sources-link>Source manifest</a>
+      </nav>
+    </header>
+
+    <main class="preview-shell">
+      <section class="preview-intro" aria-labelledby="preview-title">
+        <p class="preview-kicker">Draft review workflow</p>
+        <h1 id="preview-title">Davide Studios monthly newsletter system</h1>
+        <p>This page renders issue content from structured data for editorial review. The sendable email is generated separately into <code>newsletter/dist/</code>.</p>
+      </section>
+
+      <section class="preview-controls" aria-label="Issue controls">
+        <label>
+          <span>Issue ID</span>
+          <input data-issue-input value="2026-07" autocomplete="off">
+        </label>
+        <button type="button" data-load-issue>Load issue</button>
+        <p data-preview-status aria-live="polite"></p>
+      </section>
+
+      <section class="preview-stage" aria-label="Rendered newsletter preview">
+        <article class="newsletter-preview" data-newsletter-preview></article>
+      </section>
+    </main>
+
+    <script src="newsletter-preview.js"></script>
+  </body>
+</html>

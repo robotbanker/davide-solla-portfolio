@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-07",
+  "dateChecked": "2026-06-28",
+  "status": "research-approved",
+  "manifestNotes": "All facts were checked against official museum, gallery, organiser, studio or brand sources on 28 June 2026. Fashion imagery from brand campaign pages should be cleared through brand press assets before a live audience send when not embedded from an explicitly reusable source.",
+  "sources": [
+    {
+      "section": "Art",
+      "storyTitle": "Schiaparelli: Fashion Becomes Art",
+      "officialSourceUrl": "https://www.vam.ac.uk/exhibitions/schiaparelli",
+      "bookingUrl": "https://www.vam.ac.uk/exhibitions/schiaparelli",
+      "imageCredit": "Header image: Victoria and Albert Museum, London",
+      "usageStatus": "Official V&A exhibition-page image referenced for preview and review. Confirm campaign/send permissions if required by the email service provider.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The exhibition directly connects fashion, surrealism, photography, couture archive and contemporary image-making."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Marilyn Monroe: A Portrait",
+      "officialSourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
+      "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
+      "imageCredit": "No newsletter image used; official exhibition images and credits remain on the National Portrait Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "A portraiture-led exhibition with strong relevance to celebrity image construction, photography and visual agency."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Backyard Biennial: East",
+      "officialSourceUrl": "https://www.whitechapelgallery.org/exhibitions/backyard-biennial-east/",
+      "bookingUrl": "https://www.whitechapelgallery.org/exhibitions/backyard-biennial-east/",
+      "imageCredit": "No newsletter image used; official programme imagery remains on the Whitechapel Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "A free East London programme that links film, photography, public space, archives, craft and community-led cultural practice."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Herbert Smith Freehills Kramer Portrait Award 2026",
+      "officialSourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+      "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+      "imageCredit": "No newsletter image used; official exhibition images and credits remain on the National Portrait Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "Contemporary portraiture offers a useful counterpoint for photographers thinking about likeness, pose, surface and intimacy."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "The Process Room",
+      "officialSourceUrl": "https://www.photobookcafe.co.uk/whats-on",
+      "bookingUrl": "https://www.photobookcafe.co.uk/whats-on",
+      "imageCredit": "No newsletter image used; official organiser imagery remains on the Photobook Cafe programme page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "A tactile photography and publishing programme grounded in process, zines, alternative printing and community practice."
+    },
+    {
+      "section": "Fashion",
+      "storyTitle": "H&M Move, H&M Home and Solar Club: A collection of movement and togetherness",
+      "officialSourceUrl": "https://hmgroup.com/news/hm-move-hm-home-and-solar-club-present-a-collection-of-movement-and-togetherness/",
+      "bookingUrl": null,
+      "imageCredit": "Official H&M Group campaign image for H&M Move, H&M Home and Solar Club.",
+      "usageStatus": "Official brand newsroom image embedded and browser-verified for preview. Confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The campaign has a strong visual rhythm around movement, leisure, group styling and coastal social space."
+    },
+    {
+      "section": "Fashion",
+      "storyTitle": "LOEWE: Fall Winter 2026 precollection campaign",
+      "officialSourceUrl": "https://www.loewe.com/eur/en/pd/stories-collection/fw26-campaign.html",
+      "bookingUrl": null,
+      "imageCredit": "Official LOEWE page credits the campaign as photographed on Tenerife by Talia Chetrit.",
+      "usageStatus": "Official brand image embedded from LOEWE source page and browser-verified for preview. Confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The campaign has a clear visual position: island landscape, vivid texture, new creative direction and fashion as environmental contrast."
+    },
+    {
+      "section": "Fashion",
+      "storyTitle": "Balenciaga: A New York Minute",
+      "officialSourceUrl": "https://www.balenciaga.com/en-us/a-new-york-minute",
+      "bookingUrl": null,
+      "imageCredit": "Official Balenciaga campaign page asset; campaign directed by Celine Song.",
+      "usageStatus": "Official brand page image embedded and browser-verified for preview. It is a product/page asset from the campaign page, not a film still; confirm press/send permissions before live distribution.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "The campaign turns fashion film production, Manhattan street rhythm and behind-the-scenes structure into the visual idea."
+    },
+    {
+      "section": "On the Field",
+      "storyTitle": "Rotating Davide Studios archive image",
+      "officialSourceUrl": "https://www.davidesolla.com/",
+      "bookingUrl": "https://www.davidesolla.com/",
+      "imageCredit": "Davide Studios archive image selected from the live website image pool.",
+      "usageStatus": "Internal Davide Studios image. The renderer rotates this section image by issue ID from the image pool stored in the issue data.",
+      "dateChecked": "2026-06-28",
+      "selectedBecause": "Keeps the studio-facing section visual and current without publishing unconfirmed diary entries or partnership notes."
+    }
+  ]
+}
