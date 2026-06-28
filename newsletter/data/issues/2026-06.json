@@ -21,7 +21,7 @@
     "validationStatus": "research-approved",
     "notes": "All listed stories were checked against official museum, gallery, organiser or brand sources on 28 June 2026. External campaign and exhibition visuals are referenced from official pages; reusable press permissions should still be confirmed before a live audience send."
   },
-  "openingNote": "A June edit built around images that gather force in public: Pan-African art at the Barbican, Japanese women photographers in Soho, portraiture under close pressure, and fashion campaigns that use summer light, city rhythm and set construction as part of the visual argument.",
+  "openingNote": "A June edit built around images that gather force in public: Pan-African art at the Barbican, Japanese women photographers in Soho, architectural experiment in Kensington Gardens, and fashion campaigns that use sport, street rhythm and collective identity as part of the visual argument.",
   "sections": {
     "art": {
       "label": "01 — Art",
@@ -58,15 +58,15 @@
           "whyItMatters": "It opens a wide photographic field around authorship, social change, intimacy, colour, publication and the politics of who gets to define a national visual history."
         },
         {
-          "title": "Marilyn Monroe: A Portrait",
-          "institution": "National Portrait Gallery",
-          "dates": "4 June - 6 September 2026",
-          "location": "Floor 0, National Portrait Gallery, St Martin's Place, London WC2H 0HE",
-          "description": "Built around Monroe's centenary, this exhibition studies a public image made through collaboration with photographers, artists and stylists. The National Portrait Gallery foregrounds agency as much as iconography, moving from early pin-ups to Warhol, Boty, Avedon, Beaton, Eve Arnold and Sam Shaw.",
-          "sourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
-          "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/marilyn-monroe-a-portrait",
-          "ctaLabel": "Book tickets",
-          "whyItMatters": "It is a compact study in how celebrity portraiture is built through gaze, repetition, authorship, styling and the delicate politics of being looked at."
+          "title": "Serpentine Pavilion 2026 by LANZA atelier",
+          "institution": "Serpentine Galleries",
+          "dates": "6 June - 25 October 2026",
+          "location": "Serpentine South, Kensington Gardens, London W2 3XA",
+          "description": "LANZA atelier's 2026 Pavilion, a serpentine, anchors itself in the crinkle-crankle wall, using brick, curve and repetition to make a structure that shifts between opacity and openness. It is a quiet June reference for how rhythm, material and public movement can shape an image.",
+          "sourceUrl": "https://www.serpentinegalleries.org/whats-on/serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier/",
+          "bookingUrl": "https://www.serpentinegalleries.org/whats-on/serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier/",
+          "ctaLabel": "View pavilion",
+          "whyItMatters": "It makes architecture behave like a photographic study of pattern, shadow, permeability and bodies moving around a curved line."
         },
         {
           "title": "M.C. Escher. The Exhibition",
@@ -78,17 +78,6 @@
           "bookingUrl": "https://feverup.com/m/637982",
           "ctaLabel": "Book tickets",
           "whyItMatters": "Escher's visual language sharpens questions of pattern, perspective, optical tension and the moment a flat image begins to behave like architecture."
-        },
-        {
-          "title": "Herbert Smith Freehills Kramer Portrait Award 2026",
-          "institution": "National Portrait Gallery",
-          "dates": "25 June - 7 October 2026",
-          "location": "Floor 2, National Portrait Gallery, St Martin's Place, London WC2H 0HE",
-          "description": "The National Portrait Gallery's annual portrait award gathers contemporary painted portraits selected from international submissions. The 2026 display offers a useful counterpoint to photography: close observation, likeness, surface and sitter psychology slowed down through paint rather than captured through lens time.",
-          "sourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
-          "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
-          "ctaLabel": "View exhibition",
-          "whyItMatters": "For photographers, painted portraiture sharpens questions of pose, scale, intimacy, expression and what a face can hold after the instant has passed."
         }
       ]
     },
@@ -112,32 +101,32 @@
           }
         },
         {
-          "brand": "H&M Move, H&M Home and Solar Club",
-          "title": "A collection of movement and togetherness",
-          "releaseTiming": "Published 4 June 2026",
-          "commentary": "H&M Group's Solar Club collaboration brings movement, table culture and coastal light into one visual world. The campaign imagery shifts between bodies in motion and bodies gathered around food, which makes the collection feel less like an activewear drop and more like a study of rhythm, leisure and communal styling.",
-          "sourceUrl": "https://hmgroup.com/news/hm-move-hm-home-and-solar-club-present-a-collection-of-movement-and-togetherness/",
-          "imageCredit": "Official H&M Group campaign image for H&M Move, H&M Home and Solar Club.",
+          "brand": "Nike N7",
+          "title": "Summer 2026 N7 collection",
+          "releaseTiming": "Published 18 June 2026",
+          "commentary": "Nike's summer N7 collection uses football-inspired sportswear as a platform for Indigenous visibility, photographed around athletes Madison Hammond and T.J. Kahoalii. The campaign works through representation rather than spectacle: national pitch language, graphic identity and community memory held in a clean, contemporary sportswear frame with quiet visual confidence and presence.",
+          "sourceUrl": "https://about.nike.com/en/newsroom/releases/nike-s-new-n7-collection-celebrates-indigenous-communities-on-and-off-the-pitch",
+          "imageCredit": "Official Nike N7 campaign image from NIKE, Inc.",
           "image": {
             "type": "official-page-image",
-            "src": "https://hmgroup.com/wp-content/uploads/2026/06/Solar_PRESS-SITE_TEASER-IMAGE_1920x1080.jpg",
-            "label": "Official H&M Group campaign image",
-            "alt": "H&M Move, H&M Home and Solar Club campaign image showing runners and a coastal table scene",
+            "src": "https://media.about.nike.com/img/79d6bd83-8b48-4376-89e4-1825fea3966f/su26n7-madisonhammond-tjkahoalii-1055-edit-edit.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjozMjAwLCJoZWlnaHQiOjIxMzN9LCJyZXNpemUiOnsid2lkdGgiOjkwMH19fQ%3D%3D&s=4dae3493ee323418833884ea0eee90fa85154c8bc1b258f4eb96faa744f6426e",
+            "label": "Official Nike N7 campaign image",
+            "alt": "Nike N7 summer 2026 campaign image featuring Madison Hammond and T.J. Kahoalii",
             "recommendedSize": "1200 x 900 px"
           }
         },
         {
-          "brand": "Balenciaga",
-          "title": "A New York Minute",
-          "releaseTiming": "Launched 27 May 2026",
-          "commentary": "Balenciaga's campaign is directed by Celine Song and built as three sixty-second Manhattan films around Sarah Pidgeon, Fall 26 pieces and the Le City, Le 7 Bowling and Rodeo bags. Its best idea is structural: it lets the city, film crew and behind-the-scenes mechanics become part of the fashion image.",
-          "sourceUrl": "https://www.balenciaga.com/en-us/a-new-york-minute",
-          "imageCredit": "Official Balenciaga campaign page asset from the brand page; campaign directed by Celine Song.",
+          "brand": "Nike Football",
+          "title": "From pitch to street to community",
+          "releaseTiming": "Published 11 June 2026",
+          "commentary": "Nike's football culture release places federation kits, X2 collaborations, Cryoshots and street-facing design in the same visual system. The Jacquemus X2 image has the useful June tension: a performance object treated like fashion, with scale, colour, styling and product theatre doing as much visual work as the object itself onscreen.",
+          "sourceUrl": "https://about.nike.com/en/newsroom/releases/from-pitch-to-street-to-community-nike-defines-the-future-of-football-culture",
+          "imageCredit": "Official Nike Football culture image from NIKE, Inc.",
           "image": {
             "type": "official-page-image",
-            "src": "https://balenciaga.dam.kering.com/asset/9515b28c-d560-4b17-a4fa-155a567842b0/Large/8657622ACFH1000_F.jpg?v=3",
-            "label": "Official Balenciaga campaign page image",
-            "alt": "Balenciaga Le City bag image from the official A New York Minute campaign page",
+            "src": "https://media.about.nike.com/img/320050e0-2be9-479a-9eb3-d426fb9591d9/jacquemus-x2-3x2.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjozMjAwLCJoZWlnaHQiOjIxMzN9LCJyZXNpemUiOnsid2lkdGgiOjkwMH19fQ%3D%3D&s=c018c532da26af7246f8956350cb8ef63132a33236c9fe7ff8cf33c21b17b240",
+            "label": "Official Nike Football culture image",
+            "alt": "Nike Jacquemus X2 football culture image from NIKE, Inc.",
             "recommendedSize": "1200 x 900 px"
           }
         }
