@@ -533,8 +533,12 @@ const sendEmail = async () => {
       method: "POST",
       body: JSON.stringify({ confirmation })
     });
-    const broadcast = payload.broadcast || {};
-    setStatus(`Sent ${currentIssue.issueId}. Broadcast ${broadcast.id || "created"}.`);
+    const delivery = payload.delivery || {};
+    const provider = delivery.provider || (delivery.id ? "resend" : "email provider");
+    const detail = delivery.id
+      ? `Broadcast ${delivery.id}.`
+      : `${delivery.recipientCount || "Configured"} recipient${delivery.recipientCount === 1 ? "" : "s"}.`;
+    setStatus(`Sent ${currentIssue.issueId} via ${provider}. ${detail}`);
   } finally {
     sendButton.disabled = false;
   }

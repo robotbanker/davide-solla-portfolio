@@ -50,6 +50,7 @@ For production, set these Vercel environment variables:
 - `NEWSLETTER_DOUBLE_OPT_IN` - defaults to `true`; set to `false` only if another consent confirmation process exists
 - `NEWSLETTER_RESEND_SEGMENT_ID` - optional Resend Segment ID for new newsletter contacts
 - `NEWSLETTER_RESEND_TOPIC_ID` - optional Resend Topic ID to opt contacts into a specific topic
+- `NEWSLETTER_RECIPIENTS` - optional comma-separated SMTP fallback recipients for admin-triggered sends
 - `CREATIVEHUB_API_KEY` - Creativehub API key used server-side to load print products
 - `CREATIVEHUB_API_BASE_URL` - optional Creativehub API base URL, defaults to `https://api.creativehub.io`
 - `CREATIVEHUB_ORDER_COUNTRY_CODE` - optional fulfilment country code for checkout, defaults to `GB`
@@ -106,7 +107,7 @@ Subscriber records are managed in Resend Contacts rather than stored in this rep
 
 Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. `NEWSLETTER_RESEND_TOPIC_ID` can also opt contacts into a Resend Topic during enrollment.
 
-The Newsletter tab in `admin.html` has a `Send issue now` button. It saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, builds the email HTML, and creates a Resend Broadcast with `send: true`. The send is blocked if placeholder content remains or the source manifest is not research-approved.
+The Newsletter tab in `admin.html` has a `Send issue now` button. It saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, and builds the email HTML. When `RESEND_API_KEY` and `NEWSLETTER_RESEND_SEGMENT_ID` are set, it creates a Resend Broadcast with `send: true`. Otherwise it falls back to the configured SMTP sender and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`.
 
 ## Print Shop
 

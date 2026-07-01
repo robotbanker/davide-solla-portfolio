@@ -71,7 +71,7 @@ Recommended approach implemented:
   Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
 
 - Newsletter tab in `admin.html`  
-  Includes `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it immediately through the Resend Broadcast API.
+  Includes `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through Resend Broadcasts when configured or SMTP as a fallback.
 
 ## Public Enrollment Setup
 
@@ -86,9 +86,10 @@ Optional:
 - `NEWSLETTER_REPLY_TO_EMAIL`
 - `NEWSLETTER_RESEND_SEGMENT_ID`
 - `NEWSLETTER_RESEND_TOPIC_ID`
+- `NEWSLETTER_RECIPIENTS`
 - `NEWSLETTER_DOUBLE_OPT_IN=false` only when another confirmed-consent process exists
 
-The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required for the admin send button because Resend Broadcasts target a Segment. The broadcast HTML swaps the newsletter footer unsubscribe/preference links to Resend's unsubscribe URL placeholder before sending.
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required for Resend Broadcast sends because Broadcasts target a Segment. If Resend is not configured, the admin send button uses SMTP and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`. The Resend broadcast HTML swaps the newsletter footer unsubscribe/preference links to Resend's unsubscribe URL placeholder before sending.
 
 ## Adding a New Monthly Issue
 
@@ -270,5 +271,5 @@ Recommended send process:
 4. Build the production email.
 5. Review desktop and mobile screenshots.
 6. Sign in to `admin.html`, open Newsletter, select the issue and click `Send issue now`.
-7. Type the issue ID in the confirmation prompt to send the Resend Broadcast immediately.
-8. Send a test email from Resend before the first live audience send whenever sender/domain configuration changes.
+7. Type the issue ID in the confirmation prompt to send immediately.
+8. Send a test email before the first live audience send whenever sender/domain configuration changes.
