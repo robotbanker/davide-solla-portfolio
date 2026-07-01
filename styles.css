@@ -532,6 +532,7 @@ h2 {
 #fine-art,
 #print-shop,
 #about,
+#newsletter,
 #contact {
   scroll-margin-top: 92px;
 }
@@ -1365,6 +1366,130 @@ h2 {
   text-transform: uppercase;
 }
 
+.newsletter-section {
+  align-items: start;
+  background:
+    linear-gradient(180deg, rgba(21, 19, 16, 0.96), rgba(8, 8, 7, 0.98)),
+    var(--bone);
+  border-top: 1px solid var(--warm-line);
+  color: var(--porcelain);
+  display: grid;
+  gap: 72px;
+  grid-template-columns: minmax(0, 0.86fr) minmax(380px, 0.72fr);
+}
+
+.newsletter-copy {
+  max-width: 760px;
+}
+
+.newsletter-copy h2 {
+  margin-bottom: 26px;
+}
+
+.newsletter-copy p:not(.section-kicker) {
+  color: var(--soft-ink);
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 560px;
+  text-wrap: pretty;
+}
+
+.newsletter-copy .text-link {
+  margin-top: 18px;
+}
+
+.newsletter-form {
+  align-self: start;
+  border-top: 1px solid var(--warm-line);
+  display: grid;
+  gap: 20px;
+  padding-top: 24px;
+}
+
+.newsletter-fields {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.newsletter-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.newsletter-form span {
+  color: rgba(241, 237, 230, 0.68);
+  font-size: 12px;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.newsletter-form small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 4px;
+  text-transform: uppercase;
+}
+
+.newsletter-form input:not([type="checkbox"]) {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(241, 237, 230, 0.28);
+  color-scheme: dark;
+  color: var(--porcelain);
+  caret-color: var(--accent);
+  min-height: 46px;
+  outline: 0;
+  padding: 8px 0 12px;
+  transition: background 180ms ease, border-color 180ms ease, padding 180ms ease;
+  width: 100%;
+}
+
+.newsletter-form input:not([type="checkbox"]):focus {
+  background: rgba(241, 237, 230, 0.04);
+  border-bottom-color: var(--porcelain);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.newsletter-consent {
+  align-items: start;
+  display: grid !important;
+  gap: 12px !important;
+  grid-template-columns: 18px minmax(0, 1fr);
+}
+
+.newsletter-consent input {
+  accent-color: var(--accent);
+  height: 18px;
+  margin: 2px 0 0;
+  width: 18px;
+}
+
+.newsletter-consent span {
+  color: rgba(241, 237, 230, 0.72);
+  font-size: 13px;
+  line-height: 1.55;
+  text-transform: none;
+}
+
+.newsletter-form.was-submitted input:invalid {
+  border-color: var(--danger);
+}
+
+.newsletter-form.was-submitted .newsletter-consent input:invalid {
+  outline: 1px solid var(--danger);
+  outline-offset: 3px;
+}
+
+.newsletter-privacy {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: -4px 0 0;
+}
+
 .contact {
   background: var(--charcoal);
   border-top: 1px solid var(--line);
@@ -1448,6 +1573,8 @@ h2 {
   resize: vertical;
 }
 
+.form-honeypot,
+.newsletter-form .form-honeypot,
 .inquiry-form .form-honeypot {
   display: none;
 }
@@ -1498,6 +1625,37 @@ h2 {
   font-size: 14px;
   margin: 0;
   min-height: 24px;
+}
+
+.newsletter-confirmation {
+  align-items: center;
+  background:
+    linear-gradient(180deg, rgba(11, 10, 9, 0.94), rgba(8, 8, 7, 1)),
+    var(--charcoal);
+  color: var(--porcelain);
+  display: grid;
+  min-height: 100svh;
+  padding: 72px max(28px, calc((100vw - 980px) / 2 + 34px));
+}
+
+.newsletter-confirmation section {
+  border-top: 1px solid var(--warm-line);
+  max-width: 720px;
+  padding-top: 28px;
+}
+
+.newsletter-confirmation h1 {
+  font-size: clamp(52px, 7vw, 86px);
+  line-height: 0.98;
+  margin: 0 0 22px;
+}
+
+.newsletter-confirmation p:not(.section-kicker) {
+  color: var(--soft-ink);
+  font-size: 18px;
+  line-height: 1.68;
+  margin: 0 0 26px;
+  max-width: 580px;
 }
 
 .client-area-main {
@@ -2092,6 +2250,7 @@ h2 {
 
   .about,
   .contact,
+  .newsletter-section,
   .client-login-content,
   .split-heading,
   .print-shop-layout,
@@ -2386,6 +2545,10 @@ h2 {
     gap: 46px;
   }
 
+  .newsletter-section {
+    gap: 46px;
+  }
+
   .print-shop-grid {
     gap: 18px;
     grid-template-columns: 1fr;
@@ -2467,6 +2630,10 @@ h2 {
 
   .submit-button {
     justify-self: stretch;
+  }
+
+  .newsletter-fields {
+    grid-template-columns: 1fr;
   }
 
   .site-footer {

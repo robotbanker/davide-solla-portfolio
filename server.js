@@ -4,6 +4,7 @@ const path = require("path");
 const { handleAdminRequest, handleClientRequest } = require("./lib/admin-store");
 const { handleContactRequest } = require("./lib/contact");
 const { handlePrintsRequest, handleStripeWebhookRequest } = require("./lib/creativehub");
+const { handleNewsletterRequest } = require("./lib/newsletter");
 const { setSecurityHeaders } = require("./lib/security");
 
 const rootDir = __dirname;
@@ -27,6 +28,7 @@ const publicFiles = new Set([
   "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
   "field-notes.css", "field-notes.html", "field-notes.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
+  "newsletter-signup.js",
   "robots.txt", "script.js", "sitemap.xml", "styles.css", "wallet-card.html"
 ]);
 
@@ -91,6 +93,11 @@ const server = http.createServer((req, res) => {
 
   if (pathname === "/api/contact") {
     handleContactRequest(req, res);
+    return;
+  }
+
+  if (pathname === "/api/newsletter") {
+    handleNewsletterRequest(req, res);
     return;
   }
 

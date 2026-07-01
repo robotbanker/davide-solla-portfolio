@@ -8,6 +8,7 @@ const editorForm = document.querySelector("[data-newsletter-editor-form]");
 const saveSectionButton = document.querySelector("[data-newsletter-save-section]");
 const saveAllButton = document.querySelector("[data-newsletter-save-all]");
 const buildButton = document.querySelector("[data-newsletter-build-email]");
+const sendButton = document.querySelector("[data-newsletter-send-email]");
 const sectionTabs = Array.from(document.querySelectorAll("[data-newsletter-section-tab]"));
 
 let issues = [];
@@ -515,6 +516,30 @@ const buildEmail = async () => {
   setStatus(`Built ${payload.output}.`);
 };
 
+const sendEmail = async () => {
+  await saveIssue();
+  const confirmation = window.prompt(`Type ${currentIssue.issueId} to send this issue now.`);
+
+  if (confirmation !== currentIssue.issueId) {
+    setStatus("Send cancelled.");
+    return;
+  }
+
+  sendButton.disabled = true;
+  setStatus(`Sending ${currentIssue.issueId}...`);
+
+  try {
+    const payload = await newsletterApi(`newsletterSend&issueId=${encodeURIComponent(currentIssue.issueId)}`, {
+      method: "POST",
+      body: JSON.stringify({ confirmation })
+    });
+    const broadcast = payload.broadcast || {};
+    setStatus(`Sent ${currentIssue.issueId}. Broadcast ${broadcast.id || "created"}.`);
+  } finally {
+    sendButton.disabled = false;
+  }
+};
+
 const initialiseNewsletter = async () => {
   if (newsletterLoaded || !sessionStorage.getItem("davide-admin-session")) {
     return;
@@ -604,6 +629,13 @@ loadButton.addEventListener("click", () => loadIssue());
 saveSectionButton.addEventListener("click", () => saveIssue().catch((error) => setStatus(error.message)));
 saveAllButton.addEventListener("click", () => saveIssue().catch((error) => setStatus(error.message)));
 buildButton.addEventListener("click", () => buildEmail().catch((error) => setStatus(error.message)));
+sendButton.addEventListener("click", () => sendEmail().catch((error) => {
+  if (sendButton) {
+    sendButton.disabled = false;
+  }
+
+  setStatus(error.message);
+}));
 
 initialiseNewsletter();
 })();

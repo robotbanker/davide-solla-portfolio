@@ -8,6 +8,7 @@ Portfolio website for Davide Solla, rebuilt from the public Adobe Portfolio cont
 - `client-area.html` / `client-area.js` - private client login and embedded gallery page
 - `styles.css` - responsive editorial design system
 - `script.js` - mobile navigation, data-driven albums, image lightbox, and contact form submission
+- `newsletter-signup.js` - shared newsletter signup form behaviour
 - `data/site.json` - editable portfolio albums, covers, section text, and gallery image lists
 - `admin.html` - protected admin portal for editing albums and uploading images
 - `server.js` / `api/admin.js` / `api/client.js` - local and Vercel backend endpoints
@@ -43,6 +44,12 @@ For production, set these Vercel environment variables:
 - `CONTACT_FROM_EMAIL` - sender address, for example `Davide Solla Website <davidesollastudios@gmail.com>`
 - `CONTACT_SUBJECT_PREFIX` - optional email subject prefix, defaults to `Website enquiry`
 - `RESEND_API_KEY` - optional fallback provider key if SMTP is not configured
+- `NEWSLETTER_FROM_EMAIL` - sender for Field Notes confirmation emails, defaults to `CONTACT_FROM_EMAIL` or SMTP sender
+- `NEWSLETTER_REPLY_TO_EMAIL` - optional reply-to address for newsletter confirmations
+- `NEWSLETTER_TOKEN_SECRET` - stable secret used to sign double opt-in confirmation links
+- `NEWSLETTER_DOUBLE_OPT_IN` - defaults to `true`; set to `false` only if another consent confirmation process exists
+- `NEWSLETTER_RESEND_SEGMENT_ID` - optional Resend Segment ID for new newsletter contacts
+- `NEWSLETTER_RESEND_TOPIC_ID` - optional Resend Topic ID to opt contacts into a specific topic
 - `CREATIVEHUB_API_KEY` - Creativehub API key used server-side to load print products
 - `CREATIVEHUB_API_BASE_URL` - optional Creativehub API base URL, defaults to `https://api.creativehub.io`
 - `CREATIVEHUB_ORDER_COUNTRY_CODE` - optional fulfilment country code for checkout, defaults to `GB`
@@ -90,6 +97,16 @@ Clients open `client-area.html`, sign in with their email and password, then vie
 The public form posts to `/api/contact`, so the visitor never sees the recipient address in the page HTML. Configure the recipient and sender with `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in the hosting environment.
 
 The backend sends through Gmail SMTP when `SMTP_USER` and `SMTP_PASS` are set. Use a Gmail app password for `SMTP_PASS`, not the normal account password. If SMTP is not configured, the backend falls back to Resend when `RESEND_API_KEY` is available.
+
+## Newsletter Signup
+
+The homepage and Field Notes page both post newsletter signups to `/api/newsletter`. The form asks for email, optional first name, and explicit consent, with a hidden honeypot field and per-IP rate limiting.
+
+Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the backend sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link.
+
+Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. `NEWSLETTER_RESEND_TOPIC_ID` can also opt contacts into a Resend Topic during enrollment.
+
+The Newsletter tab in `admin.html` has a `Send issue now` button. It saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, builds the email HTML, and creates a Resend Broadcast with `send: true`. The send is blocked if placeholder content remains or the source manifest is not research-approved.
 
 ## Print Shop
 

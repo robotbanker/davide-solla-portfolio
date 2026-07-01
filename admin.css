@@ -163,6 +163,11 @@ button.danger {
   color: #ff9aa0;
 }
 
+button:disabled {
+  cursor: wait;
+  opacity: 0.58;
+}
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,

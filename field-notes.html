@@ -20,8 +20,8 @@
     <meta name="twitter:description" content="Monthly notes from Davide Studios on London exhibitions, fashion image-making, and studio culture.">
     <meta name="twitter:image" content="https://www.davidesolla.com/assets/images/soho-01.jpg">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    <link rel="stylesheet" href="styles.css?v=24">
-    <link rel="stylesheet" href="field-notes.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=26">
+    <link rel="stylesheet" href="field-notes.css?v=5">
   </head>
   <body>
     <header class="site-header is-scrolled" data-header>
@@ -50,6 +50,7 @@
         <a href="index.html#services">Services</a>
         <a href="index.html#fine-art">Fine Art</a>
         <a href="index.html#about">About</a>
+        <a href="index.html#newsletter">Newsletter</a>
         <a href="index.html#contact">Contact</a>
         <a href="field-notes.html" aria-current="page">Field Notes</a>
         <a href="client-area.html">Client Area</a>
@@ -65,11 +66,38 @@
 
     <main class="field-notes-page" id="top">
       <section class="field-notes-hero" aria-labelledby="field-notes-title">
-        <div>
+        <div class="field-notes-hero-copy">
           <p class="section-kicker">Field Notes</p>
           <h1 id="field-notes-title">Monthly visual notes from Davide Studios.</h1>
+          <p>London exhibitions, fashion image-making, and studio-facing references gathered into one monthly edit.</p>
         </div>
-        <p>London exhibitions, fashion image-making, and studio-facing references gathered into one monthly edit.</p>
+
+        <form class="newsletter-form field-notes-signup" action="/api/newsletter" method="post" data-newsletter-form data-newsletter-source="field-notes" aria-label="Join Field Notes by email" novalidate>
+          <div class="newsletter-fields">
+            <label>
+              <span>First name <small>optional</small></span>
+              <input name="firstName" type="text" autocomplete="given-name" maxlength="80">
+            </label>
+            <label>
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" required>
+            </label>
+          </div>
+
+          <label class="newsletter-consent">
+            <input name="consent" type="checkbox" value="yes" required>
+            <span>I agree to receive Field Notes emails from Davide Solla Photography. I can unsubscribe at any time.</span>
+          </label>
+
+          <label class="form-honeypot" aria-hidden="true" tabindex="-1">
+            <span>Website</span>
+            <input name="website" type="text" autocomplete="off" tabindex="-1">
+          </label>
+
+          <button class="submit-button" type="submit" data-newsletter-submit>Join Field Notes</button>
+          <p class="newsletter-privacy">One email a month. No resale or third-party list sharing.</p>
+          <p class="form-status" aria-live="polite" data-newsletter-status></p>
+        </form>
       </section>
 
       <section class="field-notes-shell" aria-label="Field Notes current and prior issue">
@@ -93,6 +121,7 @@
       <a href="#top">Back to top</a>
     </footer>
 
+    <script src="newsletter-signup.js?v=1"></script>
     <script src="field-notes.js?v=2"></script>
   </body>
 </html>

@@ -22,11 +22,13 @@ Current architecture:
 - `script.js` renders portfolio galleries from `data/site.json`.
 - `server.js` serves public static files and API endpoints.
 - `api/` and `lib/` handle admin, contact, client area, print shop and security.
-- There was no pre-existing newsletter, CMS email, campaign analytics, ESP integration or email template tooling.
+- The public newsletter signup posts to `/api/newsletter` and uses Resend Contacts for subscriber management.
 
 Recommended approach implemented:
 
 - Keep the newsletter system separate from the homepage so the site is not redesigned.
+- Keep subscriber data out of the repository; use Resend Contacts, Segments and Topics for the email list.
+- Use explicit consent, rate limiting, a honeypot field and double opt-in confirmation by default for public enrollment.
 - Store each monthly issue as structured JSON.
 - Store research provenance in a matching source manifest.
 - Generate production email HTML from data, with email-safe table layout and inline styles.
@@ -61,6 +63,32 @@ Recommended approach implemented:
 
 - `field-notes.html` / `field-notes.css` / `field-notes.js`  
   Public website page that displays the latest monthly issue and one prior issue.
+
+- `newsletter-signup.js`  
+  Shared browser behaviour for the homepage and Field Notes signup forms.
+
+- `lib/newsletter.js` / `api/newsletter.js`  
+  Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
+
+- Newsletter tab in `admin.html`  
+  Includes `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it immediately through the Resend Broadcast API.
+
+## Public Enrollment Setup
+
+Required production environment variables:
+
+- `RESEND_API_KEY`
+- `NEWSLETTER_TOKEN_SECRET`
+- `NEWSLETTER_FROM_EMAIL`
+
+Optional:
+
+- `NEWSLETTER_REPLY_TO_EMAIL`
+- `NEWSLETTER_RESEND_SEGMENT_ID`
+- `NEWSLETTER_RESEND_TOPIC_ID`
+- `NEWSLETTER_DOUBLE_OPT_IN=false` only when another confirmed-consent process exists
+
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required for the admin send button because Resend Broadcasts target a Segment. The broadcast HTML swaps the newsletter footer unsubscribe/preference links to Resend's unsubscribe URL placeholder before sending.
 
 ## Adding a New Monthly Issue
 
@@ -241,5 +269,6 @@ Recommended send process:
 3. Run strict validation.
 4. Build the production email.
 5. Review desktop and mobile screenshots.
-6. Paste or import `newsletter/dist/[issue-id].html` into the chosen email service provider.
-7. Send a test email before any live audience send.
+6. Sign in to `admin.html`, open Newsletter, select the issue and click `Send issue now`.
+7. Type the issue ID in the confirmation prompt to send the Resend Broadcast immediately.
+8. Send a test email from Resend before the first live audience send whenever sender/domain configuration changes.
