@@ -243,6 +243,58 @@ const locationByGallery = {
   petals: "London"
 };
 
+const imageDimensions = {
+  "assets/images/about-portrait.jpg": [1920, 1193],
+  "assets/images/cosmic-01.jpg": [1365, 2048],
+  "assets/images/cosmic-02.jpg": [2048, 1445],
+  "assets/images/cosmic-03.jpg": [1365, 2048],
+  "assets/images/cosmic-04.jpg": [1365, 2048],
+  "assets/images/cosmic-05.jpg": [1365, 2048],
+  "assets/images/cosmic-06.jpg": [1365, 2048],
+  "assets/images/cosmic-07.jpg": [1365, 2048],
+  "assets/images/dark-baroque-01.jpg": [2048, 1365],
+  "assets/images/dark-baroque-02.jpg": [2048, 1365],
+  "assets/images/dark-baroque-03.jpg": [1365, 2048],
+  "assets/images/dark-baroque-04.jpg": [2048, 1365],
+  "assets/images/dark-baroque-05.jpg": [2048, 1365],
+  "assets/images/dark-baroque-06.jpg": [1365, 2048],
+  "assets/images/fine-art-01.jpg": [1352, 2048],
+  "assets/images/fine-art-02.jpg": [1366, 2048],
+  "assets/images/harvey-01.jpg": [1528, 2048],
+  "assets/images/harvey-02.jpg": [1328, 2048],
+  "assets/images/harvey-03.jpg": [1920, 1300],
+  "assets/images/hero-cosmic-girl.jpg": [1733, 1355],
+  "assets/images/julia-01.jpg": [1536, 2048],
+  "assets/images/julia-02.jpg": [2048, 1365],
+  "assets/images/julia-03.jpg": [2048, 1351],
+  "assets/images/julia-04.jpg": [1373, 2048],
+  "assets/images/julia-05.jpg": [2048, 1341],
+  "assets/images/kintsugi-01.jpg": [1365, 2048],
+  "assets/images/kintsugi-02.jpg": [1365, 2048],
+  "assets/images/kintsugi-03.jpg": [1365, 2048],
+  "assets/images/kintsugi-04.jpg": [1352, 2048],
+  "assets/images/petals-02.jpg": [2048, 1365],
+  "assets/images/petals-03.jpg": [1365, 2048],
+  "assets/images/roxana-01.jpg": [1920, 1280],
+  "assets/images/roxana-02.jpg": [1920, 1103],
+  "assets/images/roxana-03.jpg": [1920, 1440],
+  "assets/images/roxana-04.jpg": [2048, 1536],
+  "assets/images/sophie-01.jpg": [2048, 1482],
+  "assets/images/sophie-02.jpg": [2048, 1365],
+  "assets/images/sophie-03.jpg": [2048, 1365],
+  "assets/images/sophie-04.jpg": [2048, 1365],
+  "assets/images/sophie-06.jpg": [2048, 1365],
+  "assets/images/sophie-07.jpg": [2048, 1365],
+  "assets/images/sophie-08.jpg": [2048, 1365],
+  "assets/images/sophie-09.jpg": [2048, 1365],
+  "assets/images/sophie-11.jpg": [2048, 1365],
+  "assets/images/studio-01.jpg": [1241, 2048],
+  "assets/images/studio-02.jpg": [1754, 2048],
+  "assets/images/studio-03.jpg": [1920, 1280],
+  "assets/images/studio-04.jpg": [1783, 2048],
+  "assets/images/studio-05.jpg": [2048, 1365]
+};
+
 const canUseResponsiveDerivative = (src) => {
   if (!src || !src.startsWith("assets/images/") || src.includes("/uploads/")) {
     return false;
@@ -272,6 +324,13 @@ const responsiveFormatDerivative = (src, width, extension) => {
 const setResponsiveImage = (image, src, sizes = "100vw") => {
   image.draggable = false;
   image.src = src;
+
+  const dimensions = imageDimensions[src];
+
+  if (dimensions) {
+    image.width = dimensions[0];
+    image.height = dimensions[1];
+  }
 
   if (canUseResponsiveDerivative(src)) {
     image.srcset = `${responsiveDerivative(src, 720)} 720w, ${responsiveDerivative(src, 1200)} 1200w`;
