@@ -1,10 +1,8 @@
 User-agent: *
 Disallow: /admin.html
 Disallow: /api/admin
-Disallow: /api/client
 Disallow: /api/stripe-webhook
 Disallow: /app-shell/
-Disallow: /client-area.html
 Disallow: /data/admin-site.json
 Disallow: /data/admin-site.enc
 Disallow: /newsletter-preview.html
