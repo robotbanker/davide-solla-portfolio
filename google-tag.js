@@ -1,15 +1,6 @@
-window.dataLayer = window.dataLayer || [];
-
-function gtag() {
-  window.dataLayer.push(arguments);
-}
-
-gtag("js", new Date());
-gtag("config", "G-1T625VVZL2");
-
 window.trackStudioEvent = (eventName, params = {}) => {
-  if (typeof gtag !== "function" || !eventName) return;
-  gtag("event", eventName, params);
+  if (typeof window.gtag !== "function" || !eventName) return;
+  window.gtag("event", eventName, params);
 };
 
 document.addEventListener("click", (event) => {
