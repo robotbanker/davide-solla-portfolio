@@ -99,9 +99,6 @@ const renderIssue = (issue) => {
         <h2>${escapeHtml(cleanIssueTitle(issue.title))}</h2>
         <p>${escapeHtml(issue.openingNote)}</p>
       </div>
-      <div class="issue-actions">
-        <a class="text-link text-link-light" href="newsletter/dist/${escapeHtml(issue.issueId)}.html">Email version</a>
-      </div>
     </header>
 
     <section class="field-section">

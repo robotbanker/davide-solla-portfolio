@@ -65,13 +65,13 @@ Recommended approach implemented:
   Public website page that displays the latest monthly issue and one prior issue.
 
 - `newsletter-signup.js`  
-  Shared browser behaviour for the homepage and Field Notes signup forms.
+  Shared browser behaviour for the Field Notes signup form.
 
 - `lib/newsletter.js` / `api/newsletter.js`  
   Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
 
 - Newsletter tab in `admin.html`  
-  Includes `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through Resend Broadcasts when configured or SMTP as a fallback.
+  Includes `Dry Run`, which sends only to `davidesolla@outlook.com`, and `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through Resend Broadcasts when configured or SMTP as a fallback.
 
 ## Public Enrollment Setup
 
@@ -89,7 +89,7 @@ Optional:
 - `NEWSLETTER_RECIPIENTS`
 - `NEWSLETTER_DOUBLE_OPT_IN=false` only when another confirmed-consent process exists
 
-The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required for Resend Broadcast sends because Broadcasts target a Segment. If Resend is not configured, the admin send button uses SMTP and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`. The Resend broadcast HTML swaps the newsletter footer unsubscribe/preference links to Resend's unsubscribe URL placeholder before sending.
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required for Resend Broadcast sends because Broadcasts target a Segment. If Resend is not configured, the admin send button uses SMTP and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`. The admin `Dry Run` button sends only to `davidesolla@outlook.com`. The Resend broadcast HTML swaps the newsletter footer unsubscribe/preference links to Resend's unsubscribe URL placeholder before sending.
 
 ## Adding a New Monthly Issue
 

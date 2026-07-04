@@ -101,13 +101,13 @@ The backend sends through Gmail SMTP when `SMTP_USER` and `SMTP_PASS` are set. U
 
 ## Newsletter Signup
 
-The homepage and Field Notes page both post newsletter signups to `/api/newsletter`. The form asks for email, optional first name, and explicit consent, with a hidden honeypot field and per-IP rate limiting.
+The Field Notes page posts newsletter signups to `/api/newsletter`. The form asks for email, optional first name, and explicit consent, with a hidden honeypot field and per-IP rate limiting.
 
 Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the backend sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link.
 
 Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. `NEWSLETTER_RESEND_TOPIC_ID` can also opt contacts into a Resend Topic during enrollment.
 
-The Newsletter tab in `admin.html` has a `Send issue now` button. It saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, and builds the email HTML. When `RESEND_API_KEY` and `NEWSLETTER_RESEND_SEGMENT_ID` are set, it creates a Resend Broadcast with `send: true`. Otherwise it falls back to the configured SMTP sender and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`.
+The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.com` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, and builds the email HTML. When `RESEND_API_KEY` and `NEWSLETTER_RESEND_SEGMENT_ID` are set, it creates a Resend Broadcast with `send: true`. Otherwise it falls back to the configured SMTP sender and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`.
 
 ## Print Shop
 

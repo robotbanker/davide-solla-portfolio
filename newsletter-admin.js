@@ -8,6 +8,7 @@ const editorForm = document.querySelector("[data-newsletter-editor-form]");
 const saveSectionButton = document.querySelector("[data-newsletter-save-section]");
 const saveAllButton = document.querySelector("[data-newsletter-save-all]");
 const buildButton = document.querySelector("[data-newsletter-build-email]");
+const dryRunButton = document.querySelector("[data-newsletter-dry-run]");
 const sendButton = document.querySelector("[data-newsletter-send-email]");
 const sectionTabs = Array.from(document.querySelectorAll("[data-newsletter-section-tab]"));
 
@@ -516,6 +517,23 @@ const buildEmail = async () => {
   setStatus(`Built ${payload.output}.`);
 };
 
+const dryRunEmail = async () => {
+  await saveIssue();
+  dryRunButton.disabled = true;
+  setStatus(`Sending dry run for ${currentIssue.issueId}...`);
+
+  try {
+    const payload = await newsletterApi(`newsletterDryRun&issueId=${encodeURIComponent(currentIssue.issueId)}`, {
+      method: "POST",
+      body: "{}"
+    });
+    const delivery = payload.delivery || {};
+    setStatus(`Dry run sent to ${delivery.recipient || "davidesolla@outlook.com"} via ${delivery.provider || "email provider"}.`);
+  } finally {
+    dryRunButton.disabled = false;
+  }
+};
+
 const sendEmail = async () => {
   await saveIssue();
   const confirmation = window.prompt(`Type ${currentIssue.issueId} to send this issue now.`);
@@ -633,6 +651,13 @@ loadButton.addEventListener("click", () => loadIssue());
 saveSectionButton.addEventListener("click", () => saveIssue().catch((error) => setStatus(error.message)));
 saveAllButton.addEventListener("click", () => saveIssue().catch((error) => setStatus(error.message)));
 buildButton.addEventListener("click", () => buildEmail().catch((error) => setStatus(error.message)));
+dryRunButton.addEventListener("click", () => dryRunEmail().catch((error) => {
+  if (dryRunButton) {
+    dryRunButton.disabled = false;
+  }
+
+  setStatus(error.message);
+}));
 sendButton.addEventListener("click", () => sendEmail().catch((error) => {
   if (sendButton) {
     sendButton.disabled = false;
