@@ -90,7 +90,7 @@ const renderIssue = (issue) => {
   const field = issue.sections.onTheField;
   const fieldImage = rotatingImageForIssue(issue, field);
 
-  document.title = `Field Notes: ${issue.month} ${issue.year} | Davide Solla Photography`;
+  document.title = `Field Notes: ${issue.month} ${issue.year} | Davide Solla Studios`;
 
   issueRoot.innerHTML = `
     <header class="issue-head">

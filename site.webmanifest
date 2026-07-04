@@ -1,0 +1,17 @@
+{
+  "name": "Davide Solla Studios",
+  "short_name": "Davide Solla",
+  "description": "London fashion, editorial and portrait photography by Davide Solla Studios.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080807",
+  "theme_color": "#080807",
+  "icons": [
+    {
+      "src": "/assets/images/favicon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

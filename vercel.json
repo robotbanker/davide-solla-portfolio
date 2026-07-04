@@ -1,5 +1,23 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "davidesolla.com"
+        }
+      ],
+      "destination": "https://www.davidesolla.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "routes": [
     {
       "src": "/(?:api/.*\\.js|lib(?:/.*)?|data/admin-site\\.(?:json|enc)|server\\.js|package(?:-lock)?\\.json|README\\.md|\\.env.*|\\.git(?:/.*)?|vercel\\.json)$",
@@ -13,6 +31,20 @@
       "continue": true
     },
     {
+      "src": "/(?:assets|newsletter/data|newsletter/dist|apple-wallet)/(.*)",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, stale-while-revalidate=86400"
+      },
+      "continue": true
+    },
+    {
+      "src": "/(?:styles|field-notes|admin|newsletter-preview)\\.css|/(?:script|field-notes|newsletter-signup|client-area|admin|newsletter-admin|newsletter-preview)\\.js|/site\\.webmanifest",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, stale-while-revalidate=86400"
+      },
+      "continue": true
+    },
+    {
       "src": "/(.*)",
       "headers": {
         "X-Content-Type-Options": "nosniff",
@@ -20,7 +52,7 @@
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
         "Cross-Origin-Opener-Policy": "same-origin",
-        "Content-Security-Policy": "default-src 'self'; base-uri 'none'; connect-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'none'; frame-src 'none'; img-src 'self' data: blob: https:; object-src 'none'; script-src 'self' 'sha256-1XmWtysKAzN9AuRW9+HNK88+6tfnvugwol2e6owcCrI='; style-src 'self'; style-src-attr 'unsafe-inline'; upgrade-insecure-requests"
+        "Content-Security-Policy": "default-src 'self'; base-uri 'none'; connect-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'none'; frame-src 'none'; img-src 'self' data: blob: https:; object-src 'none'; script-src 'self' 'sha256-R1uaZHWYzppApCvDocdOpS69oTgzRBLYecQ/n6RfIGk=' 'sha256-te71Eqs5ujX5KZiCh/Opd6GJTyfvc2AIT6hSli2ZudQ='; style-src 'self'; style-src-attr 'unsafe-inline'; upgrade-insecure-requests"
       },
       "continue": true
     }

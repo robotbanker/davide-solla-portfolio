@@ -268,13 +268,8 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/field-notes.html</loc>
-    <lastmod>2026-06-28</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://www.davidesolla.com/assets/images/soho-01.jpg</image:loc>
-      <image:title>Davide Studios Field Notes</image:title>
-      <image:caption>Monthly visual notes from Davide Studios.</image:caption>
-    </image:image>
+    <priority>0.6</priority>
   </url>
 </urlset>

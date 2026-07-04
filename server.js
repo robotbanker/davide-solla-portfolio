@@ -19,6 +19,7 @@ const mimeTypes = {
   ".jpeg": "image/jpeg",
   ".png": "image/png",
   ".txt": "text/plain; charset=utf-8",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
   ".webp": "image/webp",
   ".xml": "application/xml; charset=utf-8",
   ".svg": "image/svg+xml"
@@ -29,8 +30,13 @@ const publicFiles = new Set([
   "field-notes.css", "field-notes.html", "field-notes.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
   "newsletter-signup.js",
-  "robots.txt", "script.js", "sitemap.xml", "styles.css", "wallet-card.html"
+  "robots.txt", "script.js", "sitemap.xml", "site.webmanifest", "styles.css", "wallet-card.html"
 ]);
+
+const isCacheableStaticPath = (relativePath) => /\.(?:avif|css|gif|jpe?g|js|png|svg|webmanifest|webp)$/i.test(relativePath)
+  || relativePath.startsWith("newsletter/data/")
+  || relativePath.startsWith("newsletter/dist/")
+  || relativePath.startsWith("apple-wallet/");
 
 const isPublicPath = (relativePath) => publicFiles.has(relativePath)
   || relativePath === "data/site.json"
@@ -77,6 +83,9 @@ const serveStatic = (req, res) => {
 
     res.statusCode = 200;
     res.setHeader("content-type", mimeTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream");
+    if (isCacheableStaticPath(relativePath)) {
+      res.setHeader("cache-control", "public, max-age=31536000, stale-while-revalidate=86400");
+    }
     res.end(req.method === "HEAD" ? undefined : content);
   });
 };
