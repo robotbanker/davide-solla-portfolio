@@ -22,6 +22,7 @@ const fineGrid = document.querySelector("[data-fine-grid]");
 const servicesList = document.querySelector("[data-services-list]");
 const printShopGrid = document.querySelector("[data-print-shop-grid]");
 const printShopStatus = document.querySelector("[data-print-shop-status]");
+const printShopSection = document.querySelector("#print-shop");
 const printOrderModal = document.querySelector("[data-print-order-modal]");
 const printOrderForm = document.querySelector("[data-print-order-form]");
 const printOrderClose = document.querySelector("[data-print-order-close]");
@@ -1033,6 +1034,10 @@ const renderPrintShop = (printData) => {
 };
 
 const loadPrintShopData = async () => {
+  if (!printShopGrid || printShopSection?.hidden) {
+    return;
+  }
+
   try {
     const response = await fetch(`/api/prints?v=${Date.now()}`, { cache: "no-store" });
     const data = await response.json().catch(() => ({}));
@@ -1640,6 +1645,10 @@ form.addEventListener("submit", (event) => {
       }
 
       statusMessage.textContent = "Thanks, your enquiry has been sent.";
+      window.trackStudioEvent?.("generate_lead", {
+        form_name: "commission_enquiry",
+        project_type: data.get("project") || ""
+      });
       form.reset();
       form.classList.remove("was-submitted");
     })

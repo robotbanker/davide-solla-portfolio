@@ -11,3 +11,4 @@ node_modules/
 data/admin-site.json
 .vercel/
 .vercel
+.env*

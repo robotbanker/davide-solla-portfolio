@@ -109,6 +109,28 @@ Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend 
 
 The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, and builds the email HTML. When `RESEND_API_KEY` and `NEWSLETTER_RESEND_SEGMENT_ID` are set, it creates a Resend Broadcast with `send: true`. Otherwise it falls back to the configured SMTP sender and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`.
 
+## Analytics and Search Console
+
+GA4 is configured through a single Google tag using measurement ID `G-1T625VVZL2`. The tag is loaded on the public website pages only: `index.html`, `field-notes.html`, and `client-area.html`. Do not add a second direct GA4 tag or a GTM container on top of this unless the existing tag is removed or migrated into GTM.
+
+The local `google-tag.js` helper initialises GA4 and records lightweight conversion signals:
+
+- `generate_lead` after a successful commission enquiry form submission
+- `enquiry_intent` when visitors click links to the contact section
+- `instagram_click` when visitors click the studio Instagram link
+
+Google Search Console can verify the `https://www.davidesolla.com/` URL-prefix property using the installed GA4 tag after deployment. DNS verification remains the preferred method for a domain property covering all subdomains and protocols.
+
+Recommended next steps:
+
+1. Verify both the domain property and the `https://www.davidesolla.com/` URL-prefix property in Google Search Console.
+2. Submit `https://www.davidesolla.com/sitemap.xml`.
+3. Inspect and request indexing for `/` and `/field-notes.html`.
+4. Review GA4 Realtime after deployment to confirm page views and lead events are received.
+5. Confirm the long-term cookie consent approach before adding advertising features, remarketing, or any broader tracking.
+
+Future SEO structure work, such as dedicated crawlable portfolio/story URLs or service pages, would change visible site structure and copy. Treat that as a separate content/design approval item, not a backend-only SEO change.
+
 ## Print Shop
 
 The homepage print shop is driven by the server-side `/api/prints` endpoint, which loads products from Creativehub using `CREATIVEHUB_API_KEY`. Only products returned by Creativehub with available print options are shown. The public order panel posts buyer delivery details back to the same server-side endpoint, which creates a Creativehub embryonic order for delivery options.
