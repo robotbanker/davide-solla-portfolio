@@ -528,7 +528,7 @@ const dryRunEmail = async () => {
       body: "{}"
     });
     const delivery = payload.delivery || {};
-    setStatus(`Dry run sent to ${delivery.recipient || "davidesolla@outlook.com"} via ${delivery.provider || "email provider"}.`);
+    setStatus(`Dry run sent to ${delivery.recipient || "davidesolla@outlook.it"} via ${delivery.provider || "email provider"}.`);
   } finally {
     dryRunButton.disabled = false;
   }
