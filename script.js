@@ -21,6 +21,7 @@ const editorialGrid = document.querySelector("[data-editorial-grid]");
 const fineGrid = document.querySelector("[data-fine-grid]");
 const servicesList = document.querySelector("[data-services-list]");
 const printShopGrid = document.querySelector("[data-print-shop-grid]");
+const printShopSection = printShopGrid?.closest(".print-shop");
 const printShopStatus = document.querySelector("[data-print-shop-status]");
 const printOrderModal = document.querySelector("[data-print-order-modal]");
 const printOrderForm = document.querySelector("[data-print-order-form]");
@@ -1033,7 +1034,7 @@ const renderPrintShop = (printData) => {
 };
 
 const loadPrintShopData = async () => {
-  if (!printShopGrid) {
+  if (!printShopGrid || printShopSection?.hidden) {
     return;
   }
 
