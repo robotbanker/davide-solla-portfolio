@@ -35,7 +35,7 @@
     <link rel="apple-touch-icon" href="assets/images/favicon.png">
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#080807">
-    <link rel="stylesheet" href="styles.css?v=26">
+    <link rel="stylesheet" href="styles.css?v=27">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -500,8 +500,11 @@
           <label>
             <span>Project type</span>
             <select name="project">
+              <option>Commercial campaign or lookbook</option>
+              <option>Editorial commission</option>
               <option>Fashion editorial</option>
               <option>Beauty portrait</option>
+              <option>Artist or performer portrait</option>
               <option>Model portfolio</option>
               <option>Fine art print</option>
               <option>Print purchase</option>
@@ -516,6 +519,7 @@
             <span>Website</span>
             <input name="website" type="text" autocomplete="off" tabindex="-1">
           </label>
+          <p class="form-privacy">Your name, email, project details, and limited acquisition context (landing path, referrer host, and campaign tags) are stored privately in the studio's Vercel-hosted business system and used only to respond to and manage this enquiry. Notification email is handled by the configured mail provider, retention is reviewed after two years, and this form does not subscribe you to marketing.</p>
           <button class="submit-button" type="submit">Send enquiry</button>
           <p class="form-status" aria-live="polite" data-form-status></p>
         </form>
@@ -633,6 +637,6 @@
       </figure>
     </div>
 
-    <script src="script.js?v=27"></script>
+    <script src="script.js?v=28"></script>
   </body>
 </html>

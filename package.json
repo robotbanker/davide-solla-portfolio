@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
+    "test": "node --test tests/*.test.js",
     "newsletter:build": "node newsletter/build-email.js 2026-07",
     "newsletter:validate": "node newsletter/build-email.js 2026-07 --strict",
     "ios:sync": "cap sync ios",

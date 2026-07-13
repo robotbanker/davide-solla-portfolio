@@ -56,6 +56,58 @@ let activePrintOrderDraft = null;
 let activeDeliveryOption = null;
 let lastPrintOrderTrigger = null;
 let editorialLayoutFrame = null;
+const enquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v1";
+const pendingEnquiryStorageKey = "davide-studios-pending-enquiry-v1";
+
+const boundedAttributionValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
+
+const captureEnquiryAttribution = () => {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(enquiryAttributionStorageKey) || "null");
+    if (stored && typeof stored === "object") return stored;
+  } catch (error) {
+    // Session storage is optional; attribution can still be captured for this page view.
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  let referrerHost = "";
+  try {
+    const referrer = document.referrer ? new URL(document.referrer) : null;
+    if (referrer && referrer.hostname !== window.location.hostname) {
+      referrerHost = referrer.hostname.toLowerCase().replace(/^www\./, "");
+    }
+  } catch (error) {
+    referrerHost = "";
+  }
+  const attribution = {
+    landing_path: boundedAttributionValue(window.location.pathname || "/", 240),
+    referrer_host: boundedAttributionValue(referrerHost, 253),
+    utm_source: boundedAttributionValue(params.get("utm_source"), 120),
+    utm_medium: boundedAttributionValue(params.get("utm_medium"), 120),
+    utm_campaign: boundedAttributionValue(params.get("utm_campaign"), 160),
+    utm_content: boundedAttributionValue(params.get("utm_content"), 160),
+    utm_term: boundedAttributionValue(params.get("utm_term"), 160)
+  };
+  try { sessionStorage.setItem(enquiryAttributionStorageKey, JSON.stringify(attribution)); } catch (error) {}
+  return attribution;
+};
+
+const newEnquiryId = () => {
+  if (window.crypto?.randomUUID) return `enq_${window.crypto.randomUUID().replaceAll("-", "")}`;
+  const bytes = new Uint8Array(16);
+  window.crypto.getRandomValues(bytes);
+  return `enq_${[...bytes].map((value) => value.toString(16).padStart(2, "0")).join("")}`;
+};
+
+const pendingEnquiry = () => {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(pendingEnquiryStorageKey) || "null");
+    if (stored?.enquiry_id && stored?.submitted_at) return stored;
+  } catch (error) {}
+  const value = { enquiry_id: newEnquiryId(), submitted_at: new Date().toISOString() };
+  try { sessionStorage.setItem(pendingEnquiryStorageKey, JSON.stringify(value)); } catch (error) {}
+  return value;
+};
 
 const defaultSiteData = {
   sections: {
@@ -1613,6 +1665,7 @@ form.addEventListener("invalid", (event) => {
 }, true);
 
 form.addEventListener("input", (event) => {
+  try { sessionStorage.removeItem(pendingEnquiryStorageKey); } catch (error) {}
   if (event.target.matches("input, textarea, select") && event.target.checkValidity()) {
     event.target.removeAttribute("aria-invalid");
   }
@@ -1624,7 +1677,12 @@ form.addEventListener("submit", (event) => {
 
   const data = new FormData(form);
   const submitButton = form.querySelector(".submit-button");
-  const payload = Object.fromEntries(data.entries());
+  const submission = pendingEnquiry();
+  const payload = {
+    ...Object.fromEntries(data.entries()),
+    ...submission,
+    attribution: captureEnquiryAttribution()
+  };
 
   submitButton.disabled = true;
   form.setAttribute("aria-busy", "true");
@@ -1645,10 +1703,13 @@ form.addEventListener("submit", (event) => {
       }
 
       statusMessage.textContent = "Thanks, your enquiry has been sent.";
-      window.trackStudioEvent?.("generate_lead", {
-        form_name: "commission_enquiry",
-        project_type: data.get("project") || ""
-      });
+      if (result.enquiry_id) {
+        window.trackStudioEvent?.("generate_lead", {
+          form_name: "commission_enquiry",
+          project_type: data.get("project") || ""
+        });
+      }
+      try { sessionStorage.removeItem(pendingEnquiryStorageKey); } catch (error) {}
       form.reset();
       form.classList.remove("was-submitted");
     })

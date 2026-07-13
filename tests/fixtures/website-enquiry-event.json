@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "event_type": "website.enquiry.created",
+  "enquiry_id": "enq_fixture00000000000001",
+  "submitted_at": "2026-07-13T17:00:00.000Z",
+  "contact": {
+    "name": "Fixture Client",
+    "email": "client@example.test",
+    "company": ""
+  },
+  "project": {
+    "type": "Jewellery campaign",
+    "message": "Synthetic fixture brief for a London jewellery campaign.",
+    "location": "",
+    "timeline": "",
+    "budget_range": ""
+  },
+  "attribution": {
+    "landing_path": "/",
+    "referrer_host": "instagram.com",
+    "utm_source": "instagram",
+    "utm_medium": "organic_social",
+    "utm_campaign": "cinematic_beauty_london",
+    "utm_content": "editorial_case_study",
+    "utm_term": "",
+    "consent_state": "not_implemented"
+  },
+  "privacy_notice_version": "2026-07-13"
+}

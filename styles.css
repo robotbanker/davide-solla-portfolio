@@ -1627,6 +1627,14 @@ h2 {
   min-height: 24px;
 }
 
+.form-privacy {
+  color: rgba(241, 237, 230, 0.58);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 58ch;
+}
+
 .newsletter-confirmation {
   align-items: center;
   background:

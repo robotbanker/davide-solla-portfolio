@@ -43,7 +43,10 @@ For production, set these Vercel environment variables:
 - `CONTACT_TO_EMAIL` - private recipient address for enquiries, defaults to `SMTP_USER`
 - `CONTACT_FROM_EMAIL` - sender address, for example `Davide Solla Website <davidesollastudios@gmail.com>`
 - `CONTACT_SUBJECT_PREFIX` - optional email subject prefix, defaults to `Website enquiry`
-- `RESEND_API_KEY` - optional fallback provider key if SMTP is not configured
+- `RADAR_ENQUIRY_ENDPOINT` - private Radar intake URL for durable enquiry persistence
+- `WEBSITE_ENQUIRY_WEBHOOK_SECRET` - shared server-only HMAC secret; use the same value in Radar
+- `RADAR_ENQUIRY_TIMEOUT_MS` - optional Radar request timeout, defaults to six seconds
+- `RESEND_API_KEY` - required for idempotent browser-enquiry notifications; also the fallback when legacy SMTP is not configured
 - `NEWSLETTER_FROM_EMAIL` - sender for Field Notes confirmation emails, defaults to `CONTACT_FROM_EMAIL` or SMTP sender
 - `NEWSLETTER_REPLY_TO_EMAIL` - optional reply-to address for newsletter confirmations
 - `NEWSLETTER_TOKEN_SECRET` - stable secret used to sign double opt-in confirmation links
@@ -97,7 +100,27 @@ Clients open `client-area.html`, sign in with their email and password, then vie
 
 The public form posts to `/api/contact`, so the visitor never sees the recipient address in the page HTML. Configure the recipient and sender with `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in the hosting environment.
 
-The backend sends through Gmail SMTP when `SMTP_USER` and `SMTP_PASS` are set. Use a Gmail app password for `SMTP_PASS`, not the normal account password. If SMTP is not configured, the backend falls back to Resend when `RESEND_API_KEY` is available.
+ID-bearing browser enquiries are sent through the Resend API with a deterministic idempotency
+key, so a retry cannot create a duplicate notification. Configure `RESEND_API_KEY`,
+`CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL` before enabling the Radar integration. Gmail SMTP
+remains available only for legacy internal notifications that do not enter the enquiry funnel;
+use a Gmail app password for `SMTP_PASS`, not the normal account password.
+
+Browser submissions carry a stable opaque enquiry ID and submission timestamp. The backend
+validates and HMAC-signs a privacy-minimised event, then Radar stores an immutable private
+receipt before email is attempted. Identical retries cannot create a duplicate lifecycle
+record. Delivery acceptance/failure is stored separately: failed notifications can retry,
+accepted notifications are skipped, and Resend receives the same deterministic idempotency
+key on every attempt. The API does not acknowledge the browser until Radar records provider
+acceptance. The daily Radar email fallback uses the same contact endpoint without an enquiry
+ID, so it remains an internal notification and cannot loop back into the commercial funnel.
+
+Acquisition data is limited to landing path, referrer hostname, and the five standard UTM
+fields. The form does not retain IP addresses, user agents, full URLs, `gclid`, `fbclid`, or
+other advertising identifiers. Enquiry details are used only to answer and manage the
+requested project and do not subscribe the sender to Field Notes. Radar assigns a two-year
+retention review date; this is an operational default that should be confirmed during the
+studio's focused privacy review.
 
 ## Newsletter Signup
 
@@ -115,7 +138,7 @@ GA4 is configured through a single Google tag using measurement ID `G-1T625VVZL2
 
 The local `google-tag.js` helper initialises GA4 and records lightweight conversion signals:
 
-- `generate_lead` after a successful commission enquiry form submission
+- `generate_lead` after a durably accepted commission enquiry; the Radar-linked enquiry ID is not sent to GA
 - `enquiry_intent` when visitors click links to the contact section
 - `instagram_click` when visitors click the studio Instagram link
 
