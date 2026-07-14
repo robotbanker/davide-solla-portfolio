@@ -122,3 +122,20 @@ test("the privacy route and notice version are wired through the local server", 
   assert.match(server, /requestUrl\.pathname === "\/privacy"/);
   assert.match(contact, /privacyNoticeVersion = "2026-07-14"/);
 });
+
+test("the production privacy rewrite keeps the standard security headers", () => {
+  const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
+  const privacyRoute = config.routes.find((route) => route.src === "/privacy");
+  const catchAll = config.routes.find((route) => route.src === "/(.*)");
+  assert.equal(privacyRoute.dest, "/privacy.html");
+  for (const name of [
+    "X-Content-Type-Options",
+    "X-Frame-Options",
+    "Referrer-Policy",
+    "Permissions-Policy",
+    "Cross-Origin-Opener-Policy",
+    "Content-Security-Policy"
+  ]) {
+    assert.equal(privacyRoute.headers[name], catchAll.headers[name]);
+  }
+});
