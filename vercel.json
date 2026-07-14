@@ -2,23 +2,25 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "davidesolla.com"
-        }
-      ],
-      "destination": "https://www.davidesolla.com/:path*",
-      "permanent": true
-    },
-    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
     }
   ],
   "routes": [
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "davidesolla.com"
+        }
+      ],
+      "headers": {
+        "Location": "https://www.davidesolla.com/$1"
+      },
+      "status": 308
+    },
     {
       "src": "/(?:api/.*\\.js|lib(?:/.*)?|data/admin-site\\.(?:json|enc)|server\\.js|package(?:-lock)?\\.json|README\\.md|\\.env.*|\\.git(?:/.*)?|vercel\\.json)$",
       "status": 404

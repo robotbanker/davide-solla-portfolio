@@ -126,7 +126,9 @@ test("the privacy route and notice version are wired through the local server", 
 test("the production privacy rewrite keeps the standard security headers", () => {
   const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
   const privacyRoute = config.routes.find((route) => route.src === "/privacy");
-  const catchAll = config.routes.find((route) => route.src === "/(.*)");
+  const catchAll = config.routes.find((route) => (
+    route.src === "/(.*)" && route.headers?.["X-Content-Type-Options"] === "nosniff"
+  ));
   assert.equal(privacyRoute.dest, "/privacy.html");
   for (const name of [
     "X-Content-Type-Options",

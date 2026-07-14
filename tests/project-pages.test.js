@@ -196,11 +196,12 @@ test("homepage portfolio tiles expose stable links without removing the modal ex
 
 test("the canonical-host redirect preserves every nested path", () => {
   const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
-  const canonicalRedirect = config.redirects.find((redirect) => redirect.has?.some((condition) => (
+  const canonicalRedirect = config.routes.find((route) => route.has?.some((condition) => (
     condition.type === "host" && condition.value === "davidesolla.com"
   )));
 
-  assert.equal(canonicalRedirect.source, "/:path*");
-  assert.equal(canonicalRedirect.destination, "https://www.davidesolla.com/:path*");
-  assert.equal(canonicalRedirect.permanent, true);
+  assert.equal(config.routes[0], canonicalRedirect);
+  assert.equal(canonicalRedirect.src, "/(.*)");
+  assert.equal(canonicalRedirect.headers.Location, "https://www.davidesolla.com/$1");
+  assert.equal(canonicalRedirect.status, 308);
 });
