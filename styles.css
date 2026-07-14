@@ -337,6 +337,7 @@ body.menu-open .menu-toggle span:last-child {
     position: fixed;
     transform: translateY(-10px);
     transition: opacity 180ms ease, transform 180ms ease;
+    visibility: hidden;
     z-index: 31;
   }
 
@@ -354,6 +355,7 @@ body.menu-open .menu-toggle span:last-child {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+    visibility: visible;
   }
 }
 

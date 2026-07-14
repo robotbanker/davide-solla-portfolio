@@ -7,6 +7,7 @@ const dataLink = document.querySelector("[data-data-link]");
 const sourcesLink = document.querySelector("[data-sources-link]");
 const requestedIssue = new URLSearchParams(window.location.search).get("issue");
 const { imageApproval, issueReadyForScopes, renderedImageSlots, rotatingImageForIssue } = window.NewsletterRights;
+const adminToken = () => sessionStorage.getItem("davide-admin-session") || "";
 
 if (requestedIssue) {
   issueInput.value = requestedIssue;
@@ -136,8 +137,8 @@ const renderIssue = (issue, manifest) => {
 
 const setLinks = (issueId) => {
   productionLink.href = `newsletter/dist/${issueId}.html`;
-  dataLink.href = `newsletter/data/issues/${issueId}.json`;
-  sourcesLink.href = `newsletter/data/sources/${issueId}.manifest.json`;
+  dataLink.href = `/field-notes/${issueId}`;
+  sourcesLink.href = "admin.html";
 };
 
 const loadIssue = async () => {
@@ -147,15 +148,20 @@ const loadIssue = async () => {
   statusMessage.textContent = "Loading issue...";
 
   try {
-    const [response, manifestResponse] = await Promise.all([
-      fetch(`newsletter/data/issues/${encodeURIComponent(issueId)}.json`, { cache: "no-store" }),
-      fetch(`newsletter/data/sources/${encodeURIComponent(issueId)}.manifest.json`, { cache: "no-store" })
-    ]);
-    if (!response.ok || !manifestResponse.ok) {
-      throw new Error(`Issue ${issueId} could not be loaded.`);
+    const token = adminToken();
+    if (!token) {
+      throw new Error("Sign in through the admin editor before opening an editorial preview.");
+    }
+    const response = await fetch(`/api/admin?action=newsletterIssue&issueId=${encodeURIComponent(issueId)}`, {
+      cache: "no-store",
+      headers: { authorization: `Bearer ${token}` }
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload.issue) {
+      throw new Error(payload.error || `Issue ${issueId} could not be loaded.`);
     }
 
-    const [issue, manifest] = await Promise.all([response.json(), manifestResponse.json()]);
+    const { issue, manifest } = payload;
     renderIssue(issue, manifest);
     const slots = renderedImageSlots(issue);
     const pendingRights = slots.filter((slot) => !imageApproval(issue, manifest, slot, ["public-web", "live-newsletter"]).approved).length;

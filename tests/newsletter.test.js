@@ -17,7 +17,8 @@ const {
   newsletterRevision,
   sendNewsletterBroadcastOnce,
   sendNewsletterIssue,
-  writeGithubFiles
+  writeGithubFiles,
+  writeSiteData
 } = require("../lib/admin-store");
 const {
   loadIssue,
@@ -119,7 +120,11 @@ const withAdminNewsletterFiles = async (operation) => {
       issueId: issue.issueId,
       month: issue.month,
       year: issue.year,
-      title: issue.title
+      title: issue.title,
+      status: "research-approved",
+      publicationStatus: "published",
+      publishedAt: "2026-06-28T10:40:35.000Z",
+      updatedAt: "2026-07-01T12:00:00.000Z"
     }] }, null, 2)}\n`],
     ["newsletter/data/sources/2026-07.manifest.json", `${JSON.stringify(manifest, null, 2)}\n`]
   ]);
@@ -158,7 +163,7 @@ const withAdminNewsletterFiles = async (operation) => {
   };
   fs.writeFile = async (filePath, content, ...args) => {
     const key = keyFor(filePath);
-    if (key.startsWith("newsletter/data/")) {
+    if (key.startsWith("newsletter/data/") || key === "sitemap.xml") {
       writes += 1;
       files.set(key, String(content));
       return undefined;
@@ -186,7 +191,7 @@ test("newsletter revisions are deterministic across object key order", () => {
 });
 
 test("newsletter admin revisions reject stale saves before another write", async () => {
-  await withAdminNewsletterFiles(async ({ writeCount }) => {
+  await withAdminNewsletterFiles(async ({ files, writeCount }) => {
     const address = `admin-revision-${crypto.randomUUID()}`;
     const loginResponse = response();
     await handleAdminRequest(request({
@@ -225,7 +230,14 @@ test("newsletter admin revisions reject stale saves before another write", async
     const saved = json(saveResponse);
     assert.notEqual(saved.revision, loaded.revision);
     assert.equal(saved.revision, newsletterRevision(saved.issue, saved.manifest));
-    assert.equal(writeCount(), 3);
+    assert.equal(writeCount(), 4);
+    const savedIndex = JSON.parse(files.get("newsletter/data/issues/index.json"));
+    assert.equal(savedIndex.issues[0].status, "research-approved");
+    assert.equal(savedIndex.issues[0].publicationStatus, "published");
+    assert.equal(savedIndex.issues[0].publishedAt, "2026-06-28T10:40:35.000Z");
+    assert.match(savedIndex.issues[0].updatedAt, /^\d{4}-\d{2}-\d{2}T/);
+    assert.notEqual(savedIndex.issues[0].updatedAt, "2026-07-01T12:00:00.000Z");
+    assert.match(files.get("sitemap.xml"), /\/field-notes\/2026-07<\/loc>/);
 
     const staleResponse = response();
     await handleAdminRequest(request({
@@ -241,7 +253,51 @@ test("newsletter admin revisions reject stale saves before another write", async
     assert.equal(staleResponse.statusCode, 409);
     assert.equal(json(staleResponse).code, "NEWSLETTER_REVISION_CONFLICT");
     assert.equal(json(staleResponse).currentRevision, saved.revision);
-    assert.equal(writeCount(), 3);
+    assert.equal(writeCount(), 4);
+  });
+});
+
+test("a public Field Notes save is rejected before writes when publication invariants fail", async () => {
+  await withAdminNewsletterFiles(async ({ writeCount }) => {
+    const address = `admin-publication-${crypto.randomUUID()}`;
+    const loginResponse = response();
+    await handleAdminRequest(request({
+      url: "/api/admin?action=login",
+      body: { password: process.env.ADMIN_PASSWORD },
+      address
+    }), loginResponse);
+    assert.equal(loginResponse.statusCode, 200);
+    const authorization = `Bearer ${json(loginResponse).token}`;
+
+    const getResponse = response();
+    await handleAdminRequest(request({
+      method: "GET",
+      url: "/api/admin?action=newsletterIssue&issueId=2026-07",
+      authorization,
+      address
+    }), getResponse);
+    assert.equal(getResponse.statusCode, 200);
+    const loaded = json(getResponse);
+    const invalidIssue = structuredClone(loaded.issue);
+    invalidIssue.publication = { status: "published" };
+    invalidIssue.sections.fashion.stories = [];
+
+    const saveResponse = response();
+    await handleAdminRequest(request({
+      url: "/api/admin?action=newsletterIssue&issueId=2026-07",
+      authorization,
+      address,
+      body: {
+        issue: invalidIssue,
+        manifest: loaded.manifest,
+        revision: loaded.revision
+      }
+    }), saveResponse);
+
+    assert.equal(saveResponse.statusCode, 422);
+    assert.match(json(saveResponse).error, /public publication validation/i);
+    assert.ok(json(saveResponse).validation.errors.some((error) => /fashion\.stories/.test(error)));
+    assert.equal(writeCount(), 0);
   });
 });
 
@@ -336,6 +392,86 @@ test("concurrent GitHub newsletter commits pinned to one head cannot overwrite t
     assert.equal(rejected[0].reason.code, "NEWSLETTER_REPOSITORY_CONFLICT");
     assert.equal(patchCalls, 2);
     assert.notEqual(headSha, "head_initial");
+  } finally {
+    global.fetch = originalFetch;
+    for (const [key, value] of Object.entries(previousEnv)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});
+
+test("portfolio content and the current Field Notes sitemap share one revision-pinned GitHub commit", async () => {
+  const envKeys = [
+    "ADMIN_DATA_ENCRYPTION_KEY",
+    "GITHUB_TOKEN",
+    "GITHUB_OWNER",
+    "GITHUB_REPO",
+    "GITHUB_BRANCH"
+  ];
+  const previousEnv = Object.fromEntries(envKeys.map((key) => [key, process.env[key]]));
+  const originalFetch = global.fetch;
+  const newsletterIndex = await fs.readFile(path.join(__dirname, "..", "newsletter/data/issues/index.json"), "utf8");
+  const siteData = JSON.parse(await fs.readFile(path.join(__dirname, "..", "data/site.json"), "utf8"));
+  let blobCount = 0;
+  let commitCount = 0;
+  let patchCount = 0;
+  let treePaths = [];
+
+  Object.assign(process.env, {
+    ADMIN_DATA_ENCRYPTION_KEY: "site-write-test-encryption-key",
+    GITHUB_TOKEN: "github_site_write_test_token",
+    GITHUB_OWNER: "example",
+    GITHUB_REPO: "site-write-test",
+    GITHUB_BRANCH: "main"
+  });
+
+  global.fetch = async (url, options = {}) => {
+    const target = String(url);
+    const method = options.method || "GET";
+
+    if (method === "GET" && target.endsWith("/git/ref/heads/main")) {
+      return providerResponse(200, { object: { sha: "head_site" } });
+    }
+    if (method === "GET" && target.includes("/contents/newsletter/data/issues/index.json")) {
+      assert.match(target, /ref=head_site/);
+      return providerResponse(200, {
+        content: Buffer.from(newsletterIndex).toString("base64"),
+        sha: "index_blob"
+      });
+    }
+    if (method === "GET" && target.endsWith("/git/commits/head_site")) {
+      return providerResponse(200, { tree: { sha: "tree_site" } });
+    }
+    if (method === "POST" && target.endsWith("/git/blobs")) {
+      blobCount += 1;
+      return providerResponse(201, { sha: `site_blob_${blobCount}` });
+    }
+    if (method === "POST" && target.endsWith("/git/trees")) {
+      treePaths = JSON.parse(options.body).tree.map((entry) => entry.path).sort();
+      return providerResponse(201, { sha: "tree_site_next" });
+    }
+    if (method === "POST" && target.endsWith("/git/commits")) {
+      const body = JSON.parse(options.body);
+      assert.deepEqual(body.parents, ["head_site"]);
+      commitCount += 1;
+      return providerResponse(201, { sha: "commit_site" });
+    }
+    if (method === "PATCH" && target.endsWith("/git/refs/heads/main")) {
+      assert.equal(JSON.parse(options.body).sha, "commit_site");
+      patchCount += 1;
+      return providerResponse(200, { object: { sha: "commit_site" } });
+    }
+
+    throw new Error(`Unexpected GitHub request: ${method} ${target}`);
+  };
+
+  try {
+    await writeSiteData(siteData);
+    assert.equal(blobCount, 3);
+    assert.equal(commitCount, 1);
+    assert.equal(patchCount, 1);
+    assert.deepEqual(treePaths, ["data/admin-site.enc", "data/site.json", "sitemap.xml"]);
   } finally {
     global.fetch = originalFetch;
     for (const [key, value] of Object.entries(previousEnv)) {

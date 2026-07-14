@@ -5,6 +5,7 @@ const { handleAdminRequest, handleClientRequest } = require("./lib/admin-store")
 const { handleContactRequest } = require("./lib/contact");
 const { handlePrintsRequest, handleStripeWebhookRequest } = require("./lib/creativehub");
 const { handleNewsletterRequest } = require("./lib/newsletter");
+const { handleFieldNotesPageRequest } = require("./lib/field-notes-pages");
 const { handleProjectPageRequest } = require("./lib/project-pages");
 const { setSecurityHeaders } = require("./lib/security");
 
@@ -27,7 +28,7 @@ const mimeTypes = {
 };
 
 const publicFiles = new Set([
-  "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
+  "404.html", "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
   "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
   "newsletter-rights.js", "newsletter-signup.js", "preferences.html", "preferences.js",
@@ -36,13 +37,11 @@ const publicFiles = new Set([
 ]);
 
 const isCacheableStaticPath = (relativePath) => /\.(?:avif|css|gif|jpe?g|js|png|svg|webmanifest|webp)$/i.test(relativePath)
-  || relativePath.startsWith("newsletter/data/")
   || relativePath.startsWith("newsletter/dist/")
   || relativePath.startsWith("apple-wallet/");
 
 const isPublicPath = (relativePath) => publicFiles.has(relativePath)
   || relativePath === "data/site.json"
-  || relativePath.startsWith("newsletter/data/")
   || relativePath.startsWith("newsletter/dist/")
   || relativePath.startsWith("assets/")
   || relativePath.startsWith("apple-wallet/");
@@ -105,6 +104,15 @@ const server = http.createServer((req, res) => {
   setSecurityHeaders(res);
 
   const pathname = new URL(req.url, `http://localhost:${port}`).pathname;
+
+  if (pathname === "/field-notes"
+    || pathname === "/field-notes/"
+    || pathname === "/field-notes.html"
+    || pathname === "/api/field-notes"
+    || /^\/field-notes\/[^/]+\/?$/.test(pathname)) {
+    handleFieldNotesPageRequest(req, res);
+    return;
+  }
 
   if (pathname.startsWith("/work/") || pathname === "/api/project") {
     handleProjectPageRequest(req, res);

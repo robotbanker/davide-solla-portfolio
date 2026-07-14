@@ -2,6 +2,9 @@
   "schemaVersion": 1,
   "issueId": "2026-06",
   "status": "research-approved",
+  "publication": {
+    "status": "published"
+  },
   "allowPlaceholders": false,
   "month": "June",
   "year": "2026",

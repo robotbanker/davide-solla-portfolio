@@ -38,13 +38,13 @@ Recommended approach implemented:
 ## File Map
 
 - `newsletter/data/issues/2026-07.json`  
-  Sample monthly issue content. This is the editorial source of truth.
+  Sample monthly issue content and editorial source of truth. Issue JSON is read server-side and through the authenticated admin API; draft files are not served directly.
 
 - `newsletter/data/issues/index.json`  
-  Public issue index used by `field-notes.html`. Keep every monthly issue listed here for repo/GitHub reference; the website only displays the current issue and prior issue.
+  Server-side publication index for the stable `/field-notes/YYYY-MM` pages. Each entry records research status separately from explicit `publicationStatus`; published entries also carry `publishedAt` and `updatedAt` for Article metadata and the sitemap. The raw index is not a public endpoint.
 
 - `newsletter/data/sources/2026-07.manifest.json`  
-  Source manifest for the same issue.
+  Protected source manifest for the same issue. It is read server-side and through the authenticated admin API, not served as a public static file.
 
 - `newsletter/lib/render-email.js`  
   Validates issue data and renders the inline-styled production email.
@@ -56,13 +56,16 @@ Recommended approach implemented:
   Generated only after strict source, research and image-rights validation succeeds. Pending issues do not keep a public production file.
 
 - `newsletter-preview.html`  
-  Local browser preview for editorial review.
+  Authenticated browser preview for editorial review. Open it from the signed-in admin editor so the tab retains the admin session.
 
 - `newsletter-preview.css` / `newsletter-preview.js`  
   Preview-only rendering and styling.
 
+- `lib/field-notes-pages.js` / `api/field-notes.js`
+  Server-rendered public issue pages. The first response contains the complete article, issue-specific canonical/social metadata, Article structured data, and stable archive links.
+
 - `field-notes.html` / `field-notes.css` / `field-notes.js`  
-  Public website page that displays the latest monthly issue and one prior issue.
+  Compatibility shell, public styles and mobile-navigation behaviour. Issue content is always server-rendered; production routes the old `.html` URL and query-string issue links through the stable issue handler.
 
 - `newsletter-signup.js`  
   Shared browser behaviour for the Field Notes signup form.
@@ -120,7 +123,7 @@ The website does not store subscriber email addresses in project files. `NEWSLET
    - `openingNote`
    - all section content
    - matching source manifest entries
-   - `newsletter/data/issues/index.json`, so the issue is stored in the website repo and the public Field Notes page can select the current/prior pair
+   - `newsletter/data/issues/index.json`, including `status`, `publishedAt`, and `updatedAt`, so approved issues receive stable public URLs and deterministic sitemap dates
 
 3. Keep section order exactly:
 
@@ -143,6 +146,8 @@ The website does not store subscriber email addresses in project files. `NEWSLET
    ```
 
    Then remove placeholder wording and `isPlaceholder` flags.
+
+Saving through the newsletter admin preserves the original `publishedAt`, refreshes `updatedAt`, and writes the issue index plus `sitemap.xml` in the same repository commit. Draft or malformed issue records never become the current public issue. Public article images remain suppressed until their exact manifest record is approved for the `public-web` scope.
 
 ## Editorial Content Rules
 
@@ -269,7 +274,7 @@ Each issue image needs stable `assetId` and `sourceId` values. Each matching rig
 - optional expiry
 - `confirmed` or `not-required` third-party clearance
 
-Do not put contracts, releases, private correspondence or personal data in the manifest: source manifests are public website files. `evidenceRef` should point to a private register entry, not contain the evidence itself.
+Do not put contracts, releases, private correspondence or personal data in the manifest. Source manifests are blocked from public static delivery, but they remain operational records in the repository. `evidenceRef` should point to a private register entry, not contain the evidence itself.
 
 Validation modes:
 
@@ -277,7 +282,7 @@ Validation modes:
 - Dry run: pending rights are allowed for the fixed Davide Studios review address; explicitly rejected assets are blocked.
 - Production build/live send/`--strict`: every rendered asset must have one complete, current approval whose slot, source and exact URL match. Any change invalidates the approval and blocks output or delivery before Resend is called.
 
-The Newsletter admin’s **Image rights** panel displays dry-run and live-send blockers and saves the issue, index and manifest together in one repository commit when GitHub-backed publishing is configured.
+The Newsletter admin’s **Image rights** panel displays dry-run and live-send blockers and saves the issue, index, manifest and sitemap together in one revision-pinned repository commit when GitHub-backed publishing is configured. The separate **Publish this issue at its stable Field Notes URL** checkbox is the human publication decision; research approval alone never creates a public issue URL.
 
 Admin saves carry a SHA-256 revision over the issue and manifest. GitHub-backed saves pin all reads and the commit parent to one branch-head SHA, then update the branch with compare-and-swap semantics; a stale tab or concurrent serverless instance receives `409` before it can overwrite the issue or shared index.
 

@@ -4,13 +4,21 @@
       "issueId": "2026-06",
       "month": "June",
       "year": 2026,
-      "title": "Davide Studios: Monthly Newsletter — June Issue"
+      "title": "Davide Studios: Monthly Newsletter — June Issue",
+      "status": "research-approved",
+      "publicationStatus": "published",
+      "publishedAt": "2026-06-28T16:49:15+01:00",
+      "updatedAt": "2026-07-14T20:24:56+01:00"
     },
     {
       "issueId": "2026-07",
       "month": "July",
       "year": 2026,
-      "title": "Davide Studios: Monthly Newsletter — July Issue"
+      "title": "Davide Studios: Monthly Newsletter — July Issue",
+      "status": "research-approved",
+      "publicationStatus": "published",
+      "publishedAt": "2026-06-28T11:40:35+01:00",
+      "updatedAt": "2026-07-14T20:24:56+01:00"
     }
   ]
 }

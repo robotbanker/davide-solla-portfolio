@@ -67,7 +67,7 @@ For production, set these Vercel environment variables:
 - `PRINT_ORDER_TOKEN_SECRET` - optional signing secret for temporary print checkout tokens
 
 Production uploads are committed to GitHub under `assets/images/uploads/`, and album/text edits update `data/site.json`.
-Album/text edits also refresh `sitemap.xml` so newly published project pages and portfolio images can be discovered through the image sitemap.
+Album/text and newsletter edits refresh `sitemap.xml` in the same revision-pinned commit so stable project pages, explicitly published Field Notes issues, and portfolio images can be discovered from their canonical URLs without a stale concurrent overwrite.
 After each admin save, the backend calls `VERCEL_DEPLOY_HOOK_URL` so Vercel starts a fresh deployment immediately.
 
 ### Stable project pages and verified credits
@@ -75,6 +75,10 @@ After each admin save, the backend calls `VERCEL_DEPLOY_HOOK_URL` so Vercel star
 Every public editorial or fine-art album has a stable URL at `/work/{slug}`. The page is rendered from the same public album source as the homepage and includes unique metadata, canonical and social-card tags, an image gallery, a commission CTA, and image structured data. Set the project page to `Hidden` in the album editor when a story should return to the private edit.
 
 Treat a published slug as permanent: changing it breaks previously shared links. Before publishing collaborator credits, enter one `Role | Name` per line and use `Verify current credits`. Any later edit automatically marks the list pending and removes collaborator credits from the public data on the next save. Photography by Davide Solla is the only default credit. This human review gate prevents unverified names or roles from being published.
+
+### Stable Field Notes issues
+
+Every research-approved newsletter issue that is separately marked **published** in the admin is rendered on the server at `/field-notes/YYYY-MM`. Each response contains the full issue before JavaScript runs, with its own canonical URL, social metadata, Article structured data, publication/update timestamps, and archive navigation. `/field-notes` is a temporary redirect to the newest explicitly published issue; the old `/field-notes.html` and query-string format are compatibility redirects only. Pending image-rights records remain absent from page content and issue metadata, and source manifests are available only through the authenticated admin workflow.
 
 Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
 
@@ -161,7 +165,7 @@ Recommended next steps:
 
 1. Verify both the domain property and the `https://www.davidesolla.com/` URL-prefix property in Google Search Console.
 2. Submit `https://www.davidesolla.com/sitemap.xml`.
-3. Inspect and request indexing for `/`, `/field-notes.html`, and the `/work/{slug}` URLs listed in the sitemap.
+3. Inspect and request indexing for `/`, the `/field-notes/YYYY-MM` issues, and the `/work/{slug}` URLs listed in the sitemap.
 4. Accept analytics in a clean browser, then review GA4 Realtime to confirm page views and lead events are received.
 5. Verify the GA4 event-data retention setting, provider data-processing terms and international-transfer safeguards during the studio's periodic privacy review.
 

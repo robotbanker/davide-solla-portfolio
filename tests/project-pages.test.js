@@ -9,10 +9,11 @@ const {
   renderProjectPage,
   verifiedCredits
 } = require("../lib/project-pages");
-const { generateSitemap } = require("../lib/seo");
+const { generateSitemap, publishableFieldNotesIssues } = require("../lib/seo");
 const { sanitizePublicSiteData } = require("../lib/admin-store");
 
 const siteData = JSON.parse(fs.readFileSync("data/site.json", "utf8"));
+const newsletterIndex = JSON.parse(fs.readFileSync("newsletter/data/issues/index.json", "utf8"));
 
 const response = () => ({
   body: undefined,
@@ -171,12 +172,23 @@ test("unknown project slugs return a noindex 404 and HEAD returns no body", () =
 });
 
 test("the image sitemap names every stable project and its owned images", () => {
-  const sitemap = generateSitemap(siteData, { lastmod: "2026-07-14T00:00:00.000Z" });
+  const newsletterIssues = publishableFieldNotesIssues(newsletterIndex.issues);
+  const sitemap = generateSitemap(siteData, {
+    lastmod: "2026-07-14T00:00:00.000Z",
+    newsletterIssues
+  });
   for (const album of listProjectPages(siteData)) {
     assert.match(sitemap, new RegExp(`<loc>https://www\\.davidesolla\\.com/work/${projectSlug(album)}</loc>`));
   }
+  for (const issue of newsletterIssues) {
+    assert.match(sitemap, new RegExp(`<loc>https://www\\.davidesolla\\.com/field-notes/${issue.issueId}</loc>`));
+  }
+  assert.doesNotMatch(sitemap, /field-notes\.html|field-notes\?issue=/);
   assert.match(sitemap, /<image:loc>https:\/\/www\.davidesolla\.com\/assets\/images\/cosmic-01\.jpg<\/image:loc>/);
-  assert.equal((sitemap.match(/<lastmod>2026-07-14<\/lastmod>/g) || []).length, listProjectPages(siteData).length + 2);
+  assert.equal(
+    (sitemap.match(/<lastmod>2026-07-14<\/lastmod>/g) || []).length,
+    listProjectPages(siteData).length + newsletterIssues.length + 1
+  );
 });
 
 test("homepage portfolio tiles expose stable links without removing the modal experience", () => {
@@ -204,4 +216,33 @@ test("the canonical-host redirect preserves every nested path", () => {
   assert.equal(canonicalRedirect.src, "/(.*)");
   assert.equal(canonicalRedirect.headers.Location, "https://www.davidesolla.com/$1");
   assert.equal(canonicalRedirect.status, 308);
+});
+
+test("Field Notes routing preserves legacy issues and never serves protected source bodies", () => {
+  const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
+  const serverSource = fs.readFileSync("server.js", "utf8");
+  const fieldNotesBrowserSource = fs.readFileSync("field-notes.js", "utf8");
+  const safeNotFound = fs.readFileSync("404.html", "utf8");
+  const legacyRoute = config.routes.find((route) => route.src === "/field-notes\\.html");
+  const rootSlashRoute = config.routes.find((route) => route.src === "/field-notes/");
+  const denyRoute = config.routes.find((route) => route.dest === "/404.html" && route.status === 404);
+  const apiHeaderRoute = config.routes.find((route) => route.src === "/api/(.*)" && route.continue === true);
+  const publicDataRoutes = config.routes.filter((route) => (
+    route !== denyRoute && String(route.src).includes("newsletter/data")
+  ));
+
+  assert.equal(config.redirects.some((route) => route.source === "/field-notes.html"), false);
+  assert.equal(legacyRoute.dest, "/api/field-notes?legacy=1");
+  assert.equal(rootSlashRoute.status, 308);
+  assert.equal(rootSlashRoute.headers.Location, "/field-notes");
+  assert.match(denyRoute.src, /newsletter\/\(\?:lib/);
+  assert.match(denyRoute.src, /data\/\(\?:issues\|sources\)/);
+  assert.equal(denyRoute.headers["X-Robots-Tag"], "noindex, nofollow");
+  assert.equal(apiHeaderRoute.headers["X-Robots-Tag"], "noindex, nofollow");
+  assert.deepEqual(publicDataRoutes, []);
+  assert.match(serverSource, /pathname === "\/field-notes\/"/);
+  assert.doesNotMatch(serverSource, /startsWith\("newsletter\/data\/"\)/);
+  assert.doesNotMatch(fieldNotesBrowserSource, /newsletter\/data|fetch\(/);
+  assert.match(safeNotFound, /That page is not available/);
+  assert.doesNotMatch(safeNotFound, /const Busboy|writeGithubFiles|NEWSLETTER_TOKEN_SECRET/);
 });

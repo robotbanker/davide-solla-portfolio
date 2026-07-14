@@ -142,12 +142,13 @@ const renderOverview = () => {
   const issue = currentIssue;
 
   editorRoot.innerHTML = `
-    ${sectionTitle("Overview", "Edit issue metadata, opening note, site links and research status.")}
+    ${sectionTitle("Overview", "Edit issue metadata, opening note, site links, research status and the separate public-publishing decision.")}
     <div class="field-grid three">
       ${field({ name: "status", label: "Status", value: issue.status })}
       ${field({ name: "month", label: "Month", value: issue.month })}
       ${field({ name: "year", label: "Year", value: issue.year })}
       ${checkbox({ name: "allowPlaceholders", label: "Allow placeholders", checked: issue.allowPlaceholders })}
+      ${checkbox({ name: "publication.published", label: "Publish this issue at its stable Field Notes URL", checked: issue.publication?.status === "published" })}
       ${field({ name: "title", label: "Title", value: issue.title, full: true })}
       ${textarea({ name: "preheader", label: "Preheader", value: issue.preheader, rows: 3 })}
       ${textarea({ name: "openingNote", label: "Opening note", value: issue.openingNote, rows: 5 })}
@@ -366,6 +367,10 @@ const renderEditor = () => {
 const collectOverview = () => {
   currentIssue.status = formValue("status");
   currentIssue.allowPlaceholders = formChecked("allowPlaceholders");
+  currentIssue.publication = {
+    ...(currentIssue.publication || {}),
+    status: formChecked("publication.published") ? "published" : "draft"
+  };
   currentIssue.month = formValue("month");
   currentIssue.year = formValue("year");
   currentIssue.title = formValue("title");

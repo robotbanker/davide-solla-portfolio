@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.davidesolla.com/</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -267,14 +267,20 @@
     </image:image>
   </url>
   <url>
-    <loc>https://www.davidesolla.com/field-notes.html</loc>
+    <loc>https://www.davidesolla.com/field-notes/2026-07</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.davidesolla.com/field-notes/2026-06</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/roxana</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -300,7 +306,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/cosmic</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -341,7 +347,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/sophie</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -392,7 +398,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/inna</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -438,7 +444,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/julia</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -469,7 +475,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/harvey</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -490,7 +496,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/kintsugi</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -521,7 +527,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/petals</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -542,7 +548,7 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/work/dark-baroque</loc>
-    <lastmod>2026-07-14</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
