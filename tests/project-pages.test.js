@@ -193,3 +193,14 @@ test("homepage portfolio tiles expose stable links without removing the modal ex
   assert.match(browserScript, /button\.href = `\/work\/\$\{encodeURIComponent\(item\.projectSlug\)\}`/);
   assert.match(browserScript, /galleryProjectPageLink\.hidden = !slug/);
 });
+
+test("the canonical-host redirect preserves every nested path", () => {
+  const config = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
+  const canonicalRedirect = config.redirects.find((redirect) => redirect.has?.some((condition) => (
+    condition.type === "host" && condition.value === "davidesolla.com"
+  )));
+
+  assert.equal(canonicalRedirect.source, "/:path*");
+  assert.equal(canonicalRedirect.destination, "https://www.davidesolla.com/:path*");
+  assert.equal(canonicalRedirect.permanent, true);
+});
