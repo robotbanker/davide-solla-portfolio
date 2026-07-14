@@ -1,5 +1,7 @@
+const studioAnalyticsAllowed = () => window.StudioPrivacy?.hasAnalyticsConsent?.() === true;
+
 window.trackStudioEvent = (eventName, params = {}) => {
-  if (typeof window.gtag !== "function" || !eventName) return;
+  if (!studioAnalyticsAllowed() || typeof window.gtag !== "function" || !eventName) return;
   window.gtag("event", eventName, params);
 };
 

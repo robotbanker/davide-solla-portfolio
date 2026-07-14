@@ -375,6 +375,12 @@ test("attribution is allowlisted and excludes click IDs and full URLs", () => {
   assert.equal(Object.hasOwn(result, "fbclid"), false);
 });
 
+test("analytics consent context is allowlisted and fails closed", () => {
+  assert.equal(normalizeAttribution({ consent_state: "granted" }).consent_state, "granted");
+  assert.equal(normalizeAttribution({ consent_state: "denied" }).consent_state, "denied");
+  assert.equal(normalizeAttribution({ consent_state: "unexpected" }).consent_state, "unset");
+});
+
 test("event construction never adds analytics or transport metadata", () => {
   const event = buildWebsiteEnquiryEvent({
     enquiryId: fixture.enquiry_id,
@@ -476,9 +482,10 @@ test("the real transport refuses redirects for the signed PII body", async () =>
   assert.equal(requests, 1);
 });
 
-test("the homepage cache keys include the Phase 3 script and stylesheet revisions", () => {
+test("the homepage cache keys include the current script and stylesheet revisions", () => {
   const html = fs.readFileSync("index.html", "utf8");
-  assert.match(html, /script\.js\?v=28/);
-  assert.match(html, /styles\.css\?v=27/);
-  assert.doesNotMatch(html, /script\.js\?v=27/);
+  assert.match(html, /script\.js\?v=29/);
+  assert.match(html, /styles\.css\?v=28/);
+  assert.match(html, /privacy-consent\.js\?v=1/);
+  assert.match(html, /google-tag\.js\?v=3/);
 });

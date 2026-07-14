@@ -133,15 +133,19 @@ The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now`
 
 `NEWSLETTER_TOKEN_SECRET` must be a dedicated secret of at least 32 bytes and must not reuse the admin session secret. Live delivery creates a private per-issue state record in `lib/newsletter-send-state/` before calling Resend. A repeated, concurrent, or ambiguous attempt remains locked for manual reconciliation rather than risking a duplicate audience send.
 
-## Analytics and Search Console
+## Privacy, Analytics and Search Console
 
-GA4 is configured through a single Google tag using measurement ID `G-1T625VVZL2`. The tag is loaded on the public website pages only: `index.html`, `field-notes.html`, and `client-area.html`. Do not add a second direct GA4 tag or a GTM container on top of this unless the existing tag is removed or migrated into GTM.
+GA4 uses measurement ID `G-1T625VVZL2` and basic consent mode. `privacy-consent.js` does not request Google's tag or send any analytics data until a visitor affirmatively allows analytics. The versioned choice is stored in first-party local storage, can be changed through the footer settings control, and is reset when the notice version changes. Advertising storage, user data, personalisation and Google Signals stay denied.
 
-The local `google-tag.js` helper initialises GA4 and records lightweight conversion signals:
+Analytics is available only on the homepage and Field Notes. It is absent from the private client area, email-preference page, admin tools and privacy page. Do not add a second direct GA4 tag, a GTM container, remarketing or advertising pixels without revisiting the consent design and privacy notice.
+
+The local `google-tag.js` helper records these lightweight, consent-gated conversion signals:
 
 - `generate_lead` after a durably accepted commission enquiry; the Radar-linked enquiry ID is not sent to GA
 - `enquiry_intent` when visitors click links to the contact section
 - `instagram_click` when visitors click the studio Instagram link
+
+The enquiry contract records only `granted`, `denied` or `unset` as the analytics choice at submission. Acquisition context is allowlisted and excludes full referring URLs, click IDs, user agents and IP addresses. The public notice is at `/privacy`; `privacy_notice_version` must match its last-updated date when collection wording changes.
 
 Google Search Console can verify the `https://www.davidesolla.com/` URL-prefix property using the installed GA4 tag after deployment. DNS verification remains the preferred method for a domain property covering all subdomains and protocols.
 
@@ -150,8 +154,8 @@ Recommended next steps:
 1. Verify both the domain property and the `https://www.davidesolla.com/` URL-prefix property in Google Search Console.
 2. Submit `https://www.davidesolla.com/sitemap.xml`.
 3. Inspect and request indexing for `/` and `/field-notes.html`.
-4. Review GA4 Realtime after deployment to confirm page views and lead events are received.
-5. Confirm the long-term cookie consent approach before adding advertising features, remarketing, or any broader tracking.
+4. Accept analytics in a clean browser, then review GA4 Realtime to confirm page views and lead events are received.
+5. Verify the GA4 event-data retention setting, provider data-processing terms and international-transfer safeguards during the studio's periodic privacy review.
 
 Future SEO structure work, such as dedicated crawlable portfolio/story URLs or service pages, would change visible site structure and copy. Treat that as a separate content/design approval item, not a backend-only SEO change.
 

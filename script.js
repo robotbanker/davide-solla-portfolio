@@ -60,11 +60,18 @@ const enquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v1";
 const pendingEnquiryStorageKey = "davide-studios-pending-enquiry-v1";
 
 const boundedAttributionValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
+const analyticsConsentState = () => {
+  const state = window.StudioPrivacy?.getAnalyticsState?.();
+  return ["granted", "denied"].includes(state) ? state : "unset";
+};
 
 const captureEnquiryAttribution = () => {
+  const consentState = analyticsConsentState();
   try {
     const stored = JSON.parse(sessionStorage.getItem(enquiryAttributionStorageKey) || "null");
-    if (stored && typeof stored === "object") return stored;
+    if (stored && typeof stored === "object" && consentState === "granted") {
+      return { ...stored, consent_state: consentState };
+    }
   } catch (error) {
     // Session storage is optional; attribution can still be captured for this page view.
   }
@@ -86,9 +93,16 @@ const captureEnquiryAttribution = () => {
     utm_medium: boundedAttributionValue(params.get("utm_medium"), 120),
     utm_campaign: boundedAttributionValue(params.get("utm_campaign"), 160),
     utm_content: boundedAttributionValue(params.get("utm_content"), 160),
-    utm_term: boundedAttributionValue(params.get("utm_term"), 160)
+    utm_term: boundedAttributionValue(params.get("utm_term"), 160),
+    consent_state: consentState
   };
-  try { sessionStorage.setItem(enquiryAttributionStorageKey, JSON.stringify(attribution)); } catch (error) {}
+  try {
+    if (consentState === "granted") {
+      sessionStorage.setItem(enquiryAttributionStorageKey, JSON.stringify(attribution));
+    } else {
+      sessionStorage.removeItem(enquiryAttributionStorageKey);
+    }
+  } catch (error) {}
   return attribution;
 };
 

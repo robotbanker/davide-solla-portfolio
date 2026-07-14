@@ -30,6 +30,7 @@ const publicFiles = new Set([
   "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
   "newsletter-rights.js", "newsletter-signup.js", "preferences.html", "preferences.js",
+  "privacy-consent.js", "privacy.html",
   "robots.txt", "script.js", "sitemap.xml", "site.webmanifest", "styles.css", "wallet-card.html"
 ]);
 
@@ -50,7 +51,11 @@ const serveStatic = (req, res) => {
   let pathname;
 
   try {
-    const requestedPath = requestUrl.pathname === "/preferences" ? "/preferences.html" : requestUrl.pathname;
+    const requestedPath = requestUrl.pathname === "/preferences"
+      ? "/preferences.html"
+      : requestUrl.pathname === "/privacy"
+        ? "/privacy.html"
+        : requestUrl.pathname;
     pathname = decodeURIComponent(requestedPath === "/" ? "/index.html" : requestedPath);
   } catch (error) {
     res.statusCode = 400;

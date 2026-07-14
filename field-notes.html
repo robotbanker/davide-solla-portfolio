@@ -1,15 +1,8 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" data-analytics="enabled">
   <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1T625VVZL2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-1T625VVZL2');
-    </script>
-    <script src="google-tag.js?v=2"></script>
+    <script src="privacy-consent.js?v=1" defer></script>
+    <script src="google-tag.js?v=3" defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Field Notes | London Fashion Photography Journal | Davide Solla Studios</title>
@@ -33,7 +26,7 @@
     <link rel="apple-touch-icon" href="assets/images/favicon.png">
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#080807">
-    <link rel="stylesheet" href="styles.css?v=26">
+    <link rel="stylesheet" href="styles.css?v=28">
     <link rel="stylesheet" href="field-notes.css?v=5">
     <script type="application/ld+json">
       {
@@ -157,7 +150,7 @@
           </label>
 
           <button class="submit-button" type="submit" data-newsletter-submit>Join Field Notes</button>
-          <p class="newsletter-privacy">One email a month. No resale or third-party list sharing.</p>
+          <p class="newsletter-privacy">One email a month. No resale or third-party list sharing. <a class="inline-privacy-link" href="/privacy">Privacy notice.</a></p>
           <p class="form-status" aria-live="polite" data-newsletter-status></p>
         </form>
       </section>
@@ -180,6 +173,8 @@
       <p>Davide Solla</p>
       <p>Fashion & editorial photography / London</p>
       <a href="index.html#top">Back to home</a>
+      <a href="/privacy">Privacy</a>
+      <button class="footer-button" type="button" data-privacy-settings>Privacy settings</button>
       <a href="#top">Back to top</a>
     </footer>
 
