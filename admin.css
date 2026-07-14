@@ -410,6 +410,19 @@ textarea[data-json] {
   padding-top: 20px;
 }
 
+.validation-list {
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+  line-height: 1.5;
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.validation-list strong {
+  color: var(--danger);
+}
+
 .repeat-list {
   display: grid;
   gap: 14px;

@@ -37,6 +37,8 @@
         "ctaLabel": "Book tickets",
         "whyItMatters": "It treats image-making as a shared geography of rupture, archive, solidarity and imagination, with photography sitting beside posters, journals, painting and film.",
         "image": {
+          "assetId": "2026-06-art-project-black-planet",
+          "sourceId": "2026-06-source-project-black-planet",
           "type": "official-page-image",
           "src": "https://www.barbican.org.uk/sites/default/files/styles/gallery/public/images/2026-06/2.jpg?itok=9RSQllxK",
           "label": "Official Barbican exhibition image",
@@ -93,6 +95,8 @@
           "sourceUrl": "https://news.adidas.com/originals/adidas-originals-and-coca-cola--celebrate-the-fifa-world-cup-2026--with-a-collaborative-collection/s/cebf079f-b6f4-4956-bfa3-aad63503e36c",
           "imageCredit": "Official adidas Originals x Coca-Cola press image from adidas News.",
           "image": {
+            "assetId": "2026-06-fashion-adidas-coca-cola",
+            "sourceId": "2026-06-source-adidas-coca-cola",
             "type": "official-page-image",
             "src": "https://preview.thenewsmarket.com/Previews/ADID/StillAssets/1920x1080/725150_v2.jpg",
             "label": "Official adidas Originals x Coca-Cola campaign image",
@@ -108,6 +112,8 @@
           "sourceUrl": "https://about.nike.com/en/newsroom/releases/nike-s-new-n7-collection-celebrates-indigenous-communities-on-and-off-the-pitch",
           "imageCredit": "Official Nike N7 campaign image from NIKE, Inc.",
           "image": {
+            "assetId": "2026-06-fashion-nike-n7",
+            "sourceId": "2026-06-source-nike-n7",
             "type": "official-page-image",
             "src": "https://media.about.nike.com/img/79d6bd83-8b48-4376-89e4-1825fea3966f/su26n7-madisonhammond-tjkahoalii-1055-edit-edit.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjozMjAwLCJoZWlnaHQiOjIxMzN9LCJyZXNpemUiOnsid2lkdGgiOjkwMH19fQ%3D%3D&s=4dae3493ee323418833884ea0eee90fa85154c8bc1b258f4eb96faa744f6426e",
             "label": "Official Nike N7 campaign image",
@@ -123,6 +129,8 @@
           "sourceUrl": "https://about.nike.com/en/newsroom/releases/from-pitch-to-street-to-community-nike-defines-the-future-of-football-culture",
           "imageCredit": "Official Nike Football culture image from NIKE, Inc.",
           "image": {
+            "assetId": "2026-06-fashion-nike-football-culture",
+            "sourceId": "2026-06-source-nike-football-culture",
             "type": "official-page-image",
             "src": "https://media.about.nike.com/img/320050e0-2be9-479a-9eb3-d426fb9591d9/jacquemus-x2-3x2.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjozMjAwLCJoZWlnaHQiOjIxMzN9LCJyZXNpemUiOnsid2lkdGgiOjkwMH19fQ%3D%3D&s=c018c532da26af7246f8956350cb8ef63132a33236c9fe7ff8cf33c21b17b240",
             "label": "Official Nike Football culture image",
@@ -145,6 +153,8 @@
         "notes": "The renderer selects one image from this website-image pool using the issue ID, so the visual rotates automatically for each monthly issue.",
         "pool": [
           {
+            "assetId": "studio-hero-cosmic-girl",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/hero-cosmic-girl-1200.jpg",
             "alt": "Davide Studios cinematic fashion portrait with blue and red studio light",
@@ -152,6 +162,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-roxana-01",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/roxana-01-1200.jpg",
             "alt": "Davide Studios editorial beauty portrait in warm directional light",
@@ -159,6 +171,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-sophie-08",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/sophie-08-1200.jpg",
             "alt": "Davide Studios nocturnal London fashion portrait with cinematic street light",
@@ -166,6 +180,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-julia-04",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/julia-04-1200.jpg",
             "alt": "Davide Studios quiet editorial portrait with restrained styling",
@@ -173,6 +189,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-dark-baroque-04",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/dark-baroque-04-1200.jpg",
             "alt": "Davide Studios dark baroque fashion portrait with theatrical styling",
@@ -180,6 +198,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-kintsugi-03",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/kintsugi-03-1200.jpg",
             "alt": "Davide Studios fine-art portrait study with symbolic texture",
@@ -187,6 +207,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-soho-01",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/soho-01-1200.jpg",
             "alt": "Davide Studios Soho fashion image from the website archive",
@@ -194,6 +216,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-fine-art-02",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/fine-art-02-1200.jpg",
             "alt": "Davide Studios fine-art portrait with rose petals on white silk",

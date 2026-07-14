@@ -14,6 +14,9 @@ const sectionTabs = Array.from(document.querySelectorAll("[data-newsletter-secti
 
 let issues = [];
 let currentIssue = null;
+let currentManifest = null;
+let currentValidationModes = null;
+let currentRevision = "";
 let activeSection = "overview";
 let newsletterLoaded = false;
 
@@ -106,7 +109,12 @@ const newsletterApi = async (action, options = {}) => {
   const payload = await response.json();
 
   if (!response.ok) {
-    throw new Error(payload.error || "Request failed.");
+    const error = new Error(payload.error || "Request failed.");
+    error.statusCode = response.status;
+    error.code = payload.code;
+    error.currentRevision = payload.currentRevision;
+    error.validation = payload.validation;
+    throw error;
   }
 
   return payload;
@@ -299,6 +307,38 @@ const renderFooter = () => {
   `;
 };
 
+const renderValidationList = (title, validation) => {
+  const errors = validation?.errors || [];
+  const warnings = validation?.warnings || [];
+  const items = [
+    ...errors.map((message) => `<li><strong>Blocker:</strong> ${escapeHtml(message)}</li>`),
+    ...warnings.map((message) => `<li>${escapeHtml(message)}</li>`)
+  ];
+  return `
+    <div class="fieldset">
+      <h3>${escapeHtml(title)}</h3>
+      ${items.length ? `<ul class="validation-list">${items.join("")}</ul>` : "<p>No validation issues.</p>"}
+    </div>
+  `;
+};
+
+const renderRights = () => {
+  editorRoot.innerHTML = `
+    ${sectionTitle("Image rights", "Live sending fails closed until every rendered image has explicit, current approval. Store only opaque evidence references here; manifests are public.")}
+    ${renderValidationList("Live-send gate", currentValidationModes?.liveSend)}
+    ${renderValidationList("Dry-run gate", currentValidationModes?.dryRun)}
+    <div class="field-grid">
+      ${textarea({
+        name: "rightsManifest",
+        label: "Source and image-rights manifest JSON",
+        value: JSON.stringify(currentManifest || {}, null, 2),
+        json: true,
+        rows: 32
+      })}
+    </div>
+  `;
+};
+
 const renderJson = () => {
   editorRoot.innerHTML = `
     ${sectionTitle("Full JSON", "Advanced editor for the complete issue object. Save only after checking the JSON is valid.")}
@@ -318,6 +358,7 @@ const renderEditor = () => {
   if (activeSection === "art") renderArt();
   if (activeSection === "fashion") renderFashion();
   if (activeSection === "field") renderField();
+  if (activeSection === "rights") renderRights();
   if (activeSection === "footer") renderFooter();
   if (activeSection === "json") renderJson();
 };
@@ -436,6 +477,10 @@ const collectFooter = () => {
   };
 };
 
+const collectRights = () => {
+  currentManifest = parseJsonField("rightsManifest", currentManifest || {});
+};
+
 const collectJson = () => {
   currentIssue = parseJsonField("fullJson", currentIssue);
 };
@@ -449,6 +494,7 @@ const collectActiveSection = () => {
   if (activeSection === "art") collectArt();
   if (activeSection === "fashion") collectFashion();
   if (activeSection === "field") collectField();
+  if (activeSection === "rights") collectRights();
   if (activeSection === "footer") collectFooter();
   if (activeSection === "json") collectJson();
 };
@@ -468,6 +514,15 @@ const validationSummary = (validation) => {
   return "Saved. No validation issues.";
 };
 
+const applyValidationControls = () => {
+  const liveBlocked = (currentValidationModes?.liveSend?.errors || []).length > 0;
+  const dryRunBlocked = (currentValidationModes?.dryRun?.errors || []).length > 0;
+  sendButton.disabled = liveBlocked;
+  sendButton.title = liveBlocked ? "Resolve the live-send validation blockers first." : "";
+  dryRunButton.disabled = dryRunBlocked;
+  dryRunButton.title = dryRunBlocked ? "Resolve the dry-run validation blockers first." : "";
+};
+
 const loadIssues = async () => {
   const payload = await newsletterApi("newsletterIssues");
   issues = payload.issues || [];
@@ -485,11 +540,21 @@ const loadIssue = async (issueId = issueSelect.value) => {
 
   setStatus(`Loading ${issueId}...`);
   const payload = await newsletterApi(`newsletterIssue&issueId=${encodeURIComponent(issueId)}`);
+  if (!payload.revision) {
+    throw new Error("The newsletter revision is missing. Reload the admin page before editing.");
+  }
   currentIssue = clone(payload.issue);
+  currentManifest = clone(payload.manifest);
+  currentValidationModes = clone(payload.validationModes);
+  currentRevision = payload.revision;
   issueSelect.value = currentIssue.issueId;
   previewLink.href = `newsletter-preview.html?issue=${encodeURIComponent(currentIssue.issueId)}`;
-  setStatus(`Loaded ${currentIssue.issueId}.`);
+  const liveErrors = currentValidationModes?.liveSend?.errors?.length || 0;
+  setStatus(liveErrors
+    ? `Loaded ${currentIssue.issueId}. Live send blocked by ${liveErrors} validation issue${liveErrors === 1 ? "" : "s"}.`
+    : `Loaded ${currentIssue.issueId}. Ready for live-send review.`);
   renderEditor();
+  applyValidationControls();
 };
 
 const saveIssue = async () => {
@@ -497,14 +562,25 @@ const saveIssue = async () => {
   setStatus(`Saving ${currentIssue.issueId}...`);
   const payload = await newsletterApi(`newsletterIssue&issueId=${encodeURIComponent(currentIssue.issueId)}`, {
     method: "POST",
-    body: JSON.stringify(currentIssue)
+    body: JSON.stringify({
+      issue: currentIssue,
+      manifest: currentManifest,
+      revision: currentRevision
+    })
   });
+  if (!payload.revision) {
+    throw new Error("The saved newsletter revision is missing. Reload the issue before making another change.");
+  }
   currentIssue = clone(payload.issue);
+  currentManifest = clone(payload.manifest);
+  currentValidationModes = clone(payload.validationModes);
+  currentRevision = payload.revision;
   issues = payload.issues || issues;
   renderIssueOptions();
   issueSelect.value = currentIssue.issueId;
   renderEditor();
   setStatus(validationSummary(payload.validation));
+  applyValidationControls();
 };
 
 const buildEmail = async () => {
@@ -530,12 +606,13 @@ const dryRunEmail = async () => {
     const delivery = payload.delivery || {};
     setStatus(`Dry run sent to ${delivery.recipient || "davidesolla@outlook.it"} via ${delivery.provider || "email provider"}.`);
   } finally {
-    dryRunButton.disabled = false;
+    applyValidationControls();
   }
 };
 
 const sendEmail = async () => {
   await saveIssue();
+  const sendRevision = currentRevision;
   const confirmation = window.prompt(`Type ${currentIssue.issueId} to send this issue now.`);
 
   if (confirmation !== currentIssue.issueId) {
@@ -549,7 +626,7 @@ const sendEmail = async () => {
   try {
     const payload = await newsletterApi(`newsletterSend&issueId=${encodeURIComponent(currentIssue.issueId)}`, {
       method: "POST",
-      body: JSON.stringify({ confirmation })
+      body: JSON.stringify({ confirmation, revision: sendRevision })
     });
     const delivery = payload.delivery || {};
     const provider = delivery.provider || (delivery.id ? "resend" : "email provider");
@@ -558,7 +635,7 @@ const sendEmail = async () => {
       : `${delivery.recipientCount || "Configured"} recipient${delivery.recipientCount === 1 ? "" : "s"}.`;
     setStatus(`Sent ${currentIssue.issueId} via ${provider}. ${detail}`);
   } finally {
-    sendButton.disabled = false;
+    applyValidationControls();
   }
 };
 

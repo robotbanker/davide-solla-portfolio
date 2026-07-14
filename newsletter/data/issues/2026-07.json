@@ -37,6 +37,8 @@
         "ctaLabel": "Book tickets",
         "whyItMatters": "It connects fashion, portraiture, display design and surrealist visual language, with Man Ray, Cecil Beaton, Schiaparelli archive pieces and contemporary couture in the same visual field.",
         "image": {
+          "assetId": "2026-07-art-schiaparelli-vam",
+          "sourceId": "2026-07-source-schiaparelli",
           "type": "official-page-image",
           "src": "https://assets-cdn.vam.ac.uk/2025/07/03/11/54/12/22be0659-c8c0-4060-8226-c140fa607f6b/1920.jpg",
           "label": "Official V&A exhibition image",
@@ -104,6 +106,8 @@
           "sourceUrl": "https://hmgroup.com/news/hm-move-hm-home-and-solar-club-present-a-collection-of-movement-and-togetherness/",
           "imageCredit": "Official H&M Group campaign image for H&M Move, H&M Home and Solar Club.",
           "image": {
+            "assetId": "2026-07-fashion-hm-solar-club",
+            "sourceId": "2026-07-source-hm-solar-club",
             "type": "official-page-image",
             "src": "https://hmgroup.com/wp-content/uploads/2026/06/Solar_PRESS-SITE_TEASER-IMAGE_1920x1080.jpg",
             "label": "Official H&M Group campaign image",
@@ -119,6 +123,8 @@
           "sourceUrl": "https://www.loewe.com/eur/en/pd/stories-collection/fw26-campaign.html",
           "imageCredit": "Official LOEWE campaign visuals appear on the brand page; image embedding requires press or brand asset clearance.",
           "image": {
+            "assetId": "2026-07-fashion-loewe-fw26",
+            "sourceId": "2026-07-source-loewe-fw26",
             "type": "official-page-image",
             "src": "https://www.loewe.com/dw/image/v2/BBPC_PRD/on/demandware.static/-/Library-Sites-LOW_SharedLibrary/default/dw14903ac5/00000%20FW26%20PRECO/MAIN%20CAMPAIGN/LOEWE_FW26_PRECO_CAMPAIGN_EVA_VICTOR_sRGB_CROPPED_27_3x4.jpg?sw=1440&sfrm=jpg",
             "label": "Official LOEWE campaign image",
@@ -134,6 +140,8 @@
           "sourceUrl": "https://www.balenciaga.com/en-us/a-new-york-minute",
           "imageCredit": "Official Balenciaga campaign page asset from the brand page; campaign directed by Celine Song.",
           "image": {
+            "assetId": "2026-07-fashion-balenciaga-new-york-minute",
+            "sourceId": "2026-07-source-balenciaga-new-york-minute",
             "type": "official-page-image",
             "src": "https://balenciaga.dam.kering.com/asset/9515b28c-d560-4b17-a4fa-155a567842b0/Large/8657622ACFH1000_F.jpg?v=3",
             "label": "Official Balenciaga campaign page image",
@@ -156,6 +164,8 @@
         "notes": "The renderer selects one image from this website-image pool using the issue ID, so the visual rotates automatically for each monthly issue.",
         "pool": [
           {
+            "assetId": "studio-hero-cosmic-girl",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/hero-cosmic-girl-1200.jpg",
             "alt": "Davide Studios cinematic fashion portrait with blue and red studio light",
@@ -163,6 +173,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-roxana-01",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/roxana-01-1200.jpg",
             "alt": "Davide Studios editorial beauty portrait in warm directional light",
@@ -170,6 +182,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-sophie-08",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/sophie-08-1200.jpg",
             "alt": "Davide Studios nocturnal London fashion portrait with cinematic street light",
@@ -177,6 +191,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-julia-04",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/julia-04-1200.jpg",
             "alt": "Davide Studios quiet editorial portrait with restrained styling",
@@ -184,6 +200,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-dark-baroque-04",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/dark-baroque-04-1200.jpg",
             "alt": "Davide Studios dark baroque fashion portrait with theatrical styling",
@@ -191,6 +209,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-kintsugi-03",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/kintsugi-03-1200.jpg",
             "alt": "Davide Studios fine-art portrait study with symbolic texture",
@@ -198,6 +218,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-soho-01",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/soho-01-1200.jpg",
             "alt": "Davide Studios Soho fashion image from the website archive",
@@ -205,6 +227,8 @@
             "recommendedSize": "1200 x 760 px"
           },
           {
+            "assetId": "studio-fine-art-02",
+            "sourceId": "davide-studios-archive",
             "type": "internal",
             "src": "assets/images/responsive/fine-art-02-1200.jpg",
             "alt": "Davide Studios fine-art portrait with rose petals on white silk",

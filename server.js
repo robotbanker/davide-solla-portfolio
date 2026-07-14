@@ -27,9 +27,9 @@ const mimeTypes = {
 
 const publicFiles = new Set([
   "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
-  "field-notes.css", "field-notes.html", "field-notes.js",
+  "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
-  "newsletter-signup.js",
+  "newsletter-rights.js", "newsletter-signup.js", "preferences.html", "preferences.js",
   "robots.txt", "script.js", "sitemap.xml", "site.webmanifest", "styles.css", "wallet-card.html"
 ]);
 
@@ -50,7 +50,8 @@ const serveStatic = (req, res) => {
   let pathname;
 
   try {
-    pathname = decodeURIComponent(requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname);
+    const requestedPath = requestUrl.pathname === "/preferences" ? "/preferences.html" : requestUrl.pathname;
+    pathname = decodeURIComponent(requestedPath === "/" ? "/index.html" : requestedPath);
   } catch (error) {
     res.statusCode = 400;
     res.end("Bad request");
@@ -83,7 +84,11 @@ const serveStatic = (req, res) => {
 
     res.statusCode = 200;
     res.setHeader("content-type", mimeTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream");
-    if (isCacheableStaticPath(relativePath)) {
+    if (relativePath === "preferences.html") {
+      res.setHeader("cache-control", "no-store");
+      res.setHeader("referrer-policy", "no-referrer");
+      res.setHeader("x-robots-tag", "noindex, nofollow");
+    } else if (isCacheableStaticPath(relativePath)) {
       res.setHeader("cache-control", "public, max-age=31536000, stale-while-revalidate=86400");
     }
     res.end(req.method === "HEAD" ? undefined : content);

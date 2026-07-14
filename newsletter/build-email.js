@@ -22,6 +22,11 @@ if (result.errors.length) {
   process.exit(1);
 }
 
+if (!strict) {
+  console.error("Newsletter error: production dist builds require --strict. Use newsletter-preview.html for draft review.");
+  process.exit(1);
+}
+
 fs.mkdirSync(outputDir, { recursive: true });
 fs.writeFileSync(outputPath, renderEmail(issue), "utf8");
 

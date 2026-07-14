@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "issueId": "2026-06",
   "dateChecked": "2026-06-28",
   "status": "research-approved",
   "manifestNotes": "All facts were checked against official museum, gallery, organiser, studio or brand sources on 28 June 2026. External imagery from official pages should be cleared through source-owner press permissions before live email distribution where required.",
   "sources": [
     {
+      "sourceId": "2026-06-source-project-black-planet",
       "section": "Art",
       "storyTitle": "Project a Black Planet: The Art and Culture of Panafrica",
       "officialSourceUrl": "https://www.barbican.org.uk/whats-on/2026/event/project-a-black-planet-the-art-and-culture-of-panafrica",
@@ -16,6 +17,7 @@
       "selectedBecause": "The exhibition directly connects contemporary art, posters, film, journals, archives, photography and visual culture through Pan-Africanism."
     },
     {
+      "sourceId": "2026-06-source-japanese-women-photographers",
       "section": "Art",
       "storyTitle": "Japanese Women Photographers: From 1950s to Now",
       "officialSourceUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
@@ -26,6 +28,7 @@
       "selectedBecause": "A photography-led June opening with strong relevance to authorship, publishing, moving image and women-led visual histories."
     },
     {
+      "sourceId": "2026-06-source-serpentine-pavilion",
       "section": "Art",
       "storyTitle": "Serpentine Pavilion 2026 by LANZA atelier",
       "officialSourceUrl": "https://www.serpentinegalleries.org/whats-on/serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier/",
@@ -36,6 +39,7 @@
       "selectedBecause": "A June architecture and public-space story with strong relevance to rhythm, material, shadow and bodies moving through image space."
     },
     {
+      "sourceId": "2026-06-source-escher",
       "section": "Art",
       "storyTitle": "M.C. Escher. The Exhibition",
       "officialSourceUrl": "https://www.somersethouse.org.uk/whats-on/mc-escher-the-exhibition",
@@ -46,6 +50,7 @@
       "selectedBecause": "Escher's graphic precision and spatial illusion are useful references for composition, pattern and visual instability."
     },
     {
+      "sourceId": "2026-06-source-adidas-coca-cola",
       "section": "Fashion",
       "storyTitle": "adidas Originals and Coca-Cola: Originals are the Real Thing",
       "officialSourceUrl": "https://news.adidas.com/originals/adidas-originals-and-coca-cola--celebrate-the-fifa-world-cup-2026--with-a-collaborative-collection/s/cebf079f-b6f4-4956-bfa3-aad63503e36c",
@@ -56,6 +61,7 @@
       "selectedBecause": "The campaign connects sport, streetwear, casting, summer light and World Cup-adjacent visual culture through a strong public-space image."
     },
     {
+      "sourceId": "2026-06-source-nike-n7",
       "section": "Fashion",
       "storyTitle": "Nike N7: Summer 2026 N7 collection",
       "officialSourceUrl": "https://about.nike.com/en/newsroom/releases/nike-s-new-n7-collection-celebrates-indigenous-communities-on-and-off-the-pitch",
@@ -66,6 +72,7 @@
       "selectedBecause": "The campaign connects football-inspired sportswear, Indigenous representation, graphic identity and contemporary sport culture."
     },
     {
+      "sourceId": "2026-06-source-nike-football-culture",
       "section": "Fashion",
       "storyTitle": "Nike Football: From pitch to street to community",
       "officialSourceUrl": "https://about.nike.com/en/newsroom/releases/from-pitch-to-street-to-community-nike-defines-the-future-of-football-culture",
@@ -76,6 +83,7 @@
       "selectedBecause": "The release connects football, fashion collaboration, product image-making and street-facing cultural design."
     },
     {
+      "sourceId": "davide-studios-archive",
       "section": "On the Field",
       "storyTitle": "Rotating Davide Studios archive image",
       "officialSourceUrl": "https://www.davidesolla.com/",
@@ -84,6 +92,83 @@
       "usageStatus": "Internal Davide Studios image. The renderer rotates this section image by issue ID from the image pool stored in the issue data.",
       "dateChecked": "2026-06-28",
       "selectedBecause": "Keeps the studio-facing section visual and current without publishing unconfirmed diary entries or partnership notes."
+    }
+  ],
+  "imageRights": [
+    {
+      "assetId": "2026-06-art-project-black-planet",
+      "sourceId": "2026-06-source-project-black-planet",
+      "slot": "art.featured",
+      "assetUrl": "https://www.barbican.org.uk/sites/default/files/styles/gallery/public/images/2026-06/2.jpg?itok=9RSQllxK",
+      "decision": "pending",
+      "basis": null,
+      "scopes": [],
+      "credit": "Project a Black Planet installation view, 11 June - 6 September 2026. Image: Thomas Adank, Barbican Art Gallery.",
+      "evidenceRef": "",
+      "approvedBy": "",
+      "approvedOn": "",
+      "expiresOn": null,
+      "thirdPartyClearance": "pending"
+    },
+    {
+      "assetId": "2026-06-fashion-adidas-coca-cola",
+      "sourceId": "2026-06-source-adidas-coca-cola",
+      "slot": "fashion.stories.0",
+      "assetUrl": "https://preview.thenewsmarket.com/Previews/ADID/StillAssets/1920x1080/725150_v2.jpg",
+      "decision": "pending",
+      "basis": null,
+      "scopes": [],
+      "credit": "Official adidas Originals x Coca-Cola press image from adidas News.",
+      "evidenceRef": "",
+      "approvedBy": "",
+      "approvedOn": "",
+      "expiresOn": null,
+      "thirdPartyClearance": "pending"
+    },
+    {
+      "assetId": "2026-06-fashion-nike-n7",
+      "sourceId": "2026-06-source-nike-n7",
+      "slot": "fashion.stories.1",
+      "assetUrl": "https://media.about.nike.com/img/79d6bd83-8b48-4376-89e4-1825fea3966f/su26n7-madisonhammond-tjkahoalii-1055-edit-edit.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjozMjAwLCJoZWlnaHQiOjIxMzN9LCJyZXNpemUiOnsid2lkdGgiOjkwMH19fQ%3D%3D&s=4dae3493ee323418833884ea0eee90fa85154c8bc1b258f4eb96faa744f6426e",
+      "decision": "pending",
+      "basis": null,
+      "scopes": [],
+      "credit": "Official Nike N7 campaign image from NIKE, Inc.",
+      "evidenceRef": "",
+      "approvedBy": "",
+      "approvedOn": "",
+      "expiresOn": null,
+      "thirdPartyClearance": "pending"
+    },
+    {
+      "assetId": "2026-06-fashion-nike-football-culture",
+      "sourceId": "2026-06-source-nike-football-culture",
+      "slot": "fashion.stories.2",
+      "assetUrl": "https://media.about.nike.com/img/320050e0-2be9-479a-9eb3-d426fb9591d9/jacquemus-x2-3x2.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjozMjAwLCJoZWlnaHQiOjIxMzN9LCJyZXNpemUiOnsid2lkdGgiOjkwMH19fQ%3D%3D&s=c018c532da26af7246f8956350cb8ef63132a33236c9fe7ff8cf33c21b17b240",
+      "decision": "pending",
+      "basis": null,
+      "scopes": [],
+      "credit": "Official Nike Football culture image from NIKE, Inc.",
+      "evidenceRef": "",
+      "approvedBy": "",
+      "approvedOn": "",
+      "expiresOn": null,
+      "thirdPartyClearance": "pending"
+    },
+    {
+      "assetId": "studio-kintsugi-03",
+      "sourceId": "davide-studios-archive",
+      "slot": "onTheField",
+      "assetUrl": "assets/images/responsive/kintsugi-03-1200.jpg",
+      "decision": "pending",
+      "basis": null,
+      "scopes": [],
+      "credit": "Image: Davide Studios archive",
+      "evidenceRef": "",
+      "approvedBy": "",
+      "approvedOn": "",
+      "expiresOn": null,
+      "thirdPartyClearance": "pending"
     }
   ]
 }

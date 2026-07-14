@@ -4,6 +4,7 @@ const menuToggle = document.querySelector("[data-menu-toggle]");
 const nav = document.querySelector("[data-nav]");
 const archiveRoot = document.querySelector("[data-field-notes-archive]");
 const issueRoot = document.querySelector("[data-field-notes-issue]");
+const { imageApproval, rotatingImageForIssue } = window.NewsletterRights;
 
 const escapeHtml = (value = "") => String(value)
   .replace(/&/g, "&amp;")
@@ -12,18 +13,6 @@ const escapeHtml = (value = "") => String(value)
   .replace(/"/g, "&quot;");
 
 const isUrl = (value) => /^https?:\/\//i.test(String(value || ""));
-
-const absoluteUrl = (src, baseUrl) => {
-  if (!src) {
-    return "";
-  }
-
-  if (isUrl(src)) {
-    return src;
-  }
-
-  return `${String(baseUrl || "").replace(/\/+$/, "")}/${String(src).replace(/^\/+/, "")}`;
-};
 
 const issueIdFromUrl = () => new URLSearchParams(window.location.search).get("issue");
 
@@ -42,34 +31,16 @@ const renderCta = (label, url) => {
   return `<a class="text-link text-link-light" href="${escapeHtml(url)}">${escapeHtml(label || "View source")}</a>`;
 };
 
-const rotatingImageForIssue = (issue, field) => {
-  if (field?.image?.src) {
-    return field.image;
-  }
-
-  const pool = field?.imageRotation?.pool || [];
-  if (!pool.length) {
-    return field?.image;
-  }
-
-  const year = Number(String(issue.issueId || "").match(/(\d{4})-\d{2}/)?.[1] || issue.year || 0);
-  const month = Number(String(issue.issueId || "").match(/\d{4}-(\d{2})/)?.[1] || 1);
-  const index = Math.abs((year * 12) + month - 1) % pool.length;
-  return pool[index];
-};
-
-const renderImage = (image, issue) => {
-  if (!image?.src) {
+const renderImage = (image, issue, manifest, slot, officialSourceUrl, credit) => {
+  const approval = imageApproval(issue, manifest, { slot, image, officialSourceUrl, credit });
+  if (!approval.approved) {
     return "";
   }
 
-  const src = absoluteUrl(image.src, issue.site?.baseUrl);
-  const caption = image.credit || image.label || image.recommendedSize || "";
-
   return `
     <figure class="field-image">
-      <img src="${escapeHtml(src)}" alt="${escapeHtml(image.alt || "")}" loading="lazy" decoding="async">
-      ${caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""}
+      <img src="${escapeHtml(approval.assetUrl)}" alt="${escapeHtml(image.alt || "")}" loading="lazy" decoding="async">
+      <figcaption>${escapeHtml(approval.credit)}</figcaption>
     </figure>
   `;
 };
@@ -84,7 +55,7 @@ const renderArtItem = (item) => `
   </article>
 `;
 
-const renderIssue = (issue) => {
+const renderIssue = (issue, manifest) => {
   const art = issue.sections.art;
   const fashion = issue.sections.fashion;
   const field = issue.sections.onTheField;
@@ -105,7 +76,14 @@ const renderIssue = (issue) => {
       <p class="section-kicker">${escapeHtml(art.label)}</p>
       <p class="field-section-intro">${escapeHtml(art.intro)}</p>
       <article class="field-feature">
-        ${renderImage(art.featured.image, issue)}
+        ${renderImage(
+          art.featured.image,
+          issue,
+          manifest,
+          "art.featured",
+          art.featured.sourceUrl,
+          art.featured.image?.credit || art.featured.image?.label || art.featured.image?.recommendedSize || ""
+        )}
         <p class="field-meta">${escapeHtml(art.featured.institution)} / ${escapeHtml(art.featured.location)} / ${escapeHtml(art.featured.dates)}</p>
         <h3>${escapeHtml(art.featured.title)}</h3>
         <p>${escapeHtml(art.featured.description)}</p>
@@ -118,9 +96,9 @@ const renderIssue = (issue) => {
     <section class="field-section">
       <p class="section-kicker">${escapeHtml(fashion.label)}</p>
       <p class="field-section-intro">${escapeHtml(fashion.intro)}</p>
-      ${fashion.stories.map((story) => `
+      ${fashion.stories.map((story, index) => `
         <article class="field-story">
-          ${renderImage(story.image, issue)}
+          ${renderImage(story.image, issue, manifest, `fashion.stories.${index}`, story.sourceUrl, story.imageCredit)}
           <p class="field-meta">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
           <h3>${escapeHtml(story.title)}</h3>
           <p>${escapeHtml(story.commentary)}</p>
@@ -133,7 +111,14 @@ const renderIssue = (issue) => {
     <section class="field-section">
       <p class="section-kicker">${escapeHtml(field.label)}</p>
       <p class="field-section-intro">${escapeHtml(field.intro)}</p>
-      ${renderImage(fieldImage, issue)}
+      ${renderImage(
+        fieldImage,
+        issue,
+        manifest,
+        "onTheField",
+        field.cta?.url || issue.site?.websiteUrl,
+        fieldImage?.credit || fieldImage?.label || fieldImage?.recommendedSize || ""
+      )}
       <article class="field-note">
         <h3>Studio note</h3>
         <p>${escapeHtml(field.note || "")}</p>
@@ -204,7 +189,12 @@ const loadFieldNotes = async () => {
       throw new Error(`${activeIssue.month} ${activeIssue.year} could not be loaded.`);
     }
 
-    renderIssue(await issueResponse.json());
+    const manifestResponse = await fetch(`newsletter/data/sources/${encodeURIComponent(activeIssue.issueId)}.manifest.json`, { cache: "no-store" });
+    const [issue, manifest] = await Promise.all([
+      issueResponse.json(),
+      manifestResponse.ok ? manifestResponse.json() : Promise.resolve(null)
+    ]);
+    renderIssue(issue, manifest);
   } catch (error) {
     issueRoot.innerHTML = `<p class="field-notes-status">${escapeHtml(error.message)}</p>`;
   }

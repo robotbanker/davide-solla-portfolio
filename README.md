@@ -51,9 +51,8 @@ For production, set these Vercel environment variables:
 - `NEWSLETTER_REPLY_TO_EMAIL` - optional reply-to address for newsletter confirmations
 - `NEWSLETTER_TOKEN_SECRET` - stable secret used to sign double opt-in confirmation links
 - `NEWSLETTER_DOUBLE_OPT_IN` - defaults to `true`; set to `false` only if another consent confirmation process exists
-- `NEWSLETTER_RESEND_SEGMENT_ID` - optional Resend Segment ID for new newsletter contacts
-- `NEWSLETTER_RESEND_TOPIC_ID` - optional Resend Topic ID to opt contacts into a specific topic
-- `NEWSLETTER_RECIPIENTS` - optional comma-separated SMTP fallback recipients for admin-triggered sends
+- `NEWSLETTER_RESEND_SEGMENT_ID` - Resend Segment ID used for enrollment and required for live Broadcast sends
+- `NEWSLETTER_RESEND_TOPIC_ID` - public opt-in Resend Topic ID for Field Notes; required for preferences and live Broadcast sends
 - `CREATIVEHUB_API_KEY` - Creativehub API key used server-side to load print products
 - `CREATIVEHUB_API_BASE_URL` - optional Creativehub API base URL, defaults to `https://api.creativehub.io`
 - `CREATIVEHUB_ORDER_COUNTRY_CODE` - optional fulfilment country code for checkout, defaults to `GB`
@@ -128,9 +127,11 @@ The Field Notes page posts newsletter signups to `/api/newsletter`. The form ask
 
 Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the backend sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link.
 
-Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. `NEWSLETTER_RESEND_TOPIC_ID` can also opt contacts into a Resend Topic during enrollment.
+Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public opt-in Resend Topic named `Field Notes` and set `NEWSLETTER_RESEND_TOPIC_ID` so enrollment, provider-hosted preferences, and live sends share the same consent boundary.
 
-The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict newsletter validation, and builds the email HTML. When `RESEND_API_KEY` and `NEWSLETTER_RESEND_SEGMENT_ID` are set, it creates a Resend Broadcast with `send: true`. Otherwise it falls back to the configured SMTP sender and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`.
+The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict research and image-rights validation, builds the email HTML, and creates a Topic-scoped Resend Broadcast. Live delivery fails closed without the Resend API key, Segment and Topic; SMTP is never used for an audience send.
+
+`NEWSLETTER_TOKEN_SECRET` must be a dedicated secret of at least 32 bytes and must not reuse the admin session secret. Live delivery creates a private per-issue state record in `lib/newsletter-send-state/` before calling Resend. A repeated, concurrent, or ambiguous attempt remains locked for manual reconciliation rather than risking a duplicate audience send.
 
 ## Analytics and Search Console
 

@@ -52,8 +52,8 @@ Recommended approach implemented:
 - `newsletter/build-email.js`  
   CLI builder for `newsletter/dist/[issue-id].html`.
 
-- `newsletter/dist/2026-07.html`  
-  Generated production email output after running the build command.
+- `newsletter/dist/[issue-id].html`
+  Generated only after strict source, research and image-rights validation succeeds. Pending issues do not keep a public production file.
 
 - `newsletter-preview.html`  
   Local browser preview for editorial review.
@@ -70,8 +70,11 @@ Recommended approach implemented:
 - `lib/newsletter.js` / `api/newsletter.js`  
   Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
 
+- `lib/newsletter-send-state/[issue-id].json`
+  Private, durable live-send lock and outcome record. A live attempt is acquired before Resend is called and remains fail-closed when delivery is sent, rejected, or ambiguous. Reconcile this record with Resend before any manual intervention; never delete it merely to retry.
+
 - Newsletter tab in `admin.html`  
-  Includes `Dry Run`, which sends only to `davidesolla@outlook.it`, and `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through Resend Broadcasts when configured or SMTP as a fallback.
+  Includes `Dry Run`, which sends only to `davidesolla@outlook.it`, and `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through a Topic-scoped Resend Broadcast. SMTP is restricted to dry runs.
 
 ## Public Enrollment Setup
 
@@ -80,16 +83,23 @@ Required production environment variables:
 - `RESEND_API_KEY`
 - `NEWSLETTER_TOKEN_SECRET`
 - `NEWSLETTER_FROM_EMAIL`
+- `NEWSLETTER_RESEND_SEGMENT_ID`
+- `NEWSLETTER_RESEND_TOPIC_ID`
 
 Optional:
 
 - `NEWSLETTER_REPLY_TO_EMAIL`
-- `NEWSLETTER_RESEND_SEGMENT_ID`
-- `NEWSLETTER_RESEND_TOPIC_ID`
-- `NEWSLETTER_RECIPIENTS`
 - `NEWSLETTER_DOUBLE_OPT_IN=false` only when another confirmed-consent process exists
 
-The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required for Resend Broadcast sends because Broadcasts target a Segment. If Resend is not configured, the admin send button uses SMTP and sends to `NEWSLETTER_RECIPIENTS`, `NEWSLETTER_TO_EMAIL`, or `CONTACT_TO_EMAIL`. The admin `Dry Run` button sends only to `davidesolla@outlook.it`. The Resend broadcast HTML swaps the newsletter footer unsubscribe/preference links to Resend's unsubscribe URL placeholder before sending.
+`NEWSLETTER_RESEND_TOPIC_ID` is required for live audience sends. Create one public, opt-in Resend Topic named `Field Notes`, then store its ID in the production environment. Live sends fail closed without the Topic; SMTP is available only for the single-recipient dry run.
+
+The public `/preferences` page contains no analytics. A subscriber can request a short-lived, signed link without the site revealing whether an address is on the list. The secure page can update the Field Notes Topic or globally unsubscribe the Resend Contact; it never silently restores a globally unsubscribed Contact. Resubscription returns to the consent and double-opt-in flow.
+
+Email confirmation is two-step: opening the confirmation URL performs no write, and the subscriber must explicitly submit the confirmation form. This prevents email link scanners from subscribing an address merely by visiting the URL. Confirmation claims are protected with purpose-bound AES-256-GCM so the query token does not expose the subscriber's email, name or source in URL logs.
+
+`NEWSLETTER_TOKEN_SECRET` is a dedicated newsletter-only secret of at least 32 bytes. It must never fall back to or reuse `ADMIN_SESSION_SECRET`.
+
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `davidesolla@outlook.it`; live sends fail closed unless Resend, the Segment and the public opt-in Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
 
 ## Adding a New Monthly Issue
 
@@ -215,7 +225,7 @@ Open:
 http://localhost:4173/newsletter-preview.html
 ```
 
-Build the production email:
+Build the production email after all source and rights gates pass:
 
 ```bash
 npm run newsletter:build
@@ -230,7 +240,7 @@ newsletter/dist/2026-07.html
 For a different issue:
 
 ```bash
-node newsletter/build-email.js 2026-08
+node newsletter/build-email.js 2026-08 --strict
 ```
 
 Strict validation before sending:
@@ -240,6 +250,38 @@ node newsletter/build-email.js 2026-08 --strict
 ```
 
 Strict mode fails if placeholder content remains or if the source manifest is not `research-approved`.
+Pending or incomplete image rights also prevent the public production file from being created. Draft review remains available through the browser preview, where uncleared images are replaced with a rights-pending placeholder.
+
+## Image-rights Gate
+
+Research approval and image permission are separate decisions. A production issue uses a schema-v2 source manifest with an `imageRights` record for every image that will actually render: the Art feature, each Fashion story, and the selected On the Field rotation image.
+
+Each issue image needs stable `assetId` and `sourceId` values. Each matching rights record stores:
+
+- exact `assetId`, rendered slot and asset URL
+- matching source ID
+- `pending`, `approved` or `rejected` decision
+- rights basis: `studio-owned`, `written-permission`, `licensed` or `public-domain`
+- allowed scopes, including both `public-web` and `live-newsletter` for publication and a production send
+- required credit
+- an opaque private-register evidence reference
+- approver and approval date
+- optional expiry
+- `confirmed` or `not-required` third-party clearance
+
+Do not put contracts, releases, private correspondence or personal data in the manifest: source manifests are public website files. `evidenceRef` should point to a private register entry, not contain the evidence itself.
+
+Validation modes:
+
+- Browser preview: structural issues and rights blockers are shown without writing a public production email.
+- Dry run: pending rights are allowed for the fixed Davide Studios review address; explicitly rejected assets are blocked.
+- Production build/live send/`--strict`: every rendered asset must have one complete, current approval whose slot, source and exact URL match. Any change invalidates the approval and blocks output or delivery before Resend is called.
+
+The Newsletter admin’s **Image rights** panel displays dry-run and live-send blockers and saves the issue, index and manifest together in one repository commit when GitHub-backed publishing is configured.
+
+Admin saves carry a SHA-256 revision over the issue and manifest. GitHub-backed saves pin all reads and the commit parent to one branch-head SHA, then update the branch with compare-and-swap semantics; a stale tab or concurrent serverless instance receives `409` before it can overwrite the issue or shared index.
+
+The final live-send confirmation also carries that saved revision. The server reads one pinned issue/manifest snapshot and rejects a changed revision before any provider request, so the audience can receive only the exact content that was reviewed and confirmed.
 
 ## QA Workflow
 
@@ -249,12 +291,14 @@ Basic code check:
 npm run check
 ```
 
-Desktop and mobile visual review:
+Desktop and mobile visual review before rights approval:
 
 1. Start the local server with `npm start`.
-2. Open `http://localhost:4173/newsletter/dist/[issue-id].html`.
+2. Open `http://localhost:4173/newsletter-preview.html?issue=[issue-id]`.
 3. Check desktop width around `1440px`.
 4. Check mobile width around `390px`.
+
+After strict validation succeeds, build the production file and repeat the review at `http://localhost:4173/newsletter/dist/[issue-id].html` before a live send.
 5. Capture screenshots into `output/playwright/` for review.
 
 The production email deliberately avoids JavaScript, embedded video and fragile layout techniques. It uses table-based structure, inline styles and simple fluid image behaviour for email compatibility.

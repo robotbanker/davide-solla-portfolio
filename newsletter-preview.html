@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Davide Studios Newsletter Preview</title>
     <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <link rel="stylesheet" href="newsletter-preview.css">
   </head>
   <body>
@@ -15,7 +16,7 @@
       </a>
       <nav class="preview-actions" aria-label="Newsletter preview actions">
         <a href="admin.html">Admin editor</a>
-        <a href="newsletter/dist/2026-07.html" data-production-link>Production email</a>
+        <a href="newsletter/dist/2026-07.html" data-production-link hidden>Production email</a>
         <a href="newsletter/data/issues/2026-07.json" data-data-link>Issue data</a>
         <a href="newsletter/data/sources/2026-07.manifest.json" data-sources-link>Source manifest</a>
       </nav>
@@ -42,6 +43,7 @@
       </section>
     </main>
 
-    <script src="newsletter-preview.js"></script>
+    <script src="newsletter-rights.js?v=1"></script>
+    <script src="newsletter-preview.js?v=3"></script>
   </body>
 </html>
