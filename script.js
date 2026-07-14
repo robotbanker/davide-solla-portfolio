@@ -7,6 +7,7 @@ const galleryTitle = document.querySelector("[data-gallery-title]");
 const galleryKicker = document.querySelector("[data-gallery-kicker]");
 const galleryMeta = document.querySelector("[data-gallery-meta]");
 const galleryDescription = document.querySelector("[data-gallery-description]");
+const galleryProjectPageLink = document.querySelector("[data-gallery-project-page]");
 const galleryStrip = document.querySelector("[data-gallery-strip]");
 const galleryCloseButtons = document.querySelectorAll("[data-gallery-close]");
 const galleryPrevProjectButton = document.querySelector("[data-gallery-prev-project]");
@@ -552,11 +553,15 @@ const queueEditorialLayout = () => {
 };
 
 const createImageButton = (item, baseClass) => {
-  const button = document.createElement("button");
+  const button = document.createElement(item.projectSlug ? "a" : "button");
   button.className = [baseClass, item.className].filter(Boolean).join(" ");
-  button.type = "button";
+  if (item.projectSlug) {
+    button.href = `/work/${encodeURIComponent(item.projectSlug)}`;
+  } else {
+    button.type = "button";
+  }
   button.dataset.gallery = item.galleryId;
-  button.setAttribute("aria-label", `Open ${item.title} gallery`);
+  button.setAttribute("aria-label", `Open ${item.title} story`);
 
   const image = document.createElement("img");
   image.alt = item.alt || item.title;
@@ -1008,8 +1013,15 @@ const scopedCoverClass = (baseClass, className = "") => {
     .join(" ");
 };
 
+const publicProjectSlug = (album = {}) => {
+  if (album.projectPage?.published === false) return "";
+  const slug = String(album.projectPage?.slug || album.id || "").trim().toLowerCase();
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) ? slug : "";
+};
+
 const normaliseCover = (album, cover, baseClass = "work-tile") => ({
   galleryId: album.id,
+  projectSlug: publicProjectSlug(album),
   title: album.title,
   label: cover.label || album.title,
   src: cover.src,
@@ -1398,6 +1410,14 @@ const openGallery = (galleryId) => {
   galleryTitle.textContent = gallery.title;
   galleryKicker.textContent = gallery.kicker;
   galleryDescription.textContent = gallery.description;
+  if (galleryProjectPageLink) {
+    const slug = publicProjectSlug(gallery);
+    galleryProjectPageLink.hidden = !slug;
+    if (slug) {
+      galleryProjectPageLink.href = `/work/${encodeURIComponent(slug)}`;
+      galleryProjectPageLink.setAttribute("aria-label", `Open the shareable ${gallery.title} project page`);
+    }
+  }
   renderGalleryMeta(gallery);
   galleryStrip.innerHTML = "";
 
@@ -1435,6 +1455,11 @@ const openGallery = (galleryId) => {
   galleryModal.scrollTo(0, 0);
   updateGalleryNavigation();
   updateProjectNavigation();
+  window.trackStudioEvent?.("portfolio_story_open", {
+    project_id: gallery.id,
+    project_title: gallery.title,
+    project_category: gallery.category || categoryByGallery[gallery.id] || gallery.kicker
+  });
   requestAnimationFrame(() => galleryCloseButtons[0]?.focus({ preventScroll: true }));
 };
 
@@ -1530,6 +1555,11 @@ document.addEventListener("click", (event) => {
   const item = event.target.closest("[data-gallery]");
 
   if (item) {
+    if (item.matches("a[href]")
+      && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)) {
+      return;
+    }
+    event.preventDefault();
     lastGalleryTrigger = item;
     openGallery(item.dataset.gallery);
   }

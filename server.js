@@ -5,6 +5,7 @@ const { handleAdminRequest, handleClientRequest } = require("./lib/admin-store")
 const { handleContactRequest } = require("./lib/contact");
 const { handlePrintsRequest, handleStripeWebhookRequest } = require("./lib/creativehub");
 const { handleNewsletterRequest } = require("./lib/newsletter");
+const { handleProjectPageRequest } = require("./lib/project-pages");
 const { setSecurityHeaders } = require("./lib/security");
 
 const rootDir = __dirname;
@@ -30,7 +31,7 @@ const publicFiles = new Set([
   "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
   "newsletter-rights.js", "newsletter-signup.js", "preferences.html", "preferences.js",
-  "privacy-consent.js", "privacy.html",
+  "privacy-consent.js", "privacy.html", "project-page.css",
   "robots.txt", "script.js", "sitemap.xml", "site.webmanifest", "styles.css", "wallet-card.html"
 ]);
 
@@ -104,6 +105,11 @@ const server = http.createServer((req, res) => {
   setSecurityHeaders(res);
 
   const pathname = new URL(req.url, `http://localhost:${port}`).pathname;
+
+  if (pathname.startsWith("/work/") || pathname === "/api/project") {
+    handleProjectPageRequest(req, res);
+    return;
+  }
 
   if (pathname === "/api/admin") {
     handleAdminRequest(req, res);

@@ -137,6 +137,29 @@ const ensureAlbumShape = (album) => {
   return album;
 };
 
+const creditLines = (album) => (Array.isArray(album.credits) ? album.credits : [])
+  .map((credit) => `${credit.role || ""} | ${credit.name || ""}`)
+  .join("\n");
+
+const parseCreditLines = (value = "") => String(value)
+  .split(/\r?\n/)
+  .map((line) => {
+    const separator = line.indexOf("|");
+    return separator > 0
+      ? { role: line.slice(0, separator).trim(), name: line.slice(separator + 1).trim() }
+      : null;
+  })
+  .filter((credit) => credit?.role && credit?.name);
+
+const creditReviewLabel = (album) => {
+  const review = album.creditReview;
+  if (review?.status !== "verified" || !review.reviewedAt) return "Pending human verification";
+  const date = new Date(review.reviewedAt);
+  return Number.isFinite(date.getTime())
+    ? `Verified by ${review.reviewedBy || "Davide Solla"} on ${date.toLocaleDateString("en-GB")}`
+    : "Pending human verification";
+};
+
 const imageCountLabel = (album) => {
   const count = album.images?.length || 0;
   return `${count} image${count === 1 ? "" : "s"}`;
@@ -521,6 +544,45 @@ const renderAlbumEditor = () => {
         </div>
       </section>
 
+      <section class="control-panel span-all">
+        <h3>Stable project page and credits</h3>
+        <p class="editor-meta">Every public album can have a shareable, indexable story URL. Keep its slug permanent after publication. Collaborator credits stay private until you verify the exact role and name; editing the list revokes the review.</p>
+        <div class="album-fields">
+          <label>
+            <span>Project URL slug (keep permanent)</span>
+            <input data-project-field="projectPage.slug" value="${escapeHtml(album.projectPage?.slug || album.id)}" placeholder="${escapeHtml(album.id)}">
+          </label>
+          <label>
+            <span>Project page</span>
+            <select data-project-field="projectPage.published">
+              <option value="true" ${album.projectPage?.published !== false ? "selected" : ""}>Published</option>
+              <option value="false" ${album.projectPage?.published === false ? "selected" : ""}>Hidden</option>
+            </select>
+          </label>
+          <label>
+            <span>Category</span>
+            <input data-album-field="category" value="${escapeHtml(album.category || "")}" placeholder="Fashion editorial">
+          </label>
+          <label>
+            <span>Location</span>
+            <input data-album-field="location" value="${escapeHtml(album.location || "")}" placeholder="London">
+          </label>
+          <label>
+            <span>Year</span>
+            <input data-album-field="year" inputmode="numeric" value="${escapeHtml(album.year || "")}" placeholder="2026">
+          </label>
+          <label class="span-all">
+            <span>Collaborator credits, one per line as Role | Name</span>
+            <textarea data-credit-lines placeholder="Styling | Full name\nMake-up | Full name">${escapeHtml(creditLines(album))}</textarea>
+          </label>
+        </div>
+        <div class="row-actions">
+          <button type="button" data-verify-project-credits>Verify current credits</button>
+          <button class="secondary" type="button" data-reset-project-credits>Mark credits pending</button>
+          <span class="editor-meta">${escapeHtml(creditReviewLabel(album))}</span>
+        </div>
+      </section>
+
       <section class="control-panel upload-panel">
         <h3>Upload</h3>
         <form class="upload-box" data-upload-form>
@@ -881,6 +943,8 @@ document.addEventListener("click", async (event) => {
   const removeClientButton = event.target.closest("[data-remove-client]");
   const cancelCreateAlbumButton = event.target.closest("[data-cancel-create-album]");
   const moveAlbumButton = event.target.closest("[data-move-album]");
+  const verifyProjectCreditsButton = event.target.closest("[data-verify-project-credits]");
+  const resetProjectCreditsButton = event.target.closest("[data-reset-project-credits]");
 
   if (adminTabButton) {
     setAdminTab(adminTabButton.dataset.adminTab);
@@ -932,6 +996,26 @@ document.addEventListener("click", async (event) => {
   }
 
   ensureAlbumShape(album);
+
+  if (verifyProjectCreditsButton) {
+    album.creditReview = {
+      status: "verified",
+      reviewedBy: "Davide Solla",
+      reviewedAt: new Date().toISOString()
+    };
+    markDirty();
+    render();
+    setStatus("Current collaborator roles and names marked verified. Save changes to publish them.");
+    return;
+  }
+
+  if (resetProjectCreditsButton) {
+    album.creditReview = { status: "pending" };
+    markDirty();
+    render();
+    setStatus("Collaborator credits marked pending and will not be public after save.");
+    return;
+  }
 
   if (removeButton) {
     const [type, index] = removeButton.dataset.removeMedia.split(":");
@@ -1074,6 +1158,8 @@ const handleEditableChange = (event) => {
   const clientField = event.target.closest("[data-client-field]");
   const clientPassword = event.target.closest("[data-client-password]");
   const albumField = event.target.closest("[data-album-field]");
+  const projectField = event.target.closest("[data-project-field]");
+  const projectCreditLines = event.target.closest("[data-credit-lines]");
   const mediaField = event.target.closest("[data-media-field]");
   const positionAxis = event.target.closest("[data-position-axis]");
   const fileInput = event.target.closest('[data-upload-form] input[type="file"]');
@@ -1116,6 +1202,21 @@ const handleEditableChange = (event) => {
   const album = selectedAlbum();
 
   if (!album) {
+    return;
+  }
+
+  if (projectField) {
+    const [group, key] = projectField.dataset.projectField.split(".");
+    album[group] = album[group] || {};
+    album[group][key] = key === "published" ? projectField.value === "true" : projectField.value;
+    markDirty();
+    return;
+  }
+
+  if (projectCreditLines) {
+    album.credits = parseCreditLines(projectCreditLines.value);
+    album.creditReview = { status: "pending" };
+    markDirty();
     return;
   }
 

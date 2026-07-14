@@ -8,6 +8,7 @@ Portfolio website for Davide Solla, rebuilt from the public Adobe Portfolio cont
 - `client-area.html` / `client-area.js` - private client login and embedded gallery page
 - `styles.css` - responsive editorial design system
 - `script.js` - mobile navigation, data-driven albums, image lightbox, and contact form submission
+- `lib/project-pages.js` / `api/project.js` / `project-page.css` - server-rendered, shareable project stories at `/work/{slug}`
 - `newsletter-signup.js` - shared newsletter signup form behaviour
 - `data/site.json` - editable portfolio albums, covers, section text, and gallery image lists
 - `admin.html` - protected admin portal for editing albums and uploading images
@@ -66,8 +67,14 @@ For production, set these Vercel environment variables:
 - `PRINT_ORDER_TOKEN_SECRET` - optional signing secret for temporary print checkout tokens
 
 Production uploads are committed to GitHub under `assets/images/uploads/`, and album/text edits update `data/site.json`.
-Album/text edits also refresh `sitemap.xml` so newly published portfolio images can be discovered through the image sitemap.
+Album/text edits also refresh `sitemap.xml` so newly published project pages and portfolio images can be discovered through the image sitemap.
 After each admin save, the backend calls `VERCEL_DEPLOY_HOOK_URL` so Vercel starts a fresh deployment immediately.
+
+### Stable project pages and verified credits
+
+Every public editorial or fine-art album has a stable URL at `/work/{slug}`. The page is rendered from the same public album source as the homepage and includes unique metadata, canonical and social-card tags, an image gallery, a commission CTA, and image structured data. Set the project page to `Hidden` in the album editor when a story should return to the private edit.
+
+Treat a published slug as permanent: changing it breaks previously shared links. Before publishing collaborator credits, enter one `Role | Name` per line and use `Verify current credits`. Any later edit automatically marks the list pending and removes collaborator credits from the public data on the next save. Photography by Davide Solla is the only default credit. This human review gate prevents unverified names or roles from being published.
 
 Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
 
@@ -137,13 +144,14 @@ The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now`
 
 GA4 uses measurement ID `G-1T625VVZL2` and basic consent mode. `privacy-consent.js` does not request Google's tag or send any analytics data until a visitor affirmatively allows analytics. The versioned choice is stored in first-party local storage, can be changed through the footer settings control, and is reset when the notice version changes. Advertising storage, user data, personalisation and Google Signals stay denied.
 
-Analytics is available only on the homepage and Field Notes. It is absent from the private client area, email-preference page, admin tools and privacy page. Do not add a second direct GA4 tag, a GTM container, remarketing or advertising pixels without revisiting the consent design and privacy notice.
+Analytics is available only on the homepage, stable public project pages, and Field Notes. It is absent from the private client area, email-preference page, admin tools and privacy page. Do not add a second direct GA4 tag, a GTM container, remarketing or advertising pixels without revisiting the consent design and privacy notice.
 
 The local `google-tag.js` helper records these lightweight, consent-gated conversion signals:
 
 - `generate_lead` after a durably accepted commission enquiry; the Radar-linked enquiry ID is not sent to GA
 - `enquiry_intent` when visitors click links to the contact section
 - `instagram_click` when visitors click the studio Instagram link
+- `portfolio_story_open` when a visitor opens a homepage story modal; its project identifiers and category contain no visitor data
 
 The enquiry contract records only `granted`, `denied` or `unset` as the analytics choice at submission. Acquisition context is allowlisted and excludes full referring URLs, click IDs, user agents and IP addresses. The public notice is at `/privacy`; `privacy_notice_version` must match its last-updated date when collection wording changes.
 
@@ -153,11 +161,11 @@ Recommended next steps:
 
 1. Verify both the domain property and the `https://www.davidesolla.com/` URL-prefix property in Google Search Console.
 2. Submit `https://www.davidesolla.com/sitemap.xml`.
-3. Inspect and request indexing for `/` and `/field-notes.html`.
+3. Inspect and request indexing for `/`, `/field-notes.html`, and the `/work/{slug}` URLs listed in the sitemap.
 4. Accept analytics in a clean browser, then review GA4 Realtime to confirm page views and lead events are received.
 5. Verify the GA4 event-data retention setting, provider data-processing terms and international-transfer safeguards during the studio's periodic privacy review.
 
-Future SEO structure work, such as dedicated crawlable portfolio/story URLs or service pages, would change visible site structure and copy. Treat that as a separate content/design approval item, not a backend-only SEO change.
+Stable project pages are now generated from already-public albums without changing the homepage visual identity. New service pages or substantive project copy still change the visible content strategy and require Davide's editorial approval.
 
 ## Print Shop
 
