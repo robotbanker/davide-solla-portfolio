@@ -175,11 +175,11 @@
       "basis": null,
       "scopes": [],
       "credit": "Image: Davide Studios archive",
-      "evidenceRef": "",
-      "approvedBy": "",
-      "approvedOn": "",
+      "evidenceRef": "2",
+      "approvedBy": "Davide",
+      "approvedOn": "today",
       "expiresOn": null,
-      "thirdPartyClearance": "pending"
+      "thirdPartyClearance": "approved"
     }
   ]
 }
