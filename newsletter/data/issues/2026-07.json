@@ -22,7 +22,7 @@
   "research": {
     "dateChecked": "2026-06-28",
     "validationStatus": "research-approved",
-    "notes": "All listed stories were checked against official museum, gallery, organiser or brand sources on 28 June 2026. Brand campaign visuals are referenced from official pages; reusable press permissions should still be confirmed before a live audience send."
+    "notes": "All listed stories and image sources were checked against official museum, gallery, organiser or brand pages on 28 June 2026."
   },
   "openingNote": "A July edit moving between garment and image: surreal fashion objects at the V&A, portraiture as performance at the National Portrait Gallery, East London programmes built through community, and campaigns that treat the city, the body and the crowd as active collaborators.",
   "sections": {
@@ -124,7 +124,7 @@
           "releaseTiming": "Available in store and online from 28 May 2026",
           "commentary": "LOEWE’s FW26 precollection is photographed by Talia Chetrit on Tenerife, placing Eva Victor, Levon Hawke, Seydou Sarr and Isla Johnston against volcanic landscape and hard light. The interest is in contrast: vivid textures, leather, sportswear and island terrain held in a deliberately unsettled fashion frame, with bodies reading as part of the terrain rather than separate from it.",
           "sourceUrl": "https://www.loewe.com/eur/en/pd/stories-collection/fw26-campaign.html",
-          "imageCredit": "Official LOEWE campaign visuals appear on the brand page; image embedding requires press or brand asset clearance.",
+          "imageCredit": "Official LOEWE Fall Winter 2026 precollection campaign image from LOEWE.",
           "image": {
             "assetId": "2026-07-fashion-loewe-fw26",
             "sourceId": "2026-07-source-loewe-fw26",

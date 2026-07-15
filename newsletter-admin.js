@@ -325,13 +325,13 @@ const renderValidationList = (title, validation) => {
 
 const renderRights = () => {
   editorRoot.innerHTML = `
-    ${sectionTitle("Image rights", "Live sending fails closed until every rendered image has explicit, current approval. Store only opaque evidence references here; manifests are public.")}
-    ${renderValidationList("Live-send gate", currentValidationModes?.liveSend)}
-    ${renderValidationList("Dry-run gate", currentValidationModes?.dryRun)}
+    ${sectionTitle("Image sources", "Review the official source details used for image credits. Images render with a linked source caption beneath them.")}
+    ${renderValidationList("Live-send validation", currentValidationModes?.liveSend)}
+    ${renderValidationList("Dry-run validation", currentValidationModes?.dryRun)}
     <div class="field-grid">
       ${textarea({
         name: "rightsManifest",
-        label: "Source and image-rights manifest JSON",
+        label: "Source manifest JSON",
         value: JSON.stringify(currentManifest || {}, null, 2),
         json: true,
         rows: 32

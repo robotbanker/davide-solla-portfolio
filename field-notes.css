@@ -247,6 +247,12 @@
   padding: 10px 12px 11px;
 }
 
+.field-image figcaption a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .field-source {
   color: var(--muted);
   font-size: 11px;

@@ -53,7 +53,7 @@ Recommended approach implemented:
   CLI builder for `newsletter/dist/[issue-id].html`.
 
 - `newsletter/dist/[issue-id].html`
-  Generated only after strict source, research and image-rights validation succeeds. Pending issues do not keep a public production file.
+  Generated only after strict source and research validation succeeds. Draft issues do not keep a public production file.
 
 - `newsletter-preview.html`  
   Authenticated browser preview for editorial review. Open it from the signed-in admin editor so the tab retains the admin session.
@@ -73,6 +73,9 @@ Recommended approach implemented:
 - `lib/newsletter.js` / `api/newsletter.js`  
   Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
 
+- `lib/newsletter-metrics.js`
+  Best-effort, server-only transport for strict anonymous lifecycle facts. It signs the exact JSON body with timestamped HMAC headers, uses an opaque event ID for idempotency, rejects non-HTTPS destinations except localhost, and never includes subscriber or provider identifiers.
+
 - `lib/newsletter-send-state/[issue-id].json`
   Private, durable live-send lock and outcome record. A live attempt is acquired before Resend is called and remains fail-closed when delivery is sent, rejected, or ambiguous. Reconcile this record with Resend before any manual intervention; never delete it merely to retry.
 
@@ -88,13 +91,16 @@ Required production environment variables:
 - `NEWSLETTER_FROM_EMAIL`
 - `NEWSLETTER_RESEND_SEGMENT_ID`
 - `NEWSLETTER_RESEND_TOPIC_ID`
+- `RADAR_NEWSLETTER_METRICS_ENDPOINT`
+- `NEWSLETTER_METRICS_WEBHOOK_SECRET`
 
 Optional:
 
 - `NEWSLETTER_REPLY_TO_EMAIL`
 - `NEWSLETTER_DOUBLE_OPT_IN=false` only when another confirmed-consent process exists
+- `RADAR_NEWSLETTER_METRICS_TIMEOUT_MS=4000`
 
-`NEWSLETTER_RESEND_TOPIC_ID` is required for live audience sends. Create one public, opt-in Resend Topic named `Field Notes`, then store its ID in the production environment. Live sends fail closed without the Topic; SMTP is available only for the single-recipient dry run.
+`NEWSLETTER_RESEND_TOPIC_ID` is required for live audience sends. Create one public, opt-out-by-default Resend Topic named `Field Notes`, then store its ID in the production environment. The website explicitly opts a contact into that Topic only after confirmed consent. Live sends fail closed without the Topic; SMTP is available only for the single-recipient dry run.
 
 The public `/preferences` page contains no analytics. A subscriber can request a short-lived, signed link without the site revealing whether an address is on the list. The secure page can update the Field Notes Topic or globally unsubscribe the Resend Contact; it never silently restores a globally unsubscribed Contact. Resubscription returns to the consent and double-opt-in flow.
 
@@ -102,7 +108,9 @@ Email confirmation is two-step: opening the confirmation URL performs no write, 
 
 `NEWSLETTER_TOKEN_SECRET` is a dedicated newsletter-only secret of at least 32 bytes. It must never fall back to or reuse `ADMIN_SESSION_SECRET`.
 
-The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `davidesolla@outlook.it`; live sends fail closed unless Resend, the Segment and the public opt-in Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `davidesolla@outlook.it`; live sends fail closed unless Resend, the Segment and the public, opt-out-by-default Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
+
+Resend remains the subscriber system of record. The website sends Radar only `newsletter.lifecycle.observed` facts for confirmed consent, Topic opt-out, global unsubscribe and accepted live Broadcast boundaries. Website facts contain a timestamp, event type and HMAC-derived event ID; Broadcast facts also carry `issue_id` and an HMAC-derived campaign key. They contain no names, emails, contact IDs, Resend Broadcast IDs, tokens, IP addresses, user agents, subjects or full links. Separately, Resend sends signed lifecycle events to Radar's private provider endpoint; Radar verifies them, immediately discards recipient-level fields, and retains only anonymous confirmation, opt-out and delivery-health facts. Radar does not retain names, emails, contact or provider IDs, IP addresses, user agents, subjects, full links, opens or clicks. A Radar error is logged only as lifecycle type plus generic code and never changes the already-completed consent or provider outcome.
 
 ## Adding a New Monthly Issue
 
@@ -139,7 +147,7 @@ The website does not store subscriber email addresses in project files. `NEWSLET
    "allowPlaceholders": true
    ```
 
-5. Once all sources and image permissions are confirmed, change the issue and manifest status to:
+5. Once all editorial and image sources are confirmed, change the issue and manifest status to:
 
    ```json
    "status": "research-approved"
@@ -147,7 +155,7 @@ The website does not store subscriber email addresses in project files. `NEWSLET
 
    Then remove placeholder wording and `isPlaceholder` flags.
 
-Saving through the newsletter admin preserves the original `publishedAt`, refreshes `updatedAt`, and writes the issue index plus `sitemap.xml` in the same repository commit. Draft or malformed issue records never become the current public issue. Public article images remain suppressed until their exact manifest record is approved for the `public-web` scope.
+Saving through the newsletter admin preserves the original `publishedAt`, refreshes `updatedAt`, and writes the issue index plus `sitemap.xml` in the same repository commit. Draft or malformed issue records never become the current public issue. Every configured image is rendered with its source credit directly beneath it.
 
 ## Editorial Content Rules
 
@@ -171,7 +179,7 @@ Fashion:
 - 3-4 stories maximum.
 - Use official brand, campaign, runway, press or approved publication sources only.
 - Do not use retailer imagery, random image search, repost accounts or unverified social imagery.
-- If official imagery is not confirmed, keep the image placeholder and mark it in the source manifest.
+- Use a real image URL from the official source and add a concise image credit.
 
 On the Field:
 
@@ -193,7 +201,7 @@ Recommended slots:
 Image rules:
 
 - Use descriptive alt text.
-- Store credit and usage status in the issue and source manifest.
+- Store the image credit and official source URL in the issue and source manifest.
 - Use full production URLs in generated email. The renderer converts local `assets/...` paths to `https://www.davidesolla.com/assets/...`.
 - Do not send with placeholder images unless the email is explicitly a draft.
 
@@ -230,7 +238,7 @@ Open:
 http://localhost:4173/newsletter-preview.html
 ```
 
-Build the production email after all source and rights gates pass:
+Build the production email after the research and source checks pass:
 
 ```bash
 npm run newsletter:build
@@ -255,34 +263,12 @@ node newsletter/build-email.js 2026-08 --strict
 ```
 
 Strict mode fails if placeholder content remains or if the source manifest is not `research-approved`.
-Pending or incomplete image rights also prevent the public production file from being created. Draft review remains available through the browser preview, where uncleared images are replaced with a rights-pending placeholder.
 
-## Image-rights Gate
+## Image Sources and Attribution
 
-Research approval and image permission are separate decisions. A production issue uses a schema-v2 source manifest with an `imageRights` record for every image that will actually render: the Art feature, each Fashion story, and the selected On the Field rotation image.
+Image publication is not gated by the legacy `imageRights` records. The public Field Notes page, authenticated preview and generated email all render every configured image URL. Each image has a `Source:` caption immediately beneath it, using the issue credit and linking to the story's official source URL.
 
-Each issue image needs stable `assetId` and `sourceId` values. Each matching rights record stores:
-
-- exact `assetId`, rendered slot and asset URL
-- matching source ID
-- `pending`, `approved` or `rejected` decision
-- rights basis: `studio-owned`, `written-permission`, `licensed` or `public-domain`
-- allowed scopes, including both `public-web` and `live-newsletter` for publication and a production send
-- required credit
-- an opaque private-register evidence reference
-- approver and approval date
-- optional expiry
-- `confirmed` or `not-required` third-party clearance
-
-Do not put contracts, releases, private correspondence or personal data in the manifest. Source manifests are blocked from public static delivery, but they remain operational records in the repository. `evidenceRef` should point to a private register entry, not contain the evidence itself.
-
-Validation modes:
-
-- Browser preview: structural issues and rights blockers are shown without writing a public production email.
-- Dry run: pending rights are allowed for the fixed Davide Studios review address; explicitly rejected assets are blocked.
-- Production build/live send/`--strict`: every rendered asset must have one complete, current approval whose slot, source and exact URL match. Any change invalidates the approval and blocks output or delivery before Resend is called.
-
-The Newsletter admin’s **Image rights** panel displays dry-run and live-send blockers and saves the issue, index, manifest and sitemap together in one revision-pinned repository commit when GitHub-backed publishing is configured. The separate **Publish this issue at its stable Field Notes URL** checkbox is the human publication decision; research approval alone never creates a public issue URL.
+The Newsletter admin’s **Image sources** panel displays the normal dry-run and live-send validation results and keeps the source manifest editable. Existing `imageRights` entries may remain as historical records, but they do not hide images or block builds and sends. The separate **Publish this issue at its stable Field Notes URL** checkbox remains the human publication decision; research approval alone never creates a public issue URL.
 
 Admin saves carry a SHA-256 revision over the issue and manifest. GitHub-backed saves pin all reads and the commit parent to one branch-head SHA, then update the branch with compare-and-swap semantics; a stale tab or concurrent serverless instance receives `409` before it can overwrite the issue or shared index.
 
@@ -296,7 +282,7 @@ Basic code check:
 npm run check
 ```
 
-Desktop and mobile visual review before rights approval:
+Desktop and mobile visual review before publishing:
 
 1. Start the local server with `npm start`.
 2. Open `http://localhost:4173/newsletter-preview.html?issue=[issue-id]`.

@@ -28,26 +28,6 @@ const response = () => ({
 
 const request = (url, method = "GET") => ({ method, url, headers: {} });
 
-const approvedManifest = () => {
-  const approved = structuredClone(manifest);
-  approved.imageRights = approved.imageRights.map((record) => {
-    const internal = String(record.assetUrl).startsWith("assets/images/")
-      || String(record.assetUrl).startsWith("/assets/images/");
-    return {
-      ...record,
-      decision: "approved",
-      basis: internal ? "studio-owned" : "written-permission",
-      scopes: ["public-web", "live-newsletter"],
-      evidenceRef: `rights-register:${record.assetId}`,
-      approvedBy: "Davide Solla",
-      approvedOn: "2026-07-14",
-      expiresOn: null,
-      thirdPartyClearance: internal ? "not-required" : "confirmed"
-    };
-  });
-  return approved;
-};
-
 test("Field Notes IDs accept real calendar months only", () => {
   for (const valid of ["2026-01", "2026-07", "0000-12", "9999-11"]) {
     assert.equal(isFieldNotesIssueId(valid), true);
@@ -117,32 +97,27 @@ test("a non-empty studio note is rendered without publishing an empty editorial 
   assert.doesNotMatch(html, /<p>\s*<\/p>/);
 });
 
-test("pending issue images are absent from content and social metadata", () => {
+test("all issue images render with linked source captions and social metadata", () => {
   const html = renderFieldNotesIssue(issue, manifest, { entries, indexEntry });
-  assert.doesNotMatch(html, /assets-cdn\.vam\.ac\.uk/);
-  assert.doesNotMatch(html, /Solar_PRESS-SITE_TEASER-IMAGE/);
-  assert.deepEqual(socialImageForIssue(issue, manifest), {
-    url: "https://www.davidesolla.com/assets/images/soho-01.jpg",
-    alt: "Davide Studios Soho fashion image from the website archive"
-  });
-  assert.match(html, /<meta property="og:image" content="https:\/\/www\.davidesolla\.com\/assets\/images\/soho-01\.jpg">/);
+  assert.match(html, /assets-cdn\.vam\.ac\.uk/);
+  assert.match(html, /Solar_PRESS-SITE_TEASER-IMAGE/);
+  assert.equal((html.match(/<figure class="field-image">/g) || []).length, 5);
+  assert.equal((html.match(/<figcaption>Source: /g) || []).length, 5);
+  assert.match(html, /<figcaption>Source: <a href="https:\/\/www\.vam\.ac\.uk\/exhibitions\/schiaparelli" rel="noreferrer">Header image: Victoria and Albert Museum, London<\/a><\/figcaption>/);
+  assert.equal(socialImageForIssue(issue, manifest).url, issue.sections.art.featured.image.src);
+  assert.match(html, new RegExp(`<meta property="og:image" content="${escapeRegex(issue.sections.art.featured.image.src)}">`));
 });
 
-test("only exact current public-web approvals can render or become the social image", () => {
-  const approved = approvedManifest();
-  const approvedHtml = renderFieldNotesIssue(issue, approved, { entries, indexEntry });
-  assert.match(approvedHtml, /assets-cdn\.vam\.ac\.uk/);
-  assert.equal(socialImageForIssue(issue, approved).url, issue.sections.art.featured.image.src);
-
-  const changedCreditIssue = structuredClone(issue);
-  changedCreditIssue.sections.art.featured.image.credit = "Changed after approval";
-  const changedHtml = renderFieldNotesIssue(changedCreditIssue, approved, { entries, indexEntry });
-  assert.doesNotMatch(changedHtml, /assets-cdn\.vam\.ac\.uk/);
-
-  const expired = approvedManifest();
-  expired.imageRights[0].expiresOn = "2020-01-01";
-  const expiredHtml = renderFieldNotesIssue(issue, expired, { entries, indexEntry });
-  assert.doesNotMatch(expiredHtml, /assets-cdn\.vam\.ac\.uk/);
+test("legacy image-rights decisions never hide configured images", () => {
+  const rejected = structuredClone(manifest);
+  rejected.imageRights = rejected.imageRights.map((record) => ({
+    ...record,
+    decision: "rejected",
+    expiresOn: "2020-01-01"
+  }));
+  const html = renderFieldNotesIssue(issue, rejected, { entries, indexEntry });
+  assert.match(html, /assets-cdn\.vam\.ac\.uk/);
+  assert.match(html, /Solar_PRESS-SITE_TEASER-IMAGE/);
 });
 
 test("untrusted issue text and links cannot break out of HTML or JSON-LD", () => {

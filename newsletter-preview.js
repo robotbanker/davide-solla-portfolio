@@ -6,7 +6,7 @@ const productionLink = document.querySelector("[data-production-link]");
 const dataLink = document.querySelector("[data-data-link]");
 const sourcesLink = document.querySelector("[data-sources-link]");
 const requestedIssue = new URLSearchParams(window.location.search).get("issue");
-const { imageApproval, issueReadyForScopes, renderedImageSlots, rotatingImageForIssue } = window.NewsletterRights;
+const { imageSource, rotatingImageForIssue } = window.NewsletterRights;
 const adminToken = () => sessionStorage.getItem("davide-admin-session") || "";
 
 if (requestedIssue) {
@@ -29,23 +29,15 @@ const renderCta = (label, url) => {
   return `<a class="cta" href="${escapeHtml(url)}">${escapeHtml(label || "View source")}</a>`;
 };
 
-const renderImage = (image, issue, manifest, slot, officialSourceUrl, credit) => {
-  const approval = imageApproval(issue, manifest, { slot, image, officialSourceUrl, credit });
-  if (approval.approved) {
-    return `
-      <img src="${escapeHtml(approval.assetUrl)}" alt="${escapeHtml(image.alt || "")}">
-      <p class="image-credit">${escapeHtml(approval.credit)}</p>
-    `;
-  }
-
+const renderImage = (image, officialSourceUrl, credit) => {
+  const source = imageSource({ image, officialSourceUrl, credit });
+  if (!source.assetUrl) return "";
+  const caption = isUrl(source.sourceUrl)
+    ? `<a href="${escapeHtml(source.sourceUrl)}" rel="noreferrer">${escapeHtml(source.credit)}</a>`
+    : escapeHtml(source.credit);
   return `
-    <div class="image-slot" role="img" aria-label="${escapeHtml(image?.alt || "Image placeholder")}">
-      <div>
-        <strong>Image withheld</strong>
-        <p>Publication rights must be approved before this image can be displayed.</p>
-      </div>
-    </div>
-    <p class="image-credit">Image usage pending</p>
+    <img src="${escapeHtml(source.assetUrl)}" alt="${escapeHtml(image.alt || "")}">
+    <p class="image-credit">Source: ${caption}</p>
   `;
 };
 
@@ -79,9 +71,6 @@ const renderIssue = (issue, manifest) => {
       <article class="feature">
         ${renderImage(
           art.featured.image,
-          issue,
-          manifest,
-          "art.featured",
           art.featured.sourceUrl,
           art.featured.image?.credit || art.featured.image?.label || art.featured.image?.recommendedSize || ""
         )}
@@ -99,11 +88,10 @@ const renderIssue = (issue, manifest) => {
       <p class="section-intro">${escapeHtml(fashion.intro)}</p>
       ${fashion.stories.map((story, index) => `
         <article class="story">
-          ${renderImage(story.image, issue, manifest, `fashion.stories.${index}`, story.sourceUrl, story.imageCredit)}
+          ${renderImage(story.image, story.sourceUrl, story.imageCredit)}
           <p class="meta">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
           <h3>${escapeHtml(story.title)}</h3>
           <p>${escapeHtml(story.commentary)}</p>
-          <p class="image-credit">Source visual: ${escapeHtml(story.imageCredit || "Usage pending")}</p>
           ${renderCta("View official source", story.sourceUrl)}
         </article>
       `).join("")}
@@ -114,9 +102,6 @@ const renderIssue = (issue, manifest) => {
       <p class="section-intro">${escapeHtml(field.intro)}</p>
       ${renderImage(
         fieldImage,
-        issue,
-        manifest,
-        "onTheField",
         field.cta?.url || issue.site?.websiteUrl,
         fieldImage?.credit || fieldImage?.label || fieldImage?.recommendedSize || ""
       )}
@@ -163,15 +148,13 @@ const loadIssue = async () => {
 
     const { issue, manifest } = payload;
     renderIssue(issue, manifest);
-    const slots = renderedImageSlots(issue);
-    const pendingRights = slots.filter((slot) => !imageApproval(issue, manifest, slot, ["public-web", "live-newsletter"]).approved).length;
-    productionLink.hidden = !issueReadyForScopes(issue, manifest, ["public-web", "live-newsletter"]);
+    productionLink.hidden = issue.status !== "research-approved" || manifest?.status !== "research-approved";
     if (issue.status !== "research-approved") {
       statusMessage.textContent = `Draft status: ${issue.status}. Not for sending.`;
-    } else if (manifest.schemaVersion !== 2 || pendingRights > 0) {
-      statusMessage.textContent = `Research approved. Image rights are not cleared for live distribution (${pendingRights || "legacy manifest"}).`;
+    } else if (manifest?.status !== "research-approved") {
+      statusMessage.textContent = "Research approved. Source manifest still needs review.";
     } else {
-      statusMessage.textContent = "Research approved. Rights recorded; final server-side send validation is still required.";
+      statusMessage.textContent = "Research and sources approved. Final server-side send validation is still required.";
     }
   } catch (error) {
     previewRoot.innerHTML = "";

@@ -7,34 +7,23 @@
   }
 }(typeof globalThis !== "undefined" ? globalThis : this, () => {
   const canonicalSiteBaseUrl = "https://www.davidesolla.com";
-  const allowedBases = new Set(["studio-owned", "written-permission", "licensed", "public-domain"]);
-  const allowedClearance = new Set(["confirmed", "not-required"]);
-
-  const stripTrailingSlash = (value = "") => String(value).replace(/\/+$/, "");
 
   const absoluteAssetUrl = (src) => {
     try {
       const url = new URL(String(src || ""), `${canonicalSiteBaseUrl}/`);
-      return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+      return ["http:", "https:"].includes(url.protocol) && !url.username && !url.password ? url.href : "";
     } catch {
       return "";
     }
   };
 
-  const isUsableUrl = (value) => {
+  const absoluteSourceUrl = (value) => {
     try {
-      return ["http:", "https:"].includes(new URL(String(value || "")).protocol);
+      const url = new URL(String(value || ""));
+      return ["http:", "https:"].includes(url.protocol) && !url.username && !url.password ? url.href : "";
     } catch {
-      return false;
+      return "";
     }
-  };
-
-  const isOpaqueEvidenceRef = (value) => {
-    const reference = String(value || "").trim();
-    return reference.length >= 3
-      && reference.length <= 180
-      && !/^https?:\/\//i.test(reference)
-      && !/\s/.test(reference);
   };
 
   const rotatingImageForIssue = (issue, field) => {
@@ -84,68 +73,18 @@
     return slots;
   };
 
-  const imageApproval = (issue, manifest, slotDefinition, requiredScopes = ["public-web"]) => {
-    const fail = (reason) => ({ approved: false, reason });
-    const { slot, image, officialSourceUrl, credit } = slotDefinition || {};
-
-    if (stripTrailingSlash(issue?.site?.baseUrl) !== canonicalSiteBaseUrl) return fail("non-canonical site URL");
-    if (issue?.status !== "research-approved" || issue?.research?.validationStatus !== "research-approved") {
-      return fail("research is not approved");
-    }
-    if (Number(manifest?.schemaVersion) !== 2 || manifest?.status !== "research-approved") {
-      return fail("rights manifest is not approved");
-    }
-    if (String(manifest?.issueId || "") !== String(issue?.issueId || "")) return fail("manifest issue mismatch");
-
-    const assetId = String(image?.assetId || "").trim();
-    const sourceId = String(image?.sourceId || "").trim();
-    const assetUrl = absoluteAssetUrl(image?.src);
-    if (!assetId || !sourceId || !assetUrl) return fail("incomplete image identity");
-
-    const matches = (manifest.imageRights || []).filter((record) => record?.assetId === assetId);
-    if (matches.length !== 1) return fail("rights record is missing or duplicated");
-    const record = matches[0];
-
-    if (record.slot !== slot || record.sourceId !== sourceId) return fail("rights record does not match the slot");
-    if (absoluteAssetUrl(record.assetUrl) !== assetUrl) return fail("rights record does not match the asset");
-    if (record.decision !== "approved" || !allowedBases.has(record.basis)) return fail("publication rights are pending");
-    if (!requiredScopes.every((scope) => Array.isArray(record.scopes) && record.scopes.includes(scope))) {
-      return fail("publication scope is not approved");
-    }
-    if (!String(credit || "").trim() || String(record.credit || "").trim() !== String(credit).trim()) {
-      return fail("approved credit does not match the page");
-    }
-    if (!isOpaqueEvidenceRef(record.evidenceRef) || !String(record.approvedBy || "").trim()) {
-      return fail("approval evidence is incomplete");
-    }
-    if (!record.approvedOn || Number.isNaN(Date.parse(record.approvedOn))) return fail("approval date is invalid");
-    if (!allowedClearance.has(record.thirdPartyClearance)) return fail("third-party clearance is incomplete");
-    if (record.expiresOn && (Number.isNaN(Date.parse(record.expiresOn)) || Date.parse(record.expiresOn) < Date.now())) {
-      return fail("rights approval has expired");
-    }
-
-    const canonicalOrigin = new URL(canonicalSiteBaseUrl).origin;
-    if (new URL(assetUrl).origin !== canonicalOrigin) {
-      const sourceMatches = (manifest.sources || []).filter((source) => source?.sourceId === sourceId);
-      if (sourceMatches.length !== 1
-        || !isUsableUrl(sourceMatches[0].officialSourceUrl)
-        || sourceMatches[0].officialSourceUrl !== officialSourceUrl) {
-        return fail("official source does not match the story");
-      }
-    }
-
-    return { approved: true, assetUrl, credit: String(record.credit).trim(), record };
-  };
-
-  const issueReadyForScopes = (issue, manifest, requiredScopes) => {
-    const approvals = renderedImageSlots(issue).map((slot) => imageApproval(issue, manifest, slot, requiredScopes));
-    return approvals.length > 0 && approvals.every((approval) => approval.approved);
+  const imageSource = (slotDefinition) => {
+    const { image, officialSourceUrl, credit } = slotDefinition || {};
+    return {
+      assetUrl: absoluteAssetUrl(image?.src),
+      credit: String(credit || image?.credit || image?.label || "Official source").trim(),
+      sourceUrl: absoluteSourceUrl(officialSourceUrl)
+    };
   };
 
   return {
     canonicalSiteBaseUrl,
-    imageApproval,
-    issueReadyForScopes,
+    imageSource,
     renderedImageSlots,
     rotatingImageForIssue
   };
