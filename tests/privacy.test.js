@@ -24,7 +24,7 @@ const runConsent = ({ analytics = "unset", analyticsEnabled = true, cookie = "" 
   const appendedToHead = [];
   const stored = analytics === "unset"
     ? null
-    : JSON.stringify({ analytics, version: "2026-07-14", decidedAt: "2026-07-14T00:00:00.000Z" });
+    : JSON.stringify({ analytics, version: "2026-07-18", decidedAt: "2026-07-18T00:00:00.000Z" });
   const storage = new Map(stored ? [["davide-studios-privacy-v1", stored]] : []);
   const document = {
     activeElement: null,
@@ -100,12 +100,31 @@ test("public analytics pages use the consent controller and contain no eager Goo
   for (const file of ["index.html", "field-notes.html"]) {
     const html = fs.readFileSync(file, "utf8");
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=1/);
+    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
     assert.match(html, /google-tag\.js\?v=3/);
     assert.doesNotMatch(html, /<script[^>]+src="https:\/\/www\.googletagmanager\.com/);
     assert.doesNotMatch(html, /gtag\('config'/);
     assert.match(html, /href="\/privacy"/);
     assert.match(html, /data-privacy-settings/);
+  }
+});
+
+test("every rendered privacy controller URL is cache-busted with the notice version", () => {
+  const noticeVersion = consentSource.match(/const noticeVersion = "([^"]+)";/)?.[1];
+  assert.equal(noticeVersion, "2026-07-18");
+  const expectedAsset = `privacy-consent.js?v=${noticeVersion}`;
+
+  for (const file of [
+    "index.html",
+    "field-notes.html",
+    "privacy.html",
+    "lib/project-pages.js",
+    "lib/field-notes-pages.js"
+  ]) {
+    assert.ok(
+      fs.readFileSync(file, "utf8").includes(expectedAsset),
+      `${file} must load the consent controller using the current notice version`
+    );
   }
 });
 
@@ -118,9 +137,16 @@ test("tracking helpers fail closed without granted consent", () => {
 test("the privacy route and notice version are wired through the local server", () => {
   const server = fs.readFileSync("server.js", "utf8");
   const contact = fs.readFileSync("lib/contact.js", "utf8");
+  const privacy = fs.readFileSync("privacy.html", "utf8");
   assert.match(server, /"privacy-consent\.js", "privacy\.html"/);
   assert.match(server, /requestUrl\.pathname === "\/privacy"/);
-  assert.match(contact, /privacyNoticeVersion = "2026-07-14"/);
+  assert.match(contact, /privacyNoticeVersion = "2026-07-18"/);
+  assert.match(privacy, /Last updated 18 July 2026/);
+  assert.equal((privacy.match(/18 July 2026/g) || []).length, 2);
+  assert.doesNotMatch(privacy, /14 July 2026/);
+  assert.match(privacy, /privacy-minimised, pseudonymous/);
+  assert.match(privacy, /no more than 24 months/);
+  assert.doesNotMatch(privacy, /anonymous (?:confirmation|event|Field Notes)/i);
 });
 
 test("the production privacy rewrite keeps the standard security headers", () => {
