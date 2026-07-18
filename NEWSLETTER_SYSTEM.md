@@ -53,7 +53,7 @@ Recommended approach implemented:
   CLI builder for `newsletter/dist/[issue-id].html`.
 
 - `newsletter/dist/[issue-id].html`
-  Generated only after strict source, research and image-rights validation succeeds. Pending issues do not keep a public production file.
+  Generated only after strict source, research and content validation succeeds. Pending issues do not keep a public production file.
 
 - `newsletter-preview.html`  
   Authenticated browser preview for editorial review. Open it from the signed-in admin editor so the tab retains the admin session.
@@ -150,7 +150,7 @@ Website facts contain an event type, actual event time and derived event key; Br
    "allowPlaceholders": true
    ```
 
-5. Once all sources and image permissions are confirmed, change the issue and manifest status to:
+5. Once all sources are confirmed and the issue is editorially complete, change the issue and manifest status to:
 
    ```json
    "status": "research-approved"
@@ -158,7 +158,7 @@ Website facts contain an event type, actual event time and derived event key; Br
 
    Then remove placeholder wording and `isPlaceholder` flags.
 
-Saving through the newsletter admin preserves the original `publishedAt`, refreshes `updatedAt`, and writes the issue index plus `sitemap.xml` in the same repository commit. Draft or malformed issue records never become the current public issue. Public article images remain suppressed until their exact manifest record is approved for the `public-web` scope.
+Saving through the newsletter admin preserves the original `publishedAt`, refreshes `updatedAt`, and writes the issue index plus `sitemap.xml` in the same repository commit. Draft or malformed issue records never become the current public issue. Public article images are included when Davide explicitly marks the issue published after completing his manual editorial and image review.
 
 ## Editorial Content Rules
 
@@ -204,7 +204,7 @@ Recommended slots:
 Image rules:
 
 - Use descriptive alt text.
-- Store credit and usage status in the issue and source manifest.
+- Store image credit and official-source provenance in the issue and source manifest.
 - Use full production URLs in generated email. The renderer converts local `assets/...` paths to `https://www.davidesolla.com/assets/...`.
 - Do not send with placeholder images unless the email is explicitly a draft.
 
@@ -241,7 +241,7 @@ Open:
 http://localhost:4173/newsletter-preview.html
 ```
 
-Build the production email after all source and rights gates pass:
+Build the production email after all source and editorial checks pass:
 
 ```bash
 npm run newsletter:build
@@ -265,35 +265,15 @@ Strict validation before sending:
 node newsletter/build-email.js 2026-08 --strict
 ```
 
-Strict mode fails if placeholder content remains or if the source manifest is not `research-approved`.
-Pending or incomplete image rights also prevent the public production file from being created. Draft review remains available through the browser preview, where uncleared images are replaced with a rights-pending placeholder.
+Strict mode fails if placeholder content remains, required image/source data is missing, or the source manifest is not `research-approved`.
 
-## Image-rights Gate
+## Manual Image and Publication Review
 
-Research approval and image permission are separate decisions. A production issue uses a schema-v2 source manifest with an `imageRights` record for every image that will actually render: the Art feature, each Fashion story, and the selected On the Field rotation image.
+The system does not require a separate approval decision for every image. Davide reviews the complete issue—including imagery, credits, provenance and suitability—before publishing or sending it. Legacy `imageRights` records may remain in older manifests for history, but they are ignored and are not part of the publishing workflow.
 
-Each issue image needs stable `assetId` and `sourceId` values. Each matching rights record stores:
+The explicit **Publish this issue at its stable Field Notes URL** checkbox is the issue-level publication decision; research approval alone never creates a public issue URL. A live audience send separately requires typing the issue ID, ensuring the exact saved revision is intentionally confirmed before Resend is called.
 
-- exact `assetId`, rendered slot and asset URL
-- matching source ID
-- `pending`, `approved` or `rejected` decision
-- rights basis: `studio-owned`, `written-permission`, `licensed` or `public-domain`
-- allowed scopes, including both `public-web` and `live-newsletter` for publication and a production send
-- required credit
-- an opaque private-register evidence reference
-- approver and approval date
-- optional expiry
-- `confirmed` or `not-required` third-party clearance
-
-Do not put contracts, releases, private correspondence or personal data in the manifest. Source manifests are blocked from public static delivery, but they remain operational records in the repository. `evidenceRef` should point to a private register entry, not contain the evidence itself.
-
-Validation modes:
-
-- Browser preview: structural issues and rights blockers are shown without writing a public production email.
-- Dry run: pending rights are allowed for the fixed Davide Studios review address; explicitly rejected assets are blocked.
-- Production build/live send/`--strict`: every rendered asset must have one complete, current approval whose slot, source and exact URL match. Any change invalidates the approval and blocks output or delivery before Resend is called.
-
-The Newsletter admin’s **Image rights** panel displays dry-run and live-send blockers and saves the issue, index, manifest and sitemap together in one revision-pinned repository commit when GitHub-backed publishing is configured. The separate **Publish this issue at its stable Field Notes URL** checkbox is the human publication decision; research approval alone never creates a public issue URL.
+Strict validation continues to require a real renderable URL and credit for every displayed image. External images must retain a matching official-source record. These are content-integrity checks, not image-by-image approval gates.
 
 Admin saves carry a SHA-256 revision over the issue and manifest. GitHub-backed saves pin all reads and the commit parent to one branch-head SHA, then update the branch with compare-and-swap semantics; a stale tab or concurrent serverless instance receives `409` before it can overwrite the issue or shared index.
 
@@ -307,7 +287,7 @@ Basic code check:
 npm run check
 ```
 
-Desktop and mobile visual review before rights approval:
+Desktop and mobile visual review before publishing:
 
 1. Start the local server with `npm start`.
 2. Open `http://localhost:4173/newsletter-preview.html?issue=[issue-id]`.
@@ -326,7 +306,7 @@ This repository does not send newsletter emails automatically.
 Recommended send process:
 
 1. Complete research.
-2. Approve the source manifest.
+2. Confirm the source manifest is complete.
 3. Run strict validation.
 4. Build the production email.
 5. Review desktop and mobile screenshots.

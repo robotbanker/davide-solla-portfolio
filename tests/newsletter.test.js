@@ -25,11 +25,6 @@ const {
   loadManifest,
   validateIssue
 } = require("../newsletter/lib/render-email");
-const {
-  imageApproval,
-  issueReadyForScopes,
-  renderedImageSlots
-} = require("../newsletter-rights");
 
 const response = () => {
   const headers = {};
@@ -1220,89 +1215,35 @@ test("tampered preference tokens fail before any provider request", async () => 
   });
 });
 
-const approvedManifest = (issueId) => {
-  const manifest = structuredClone(loadManifest(issueId));
-  manifest.imageRights = manifest.imageRights.map((record) => {
-    const internal = record.assetId.startsWith("studio-");
-    return {
-      ...record,
-      decision: "approved",
-      basis: internal ? "studio-owned" : "written-permission",
-      scopes: ["public-web", "live-newsletter"],
-      evidenceRef: `rights-register:${record.assetId}`,
-      approvedBy: "Davide Solla",
-      approvedOn: "2026-07-14",
-      thirdPartyClearance: internal ? "not-required" : "confirmed"
-    };
-  });
-  return manifest;
-};
-
-test("current issues preview safely but live-send fails closed while rights remain unresolved", () => {
+test("current issues pass live validation without per-image approval decisions", () => {
   for (const issueId of ["2026-06", "2026-07"]) {
     const issue = loadIssue(issueId);
     const manifest = loadManifest(issueId);
     assert.equal(validateIssue(issue, manifest, { mode: "preview" }).errors.length, 0);
     assert.equal(validateIssue(issue, manifest, { mode: "dry-run" }).errors.length, 0);
     const live = validateIssue(issue, manifest, { mode: "live-send" });
-    assert.equal(live.errors.length, 5);
-    assert.ok(live.errors.every((message) => (
-      message.includes("rights are pending") || message.includes("approval is incomplete")
-    )));
+    assert.deepEqual(live.errors, []);
+    assert.equal(live.images.ready, true);
   }
 });
 
-test("public issue imagery is fail-closed until every exact public-web approval exists", () => {
+test("legacy image-rights records do not gate an issue-level publishing decision", () => {
   const issue = loadIssue("2026-07");
-  const pendingManifest = loadManifest("2026-07");
-  const slots = renderedImageSlots(issue);
+  const manifest = loadManifest("2026-07");
+  const withoutRights = structuredClone(manifest);
+  delete withoutRights.imageRights;
+  withoutRights.schemaVersion = 1;
+  const rejectedLegacyRecords = structuredClone(manifest);
+  rejectedLegacyRecords.imageRights.forEach((record) => { record.decision = "rejected"; });
 
-  assert.equal(issueReadyForScopes(issue, pendingManifest, ["public-web"]), false);
-  assert.ok(slots.every((slot) => !imageApproval(issue, pendingManifest, slot, ["public-web"]).approved));
-
-  const approved = approvedManifest("2026-07");
-  assert.equal(issueReadyForScopes(issue, approved, ["public-web"]), true);
-
-  const redirected = structuredClone(issue);
-  redirected.site.baseUrl = "https://attacker.example";
-  assert.equal(issueReadyForScopes(redirected, approved, ["public-web"]), false);
-
-  const changedCredit = structuredClone(issue);
-  changedCredit.sections.fashion.stories[0].imageCredit = "Changed credit";
-  assert.equal(issueReadyForScopes(changedCredit, approved, ["public-web"]), false);
-
-  const unknownSchema = structuredClone(approved);
-  unknownSchema.schemaVersion = 3;
-  assert.equal(issueReadyForScopes(issue, unknownSchema, ["public-web"]), false);
+  assert.deepEqual(validateIssue(issue, manifest, { mode: "live-send" }).errors, []);
+  assert.deepEqual(validateIssue(issue, withoutRights, { mode: "live-send" }).errors, []);
+  assert.deepEqual(validateIssue(issue, rejectedLegacyRecords, { mode: "live-send" }).errors, []);
 });
 
-test("live-send requires complete rights records tied to the exact rendered asset", () => {
+test("live-send validates image integrity and official provenance without approval fields", () => {
   const issue = loadIssue("2026-07");
-  const manifest = approvedManifest("2026-07");
-  const approved = validateIssue(issue, manifest, { mode: "live-send" });
-  assert.deepEqual(approved.errors, []);
-  assert.equal(approved.rights.ready, true);
-
-  const swapped = structuredClone(manifest);
-  swapped.imageRights[0].assetUrl = `${swapped.imageRights[0].assetUrl}?changed=1`;
-  assert.match(
-    validateIssue(issue, swapped, { mode: "live-send" }).errors.join("\n"),
-    /does not match the rendered asset URL/
-  );
-
-  const duplicate = structuredClone(manifest);
-  duplicate.imageRights.push(structuredClone(duplicate.imageRights[0]));
-  assert.match(
-    validateIssue(issue, duplicate, { mode: "live-send" }).errors.join("\n"),
-    /must match exactly one image-rights record; found 2/
-  );
-
-  const rejected = structuredClone(manifest);
-  rejected.imageRights[0].decision = "rejected";
-  assert.match(
-    validateIssue(issue, rejected, { mode: "dry-run" }).errors.join("\n"),
-    /explicitly rejected/
-  );
+  const manifest = loadManifest("2026-07");
 
   const draftIssue = structuredClone(issue);
   draftIssue.status = "draft";
@@ -1327,21 +1268,21 @@ test("live-send requires complete rights records tied to the exact rendered asse
   missingCredit.sections.fashion.stories[0].imageCredit = "";
   assert.match(
     validateIssue(missingCredit, manifest, { mode: "live-send" }).errors.join("\n"),
-    /credit matching the rendered issue/
+    /needs an image credit/
   );
 
   const wrongManifest = structuredClone(manifest);
   wrongManifest.issueId = "2026-06";
   assert.match(
     validateIssue(issue, wrongManifest, { mode: "live-send" }).errors.join("\n"),
-    /manifest issueId must match the rendered issue/
+    /Source manifest issueId must match the rendered issue/
   );
 
-  const futureSchema = structuredClone(manifest);
-  futureSchema.schemaVersion = 3;
+  const missingSource = structuredClone(manifest);
+  missingSource.sources = missingSource.sources.filter((source) => source.sourceId !== "2026-07-source-schiaparelli");
   assert.match(
-    validateIssue(issue, futureSchema, { mode: "live-send" }).errors.join("\n"),
-    /Exactly image-rights manifest schema v2/
+    validateIssue(issue, missingSource, { mode: "live-send" }).errors.join("\n"),
+    /must match exactly one official source record/
   );
 
   const missingTitle = structuredClone(issue);
@@ -1357,25 +1298,6 @@ test("unknown newsletter validation modes fail closed", () => {
     () => validateIssue(loadIssue("2026-07"), loadManifest("2026-07"), { mode: "live-sned" }),
     /Unsupported newsletter validation mode/
   );
-});
-
-test("live-send stops at the rights gate before provider delivery", async () => {
-  await withNewsletterEnv(async () => {
-    const originalFetch = global.fetch;
-    let called = false;
-    global.fetch = async () => { called = true; return providerResponse(200, { id: "should_not_send" }); };
-    const issue = loadIssue("2026-07");
-    const manifest = loadManifest("2026-07");
-    try {
-      await assert.rejects(
-        sendNewsletterIssue("2026-07", "2026-07", newsletterRevision(issue, manifest)),
-        (error) => error.statusCode === 422 && /rights are pending/.test(error.message)
-      );
-    } finally {
-      global.fetch = originalFetch;
-    }
-    assert.equal(called, false);
-  });
 });
 
 test("live-send rejects a revision changed after review before provider delivery", async () => {

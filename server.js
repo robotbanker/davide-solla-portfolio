@@ -31,7 +31,7 @@ const publicFiles = new Set([
   "404.html", "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
   "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
   "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
-  "newsletter-rights.js", "newsletter-signup.js", "preferences.html", "preferences.js",
+  "newsletter-signup.js", "preferences.html", "preferences.js",
   "privacy-consent.js", "privacy.html", "project-page.css",
   "robots.txt", "script.js", "sitemap.xml", "site.webmanifest", "styles.css", "wallet-card.html"
 ]);

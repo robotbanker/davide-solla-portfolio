@@ -106,7 +106,7 @@
       "continue": true
     },
     {
-      "src": "/(?:styles|field-notes|admin|newsletter-preview|project-page)\\.css|/(?:script|privacy-consent|field-notes|newsletter-rights|newsletter-signup|preferences|client-area|admin|newsletter-admin|newsletter-preview|google-tag)\\.js|/site\\.webmanifest",
+      "src": "/(?:styles|field-notes|admin|newsletter-preview|project-page)\\.css|/(?:script|privacy-consent|field-notes|newsletter-signup|preferences|client-area|admin|newsletter-admin|newsletter-preview|google-tag)\\.js|/site\\.webmanifest",
       "headers": {
         "Cache-Control": "public, max-age=31536000, stale-while-revalidate=86400"
       },

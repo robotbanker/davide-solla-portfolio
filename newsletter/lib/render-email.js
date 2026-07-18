@@ -71,8 +71,6 @@ const hasPlaceholder = (value) => {
 const wordCount = (value = "") => String(value).trim().split(/\s+/).filter(Boolean).length;
 
 const validationModes = new Set(["preview", "dry-run", "live-send"]);
-const liveRightsBases = new Set(["studio-owned", "written-permission", "licensed", "public-domain"]);
-const liveRightsScopes = ["public-web", "live-newsletter"];
 const canonicalSiteBaseUrl = "https://www.davidesolla.com";
 
 const validationMode = (options = {}) => {
@@ -131,14 +129,6 @@ const extractRenderedImageSlots = (issue) => {
   return slots;
 };
 
-const isOpaqueEvidenceRef = (value) => {
-  const reference = String(value || "").trim();
-  return reference.length >= 3
-    && reference.length <= 180
-    && !/^https?:\/\//i.test(reference)
-    && !/\s/.test(reference);
-};
-
 const renderedCreditForSlot = (issue, slot, image) => {
   if (slot.startsWith("fashion.stories.")) {
     const storyIndex = Number(slot.split(".").at(-1));
@@ -148,42 +138,19 @@ const renderedCreditForSlot = (issue, slot, image) => {
   return String(image?.credit || image?.label || image?.recommendedSize || "").trim();
 };
 
-const validateImageRights = (issue, manifest, mode, errors, warnings) => {
+const validateImageSources = (issue, manifest, mode, errors, warnings) => {
   const slots = extractRenderedImageSlots(issue);
-  const rights = Array.isArray(manifest?.imageRights) ? manifest.imageRights : [];
   const sources = Array.isArray(manifest?.sources) ? manifest.sources : [];
-  const schemaReady = Number(manifest?.schemaVersion) === 2 && Array.isArray(manifest?.imageRights);
-  let rightsProblemCount = 0;
-  const issueForMode = (message, { blockDryRun = false } = {}) => {
-    rightsProblemCount += 1;
-    if (mode === "live-send" || (mode === "dry-run" && blockDryRun)) {
-      errors.push(message);
-    } else {
-      warnings.push(message);
-    }
+  let sourceProblemCount = 0;
+  const issueForMode = (message) => {
+    sourceProblemCount += 1;
+    if (mode === "live-send") errors.push(message);
+    else warnings.push(message);
   };
 
-  if (!schemaReady) {
-    issueForMode("Exactly image-rights manifest schema v2 is required before a live newsletter send.");
-    return { mode, slotCount: slots.length, approvedCount: 0, ready: false };
+  if (manifest && String(manifest.issueId || "") !== String(issue.issueId || "")) {
+    issueForMode("Source manifest issueId must match the rendered issue.");
   }
-
-  if (String(manifest.issueId || "") !== String(issue.issueId || "")) {
-    issueForMode("Image-rights manifest issueId must match the rendered issue.");
-    return { mode, slotCount: slots.length, approvedCount: 0, ready: false };
-  }
-
-  const rightsByAsset = new Map();
-  rights.forEach((record) => {
-    const assetId = String(record?.assetId || "").trim();
-    if (!assetId) {
-      issueForMode("Every image-rights record needs an assetId.");
-      return;
-    }
-    const matches = rightsByAsset.get(assetId) || [];
-    matches.push(record);
-    rightsByAsset.set(assetId, matches);
-  });
 
   const sourcesById = new Map();
   sources.forEach((source) => {
@@ -194,43 +161,25 @@ const validateImageRights = (issue, manifest, mode, errors, warnings) => {
     sourcesById.set(sourceId, matches);
   });
 
-  let approvedCount = 0;
-  const renderedAssetIds = new Set();
+  let sourcedCount = 0;
 
   slots.forEach(({ slot, image, officialSourceUrl }) => {
-    const assetId = String(image?.assetId || "").trim();
     const sourceId = String(image?.sourceId || "").trim();
     const renderedUrl = absoluteUrl(image?.src, canonicalSiteBaseUrl);
     const renderedCredit = renderedCreditForSlot(issue, slot, image);
-    const label = `${slot}${assetId ? ` (${assetId})` : ""}`;
+    const label = slot;
 
     if (!image?.src) {
-      issueForMode(`${label} needs a real image source before live distribution.`);
+      issueForMode(`${label} needs a real image source before distribution.`);
       return;
     }
-
-    if (!assetId) {
-      issueForMode(`${slot} needs a stable assetId before live distribution.`);
+    if (!isUsableUrl(renderedUrl)) {
+      issueForMode(`${label} does not resolve to a valid image URL.`);
       return;
     }
-
-    renderedAssetIds.add(assetId);
-    const matches = rightsByAsset.get(assetId) || [];
-    if (matches.length !== 1) {
-      issueForMode(`${label} must match exactly one image-rights record; found ${matches.length}.`);
+    if (!renderedCredit) {
+      issueForMode(`${label} needs an image credit before distribution.`);
       return;
-    }
-
-    const record = matches[0];
-    const recordUrl = absoluteUrl(record.assetUrl, canonicalSiteBaseUrl);
-    if (record.slot !== slot) {
-      issueForMode(`${label} rights record is assigned to ${record.slot || "no slot"}, not ${slot}.`);
-    }
-    if (!recordUrl || recordUrl !== renderedUrl) {
-      issueForMode(`${label} rights approval does not match the rendered asset URL.`);
-    }
-    if (String(record.sourceId || "") !== sourceId) {
-      issueForMode(`${label} rights record does not match the rendered sourceId.`);
     }
 
     let external = true;
@@ -246,53 +195,19 @@ const validateImageRights = (issue, manifest, mode, errors, warnings) => {
       } else if (!isUsableUrl(sourceMatches[0].officialSourceUrl)
         || sourceMatches[0].officialSourceUrl !== officialSourceUrl) {
         issueForMode(`${label} official source does not match the rendered story source.`);
+      } else {
+        sourcedCount += 1;
       }
-    }
-
-    const decision = String(record.decision || "pending");
-    if (decision === "rejected") {
-      issueForMode(`${label} is explicitly rejected for newsletter use.`, { blockDryRun: true });
-      return;
-    }
-    if (decision !== "approved") {
-      issueForMode(`${label} image rights are pending.`);
-      return;
-    }
-
-    const blockers = [];
-    if (!liveRightsBases.has(record.basis)) blockers.push("approved rights basis");
-    liveRightsScopes.forEach((scope) => {
-      if (!Array.isArray(record.scopes) || !record.scopes.includes(scope)) blockers.push(scope);
-    });
-    if (!String(record.credit || "").trim()) blockers.push("credit");
-    if (String(record.credit || "").trim() !== renderedCredit) blockers.push("credit matching the rendered issue");
-    if (!isOpaqueEvidenceRef(record.evidenceRef)) blockers.push("opaque evidence reference");
-    if (!String(record.approvedBy || "").trim()) blockers.push("approver");
-    if (!record.approvedOn || Number.isNaN(Date.parse(record.approvedOn))) blockers.push("approval date");
-    if (!["confirmed", "not-required"].includes(record.thirdPartyClearance)) blockers.push("third-party clearance");
-    if (record.expiresOn && (Number.isNaN(Date.parse(record.expiresOn)) || Date.parse(record.expiresOn) < Date.now())) {
-      blockers.push("current expiry date");
-    }
-
-    if (blockers.length) {
-      issueForMode(`${label} approval is incomplete: ${blockers.join(", ")}.`);
-      return;
-    }
-
-    approvedCount += 1;
-  });
-
-  rights.forEach((record) => {
-    if (record?.assetId && !renderedAssetIds.has(record.assetId)) {
-      warnings.push(`Image-rights record ${record.assetId} is not used by the rendered issue.`);
+    } else {
+      sourcedCount += 1;
     }
   });
 
   return {
     mode,
     slotCount: slots.length,
-    approvedCount,
-    ready: rightsProblemCount === 0 && approvedCount === slots.length && slots.length > 0
+    sourcedCount,
+    ready: sourceProblemCount === 0 && sourcedCount === slots.length && slots.length > 0
   };
 };
 
@@ -392,9 +307,9 @@ const validateIssue = (issue, manifest, options = {}) => {
     errors.push("Strict validation failed: source manifest status must be research-approved.");
   }
 
-  const rights = validateImageRights(issue, manifest, mode, errors, warnings);
+  const images = validateImageSources(issue, manifest, mode, errors, warnings);
 
-  return { errors, warnings, rights };
+  return { errors, warnings, images };
 };
 
 const text = (copy, style = "") => `<p style="${style}">${escapeHtml(copy)}</p>`;
@@ -596,5 +511,6 @@ module.exports = {
   loadIssue,
   loadManifest,
   renderEmail,
+  rotatingImageForIssue,
   validateIssue
 };

@@ -308,38 +308,6 @@ const renderFooter = () => {
   `;
 };
 
-const renderValidationList = (title, validation) => {
-  const errors = validation?.errors || [];
-  const warnings = validation?.warnings || [];
-  const items = [
-    ...errors.map((message) => `<li><strong>Blocker:</strong> ${escapeHtml(message)}</li>`),
-    ...warnings.map((message) => `<li>${escapeHtml(message)}</li>`)
-  ];
-  return `
-    <div class="fieldset">
-      <h3>${escapeHtml(title)}</h3>
-      ${items.length ? `<ul class="validation-list">${items.join("")}</ul>` : "<p>No validation issues.</p>"}
-    </div>
-  `;
-};
-
-const renderRights = () => {
-  editorRoot.innerHTML = `
-    ${sectionTitle("Image rights", "Live sending fails closed until every rendered image has explicit, current approval. Store only opaque evidence references here; manifests are public.")}
-    ${renderValidationList("Live-send gate", currentValidationModes?.liveSend)}
-    ${renderValidationList("Dry-run gate", currentValidationModes?.dryRun)}
-    <div class="field-grid">
-      ${textarea({
-        name: "rightsManifest",
-        label: "Source and image-rights manifest JSON",
-        value: JSON.stringify(currentManifest || {}, null, 2),
-        json: true,
-        rows: 32
-      })}
-    </div>
-  `;
-};
-
 const renderJson = () => {
   editorRoot.innerHTML = `
     ${sectionTitle("Full JSON", "Advanced editor for the complete issue object. Save only after checking the JSON is valid.")}
@@ -359,7 +327,6 @@ const renderEditor = () => {
   if (activeSection === "art") renderArt();
   if (activeSection === "fashion") renderFashion();
   if (activeSection === "field") renderField();
-  if (activeSection === "rights") renderRights();
   if (activeSection === "footer") renderFooter();
   if (activeSection === "json") renderJson();
 };
@@ -482,10 +449,6 @@ const collectFooter = () => {
   };
 };
 
-const collectRights = () => {
-  currentManifest = parseJsonField("rightsManifest", currentManifest || {});
-};
-
 const collectJson = () => {
   currentIssue = parseJsonField("fullJson", currentIssue);
 };
@@ -499,7 +462,6 @@ const collectActiveSection = () => {
   if (activeSection === "art") collectArt();
   if (activeSection === "fashion") collectFashion();
   if (activeSection === "field") collectField();
-  if (activeSection === "rights") collectRights();
   if (activeSection === "footer") collectFooter();
   if (activeSection === "json") collectJson();
 };

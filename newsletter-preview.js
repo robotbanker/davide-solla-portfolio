@@ -6,7 +6,6 @@ const productionLink = document.querySelector("[data-production-link]");
 const dataLink = document.querySelector("[data-data-link]");
 const sourcesLink = document.querySelector("[data-sources-link]");
 const requestedIssue = new URLSearchParams(window.location.search).get("issue");
-const { imageApproval, issueReadyForScopes, renderedImageSlots, rotatingImageForIssue } = window.NewsletterRights;
 const adminToken = () => sessionStorage.getItem("davide-admin-session") || "";
 
 if (requestedIssue) {
@@ -21,6 +20,24 @@ const escapeHtml = (value = "") => String(value)
 
 const isUrl = (value) => /^https?:\/\//i.test(String(value || ""));
 
+const absoluteImageUrl = (src, baseUrl) => {
+  try {
+    const value = new URL(String(src || ""), `${String(baseUrl || "").replace(/\/+$/, "")}/`);
+    return ["http:", "https:"].includes(value.protocol) ? value.href : "";
+  } catch {
+    return "";
+  }
+};
+
+const rotatingImageForIssue = (issue, field) => {
+  if (field?.image?.src) return field.image;
+  const pool = field?.imageRotation?.pool || [];
+  if (!pool.length) return field?.image;
+  const year = Number(String(issue.issueId || "").match(/(\d{4})-\d{2}/)?.[1] || issue.year || 0);
+  const month = Number(String(issue.issueId || "").match(/\d{4}-(\d{2})/)?.[1] || 1);
+  return pool[Math.abs((year * 12) + month - 1) % pool.length];
+};
+
 const renderCta = (label, url) => {
   if (!isUrl(url)) {
     return `<span class="source-label">${escapeHtml(label || "Source required")}</span>`;
@@ -29,23 +46,12 @@ const renderCta = (label, url) => {
   return `<a class="cta" href="${escapeHtml(url)}">${escapeHtml(label || "View source")}</a>`;
 };
 
-const renderImage = (image, issue, manifest, slot, officialSourceUrl, credit) => {
-  const approval = imageApproval(issue, manifest, { slot, image, officialSourceUrl, credit });
-  if (approval.approved) {
-    return `
-      <img src="${escapeHtml(approval.assetUrl)}" alt="${escapeHtml(image.alt || "")}">
-      <p class="image-credit">${escapeHtml(approval.credit)}</p>
-    `;
-  }
-
+const renderImage = (image, issue, credit) => {
+  const src = absoluteImageUrl(image?.src, issue.site?.baseUrl);
+  if (!src) return "";
   return `
-    <div class="image-slot" role="img" aria-label="${escapeHtml(image?.alt || "Image placeholder")}">
-      <div>
-        <strong>Image withheld</strong>
-        <p>Publication rights must be approved before this image can be displayed.</p>
-      </div>
-    </div>
-    <p class="image-credit">Image usage pending</p>
+    <img src="${escapeHtml(src)}" alt="${escapeHtml(image.alt || "")}">
+    <p class="image-credit">${escapeHtml(credit || image.credit || image.label || "")}</p>
   `;
 };
 
@@ -80,9 +86,6 @@ const renderIssue = (issue, manifest) => {
         ${renderImage(
           art.featured.image,
           issue,
-          manifest,
-          "art.featured",
-          art.featured.sourceUrl,
           art.featured.image?.credit || art.featured.image?.label || art.featured.image?.recommendedSize || ""
         )}
         <p class="meta">${escapeHtml(art.featured.institution)} / ${escapeHtml(art.featured.location)} / ${escapeHtml(art.featured.dates)}</p>
@@ -99,7 +102,7 @@ const renderIssue = (issue, manifest) => {
       <p class="section-intro">${escapeHtml(fashion.intro)}</p>
       ${fashion.stories.map((story, index) => `
         <article class="story">
-          ${renderImage(story.image, issue, manifest, `fashion.stories.${index}`, story.sourceUrl, story.imageCredit)}
+          ${renderImage(story.image, issue, story.imageCredit)}
           <p class="meta">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
           <h3>${escapeHtml(story.title)}</h3>
           <p>${escapeHtml(story.commentary)}</p>
@@ -115,9 +118,6 @@ const renderIssue = (issue, manifest) => {
       ${renderImage(
         fieldImage,
         issue,
-        manifest,
-        "onTheField",
-        field.cta?.url || issue.site?.websiteUrl,
         fieldImage?.credit || fieldImage?.label || fieldImage?.recommendedSize || ""
       )}
       <article class="field-card">
@@ -163,15 +163,11 @@ const loadIssue = async () => {
 
     const { issue, manifest } = payload;
     renderIssue(issue, manifest);
-    const slots = renderedImageSlots(issue);
-    const pendingRights = slots.filter((slot) => !imageApproval(issue, manifest, slot, ["public-web", "live-newsletter"]).approved).length;
-    productionLink.hidden = !issueReadyForScopes(issue, manifest, ["public-web", "live-newsletter"]);
+    productionLink.hidden = issue.status !== "research-approved" || manifest?.status !== "research-approved";
     if (issue.status !== "research-approved") {
       statusMessage.textContent = `Draft status: ${issue.status}. Not for sending.`;
-    } else if (manifest.schemaVersion !== 2 || pendingRights > 0) {
-      statusMessage.textContent = `Research approved. Image rights are not cleared for live distribution (${pendingRights || "legacy manifest"}).`;
     } else {
-      statusMessage.textContent = "Research approved. Rights recorded; final server-side send validation is still required.";
+      statusMessage.textContent = "Research approved. Complete your manual editorial and image review before publishing or sending.";
     }
   } catch (error) {
     previewRoot.innerHTML = "";
