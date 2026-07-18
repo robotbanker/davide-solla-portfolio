@@ -47,16 +47,13 @@ For production, set these Vercel environment variables:
 - `RADAR_ENQUIRY_ENDPOINT` - private Radar intake URL for durable enquiry persistence
 - `WEBSITE_ENQUIRY_WEBHOOK_SECRET` - shared server-only HMAC secret; use the same value in Radar
 - `RADAR_ENQUIRY_TIMEOUT_MS` - optional Radar request timeout, defaults to six seconds
-- `RADAR_NEWSLETTER_METRICS_ENDPOINT` - private Radar intake URL for anonymous Field Notes lifecycle facts
-- `NEWSLETTER_METRICS_WEBHOOK_SECRET` - dedicated server-only HMAC secret shared with Radar; use at least 32 bytes
-- `RADAR_NEWSLETTER_METRICS_TIMEOUT_MS` - optional lifecycle-fact timeout, defaults to four seconds and is bounded between one and ten seconds
 - `RESEND_API_KEY` - required for idempotent browser-enquiry notifications; also the fallback when legacy SMTP is not configured
 - `NEWSLETTER_FROM_EMAIL` - sender for Field Notes confirmation emails, defaults to `CONTACT_FROM_EMAIL` or SMTP sender
 - `NEWSLETTER_REPLY_TO_EMAIL` - optional reply-to address for newsletter confirmations
 - `NEWSLETTER_TOKEN_SECRET` - stable secret used to sign double opt-in confirmation links
 - `NEWSLETTER_DOUBLE_OPT_IN` - defaults to `true`; set to `false` only if another consent confirmation process exists
 - `NEWSLETTER_RESEND_SEGMENT_ID` - Resend Segment ID used for enrollment and required for live Broadcast sends
-- `NEWSLETTER_RESEND_TOPIC_ID` - public, opt-out-by-default Resend Topic ID for Field Notes; the website explicitly opts in confirmed contacts
+- `NEWSLETTER_RESEND_TOPIC_ID` - public opt-in Resend Topic ID for Field Notes; required for preferences and live Broadcast sends
 - `CREATIVEHUB_API_KEY` - Creativehub API key used server-side to load print products
 - `CREATIVEHUB_API_BASE_URL` - optional Creativehub API base URL, defaults to `https://api.creativehub.io`
 - `CREATIVEHUB_ORDER_COUNTRY_CODE` - optional fulfilment country code for checkout, defaults to `GB`
@@ -81,7 +78,7 @@ Treat a published slug as permanent: changing it breaks previously shared links.
 
 ### Stable Field Notes issues
 
-Every research-approved newsletter issue that is separately marked **published** in the admin is rendered on the server at `/field-notes/YYYY-MM`. Each response contains the full issue before JavaScript runs, with its own canonical URL, social metadata, Article structured data, publication/update timestamps, and archive navigation. `/field-notes` is a temporary redirect to the newest explicitly published issue; the old `/field-notes.html` and query-string format are compatibility redirects only. Every configured image is visible with a linked source caption directly underneath, while source manifests remain available only through the authenticated admin workflow.
+Every research-approved newsletter issue that is separately marked **published** in the admin is rendered on the server at `/field-notes/YYYY-MM`. Each response contains the full issue before JavaScript runs, with its own canonical URL, social metadata, Article structured data, publication/update timestamps, and archive navigation. `/field-notes` is a temporary redirect to the newest explicitly published issue; the old `/field-notes.html` and query-string format are compatibility redirects only. Pending image-rights records remain absent from page content and issue metadata, and source manifests are available only through the authenticated admin workflow.
 
 Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
 
@@ -141,13 +138,11 @@ The Field Notes page posts newsletter signups to `/api/newsletter`. The form ask
 
 Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the backend sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link.
 
-Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public, opt-out-by-default Resend Topic named `Field Notes` and set `NEWSLETTER_RESEND_TOPIC_ID`; the website explicitly opts a contact into that Topic only after confirmed consent, so enrollment, provider-hosted preferences, and live sends share the same boundary.
+Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public opt-in Resend Topic named `Field Notes` and set `NEWSLETTER_RESEND_TOPIC_ID` so enrollment, provider-hosted preferences, and live sends share the same consent boundary.
 
-The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict research and source validation, builds the email HTML, and creates a Topic-scoped Resend Broadcast. Live delivery fails closed without the Resend API key, Segment and Topic; SMTP is never used for an audience send.
+The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict research and image-rights validation, builds the email HTML, and creates a Topic-scoped Resend Broadcast. Live delivery fails closed without the Resend API key, Segment and Topic; SMTP is never used for an audience send.
 
 `NEWSLETTER_TOKEN_SECRET` must be a dedicated secret of at least 32 bytes and must not reuse the admin session secret. Live delivery creates a private per-issue state record in `lib/newsletter-send-state/` before calling Resend. A repeated, concurrent, or ambiguous attempt remains locked for manual reconciliation rather than risking a duplicate audience send.
-
-Resend remains the subscriber system of record. When `RADAR_NEWSLETTER_METRICS_ENDPOINT` and the dedicated `NEWSLETTER_METRICS_WEBHOOK_SECRET` are configured, the website sends Radar only signed, anonymous facts for confirmed subscriptions, Topic opt-outs, global unsubscribes and accepted live Broadcasts. The website payload contains opaque HMAC identifiers and, for a Broadcast, its issue month and opaque campaign key; it contains no names, emails, contact or provider IDs, tokens, IPs, user agents, subjects or full links. Separately, Resend sends signed lifecycle events to Radar's private provider endpoint. Radar verifies those events, immediately discards recipient-level fields, and retains only anonymous confirmation, opt-out and delivery-health facts; it does not retain names, emails, contact or provider IDs, IPs, user agents, subjects, full links, opens or clicks. Metrics delivery is best-effort and cannot reverse a consent change or make an accepted Broadcast retryable.
 
 ## Privacy, Analytics and Search Console
 

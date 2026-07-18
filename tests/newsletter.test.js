@@ -26,7 +26,8 @@ const {
   validateIssue
 } = require("../newsletter/lib/render-email");
 const {
-  imageSource,
+  imageApproval,
+  issueReadyForScopes,
   renderedImageSlots
 } = require("../newsletter-rights");
 
@@ -71,28 +72,9 @@ const baseEnv = {
   PUBLIC_SITE_URL: "https://www.davidesolla.com"
 };
 
-const metricsEnv = {
-  RADAR_NEWSLETTER_METRICS_ENDPOINT: "https://radar.example.test/api/integrations/newsletter/events",
-  NEWSLETTER_METRICS_WEBHOOK_SECRET: "newsletter-metrics-integration-secret-32-bytes"
-};
-
 const withNewsletterEnv = async (operation) => {
   const previous = Object.fromEntries(Object.keys(baseEnv).map((key) => [key, process.env[key]]));
   Object.assign(process.env, baseEnv);
-  try {
-    return await operation();
-  } finally {
-    for (const [key, value] of Object.entries(previous)) {
-      if (value === undefined) delete process.env[key];
-      else process.env[key] = value;
-    }
-  }
-};
-
-const withNewsletterMetricsEnv = async (operation, overrides = {}) => {
-  const values = { ...metricsEnv, ...overrides };
-  const previous = Object.fromEntries(Object.keys(values).map((key) => [key, process.env[key]]));
-  Object.assign(process.env, values);
   try {
     return await operation();
   } finally {
@@ -569,39 +551,6 @@ test("tampering with an encrypted confirmation token fails before provider acces
   });
 });
 
-test("double-opt-in email carries only the supported Resend message-type tag", async () => {
-  await withNewsletterEnv(async () => {
-    const originalFetch = global.fetch;
-    let confirmationEmail;
-    global.fetch = async (url, options = {}) => {
-      assert.equal(String(url), "https://api.resend.com/emails");
-      confirmationEmail = JSON.parse(options.body);
-      return providerResponse(200, { id: "confirmation_email" });
-    };
-    const res = response();
-
-    try {
-      await handleNewsletterRequest(request({
-        body: {
-          email: "reader@example.test",
-          firstName: "Reader",
-          consent: true,
-          source: "test",
-          website: ""
-        }
-      }), res);
-    } finally {
-      global.fetch = originalFetch;
-    }
-
-    assert.equal(res.statusCode, 200);
-    assert.equal(json(res).requiresConfirmation, true);
-    assert.deepEqual(confirmationEmail.tags, [
-      { name: "message_type", value: "field_notes_confirmation" }
-    ]);
-  });
-});
-
 test("confirmation POST creates a Resend contact using the raw REST field names", async () => {
   await withNewsletterEnv(async () => {
     const originalFetch = global.fetch;
@@ -635,111 +584,6 @@ test("confirmation POST creates a Resend contact using the raw REST field names"
     assert.equal(Object.hasOwn(payload, "firstName"), false);
     assert.deepEqual(payload.topics, [{ id: "topic_field_notes", subscription: "opt_in" }]);
   });
-});
-
-test("a rejected Radar fact cannot undo a confirmed double opt-in", async () => {
-  await withNewsletterEnv(() => withNewsletterMetricsEnv(async () => {
-    const originalFetch = global.fetch;
-    const originalConsoleError = console.error;
-    const logs = [];
-    let metricsRequest;
-    console.error = (...args) => logs.push(args);
-    global.fetch = async (url, options = {}) => {
-      const target = String(url);
-      if (target === "https://api.resend.com/contacts") {
-        return providerResponse(200, { id: "contact_provider_private" });
-      }
-      if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
-        metricsRequest = { headers: options.headers, body: options.body };
-        return providerResponse(503, { error: "private Radar failure detail" });
-      }
-      throw new Error(`Unexpected request: ${target}`);
-    };
-    const token = createConfirmationToken({
-      email: "confirmed-reader@example.test",
-      firstName: "Reader",
-      source: "test",
-      consentAt: "2026-07-15T08:00:00.000Z"
-    }, { tokenSecret: baseEnv.NEWSLETTER_TOKEN_SECRET });
-    const res = response();
-
-    try {
-      await handleNewsletterRequest(request({
-        url: "/api/newsletter?action=confirm",
-        body: { token },
-        contentType: "application/x-www-form-urlencoded"
-      }), res);
-    } finally {
-      global.fetch = originalFetch;
-      console.error = originalConsoleError;
-    }
-
-    assert.equal(res.statusCode, 200);
-    assert.match(res.body, /You're subscribed/);
-    const fact = JSON.parse(metricsRequest.body);
-    assert.equal(fact.type, "subscription.confirmed");
-    assert.equal(metricsRequest.headers["idempotency-key"], fact.event_id);
-    assert.deepEqual(Object.keys(fact), [
-      "schema_version",
-      "event_type",
-      "event_id",
-      "type",
-      "occurred_at"
-    ]);
-    assert.equal(metricsRequest.body.includes("confirmed-reader@example.test"), false);
-    assert.equal(metricsRequest.body.includes("contact_provider_private"), false);
-    assert.equal(metricsRequest.body.includes(token), false);
-    assert.deepEqual(logs, [[
-      "Newsletter lifecycle metric failed",
-      { type: "subscription.confirmed", code: "request_rejected" }
-    ]]);
-  }));
-});
-
-test("single opt-in emits the same anonymous confirmation boundary when explicitly enabled", async () => {
-  await withNewsletterEnv(() => withNewsletterMetricsEnv(async () => {
-    const previousDoubleOptIn = process.env.NEWSLETTER_DOUBLE_OPT_IN;
-    const originalFetch = global.fetch;
-    const requests = [];
-    process.env.NEWSLETTER_DOUBLE_OPT_IN = "false";
-    global.fetch = async (url, options = {}) => {
-      const target = String(url);
-      requests.push({ target, options });
-      if (target === "https://api.resend.com/contacts") {
-        return providerResponse(200, { id: "single_opt_in_provider_id" });
-      }
-      if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
-        return providerResponse(201, { ok: true });
-      }
-      throw new Error(`Unexpected request: ${target}`);
-    };
-    const res = response();
-
-    try {
-      await handleNewsletterRequest(request({
-        body: {
-          email: "single-opt-in@example.test",
-          firstName: "Reader",
-          consent: true,
-          source: "test",
-          website: ""
-        }
-      }), res);
-    } finally {
-      global.fetch = originalFetch;
-      if (previousDoubleOptIn === undefined) delete process.env.NEWSLETTER_DOUBLE_OPT_IN;
-      else process.env.NEWSLETTER_DOUBLE_OPT_IN = previousDoubleOptIn;
-    }
-
-    assert.equal(res.statusCode, 200);
-    assert.equal(json(res).requiresConfirmation, false);
-    const contactPayload = JSON.parse(requests.find((item) => item.target.endsWith("/contacts")).options.body);
-    assert.deepEqual(contactPayload.topics, [{ id: "topic_field_notes", subscription: "opt_in" }]);
-    const metricsBody = requests.find((item) => item.target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT).options.body;
-    assert.equal(JSON.parse(metricsBody).type, "subscription.confirmed");
-    assert.equal(metricsBody.includes("single-opt-in@example.test"), false);
-    assert.equal(metricsBody.includes("single_opt_in_provider_id"), false);
-  }));
 });
 
 test("newsletter tokens require a dedicated secret and cannot authenticate as admin sessions", async () => {
@@ -944,9 +788,6 @@ test("known and unknown preference-link requests have indistinguishable public r
     assert.equal(unknownResponse.statusCode, 200);
     assert.deepEqual(json(knownResponse), json(unknownResponse));
     assert.equal(sentEmail.payload.to[0], "known@example.test");
-    assert.deepEqual(sentEmail.payload.tags, [
-      { name: "message_type", value: "field_notes_preferences" }
-    ]);
     assert.match(sentEmail.options.headers["idempotency-key"], /^newsletter-preferences\/[a-f0-9]{64}$/);
     const match = sentEmail.payload.text.match(/#token=([^\s]+)/);
     assert.ok(match);
@@ -1112,90 +953,6 @@ test("secure preferences can read, opt out of Field Notes, and globally unsubscr
   });
 });
 
-test("preference lifecycle facts cover only real opt-out transitions", async () => {
-  await withNewsletterEnv(() => withNewsletterMetricsEnv(async () => {
-    const originalFetch = global.fetch;
-    let globallyUnsubscribed = false;
-    let topicSubscription = "opt_in";
-    let mutationCalls = 0;
-    const facts = [];
-    global.fetch = async (url, options = {}) => {
-      const target = String(url);
-      if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
-        facts.push(JSON.parse(options.body));
-        return providerResponse(201, { ok: true });
-      }
-      if (options.method === "GET" && target.endsWith("/contacts/contact_transition")) {
-        return providerResponse(200, {
-          id: "contact_transition",
-          email: "transition@example.test",
-          unsubscribed: globallyUnsubscribed
-        });
-      }
-      if (options.method === "GET" && target.endsWith("/contacts/contact_transition/topics")) {
-        return providerResponse(200, {
-          data: [{ id: "topic_field_notes", subscription: topicSubscription }]
-        });
-      }
-      if (options.method === "PATCH" && target.endsWith("/contacts/contact_transition/topics")) {
-        mutationCalls += 1;
-        topicSubscription = JSON.parse(options.body).topics[0].subscription;
-        return providerResponse(200, { id: "updated_topic" });
-      }
-      if (options.method === "PATCH" && target.endsWith("/contacts/contact_transition")) {
-        mutationCalls += 1;
-        globallyUnsubscribed = JSON.parse(options.body).unsubscribed === true;
-        return providerResponse(200, { id: "updated_contact" });
-      }
-      throw new Error(`Unexpected provider call: ${options.method} ${target}`);
-    };
-    const token = createPreferencesToken("contact_transition", {
-      tokenSecret: baseEnv.NEWSLETTER_TOKEN_SECRET
-    });
-
-    const invoke = async (actionBody, action = "update_preferences") => {
-      const res = response();
-      await handleNewsletterRequest(request({
-        url: `/api/newsletter?action=${action}`,
-        body: { token, ...actionBody }
-      }), res);
-      assert.equal(res.statusCode, 200);
-      return res;
-    };
-
-    try {
-      await invoke({}, "read_preferences");
-      await invoke({ fieldNotes: true });
-      await invoke({ fieldNotes: false });
-      await invoke({ fieldNotes: false });
-      await invoke({ fieldNotes: true });
-      await invoke({ unsubscribeAll: true });
-      await invoke({ unsubscribeAll: true });
-    } finally {
-      global.fetch = originalFetch;
-    }
-
-    assert.equal(mutationCalls, 3);
-    assert.deepEqual(facts.map((fact) => fact.type), [
-      "subscription.topic_opted_out",
-      "subscription.global_unsubscribed"
-    ]);
-    for (const fact of facts) {
-      const body = JSON.stringify(fact);
-      assert.deepEqual(Object.keys(fact), [
-        "schema_version",
-        "event_type",
-        "event_id",
-        "type",
-        "occurred_at"
-      ]);
-      assert.equal(body.includes("contact_transition"), false);
-      assert.equal(body.includes("transition@example.test"), false);
-      assert.equal(body.includes(token), false);
-    }
-  }));
-});
-
 test("a missing configured Topic is unavailable and can never be inferred as opted in", async () => {
   await withNewsletterEnv(async () => {
     const originalFetch = global.fetch;
@@ -1264,41 +1021,87 @@ test("tampered preference tokens fail before any provider request", async () => 
   });
 });
 
-test("current issues pass live validation without an image-rights gate", () => {
+const approvedManifest = (issueId) => {
+  const manifest = structuredClone(loadManifest(issueId));
+  manifest.imageRights = manifest.imageRights.map((record) => {
+    const internal = record.assetId.startsWith("studio-");
+    return {
+      ...record,
+      decision: "approved",
+      basis: internal ? "studio-owned" : "written-permission",
+      scopes: ["public-web", "live-newsletter"],
+      evidenceRef: `rights-register:${record.assetId}`,
+      approvedBy: "Davide Solla",
+      approvedOn: "2026-07-14",
+      thirdPartyClearance: internal ? "not-required" : "confirmed"
+    };
+  });
+  return manifest;
+};
+
+test("current issues preview safely but live-send fails closed while rights are pending", () => {
   for (const issueId of ["2026-06", "2026-07"]) {
     const issue = loadIssue(issueId);
     const manifest = loadManifest(issueId);
     assert.equal(validateIssue(issue, manifest, { mode: "preview" }).errors.length, 0);
     assert.equal(validateIssue(issue, manifest, { mode: "dry-run" }).errors.length, 0);
-    assert.deepEqual(validateIssue(issue, manifest, { mode: "live-send" }).errors, []);
+    const live = validateIssue(issue, manifest, { mode: "live-send" });
+    assert.equal(live.errors.length, 5);
+    assert.ok(live.errors.every((message) => message.includes("rights are pending")));
   }
 });
 
-test("every configured image resolves with its source credit", () => {
+test("public issue imagery is fail-closed until every exact public-web approval exists", () => {
   const issue = loadIssue("2026-07");
+  const pendingManifest = loadManifest("2026-07");
   const slots = renderedImageSlots(issue);
-  assert.equal(slots.length, 5);
-  for (const slot of slots) {
-    const source = imageSource(slot);
-    assert.match(source.assetUrl, /^https?:\/\//);
-    assert.ok(source.credit);
-    assert.match(source.sourceUrl, /^https?:\/\//);
-  }
+
+  assert.equal(issueReadyForScopes(issue, pendingManifest, ["public-web"]), false);
+  assert.ok(slots.every((slot) => !imageApproval(issue, pendingManifest, slot, ["public-web"]).approved));
+
+  const approved = approvedManifest("2026-07");
+  assert.equal(issueReadyForScopes(issue, approved, ["public-web"]), true);
+
+  const redirected = structuredClone(issue);
+  redirected.site.baseUrl = "https://attacker.example";
+  assert.equal(issueReadyForScopes(redirected, approved, ["public-web"]), false);
+
+  const changedCredit = structuredClone(issue);
+  changedCredit.sections.fashion.stories[0].imageCredit = "Changed credit";
+  assert.equal(issueReadyForScopes(changedCredit, approved, ["public-web"]), false);
+
+  const unknownSchema = structuredClone(approved);
+  unknownSchema.schemaVersion = 3;
+  assert.equal(issueReadyForScopes(issue, unknownSchema, ["public-web"]), false);
 });
 
-test("legacy image-rights records do not affect newsletter validation", () => {
+test("live-send requires complete rights records tied to the exact rendered asset", () => {
   const issue = loadIssue("2026-07");
-  const manifest = structuredClone(loadManifest("2026-07"));
-  manifest.schemaVersion = 99;
-  manifest.imageRights = [{ decision: "rejected", expiresOn: "2020-01-01" }];
-  assert.deepEqual(validateIssue(issue, manifest, { mode: "preview" }).errors, []);
-  assert.deepEqual(validateIssue(issue, manifest, { mode: "dry-run" }).errors, []);
-  assert.deepEqual(validateIssue(issue, manifest, { mode: "live-send" }).errors, []);
-});
+  const manifest = approvedManifest("2026-07");
+  const approved = validateIssue(issue, manifest, { mode: "live-send" });
+  assert.deepEqual(approved.errors, []);
+  assert.equal(approved.rights.ready, true);
 
-test("live-send keeps research, canonical URL, source-manifest, and content validation", () => {
-  const issue = loadIssue("2026-07");
-  const manifest = loadManifest("2026-07");
+  const swapped = structuredClone(manifest);
+  swapped.imageRights[0].assetUrl = `${swapped.imageRights[0].assetUrl}?changed=1`;
+  assert.match(
+    validateIssue(issue, swapped, { mode: "live-send" }).errors.join("\n"),
+    /does not match the rendered asset URL/
+  );
+
+  const duplicate = structuredClone(manifest);
+  duplicate.imageRights.push(structuredClone(duplicate.imageRights[0]));
+  assert.match(
+    validateIssue(issue, duplicate, { mode: "live-send" }).errors.join("\n"),
+    /must match exactly one image-rights record; found 2/
+  );
+
+  const rejected = structuredClone(manifest);
+  rejected.imageRights[0].decision = "rejected";
+  assert.match(
+    validateIssue(issue, rejected, { mode: "dry-run" }).errors.join("\n"),
+    /explicitly rejected/
+  );
 
   const draftIssue = structuredClone(issue);
   draftIssue.status = "draft";
@@ -1319,11 +1122,25 @@ test("live-send keeps research, canonical URL, source-manifest, and content vali
     /site\.baseUrl must be https:\/\/www\.davidesolla\.com/
   );
 
-  const draftManifest = structuredClone(manifest);
-  draftManifest.status = "draft";
+  const missingCredit = structuredClone(issue);
+  missingCredit.sections.fashion.stories[0].imageCredit = "";
   assert.match(
-    validateIssue(issue, draftManifest, { mode: "live-send" }).errors.join("\n"),
-    /source manifest status must be research-approved/
+    validateIssue(missingCredit, manifest, { mode: "live-send" }).errors.join("\n"),
+    /credit matching the rendered issue/
+  );
+
+  const wrongManifest = structuredClone(manifest);
+  wrongManifest.issueId = "2026-06";
+  assert.match(
+    validateIssue(issue, wrongManifest, { mode: "live-send" }).errors.join("\n"),
+    /manifest issueId must match the rendered issue/
+  );
+
+  const futureSchema = structuredClone(manifest);
+  futureSchema.schemaVersion = 3;
+  assert.match(
+    validateIssue(issue, futureSchema, { mode: "live-send" }).errors.join("\n"),
+    /Exactly image-rights manifest schema v2/
   );
 
   const missingTitle = structuredClone(issue);
@@ -1339,6 +1156,25 @@ test("unknown newsletter validation modes fail closed", () => {
     () => validateIssue(loadIssue("2026-07"), loadManifest("2026-07"), { mode: "live-sned" }),
     /Unsupported newsletter validation mode/
   );
+});
+
+test("live-send stops at the rights gate before provider delivery", async () => {
+  await withNewsletterEnv(async () => {
+    const originalFetch = global.fetch;
+    let called = false;
+    global.fetch = async () => { called = true; return providerResponse(200, { id: "should_not_send" }); };
+    const issue = loadIssue("2026-07");
+    const manifest = loadManifest("2026-07");
+    try {
+      await assert.rejects(
+        sendNewsletterIssue("2026-07", "2026-07", newsletterRevision(issue, manifest)),
+        (error) => error.statusCode === 422 && /rights are pending/.test(error.message)
+      );
+    } finally {
+      global.fetch = originalFetch;
+    }
+    assert.equal(called, false);
+  });
 });
 
 test("live-send rejects a revision changed after review before provider delivery", async () => {
@@ -1439,74 +1275,6 @@ test("live broadcast delivery is durably send-once", async () => {
     assert.equal(state.status, "sent");
     assert.equal(state.delivery.broadcastId, "broadcast_once");
     assert.match(state.contentHash, /^[a-f0-9]{64}$/);
-  });
-});
-
-test("a Radar timeout cannot turn an accepted broadcast into a retry risk", async () => {
-  await withLocalSendState(async ({ fullDir }) => {
-    await withNewsletterMetricsEnv(async () => {
-      const originalFetch = global.fetch;
-      const originalConsoleError = console.error;
-      const logs = [];
-      let providerCalls = 0;
-      let metricsBody = "";
-      console.error = (...args) => logs.push(args);
-      global.fetch = async (url, options = {}) => {
-        const target = String(url);
-        if (target === "https://api.resend.com/broadcasts") {
-          providerCalls += 1;
-          return providerResponse(200, { id: "broadcast_provider_private_timeout" });
-        }
-        if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
-          metricsBody = options.body;
-          return new Promise((resolve, reject) => {
-            options.signal.addEventListener("abort", () => {
-              const error = new Error("private timeout detail");
-              error.name = "AbortError";
-              reject(error);
-            }, { once: true });
-          });
-        }
-        throw new Error(`Unexpected request: ${target}`);
-      };
-      const payload = {
-        segment_id: "segment_test",
-        topic_id: "topic_field_notes",
-        from: "Field Notes <field-notes@example.test>",
-        subject: "Accepted with metrics timeout",
-        html: "<p>Accepted</p>",
-        send: true
-      };
-
-      try {
-        assert.deepEqual(
-          await sendNewsletterBroadcastOnce("2099-03", payload, { apiKey: "re_test" }),
-          { id: "broadcast_provider_private_timeout" }
-        );
-        await assert.rejects(
-          sendNewsletterBroadcastOnce("2099-03", payload, { apiKey: "re_test" }),
-          (error) => error.statusCode === 409 && /already has a sent live-send attempt/.test(error.message)
-        );
-      } finally {
-        global.fetch = originalFetch;
-        console.error = originalConsoleError;
-      }
-
-      assert.equal(providerCalls, 1);
-      const state = JSON.parse(await fs.readFile(path.join(fullDir, "2099-03.json"), "utf8"));
-      assert.equal(state.status, "sent");
-      assert.equal(state.delivery.broadcastId, "broadcast_provider_private_timeout");
-      const fact = JSON.parse(metricsBody);
-      assert.equal(fact.type, "broadcast.accepted");
-      assert.equal(fact.issue_id, "2099-03");
-      assert.match(fact.campaign_key, /^nlc_[a-f0-9]{64}$/);
-      assert.equal(metricsBody.includes("broadcast_provider_private_timeout"), false);
-      assert.equal(metricsBody.includes("field-notes@example.test"), false);
-      assert.deepEqual(logs, [[
-        "Newsletter lifecycle metric failed",
-        { type: "broadcast.accepted", code: "request_timeout" }
-      ]]);
-    }, { RADAR_NEWSLETTER_METRICS_TIMEOUT_MS: "1000" });
   });
 });
 

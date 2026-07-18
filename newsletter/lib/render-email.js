@@ -71,6 +71,8 @@ const hasPlaceholder = (value) => {
 const wordCount = (value = "") => String(value).trim().split(/\s+/).filter(Boolean).length;
 
 const validationModes = new Set(["preview", "dry-run", "live-send"]);
+const liveRightsBases = new Set(["studio-owned", "written-permission", "licensed", "public-domain"]);
+const liveRightsScopes = ["public-web", "live-newsletter"];
 const canonicalSiteBaseUrl = "https://www.davidesolla.com";
 
 const validationMode = (options = {}) => {
@@ -95,6 +97,203 @@ const rotatingImageForIssue = (issue, field) => {
   const month = Number(String(issue.issueId || "").match(/\d{4}-(\d{2})/)?.[1] || 1);
   const index = Math.abs((year * 12) + month - 1) % pool.length;
   return pool[index];
+};
+
+const extractRenderedImageSlots = (issue) => {
+  const slots = [];
+  const feature = issue.sections?.art?.featured;
+
+  if (feature) {
+    slots.push({
+      slot: "art.featured",
+      image: feature.image,
+      officialSourceUrl: feature.sourceUrl
+    });
+  }
+
+  (issue.sections?.fashion?.stories || []).forEach((story, index) => {
+    slots.push({
+      slot: `fashion.stories.${index}`,
+      image: story.image,
+      officialSourceUrl: story.sourceUrl
+    });
+  });
+
+  const field = issue.sections?.onTheField;
+  if (field) {
+    slots.push({
+      slot: "onTheField",
+      image: rotatingImageForIssue(issue, field),
+      officialSourceUrl: field.cta?.url || issue.site?.websiteUrl
+    });
+  }
+
+  return slots;
+};
+
+const isOpaqueEvidenceRef = (value) => {
+  const reference = String(value || "").trim();
+  return reference.length >= 3
+    && reference.length <= 180
+    && !/^https?:\/\//i.test(reference)
+    && !/\s/.test(reference);
+};
+
+const renderedCreditForSlot = (issue, slot, image) => {
+  if (slot.startsWith("fashion.stories.")) {
+    const storyIndex = Number(slot.split(".").at(-1));
+    return String(issue.sections?.fashion?.stories?.[storyIndex]?.imageCredit || "").trim();
+  }
+
+  return String(image?.credit || image?.label || image?.recommendedSize || "").trim();
+};
+
+const validateImageRights = (issue, manifest, mode, errors, warnings) => {
+  const slots = extractRenderedImageSlots(issue);
+  const rights = Array.isArray(manifest?.imageRights) ? manifest.imageRights : [];
+  const sources = Array.isArray(manifest?.sources) ? manifest.sources : [];
+  const schemaReady = Number(manifest?.schemaVersion) === 2 && Array.isArray(manifest?.imageRights);
+  let rightsProblemCount = 0;
+  const issueForMode = (message, { blockDryRun = false } = {}) => {
+    rightsProblemCount += 1;
+    if (mode === "live-send" || (mode === "dry-run" && blockDryRun)) {
+      errors.push(message);
+    } else {
+      warnings.push(message);
+    }
+  };
+
+  if (!schemaReady) {
+    issueForMode("Exactly image-rights manifest schema v2 is required before a live newsletter send.");
+    return { mode, slotCount: slots.length, approvedCount: 0, ready: false };
+  }
+
+  if (String(manifest.issueId || "") !== String(issue.issueId || "")) {
+    issueForMode("Image-rights manifest issueId must match the rendered issue.");
+    return { mode, slotCount: slots.length, approvedCount: 0, ready: false };
+  }
+
+  const rightsByAsset = new Map();
+  rights.forEach((record) => {
+    const assetId = String(record?.assetId || "").trim();
+    if (!assetId) {
+      issueForMode("Every image-rights record needs an assetId.");
+      return;
+    }
+    const matches = rightsByAsset.get(assetId) || [];
+    matches.push(record);
+    rightsByAsset.set(assetId, matches);
+  });
+
+  const sourcesById = new Map();
+  sources.forEach((source) => {
+    const sourceId = String(source?.sourceId || "").trim();
+    if (!sourceId) return;
+    const matches = sourcesById.get(sourceId) || [];
+    matches.push(source);
+    sourcesById.set(sourceId, matches);
+  });
+
+  let approvedCount = 0;
+  const renderedAssetIds = new Set();
+
+  slots.forEach(({ slot, image, officialSourceUrl }) => {
+    const assetId = String(image?.assetId || "").trim();
+    const sourceId = String(image?.sourceId || "").trim();
+    const renderedUrl = absoluteUrl(image?.src, canonicalSiteBaseUrl);
+    const renderedCredit = renderedCreditForSlot(issue, slot, image);
+    const label = `${slot}${assetId ? ` (${assetId})` : ""}`;
+
+    if (!image?.src) {
+      issueForMode(`${label} needs a real image source before live distribution.`);
+      return;
+    }
+
+    if (!assetId) {
+      issueForMode(`${slot} needs a stable assetId before live distribution.`);
+      return;
+    }
+
+    renderedAssetIds.add(assetId);
+    const matches = rightsByAsset.get(assetId) || [];
+    if (matches.length !== 1) {
+      issueForMode(`${label} must match exactly one image-rights record; found ${matches.length}.`);
+      return;
+    }
+
+    const record = matches[0];
+    const recordUrl = absoluteUrl(record.assetUrl, canonicalSiteBaseUrl);
+    if (record.slot !== slot) {
+      issueForMode(`${label} rights record is assigned to ${record.slot || "no slot"}, not ${slot}.`);
+    }
+    if (!recordUrl || recordUrl !== renderedUrl) {
+      issueForMode(`${label} rights approval does not match the rendered asset URL.`);
+    }
+    if (String(record.sourceId || "") !== sourceId) {
+      issueForMode(`${label} rights record does not match the rendered sourceId.`);
+    }
+
+    let external = true;
+    try {
+      external = new URL(renderedUrl).origin !== new URL(canonicalSiteBaseUrl).origin;
+    } catch {
+      issueForMode(`${label} does not resolve to a valid asset URL.`);
+    }
+    if (external) {
+      const sourceMatches = sourcesById.get(sourceId) || [];
+      if (!sourceId || sourceMatches.length !== 1) {
+        issueForMode(`${label} must match exactly one official source record.`);
+      } else if (!isUsableUrl(sourceMatches[0].officialSourceUrl)
+        || sourceMatches[0].officialSourceUrl !== officialSourceUrl) {
+        issueForMode(`${label} official source does not match the rendered story source.`);
+      }
+    }
+
+    const decision = String(record.decision || "pending");
+    if (decision === "rejected") {
+      issueForMode(`${label} is explicitly rejected for newsletter use.`, { blockDryRun: true });
+      return;
+    }
+    if (decision !== "approved") {
+      issueForMode(`${label} image rights are pending.`);
+      return;
+    }
+
+    const blockers = [];
+    if (!liveRightsBases.has(record.basis)) blockers.push("approved rights basis");
+    liveRightsScopes.forEach((scope) => {
+      if (!Array.isArray(record.scopes) || !record.scopes.includes(scope)) blockers.push(scope);
+    });
+    if (!String(record.credit || "").trim()) blockers.push("credit");
+    if (String(record.credit || "").trim() !== renderedCredit) blockers.push("credit matching the rendered issue");
+    if (!isOpaqueEvidenceRef(record.evidenceRef)) blockers.push("opaque evidence reference");
+    if (!String(record.approvedBy || "").trim()) blockers.push("approver");
+    if (!record.approvedOn || Number.isNaN(Date.parse(record.approvedOn))) blockers.push("approval date");
+    if (!["confirmed", "not-required"].includes(record.thirdPartyClearance)) blockers.push("third-party clearance");
+    if (record.expiresOn && (Number.isNaN(Date.parse(record.expiresOn)) || Date.parse(record.expiresOn) < Date.now())) {
+      blockers.push("current expiry date");
+    }
+
+    if (blockers.length) {
+      issueForMode(`${label} approval is incomplete: ${blockers.join(", ")}.`);
+      return;
+    }
+
+    approvedCount += 1;
+  });
+
+  rights.forEach((record) => {
+    if (record?.assetId && !renderedAssetIds.has(record.assetId)) {
+      warnings.push(`Image-rights record ${record.assetId} is not used by the rendered issue.`);
+    }
+  });
+
+  return {
+    mode,
+    slotCount: slots.length,
+    approvedCount,
+    ready: rightsProblemCount === 0 && approvedCount === slots.length && slots.length > 0
+  };
 };
 
 const requireField = (errors, value, label) => {
@@ -193,7 +392,9 @@ const validateIssue = (issue, manifest, options = {}) => {
     errors.push("Strict validation failed: source manifest status must be research-approved.");
   }
 
-  return { errors, warnings };
+  const rights = validateImageRights(issue, manifest, mode, errors, warnings);
+
+  return { errors, warnings, rights };
 };
 
 const text = (copy, style = "") => `<p style="${style}">${escapeHtml(copy)}</p>`;
@@ -220,18 +421,14 @@ const renderCta = (label, href) => {
   `;
 };
 
-const renderImage = (image, issue, { height = 360, sourceUrl = "" } = {}) => {
+const renderImage = (image, issue, height = 360) => {
   const baseUrl = issue.site?.baseUrl || "";
-  const credit = image?.credit || image?.label || "Official source";
-  const source = isUsableUrl(sourceUrl)
-    ? `<a href="${escapeAttr(sourceUrl)}" style="color:${tokens.muted};text-decoration:underline;">${escapeHtml(credit)}</a>`
-    : escapeHtml(credit);
-  const sourceCredit = `<p style="color:${tokens.muted};font-family:${tokens.sans};font-size:10px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">Source: ${source}</p>`;
+  const credit = image?.credit || image?.label || image?.recommendedSize || "";
 
   if (image?.src) {
     return `
       <img src="${escapeAttr(absoluteUrl(image.src, baseUrl))}" width="620" alt="${escapeAttr(image.alt || "")}" style="border:0;display:block;height:auto;max-width:620px;width:100%;">
-      ${sourceCredit}
+      ${credit ? `<p style="color:${tokens.muted};font-family:${tokens.sans};font-size:10px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">${escapeHtml(credit)}</p>` : ""}
     `;
   }
 
@@ -244,7 +441,7 @@ const renderImage = (image, issue, { height = 360, sourceUrl = "" } = {}) => {
         </td>
       </tr>
     </table>
-    ${sourceCredit}
+    <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:10px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">${escapeHtml(credit || "Image usage pending")}</p>
   `;
 };
 
@@ -266,7 +463,7 @@ const renderArt = (issue) => {
     ${renderSectionHeading(art.label, art.intro)}
     <tr>
       <td style="padding:0 0 26px;">
-        ${renderImage(feature.image, issue, { height: 360, sourceUrl: feature.sourceUrl })}
+        ${renderImage(feature.image, issue, 360)}
       </td>
     </tr>
     <tr>
@@ -300,7 +497,7 @@ const renderFashion = (issue) => {
     ${(fashion.stories || []).map((story) => `
       <tr>
         <td style="padding:0 0 30px;">
-          ${renderImage({ ...story.image, credit: story.imageCredit }, issue, { height: 300, sourceUrl: story.sourceUrl })}
+          ${renderImage({ ...story.image, credit: story.imageCredit }, issue, 300)}
           <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:10px;font-weight:700;line-height:1.4;margin:17px 0 9px;text-transform:uppercase;">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
           <h3 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:29px;font-weight:400;line-height:1.1;margin:0 0 12px;">${escapeHtml(story.title)}</h3>
           ${text(story.commentary, `color:${tokens.softInk};font-family:${tokens.sans};font-size:15px;line-height:1.68;margin:0 0 14px;`)}
@@ -318,7 +515,7 @@ const renderOnTheField = (issue) => {
   return `
     ${renderSectionHeading(field.label, field.intro)}
     <tr>
-      <td style="padding:0 0 20px;">${renderImage(fieldImage, issue, { height: 340, sourceUrl: field.cta?.url || issue.site?.websiteUrl })}</td>
+      <td style="padding:0 0 20px;">${renderImage(fieldImage, issue, 340)}</td>
     </tr>
     <tr>
       <td style="border-top:1px solid ${tokens.warmLine};padding:22px 0 0;">
@@ -395,6 +592,7 @@ const renderEmail = (issue) => {
 };
 
 module.exports = {
+  extractRenderedImageSlots,
   loadIssue,
   loadManifest,
   renderEmail,

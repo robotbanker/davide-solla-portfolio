@@ -225,12 +225,6 @@ img {
   text-transform: uppercase;
 }
 
-.image-credit a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
 .feature h3,
 .story h3,
 .field-card h3 {
