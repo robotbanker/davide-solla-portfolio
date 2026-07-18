@@ -30,11 +30,12 @@
     editor.hidden = false;
     requestForm.hidden = true;
     const topicAvailable = Boolean(preferences.topicConfigured);
+    const globallyUnsubscribed = preferences.globallySubscribed === false;
     fieldNotesRow.hidden = !topicAvailable;
     fieldNotesCheckbox.checked = topicAvailable && Boolean(preferences.fieldNotes);
-    fieldNotesCheckbox.disabled = !preferences.globallySubscribed;
-    saveButton.hidden = !topicAvailable || !preferences.globallySubscribed;
-    resubscribeNote.hidden = preferences.globallySubscribed;
+    fieldNotesCheckbox.disabled = globallyUnsubscribed;
+    saveButton.hidden = !topicAvailable || globallyUnsubscribed;
+    resubscribeNote.hidden = !globallyUnsubscribed;
   };
 
   const readSecurePreferences = async () => {

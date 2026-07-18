@@ -486,6 +486,6 @@ test("the homepage cache keys include the current script and stylesheet revision
   const html = fs.readFileSync("index.html", "utf8");
   assert.match(html, /script\.js\?v=30/);
   assert.match(html, /styles\.css\?v=30/);
-  assert.match(html, /privacy-consent\.js\?v=1/);
+  assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
   assert.match(html, /google-tag\.js\?v=3/);
 });

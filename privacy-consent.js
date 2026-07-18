@@ -5,7 +5,7 @@
 
   const analyticsId = "G-1T625VVZL2";
   const storageKey = "davide-studios-privacy-v1";
-  const noticeVersion = "2026-07-14";
+  const noticeVersion = "2026-07-18";
   const analyticsEnabled = document.documentElement.dataset.analytics === "enabled";
   const validChoices = new Set(["granted", "denied"]);
   let analyticsStarted = false;
