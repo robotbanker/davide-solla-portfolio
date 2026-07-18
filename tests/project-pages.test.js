@@ -34,7 +34,7 @@ test("every already-public album has one unique, server-rendered project URL", (
     const html = renderProjectPage(siteData, slug);
     assert.match(html, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/work/${slug}">`));
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=1/);
+    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
     assert.match(html, /google-tag\.js\?v=3/);
     assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large">/);
     assert.match(html, /<script type="application\/ld\+json">/);

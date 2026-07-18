@@ -73,6 +73,9 @@ Recommended approach implemented:
 - `lib/newsletter.js` / `api/newsletter.js`  
   Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
 
+- `lib/newsletter-metrics.js`
+  Builds a strict privacy-minimised lifecycle fact, derives pseudonymous event and campaign keys with a dedicated identifier secret, signs the exact JSON body with a separate transport secret, and sends it to the private Radar endpoint after a confirmed subscription, opt-out request, or accepted Broadcast. It never includes a raw subscriber or provider identifier.
+
 - `lib/newsletter-send-state/[issue-id].json`
   Private, durable live-send lock and outcome record. A live attempt is acquired before Resend is called and remains fail-closed when delivery is sent, rejected, or ambiguous. Reconcile this record with Resend before any manual intervention; never delete it merely to retry.
 
@@ -88,13 +91,17 @@ Required production environment variables:
 - `NEWSLETTER_FROM_EMAIL`
 - `NEWSLETTER_RESEND_SEGMENT_ID`
 - `NEWSLETTER_RESEND_TOPIC_ID`
+- `RADAR_NEWSLETTER_METRICS_ENDPOINT`
+- `NEWSLETTER_METRICS_WEBHOOK_SECRET`
+- `NEWSLETTER_METRICS_ID_SECRET`
 
 Optional:
 
 - `NEWSLETTER_REPLY_TO_EMAIL`
 - `NEWSLETTER_DOUBLE_OPT_IN=false` only when another confirmed-consent process exists
+- `RADAR_NEWSLETTER_METRICS_TIMEOUT_MS`, from 1,000 to 10,000 milliseconds; defaults to 4,000
 
-`NEWSLETTER_RESEND_TOPIC_ID` is required for live audience sends. Create one public, opt-in Resend Topic named `Field Notes`, then store its ID in the production environment. Live sends fail closed without the Topic; SMTP is available only for the single-recipient dry run.
+`NEWSLETTER_RESEND_TOPIC_ID` is required for live audience sends. Create one public Resend Topic named `Field Notes` with its default subscription set to `opt_out`, then store its ID in the production environment. The website explicitly opts confirmed subscribers in. Live sends fail closed without the Topic; SMTP is available only for the single-recipient dry run.
 
 The public `/preferences` page contains no analytics. A subscriber can request a short-lived, signed link without the site revealing whether an address is on the list. The secure page can update the Field Notes Topic or globally unsubscribe the Resend Contact; it never silently restores a globally unsubscribed Contact. Resubscription returns to the consent and double-opt-in flow.
 
@@ -102,7 +109,11 @@ Email confirmation is two-step: opening the confirmation URL performs no write, 
 
 `NEWSLETTER_TOKEN_SECRET` is a dedicated newsletter-only secret of at least 32 bytes. It must never fall back to or reuse `ADMIN_SESSION_SECRET`.
 
-The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `davidesolla@outlook.it`; live sends fail closed unless Resend, the Segment and the public opt-in Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `davidesolla@outlook.it`; live sends fail closed unless Resend, the Segment and the public opt-out-by-default Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
+
+Resend is the subscriber system of record. Lifecycle measurement is deliberately separate: the website sends Radar only `subscription.confirmed`, topic/global opt-out requests, and `broadcast.accepted`. `NEWSLETTER_METRICS_WEBHOOK_SECRET` signs the exact request body and `NEWSLETTER_METRICS_ID_SECRET` independently derives pseudonymous event and campaign keys; both are required when the integration is enabled and both must match Radar. Generate them independently with a cryptographically random value such as `openssl rand -hex 32`, and do not reuse newsletter-token or admin secrets.
+
+Website facts contain an event type, actual event time and derived event key; Broadcast facts also carry `issue_id` and a derived campaign key. They contain no name, email address, raw Contact or provider identifier, token, IP address, user agent, subject or full link. Resend provider webhooks are verified against the exact raw body in Radar, where recipient fields are discarded immediately. Radar retains allowlisted pseudonymous event receipts for no more than 24 months and then deletes them. Opened and clicked events are not collected. Counts are observed event receipts rather than unique people or messages, and best-effort delivery means provider or Radar outages can leave gaps. A metrics failure never rolls back a consent change or makes an accepted Broadcast retryable.
 
 ## Adding a New Monthly Issue
 

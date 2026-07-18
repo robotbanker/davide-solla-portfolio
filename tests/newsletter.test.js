@@ -72,9 +72,31 @@ const baseEnv = {
   PUBLIC_SITE_URL: "https://www.davidesolla.com"
 };
 
+const metricsEnv = {
+  RADAR_NEWSLETTER_METRICS_ENDPOINT: "https://radar.example.test/api/integrations/newsletter/events",
+  NEWSLETTER_METRICS_WEBHOOK_SECRET: "newsletter-signing-integration-secret-32-bytes",
+  NEWSLETTER_METRICS_ID_SECRET: "newsletter-identifier-integration-secret-32-bytes"
+};
+
 const withNewsletterEnv = async (operation) => {
-  const previous = Object.fromEntries(Object.keys(baseEnv).map((key) => [key, process.env[key]]));
+  const keys = [...Object.keys(baseEnv), ...Object.keys(metricsEnv)];
+  const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+  for (const key of Object.keys(metricsEnv)) delete process.env[key];
   Object.assign(process.env, baseEnv);
+  try {
+    return await operation();
+  } finally {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+};
+
+const withNewsletterMetricsEnv = async (operation, overrides = {}) => {
+  const values = { ...metricsEnv, ...overrides };
+  const previous = Object.fromEntries(Object.keys(values).map((key) => [key, process.env[key]]));
+  Object.assign(process.env, values);
   try {
     return await operation();
   } finally {
@@ -951,6 +973,183 @@ test("secure preferences can read, opt out of Field Notes, and globally unsubscr
       global.fetch = originalFetch;
     }
   });
+});
+
+test("global unsubscribe patches without a status read and succeeds when Radar rejects the metric", async () => {
+  await withNewsletterEnv(() => withNewsletterMetricsEnv(async () => {
+    const originalFetch = global.fetch;
+    const originalConsoleError = console.error;
+    const logs = [];
+    let statusReads = 0;
+    let contactPatches = 0;
+    let metricsBody = "";
+    console.error = (...args) => logs.push(args);
+    global.fetch = async (url, options = {}) => {
+      const target = String(url);
+      if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
+        metricsBody = options.body;
+        return providerResponse(503, { error: "private Radar detail" });
+      }
+      if (options.method === "GET") {
+        statusReads += 1;
+        return providerResponse(503, { error: "status read unavailable" });
+      }
+      if (options.method === "PATCH" && target.endsWith("/contacts/contact_global_opt_out")) {
+        contactPatches += 1;
+        assert.deepEqual(JSON.parse(options.body), { unsubscribed: true });
+        return providerResponse(200, { id: "private-provider-contact-id" });
+      }
+      throw new Error(`Unexpected provider call: ${options.method} ${target}`);
+    };
+    const token = createPreferencesToken("contact_global_opt_out", {
+      tokenSecret: baseEnv.NEWSLETTER_TOKEN_SECRET
+    }, {
+      issuedAt: Date.now() - 60_000,
+      nonce: "stable-global-opt-out-token-nonce"
+    });
+    const res = response();
+
+    try {
+      await handleNewsletterRequest(request({
+        url: "/api/newsletter?action=update_preferences",
+        body: { token, unsubscribeAll: true }
+      }), res);
+    } finally {
+      global.fetch = originalFetch;
+      console.error = originalConsoleError;
+    }
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(json(res).preferences.globallySubscribed, false);
+    assert.equal(statusReads, 0);
+    assert.equal(contactPatches, 1);
+    const fact = JSON.parse(metricsBody);
+    assert.equal(fact.type, "subscription.global_unsubscribed");
+    assert.match(fact.event_id, /^nle_[a-f0-9]{64}$/);
+    assert.deepEqual(Object.keys(fact), [
+      "schema_version",
+      "event_type",
+      "event_id",
+      "type",
+      "occurred_at"
+    ]);
+    for (const forbidden of ["contact_global_opt_out", "private-provider-contact-id", token]) {
+      assert.equal(metricsBody.includes(forbidden), false);
+    }
+    assert.deepEqual(logs, [[
+      "Newsletter lifecycle metric failed",
+      { type: "subscription.global_unsubscribed", code: "request_rejected" }
+    ]]);
+  }));
+});
+
+test("topic opt-out patches without status reads and succeeds when Radar is unavailable", async () => {
+  await withNewsletterEnv(() => withNewsletterMetricsEnv(async () => {
+    const originalFetch = global.fetch;
+    const originalConsoleError = console.error;
+    const logs = [];
+    let statusReads = 0;
+    let topicPatches = 0;
+    let metricsBody = "";
+    console.error = (...args) => logs.push(args);
+    global.fetch = async (url, options = {}) => {
+      const target = String(url);
+      if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
+        metricsBody = options.body;
+        return providerResponse(503, { error: "private Radar detail" });
+      }
+      if (options.method === "GET") {
+        statusReads += 1;
+        return providerResponse(503, { error: "status read unavailable" });
+      }
+      if (options.method === "PATCH" && target.endsWith("/contacts/contact_topic_opt_out/topics")) {
+        topicPatches += 1;
+        assert.deepEqual(JSON.parse(options.body), {
+          topics: [{ id: "topic_field_notes", subscription: "opt_out" }]
+        });
+        return providerResponse(200, { id: "private-provider-topic-id" });
+      }
+      throw new Error(`Unexpected provider call: ${options.method} ${target}`);
+    };
+    const token = createPreferencesToken("contact_topic_opt_out", {
+      tokenSecret: baseEnv.NEWSLETTER_TOKEN_SECRET
+    }, {
+      issuedAt: Date.now() - 60_000,
+      nonce: "stable-topic-opt-out-token-nonce"
+    });
+    const res = response();
+
+    try {
+      await handleNewsletterRequest(request({
+        url: "/api/newsletter?action=update_preferences",
+        body: { token, fieldNotes: false }
+      }), res);
+    } finally {
+      global.fetch = originalFetch;
+      console.error = originalConsoleError;
+    }
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(json(res).preferences.fieldNotes, false);
+    assert.equal(json(res).preferences.globallySubscribed, null);
+    assert.equal(statusReads, 0);
+    assert.equal(topicPatches, 1);
+    const fact = JSON.parse(metricsBody);
+    assert.equal(fact.type, "subscription.topic_opted_out");
+    assert.match(fact.event_id, /^nle_[a-f0-9]{64}$/);
+    for (const forbidden of ["contact_topic_opt_out", "private-provider-topic-id", token]) {
+      assert.equal(metricsBody.includes(forbidden), false);
+    }
+    assert.deepEqual(logs, [[
+      "Newsletter lifecycle metric failed",
+      { type: "subscription.topic_opted_out", code: "request_rejected" }
+    ]]);
+  }));
+});
+
+test("retries from the same preference token derive one stable opt-out event ID without exposing the token", async () => {
+  await withNewsletterEnv(() => withNewsletterMetricsEnv(async () => {
+    const originalFetch = global.fetch;
+    const facts = [];
+    global.fetch = async (url, options = {}) => {
+      const target = String(url);
+      if (target === metricsEnv.RADAR_NEWSLETTER_METRICS_ENDPOINT) {
+        facts.push(JSON.parse(options.body));
+        return providerResponse(201, { ok: true });
+      }
+      if (options.method === "PATCH" && target.endsWith("/contacts/contact_stable_event/topics")) {
+        return providerResponse(200, { id: "private-provider-topic-id" });
+      }
+      throw new Error(`Unexpected provider call: ${options.method} ${target}`);
+    };
+    const token = createPreferencesToken("contact_stable_event", {
+      tokenSecret: baseEnv.NEWSLETTER_TOKEN_SECRET
+    }, {
+      issuedAt: Date.now() - 60_000,
+      nonce: "stable-retry-token-nonce"
+    });
+
+    try {
+      for (let index = 0; index < 2; index += 1) {
+        const res = response();
+        await handleNewsletterRequest(request({
+          url: "/api/newsletter?action=update_preferences",
+          body: { token, fieldNotes: false }
+        }), res);
+        assert.equal(res.statusCode, 200);
+      }
+    } finally {
+      global.fetch = originalFetch;
+    }
+
+    assert.equal(facts.length, 2);
+    assert.equal(facts[0].event_id, facts[1].event_id);
+    assert.match(facts[0].occurred_at, /^\d{4}-\d{2}-\d{2}T/);
+    assert.match(facts[1].occurred_at, /^\d{4}-\d{2}-\d{2}T/);
+    const serialized = JSON.stringify(facts);
+    assert.equal(serialized.includes("contact_stable_event"), false);
+    assert.equal(serialized.includes(token), false);
+  }));
 });
 
 test("a missing configured Topic is unavailable and can never be inferred as opted in", async () => {

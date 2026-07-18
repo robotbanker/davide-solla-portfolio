@@ -47,13 +47,17 @@ For production, set these Vercel environment variables:
 - `RADAR_ENQUIRY_ENDPOINT` - private Radar intake URL for durable enquiry persistence
 - `WEBSITE_ENQUIRY_WEBHOOK_SECRET` - shared server-only HMAC secret; use the same value in Radar
 - `RADAR_ENQUIRY_TIMEOUT_MS` - optional Radar request timeout, defaults to six seconds
+- `RADAR_NEWSLETTER_METRICS_ENDPOINT` - private Radar URL for privacy-minimised, pseudonymous newsletter lifecycle facts
+- `NEWSLETTER_METRICS_WEBHOOK_SECRET` - dedicated shared HMAC secret used only to sign requests to Radar; use the same value in Radar
+- `NEWSLETTER_METRICS_ID_SECRET` - separate shared HMAC secret used only to derive pseudonymous event and campaign keys; use the same value in Radar
+- `RADAR_NEWSLETTER_METRICS_TIMEOUT_MS` - optional lifecycle request timeout, defaults to four seconds
 - `RESEND_API_KEY` - required for idempotent browser-enquiry notifications; also the fallback when legacy SMTP is not configured
 - `NEWSLETTER_FROM_EMAIL` - sender for Field Notes confirmation emails, defaults to `CONTACT_FROM_EMAIL` or SMTP sender
 - `NEWSLETTER_REPLY_TO_EMAIL` - optional reply-to address for newsletter confirmations
 - `NEWSLETTER_TOKEN_SECRET` - stable secret used to sign double opt-in confirmation links
 - `NEWSLETTER_DOUBLE_OPT_IN` - defaults to `true`; set to `false` only if another consent confirmation process exists
 - `NEWSLETTER_RESEND_SEGMENT_ID` - Resend Segment ID used for enrollment and required for live Broadcast sends
-- `NEWSLETTER_RESEND_TOPIC_ID` - public opt-in Resend Topic ID for Field Notes; required for preferences and live Broadcast sends
+- `NEWSLETTER_RESEND_TOPIC_ID` - public, opt-out-by-default Resend Topic ID for Field Notes; the website explicitly opts in confirmed subscribers and the Topic is required for preferences and live Broadcast sends
 - `CREATIVEHUB_API_KEY` - Creativehub API key used server-side to load print products
 - `CREATIVEHUB_API_BASE_URL` - optional Creativehub API base URL, defaults to `https://api.creativehub.io`
 - `CREATIVEHUB_ORDER_COUNTRY_CODE` - optional fulfilment country code for checkout, defaults to `GB`
@@ -138,11 +142,15 @@ The Field Notes page posts newsletter signups to `/api/newsletter`. The form ask
 
 Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the backend sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link.
 
-Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public opt-in Resend Topic named `Field Notes` and set `NEWSLETTER_RESEND_TOPIC_ID` so enrollment, provider-hosted preferences, and live sends share the same consent boundary.
+Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public Resend Topic named `Field Notes` with its default subscription set to `opt_out`, then set `NEWSLETTER_RESEND_TOPIC_ID`. The website explicitly opts in only confirmed subscribers, so enrollment, provider-hosted preferences, and live sends share the same consent boundary without silently enrolling existing Contacts.
 
 The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict research and image-rights validation, builds the email HTML, and creates a Topic-scoped Resend Broadcast. Live delivery fails closed without the Resend API key, Segment and Topic; SMTP is never used for an audience send.
 
 `NEWSLETTER_TOKEN_SECRET` must be a dedicated secret of at least 32 bytes and must not reuse the admin session secret. Live delivery creates a private per-issue state record in `lib/newsletter-send-state/` before calling Resend. A repeated, concurrent, or ambiguous attempt remains locked for manual reconciliation rather than risking a duplicate audience send.
+
+Resend remains the subscriber system of record. When the endpoint and both dedicated metrics secrets are configured, the website sends Radar only signed, privacy-minimised facts for confirmed subscriptions, opt-out requests and accepted Broadcasts. The fact contains an event type, actual event time and HMAC-derived pseudonymous event key; an accepted Broadcast also contains its issue month and a separately derived campaign key. It contains no name, email address, raw Contact or provider identifier, token, IP address, user agent, subject or full link. Generate the signing and identifier secrets independently, for example with `openssl rand -hex 32`; do not reuse either secret for newsletter tokens or admin sessions.
+
+Resend can also send signed provider delivery events directly to Radar. Radar verifies the exact raw request in memory, discards recipient-level fields, and retains only allowlisted pseudonymous event receipts for no more than 24 months before deletion. Open and click events are deliberately excluded. Measurement is best effort: receipts count observed events rather than unique people or messages, retries can be deduplicated, and provider or Radar outages can leave gaps. A metrics failure never reverses a subscriber choice or makes an accepted Broadcast safe to retry.
 
 ## Privacy, Analytics and Search Console
 
