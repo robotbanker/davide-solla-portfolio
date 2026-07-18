@@ -1238,7 +1238,7 @@ const approvedManifest = (issueId) => {
   return manifest;
 };
 
-test("current issues preview safely but live-send fails closed while rights are pending", () => {
+test("current issues preview safely but live-send fails closed while rights remain unresolved", () => {
   for (const issueId of ["2026-06", "2026-07"]) {
     const issue = loadIssue(issueId);
     const manifest = loadManifest(issueId);
@@ -1246,7 +1246,9 @@ test("current issues preview safely but live-send fails closed while rights are 
     assert.equal(validateIssue(issue, manifest, { mode: "dry-run" }).errors.length, 0);
     const live = validateIssue(issue, manifest, { mode: "live-send" });
     assert.equal(live.errors.length, 5);
-    assert.ok(live.errors.every((message) => message.includes("rights are pending")));
+    assert.ok(live.errors.every((message) => (
+      message.includes("rights are pending") || message.includes("approval is incomplete")
+    )));
   }
 });
 

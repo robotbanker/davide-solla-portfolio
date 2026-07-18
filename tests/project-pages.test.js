@@ -178,17 +178,27 @@ test("the image sitemap names every stable project and its owned images", () => 
     newsletterIssues
   });
   for (const album of listProjectPages(siteData)) {
-    assert.match(sitemap, new RegExp(`<loc>https://www\\.davidesolla\\.com/work/${projectSlug(album)}</loc>`));
+    assert.match(
+      sitemap,
+      new RegExp(`<loc>https://www\\.davidesolla\\.com/work/${projectSlug(album)}</loc>\\n    <lastmod>2026-07-14</lastmod>`)
+    );
   }
   for (const issue of newsletterIssues) {
     assert.match(sitemap, new RegExp(`<loc>https://www\\.davidesolla\\.com/field-notes/${issue.issueId}</loc>`));
   }
   assert.doesNotMatch(sitemap, /field-notes\.html|field-notes\?issue=/);
   assert.match(sitemap, /<image:loc>https:\/\/www\.davidesolla\.com\/assets\/images\/cosmic-01\.jpg<\/image:loc>/);
-  assert.equal(
-    (sitemap.match(/<lastmod>2026-07-14<\/lastmod>/g) || []).length,
-    listProjectPages(siteData).length + newsletterIssues.length + 1
+  assert.match(
+    sitemap,
+    /<loc>https:\/\/www\.davidesolla\.com\/<\/loc>\n    <lastmod>2026-07-14<\/lastmod>/
   );
+  for (const issue of newsletterIssues) {
+    const issueLastmod = new Date(issue.updatedAt || issue.publishedAt).toISOString().slice(0, 10);
+    assert.match(
+      sitemap,
+      new RegExp(`<loc>https://www\\.davidesolla\\.com/field-notes/${issue.issueId}</loc>\\n    <lastmod>${issueLastmod}</lastmod>`)
+    );
+  }
 });
 
 test("homepage portfolio tiles expose stable links without removing the modal experience", () => {
