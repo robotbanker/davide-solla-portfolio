@@ -68,7 +68,7 @@ test("August public Field Notes renders all portraits first and uses Kyazi socia
     entries: index.issues,
     indexEntry
   });
-  const firstPortrait = html.indexOf("kyazi-full-portrait.jpg");
+  const firstPortrait = html.indexOf("kyazi-lead-portrait.jpg");
   const secondPortrait = html.indexOf("kyazi-with-guitar.jpg");
   const thirdPortrait = html.indexOf("kyazi-guitar-detail.jpg");
   const art = html.indexOf("02 — Art");
@@ -78,10 +78,10 @@ test("August public Field Notes renders all portraits first and uses Kyazi socia
   assert.ok(firstPortrait > 0);
   assert.ok(firstPortrait < secondPortrait && secondPortrait < thirdPortrait);
   assert.ok(thirdPortrait < art && art < fashion);
-  assert.match(html, /kyazi-full-portrait\.jpg[^>]+loading="eager"[^>]+fetchpriority="high"/);
+  assert.match(html, /kyazi-lead-portrait\.jpg[^>]+loading="eager"[^>]+fetchpriority="high"/);
   assert.equal(
     socialImageForIssue(issue).url,
-    "https://www.davidesolla.com/assets/images/newsletter/2026-08/kyazi-full-portrait.jpg"
+    "https://www.davidesolla.com/assets/images/newsletter/2026-08/kyazi-lead-portrait.jpg"
   );
 });
 
