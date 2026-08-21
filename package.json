@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test tests/*.test.js",
-    "newsletter:build": "node newsletter/build-email.js 2026-07 --strict",
-    "newsletter:validate": "node newsletter/build-email.js 2026-07 --strict",
+    "newsletter:build": "node newsletter/build-email.js 2026-08 --strict",
+    "newsletter:validate": "node newsletter/build-email.js 2026-08 --strict",
     "sitemap:build": "node scripts/build-sitemap.js",
     "ios:sync": "cap sync ios",
     "ios:open": "cap open ios",

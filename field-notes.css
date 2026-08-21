@@ -219,7 +219,10 @@
 
 .field-feature,
 .field-story,
-.field-note {
+.field-note,
+.field-editorial,
+.field-gallery,
+.field-gallery-cta {
   max-width: var(--field-measure);
 }
 
@@ -267,7 +270,8 @@
 
 .field-feature h3,
 .field-story h3,
-.field-note h3 {
+.field-note h3,
+.field-editorial h3 {
   font-family: var(--display);
   font-size: clamp(30px, 3.8vw, 44px);
   font-weight: 400;
@@ -278,7 +282,9 @@
 
 .field-feature p,
 .field-story p,
-.field-note p {
+.field-note p,
+.field-editorial p,
+.field-gallery-copy p {
   color: var(--soft-ink);
   font-size: 17px;
   line-height: 1.76;
@@ -314,6 +320,35 @@
 .field-note {
   border-top: 1px solid var(--warm-line);
   padding-top: 28px;
+}
+
+.field-editorial {
+  margin-bottom: 32px;
+}
+
+.field-gallery .field-image {
+  margin-bottom: 0;
+}
+
+.field-gallery .field-image:not(:first-child) {
+  margin-top: 18px;
+}
+
+.field-gallery-copy {
+  border-top: 1px solid var(--line);
+  padding: 24px 0 30px;
+}
+
+.field-gallery-copy p {
+  margin: 0;
+}
+
+.field-gallery-copy-closing {
+  border-top-color: var(--warm-line);
+}
+
+.field-gallery-cta {
+  padding-top: 8px;
 }
 
 @media (max-width: 980px) {

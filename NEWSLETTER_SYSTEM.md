@@ -136,12 +136,16 @@ Website facts contain an event type, actual event time and derived event key; Br
    - matching source manifest entries
    - `newsletter/data/issues/index.json`, including `status`, `publishedAt`, and `updatedAt`, so approved issues receive stable public URLs and deterministic sitemap dates
 
-3. Keep section order exactly:
+3. Keep the default section order:
 
    - `01 — Art`
    - `02 — Fashion`
    - `03 — On the Field`
    - Footer
+
+   A commissioned lead editorial may set an issue-level `sectionOrder` containing
+   `onTheField`, `art` and `fashion` exactly once. Update the visible number labels
+   to match the requested order; older issues continue to use the default.
 
 4. Keep placeholder flags until research is complete:
 
@@ -189,6 +193,7 @@ On the Field:
 - Keep this as a single studio-led module, not a multi-item diary.
 - Do not add `PL Photostudio diary` or `In conversation` subsections.
 - Use the issue’s `imageRotation.pool` to rotate one image from the existing Davide Studios website archive each month.
+- When a month is explicitly commissioned as a studio portrait series, the same single module may use a 2-6 image `gallery` with a title and interleaved editorial paragraphs. This is an image-led exception, not a new diary or interview subsection.
 - Keep the note concise and studio-facing. Do not invent diary entries, collaborations or partnership news.
 
 ## Image Requirements

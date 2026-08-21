@@ -227,10 +227,41 @@ img {
 
 .feature h3,
 .story h3,
-.field-card h3 {
+.field-card h3,
+.field-editorial h3 {
   color: var(--ink);
   font-size: clamp(27px, 5vw, 38px);
   margin-bottom: 14px;
+}
+
+.field-editorial {
+  padding-bottom: 26px;
+}
+
+.field-editorial p,
+.field-copy p {
+  margin-bottom: 0;
+}
+
+.field-frame {
+  margin: 0;
+  padding: 0 0 14px;
+}
+
+.field-frame + .field-copy {
+  border-top: 1px solid var(--line);
+}
+
+.field-copy {
+  padding: 20px 0 28px;
+}
+
+.field-copy-closing {
+  border-top-color: var(--warm-line);
+}
+
+.field-cta {
+  padding-top: 2px;
 }
 
 .meta {

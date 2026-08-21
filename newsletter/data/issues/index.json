@@ -19,6 +19,16 @@
       "publicationStatus": "published",
       "publishedAt": "2026-06-28T10:40:35.000Z",
       "updatedAt": "2026-07-15T05:23:22.614Z"
+    },
+    {
+      "issueId": "2026-08",
+      "month": "August",
+      "year": 2026,
+      "title": "Davide Studios: Monthly Newsletter — August Issue",
+      "status": "research-approved",
+      "publicationStatus": "published",
+      "publishedAt": "2026-08-21T10:44:55+02:00",
+      "updatedAt": "2026-08-21T10:44:55+02:00"
     }
   ]
 }

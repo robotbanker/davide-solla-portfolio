@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-08",
+  "status": "research-approved",
+  "allowPlaceholders": false,
+  "publication": {
+    "status": "published"
+  },
+  "month": "August",
+  "year": "2026",
+  "title": "Davide Studios: Monthly Newsletter — August Issue",
+  "preheader": "An August edit of London exhibitions, cinematic fashion campaigns and a three-frame portrait study with Kyazi Lugangira.",
+  "site": {
+    "brandName": "Davide Studios",
+    "baseUrl": "https://www.davidesolla.com",
+    "previewBaseUrl": ".",
+    "websiteUrl": "https://www.davidesolla.com/",
+    "instagramUrl": "https://www.instagram.com/davide.studios/",
+    "location": "London",
+    "unsubscribeUrl": "https://www.davidesolla.com/preferences",
+    "preferencesUrl": "https://www.davidesolla.com/preferences"
+  },
+  "research": {
+    "dateChecked": "2026-08-21",
+    "validationStatus": "research-approved",
+    "notes": "All listed stories were checked against official gallery, museum, artist or brand sources on 21 August 2026. The Kyazi portraits are original Davide Studios images supplied for this issue. Brand and institutional page imagery remains subject to the sender’s final usage review before live distribution."
+  },
+  "openingNote": "August moves between public histories and private presence: Japanese photography rewritten across generations, East London read through Tom Hunter’s archive, new work at Serpentine and Hayward, and fashion campaigns shaped by the street, architectural shadow and cinematic tension. In the studio, Kyazi Lugangira brings the month back to portraiture.",
+  "sectionOrder": [
+    "onTheField",
+    "art",
+    "fashion"
+  ],
+  "sections": {
+    "art": {
+      "label": "02 — Art",
+      "intro": "A London-facing edit for photography, portraiture, contemporary art and image culture.",
+      "featured": {
+        "title": "Japanese Women Photographers: From 1950s to Now",
+        "institution": "The Photographers’ Gallery",
+        "dates": "24 June - 27 September 2026",
+        "location": "16-18 Ramillies Street, London W1F 7LW",
+        "description": "Bringing together 27 artists and more than 200 photographs, videos, installations and rare photobooks, this landmark exhibition rewrites the history of Japanese photography through women’s perspectives. From post-war pioneers to experimental contemporary voices, it moves through identity, pop culture, fashion and everyday life, placing overlooked practitioners beside internationally recognised figures.",
+        "sourceUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+        "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+        "ctaLabel": "Book tickets",
+        "whyItMatters": "Its breadth makes authorship visible: shifts in gaze, intimacy, sequence, colour and social record show how a photographic history changes when the frame includes those long excluded from it.",
+        "image": {
+          "type": "official-page-image",
+          "sourceId": "art-japanese-women-photographers",
+          "src": "https://thephotographersgallery.org.uk/sites/default/files/2026-06/Toyoko-Tokiwa-Hospital.jpg",
+          "label": "Official exhibition image",
+          "alt": "Toyoko Tokiwa’s 1956 photograph Waiting Room of Byobugaura Prefectural Hospital",
+          "credit": "TOKIWA Toyoko, Waiting Room of Byobugaura Prefectural Hospital, 1956. Courtesy Museum of Yokohama Urban History and Aperture.",
+          "recommendedSize": "1200 x 760 px"
+        }
+      },
+      "items": [
+        {
+          "title": "Tom Hunter Selects",
+          "institution": "V&A East Museum",
+          "dates": "21 August - 18 October 2026",
+          "location": "107 Carpenters Road, Stratford, London E20 2AR",
+          "description": "Co-curated by Tom Hunter and the V&A East Youth Collective, this free display places East London at the centre of an archive-driven visual essay. Hunter’s photography appears beside Dorothea Lange, Paul Trevor, punk graphics, protest ephemera and historic maps, tracing how communities record change, resilience and the right to shape their own image.",
+          "sourceUrl": "https://www.vam.ac.uk/event/61KvA3gqEnb/tom-hunter-selects-2026",
+          "bookingUrl": "https://www.vam.ac.uk/event/61KvA3gqEnb/tom-hunter-selects-2026",
+          "ctaLabel": "View display",
+          "whyItMatters": "It treats the museum collection as living material, connecting documentary photography, neighbourhood memory and youth-led interpretation across one changing part of London."
+        },
+        {
+          "title": "Cecily Brown: Picture Making",
+          "institution": "Serpentine South",
+          "dates": "27 March - 6 September 2026",
+          "location": "Kensington Gardens, London W2 3XA",
+          "description": "New paintings made for Serpentine sit beside works dating to 2001, recent monotypes and drawings. Brown returns to the park as subject and memory, moving between vigorous brushwork, amorous figures, woodland scenes and the darker undertow of cautionary tales. The exhibition is her first major UK institutional presentation of paintings since 2005.",
+          "sourceUrl": "https://www.serpentinegalleries.org/whats-on/cecily-brown-picture-making/",
+          "bookingUrl": "https://www.serpentinegalleries.org/whats-on/cecily-brown-picture-making/",
+          "ctaLabel": "Book free entry",
+          "whyItMatters": "Brown’s layered surfaces reward photographers interested in movement, visual ambiguity and the point where a figure appears, dissolves and reappears inside an image."
+        },
+        {
+          "title": "Musquiqui Chihying: A Life of Navigation",
+          "institution": "HENI Project Space, Hayward Gallery",
+          "dates": "25 August - 18 October 2026",
+          "location": "Southbank Centre, Belvedere Road, London SE1 8XX",
+          "description": "Four works bring Musquiqui Chihying’s humorous and quietly critical practice into focus. Early pieces on high-pressure urban life sit with two new video installations examining artificial intelligence, gaming, automation and the colonial attitudes embedded in technological progress. Photography, sculpture, moving image and performance keep reality and the surreal in productive tension.",
+          "sourceUrl": "https://www.southbankcentre.co.uk/whats-on/musquiqui-chihying-a-life-of-navigation/",
+          "bookingUrl": "https://www.southbankcentre.co.uk/whats-on/musquiqui-chihying-a-life-of-navigation/",
+          "ctaLabel": "View exhibition",
+          "whyItMatters": "The work uses humour as a visual instrument, letting staging, objects and screen language expose the human assumptions hidden inside apparently neutral technologies."
+        }
+      ]
+    },
+    "fashion": {
+      "label": "03 — Fashion",
+      "intro": "A compact visual edit of campaigns and creative direction selected for image-making rather than product noise.",
+      "stories": [
+        {
+          "brand": "Bottega Veneta",
+          "title": "Fall 2026: Venice, Unfiltered",
+          "releaseTiming": "Current as of 21 August 2026",
+          "commentary": "Bottega Veneta’s Fall 2026 campaign, photographed by Chris Rhodes under Louise Trotter’s direction, moves through Venice without turning the city into a postcard. Vintage wallpaper, terrazzo, private interiors and metropolitan fragments hold craft against ordinary surroundings. The interplay of digital and analogue, day and night, lets each frame feel observed rather than over-staged.",
+          "sourceUrl": "https://www.bottegaveneta.com/en-gb/fall-2026-campaign.html",
+          "imageCredit": "Official Bottega Veneta Fall 2026 collection image from the house’s media stream.",
+          "image": {
+            "type": "official-page-image",
+            "sourceId": "fashion-bottega-fall-2026",
+            "src": "https://mediastorage.livestory.io/bottegaveneta/posts/orig/6a0c1019a456d0960a5c9062.jpg?auto=webp&format=pjpg&quality=90&width=1000",
+            "label": "Official Bottega Veneta collection image",
+            "alt": "Model in a pale oversized Bottega Veneta coat and black trousers against a white studio wall",
+            "recommendedSize": "1200 x 900 px"
+          }
+        },
+        {
+          "brand": "Balmain",
+          "title": "L’heure du loup",
+          "releaseTiming": "Published 21 July 2026",
+          "commentary": "Antonin Tron’s first Balmain campaign turns the twilight phrase entre chien et loup into a neo-noir sequence photographed by Suffo Moncloa. A John Lautner house becomes an architectural set for bold shoulders, leather and draped silhouettes. The frames feel like suspended film stills, charged by controlled shadow, modernist geometry and exchanges that remain deliberately unresolved.",
+          "sourceUrl": "https://balmain.com/en-gb/pages/fall-winter-2026-campaign",
+          "imageCredit": "Official Balmain Fall/Winter 2026 campaign image. Photographer: Suffo Moncloa.",
+          "image": {
+            "type": "official-page-image",
+            "sourceId": "fashion-balmain-lheure-du-loup",
+            "src": "https://balmain.com/cdn/shop/files/Balmain_FallWinter_2026_9_NoLogo__1080x1350_7ed54d40-5e23-4908-b7dc-fb53d99de377.jpg?crop=center&height=1867&v=1784627176&width=1400",
+            "label": "Official Balmain campaign image",
+            "alt": "Balmain Fall/Winter 2026 campaign scene inside a modernist house at twilight",
+            "recommendedSize": "1200 x 900 px"
+          }
+        },
+        {
+          "brand": "Dior",
+          "title": "Winter 2026-2027 Campaign",
+          "releaseTiming": "Current as of 21 August 2026",
+          "commentary": "David Sims reduces Dior’s winter campaign to a few precise cues — violin, delphiniums, polka dots and check — then arranges them across a dreamlike French countryside. Landscape, prop and garment share the frame without becoming decorative shorthand. The stillness feels painterly, but the odd juxtapositions keep each image gently unsettled rather than nostalgic.",
+          "sourceUrl": "https://www.dior.com/en_gb/fashion/news-savoir-faire/folder-news-and-events/winter-2026-2027-campaign",
+          "imageCredit": "Official Dior Winter 2026-2027 campaign image. Photograph: David Sims.",
+          "image": {
+            "type": "official-page-image",
+            "sourceId": "fashion-dior-winter-2026",
+            "src": "https://diorama.dam-broadcast.com/cdn-cgi/image/width%3D3000%2Cformat%3Dauto%2Cquality%3D80/pm_11872_1511_1511409-695xk2esgj-whr.jpg",
+            "label": "Official Dior campaign image",
+            "alt": "Dior Winter 2026-2027 campaign photographed in a dreamlike French countryside",
+            "recommendedSize": "1200 x 900 px"
+          }
+        }
+      ]
+    },
+    "onTheField": {
+      "label": "01 — On the Field",
+      "intro": "Field Notes from the studio: one portrait sitting, sequenced from stillness to sound.",
+      "title": "Kyazi: Presence, Practice",
+      "paragraphs": [
+        "This month I sat with Kyazi Lugangira, the London-based Tanzanian singer-songwriter and guitarist who leads Kihaya Blues. His music moves between soul, blues, funk, jazz, Latin and hip-hop, yet the portrait series begins in near silence.",
+        "Against black, Kyazi first appears full-length and composed: dark tailoring, brim lowered, hands at rest. The frame gives him room, allowing posture and gaze to carry the portrait before the sequence begins to close in.",
+        "A line of light catches the hat, glasses and beard as the guitar enters the image, shifting the mood from formal study to something warmer and more tactile. In the final frame, face gives way to hands, timber and strings; the instrument becomes a second portrait.",
+        "Together, the photographs move from presence to practice. They do not try to illustrate a genre or perform a biography. Instead, they hold on to the quiet details around a musician: the stance before a note, the touch of an instrument, and the concentration that remains when everything else falls into shadow."
+      ],
+      "note": "This month I sat with Kyazi Lugangira, the London-based Tanzanian singer-songwriter and guitarist who leads Kihaya Blues. His music moves between soul, blues, funk, jazz, Latin and hip-hop, yet the portrait series begins in near silence. Against black, Kyazi first appears full-length and composed: dark tailoring, brim lowered, hands at rest. The frame gives him room, allowing posture and gaze to carry the portrait before the sequence begins to close in. A line of light catches the hat, glasses and beard as the guitar enters the image, shifting the mood from formal study to something warmer and more tactile. In the final frame, face gives way to hands, timber and strings; the instrument becomes a second portrait. Together, the photographs move from presence to practice. They do not try to illustrate a genre or perform a biography. Instead, they hold on to the quiet details around a musician: the stance before a note, the touch of an instrument, and the concentration that remains when everything else falls into shadow.",
+      "cta": {
+        "label": "Listen to Kyazi / Kihaya Blues",
+        "url": "https://soundcloud.com/kyazi-kihaya-blues"
+      },
+      "image": {
+        "type": "internal",
+        "src": "assets/images/newsletter/2026-08/kyazi-full-portrait.jpg",
+        "alt": "Full-length portrait of Kyazi Lugangira in a black suit and hat against a dark background",
+        "credit": "01 — Presence. Kyazi Lugangira, London, 2026. Photograph: Davide Studios.",
+        "recommendedSize": "1365 x 2048 px"
+      },
+      "gallery": [
+        {
+          "type": "internal",
+          "src": "assets/images/newsletter/2026-08/kyazi-full-portrait.jpg",
+          "alt": "Full-length portrait of Kyazi Lugangira in a black suit and hat against a dark background",
+          "credit": "01 — Presence. Kyazi Lugangira, London, 2026. Photograph: Davide Studios.",
+          "recommendedSize": "1365 x 2048 px"
+        },
+        {
+          "type": "internal",
+          "src": "assets/images/newsletter/2026-08/kyazi-with-guitar.jpg",
+          "alt": "Close portrait of Kyazi Lugangira in hat and sunglasses holding an electric guitar in rim light",
+          "credit": "02 — Instrument. Kyazi Lugangira, London, 2026. Photograph: Davide Studios.",
+          "recommendedSize": "1365 x 2048 px"
+        },
+        {
+          "type": "internal",
+          "src": "assets/images/newsletter/2026-08/kyazi-guitar-detail.jpg",
+          "alt": "Kyazi Lugangira’s hands resting around the headstock of a Fender Telecaster guitar",
+          "credit": "03 — Practice. Kyazi Lugangira, London, 2026. Photograph: Davide Studios.",
+          "recommendedSize": "1365 x 2048 px"
+        }
+      ]
+    }
+  },
+  "footer": {
+    "wordmark": "Davide Studios",
+    "copyright": "© 2026 Davide Studios. All rights reserved."
+  }
+}

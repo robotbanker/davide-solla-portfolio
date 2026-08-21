@@ -70,6 +70,17 @@ const hasPlaceholder = (value) => {
 
 const wordCount = (value = "") => String(value).trim().split(/\s+/).filter(Boolean).length;
 
+const defaultSectionOrder = Object.freeze(["art", "fashion", "onTheField"]);
+
+const isValidSectionOrder = (value) => Array.isArray(value)
+  && value.length === defaultSectionOrder.length
+  && new Set(value).size === defaultSectionOrder.length
+  && defaultSectionOrder.every((section) => value.includes(section));
+
+const sectionOrderForIssue = (issue) => (
+  isValidSectionOrder(issue?.sectionOrder) ? issue.sectionOrder : defaultSectionOrder
+);
+
 const validationModes = new Set(["preview", "dry-run", "live-send"]);
 const canonicalSiteBaseUrl = "https://www.davidesolla.com";
 
@@ -97,36 +108,38 @@ const rotatingImageForIssue = (issue, field) => {
   return pool[index];
 };
 
-const extractRenderedImageSlots = (issue) => {
-  const slots = [];
-  const feature = issue.sections?.art?.featured;
+const fieldImagesForIssue = (issue, field) => {
+  if (Array.isArray(field?.gallery) && field.gallery.length) {
+    return field.gallery;
+  }
 
-  if (feature) {
-    slots.push({
+  const legacyImage = rotatingImageForIssue(issue, field);
+  return legacyImage ? [legacyImage] : [];
+};
+
+const extractRenderedImageSlots = (issue) => {
+  const feature = issue.sections?.art?.featured;
+  const field = issue.sections?.onTheField;
+  const fieldImages = fieldImagesForIssue(issue, field);
+  const slotsBySection = {
+    art: feature ? [{
       slot: "art.featured",
       image: feature.image,
       officialSourceUrl: feature.sourceUrl
-    });
-  }
-
-  (issue.sections?.fashion?.stories || []).forEach((story, index) => {
-    slots.push({
+    }] : [],
+    fashion: (issue.sections?.fashion?.stories || []).map((story, index) => ({
       slot: `fashion.stories.${index}`,
       image: story.image,
       officialSourceUrl: story.sourceUrl
-    });
-  });
-
-  const field = issue.sections?.onTheField;
-  if (field) {
-    slots.push({
-      slot: "onTheField",
-      image: rotatingImageForIssue(issue, field),
+    })),
+    onTheField: fieldImages.map((image, index) => ({
+      slot: fieldImages.length > 1 ? `onTheField.gallery.${index}` : "onTheField",
+      image,
       officialSourceUrl: field.cta?.url || issue.site?.websiteUrl
-    });
-  }
+    }))
+  };
 
-  return slots;
+  return sectionOrderForIssue(issue).flatMap((section) => slotsBySection[section]);
 };
 
 const renderedCreditForSlot = (issue, slot, image) => {
@@ -238,6 +251,20 @@ const validateIssue = (issue, manifest, options = {}) => {
   const fashion = issue.sections?.fashion;
   const onTheField = issue.sections?.onTheField;
 
+  if (issue.sectionOrder !== undefined && !isValidSectionOrder(issue.sectionOrder)) {
+    errors.push("sectionOrder must contain art, fashion and onTheField exactly once.");
+  }
+
+  if (isValidSectionOrder(issue.sectionOrder)) {
+    sectionOrderForIssue(issue).forEach((sectionKey, index) => {
+      const expectedPrefix = `0${index + 1}`;
+      const label = String(issue.sections?.[sectionKey]?.label || "").trim();
+      if (!label.startsWith(expectedPrefix)) {
+        errors.push(`${sectionKey}.label must begin ${expectedPrefix} for the requested sectionOrder.`);
+      }
+    });
+  }
+
   requireField(errors, art?.featured?.title, "art.featured.title");
   if (!Array.isArray(art?.items) || art.items.length < 2 || art.items.length > 4) {
     errors.push("art.items must contain 2-4 supporting events, creating 3-5 art listings including the feature.");
@@ -283,8 +310,38 @@ const validateIssue = (issue, manifest, options = {}) => {
   });
 
   requireField(errors, onTheField?.label, "onTheField.label");
-  if (!onTheField?.image?.src && !onTheField?.imageRotation?.pool?.length) {
-    errors.push("onTheField needs either image.src or imageRotation.pool.");
+  const fieldGallery = onTheField?.gallery;
+  const hasFieldGallery = Array.isArray(fieldGallery) && fieldGallery.length > 0;
+
+  if (fieldGallery !== undefined && !Array.isArray(fieldGallery)) {
+    errors.push("onTheField.gallery must be an array when provided.");
+  }
+
+  if (hasFieldGallery) {
+    if (fieldGallery.length < 2 || fieldGallery.length > 6) {
+      errors.push("onTheField.gallery must contain 2-6 images.");
+    }
+
+    requireField(errors, onTheField.title, "onTheField.title");
+    const fieldParagraphs = Array.isArray(onTheField.paragraphs)
+      ? onTheField.paragraphs.filter((paragraph) => String(paragraph || "").trim())
+      : [];
+
+    if (onTheField.paragraphs !== undefined && !Array.isArray(onTheField.paragraphs)) {
+      errors.push("onTheField.paragraphs must be an array when provided.");
+    }
+
+    if (!fieldParagraphs.length && !String(onTheField.note || "").trim()) {
+      errors.push("onTheField gallery needs editorial paragraphs or a note.");
+    }
+
+    fieldGallery.forEach((image, index) => {
+      requireField(errors, image?.src, `onTheField.gallery.${index}.src`);
+      requireField(errors, image?.alt, `onTheField.gallery.${index}.alt`);
+      requireField(errors, image?.credit, `onTheField.gallery.${index}.credit`);
+    });
+  } else if (!onTheField?.image?.src && !onTheField?.imageRotation?.pool?.length) {
+    errors.push("onTheField needs gallery images, image.src or imageRotation.pool.");
   }
 
   if (strict && hasPlaceholder(issue)) {
@@ -425,7 +482,46 @@ const renderFashion = (issue) => {
 
 const renderOnTheField = (issue) => {
   const field = issue.sections.onTheField;
-  const fieldImage = rotatingImageForIssue(issue, field);
+  const fieldImages = fieldImagesForIssue(issue, field);
+  const hasGallery = Array.isArray(field.gallery) && field.gallery.length > 0;
+
+  if (hasGallery) {
+    const paragraphs = (Array.isArray(field.paragraphs) ? field.paragraphs : [field.note])
+      .filter((paragraph) => String(paragraph || "").trim());
+    const openingParagraph = paragraphs[0] || "";
+
+    return `
+      ${renderSectionHeading(field.label, field.intro)}
+      <tr>
+        <td style="padding:0 0 26px;">
+          <h3 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:34px;font-weight:400;line-height:1.08;margin:0 0 15px;">${escapeHtml(field.title)}</h3>
+          ${openingParagraph ? text(openingParagraph, `color:${tokens.softInk};font-family:${tokens.sans};font-size:15px;line-height:1.72;margin:0;`) : ""}
+        </td>
+      </tr>
+      ${fieldImages.map((image, index) => {
+        const followingParagraph = paragraphs[index + 1];
+        return `
+          <tr>
+            <td style="padding:${index ? "14px" : "0"} 0 20px;">${renderImage(image, issue, 520)}</td>
+          </tr>
+          ${followingParagraph ? `
+            <tr>
+              <td style="border-top:1px solid ${index === fieldImages.length - 1 ? tokens.warmLine : tokens.line};padding:20px 0 24px;">
+                ${text(followingParagraph, `color:${tokens.softInk};font-family:${tokens.sans};font-size:14px;line-height:1.72;margin:0;`)}
+              </td>
+            </tr>
+          ` : ""}
+        `;
+      }).join("")}
+      ${field.cta ? `
+        <tr>
+          <td style="padding:2px 0 0;">${renderCta(field.cta.label || "Visit Davide Studios", field.cta.url)}</td>
+        </tr>
+      ` : ""}
+    `;
+  }
+
+  const fieldImage = fieldImages[0];
 
   return `
     ${renderSectionHeading(field.label, field.intro)}
@@ -439,6 +535,18 @@ const renderOnTheField = (issue) => {
       </td>
     </tr>
   `;
+};
+
+const renderIssueSections = (issue) => {
+  const renderers = {
+    art: renderArt,
+    fashion: renderFashion,
+    onTheField: renderOnTheField
+  };
+
+  return sectionOrderForIssue(issue)
+    .map((sectionKey) => `${sectionRule()}${renderers[sectionKey](issue)}`)
+    .join("");
 };
 
 const renderEmail = (issue) => {
@@ -474,12 +582,7 @@ const renderEmail = (issue) => {
                       ${text(issue.openingNote, `color:${tokens.softInk};font-family:${tokens.sans};font-size:16px;line-height:1.75;margin:0;`)}
                     </td>
                   </tr>
-                  ${sectionRule()}
-                  ${renderArt(issue)}
-                  ${sectionRule()}
-                  ${renderFashion(issue)}
-                  ${sectionRule()}
-                  ${renderOnTheField(issue)}
+                  ${renderIssueSections(issue)}
                   <tr>
                     <td style="padding:46px 0 0;">
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top:1px solid ${tokens.warmLine};">
@@ -508,9 +611,11 @@ const renderEmail = (issue) => {
 
 module.exports = {
   extractRenderedImageSlots,
+  fieldImagesForIssue,
   loadIssue,
   loadManifest,
   renderEmail,
   rotatingImageForIssue,
+  sectionOrderForIssue,
   validateIssue
 };
