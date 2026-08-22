@@ -6,7 +6,7 @@
     <title>Davide Solla Studio Manager</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    <link rel="stylesheet" href="admin.css?v=9">
+    <link rel="stylesheet" href="admin.css?v=11">
   </head>
   <body class="admin-body">
     <main class="admin-root">
@@ -41,6 +41,7 @@
           <button id="admin-tab-design" class="admin-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="admin-panel-design" data-admin-tab="design">Overall design</button>
           <button id="admin-tab-gallery" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-gallery" data-admin-tab="gallery">Gallery builder</button>
           <button id="admin-tab-clients" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-clients" data-admin-tab="clients">Client management</button>
+          <button id="admin-tab-feedback" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-feedback" data-admin-tab="feedback">Client feedback</button>
           <button id="admin-tab-newsletter" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="admin-panel-newsletter" data-admin-tab="newsletter">Newsletter</button>
         </nav>
 
@@ -97,6 +98,18 @@
           </div>
         </section>
 
+        <section id="admin-panel-feedback" class="admin-panel" role="tabpanel" aria-labelledby="admin-tab-feedback" data-admin-panel="feedback" hidden>
+          <div class="panel-head">
+            <div>
+              <p class="admin-kicker">Client review</p>
+              <h2>Ratings and comments</h2>
+            </div>
+          </div>
+          <div class="settings-block">
+            <div class="feedback-editor" data-client-feedback-editor></div>
+          </div>
+        </section>
+
         <section id="admin-panel-newsletter" class="admin-panel" role="tabpanel" aria-labelledby="admin-tab-newsletter" data-admin-panel="newsletter" hidden>
           <div class="panel-head">
             <div>
@@ -144,7 +157,7 @@
       </section>
     </main>
 
-    <script src="admin.js?v=10"></script>
+    <script src="admin.js?v=11"></script>
     <script src="newsletter-admin.js?v=3"></script>
   </body>
 </html>

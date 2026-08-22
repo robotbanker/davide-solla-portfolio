@@ -8,9 +8,10 @@
     <meta name="robots" content="noindex, nofollow">
     <link rel="preload" as="image" href="assets/images/responsive/studio-05-1200.avif" imagesrcset="assets/images/responsive/studio-05-720.avif 720w, assets/images/responsive/studio-05-1200.avif 1200w" imagesizes="100vw" type="image/avif" fetchpriority="high">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    <link rel="stylesheet" href="styles.css?v=30">
+    <link rel="stylesheet" href="styles.css?v=33">
   </head>
-  <body>
+  <body class="client-page">
+    <a class="skip-link" href="#top">Skip to client area</a>
     <header class="site-header" data-header>
       <a class="brand" href="index.html#top" aria-label="Davide Solla home">
         <span>Davide Solla</span>
@@ -26,13 +27,13 @@
           </svg>
         </a>
 
-        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-toggle>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-controls="site-navigation" aria-expanded="false" data-menu-toggle>
           <span></span>
           <span></span>
         </button>
       </div>
 
-      <nav class="site-nav" data-nav aria-label="Main navigation">
+      <nav class="site-nav" id="site-navigation" data-nav aria-label="Main navigation">
         <a href="index.html#work">Work</a>
         <a href="index.html#services">Services</a>
         <a href="index.html#fine-art">Fine Art</a>
@@ -50,13 +51,13 @@
       </nav>
     </header>
 
-    <main id="top" class="client-area-main">
+    <main id="top" class="client-area-main" tabindex="-1">
       <section class="client-login-section" data-client-login-panel aria-labelledby="client-login-heading">
         <div class="client-login-media">
           <picture>
             <source type="image/avif" srcset="assets/images/responsive/studio-05-720.avif 720w, assets/images/responsive/studio-05-1200.avif 1200w" sizes="100vw">
             <source type="image/webp" srcset="assets/images/responsive/studio-05-720.webp 720w, assets/images/responsive/studio-05-1200.webp 1200w" sizes="100vw">
-            <img src="assets/images/studio-05.jpg" srcset="assets/images/responsive/studio-05-720.jpg 720w, assets/images/responsive/studio-05-1200.jpg 1200w, assets/images/studio-05.jpg 1365w" sizes="100vw" alt="Studio fashion portrait by Davide Solla" width="1365" height="2048" fetchpriority="high" decoding="async">
+            <img src="assets/images/studio-05.jpg" srcset="assets/images/responsive/studio-05-720.jpg 720w, assets/images/responsive/studio-05-1200.jpg 1200w, assets/images/studio-05.jpg 1365w" sizes="100vw" alt="Studio fashion portrait by Davide Solla" width="1365" height="2048" fetchpriority="high" decoding="async" draggable="false">
           </picture>
         </div>
         <div class="client-login-shade"></div>
@@ -65,7 +66,7 @@
           <div class="client-login-copy">
             <p class="eyebrow">Private gallery</p>
             <h1 id="client-login-heading">Client Area</h1>
-            <p class="hero-copy">Sign in to view your private gallery and open the Lightroom download link assigned to your session.</p>
+            <p class="hero-copy">Sign in to view and review your private gallery.</p>
           </div>
 
           <form class="client-login-form" data-client-login-form>
@@ -87,11 +88,11 @@
         <div class="client-gallery-intro">
           <div>
             <p class="section-kicker">Client gallery</p>
-            <h2 id="client-gallery-heading" data-client-gallery-title>Your private gallery</h2>
-            <p data-client-gallery-copy>Use the embedded gallery below, or open Lightroom directly for downloads.</p>
+            <h2 id="client-gallery-heading" data-client-gallery-title tabindex="-1">Your private gallery</h2>
+            <p data-client-gallery-copy>Open any image to review it, add a rating, and leave a comment.</p>
           </div>
           <div class="client-gallery-actions">
-            <a class="submit-button client-download" href="#" target="_blank" rel="noreferrer" data-client-download>Download gallery</a>
+            <a class="submit-button client-download" href="#" target="_blank" rel="noreferrer" data-client-download hidden>Download gallery</a>
             <button class="gallery-back" type="button" data-client-logout>Log out</button>
           </div>
         </div>
@@ -109,6 +110,64 @@
       <a href="/privacy">Privacy</a>
     </footer>
 
-    <script src="client-area.js?v=3"></script>
+    <div class="client-lightbox" data-client-lightbox role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="client-lightbox-title" hidden inert>
+      <div class="client-lightbox-toolbar">
+        <p class="client-lightbox-counter" data-client-lightbox-counter aria-live="polite">Image 1 of 1</p>
+        <button class="client-lightbox-close" type="button" data-client-lightbox-close>Close image</button>
+      </div>
+
+      <div class="client-lightbox-layout">
+        <section class="client-lightbox-media" data-client-lightbox-media aria-label="Expanded gallery image">
+          <button class="client-lightbox-nav client-lightbox-nav-prev" type="button" aria-label="Previous image" data-client-lightbox-prev>
+            <span aria-hidden="true">&#8592;</span>
+          </button>
+
+          <figure class="client-lightbox-figure">
+            <img src="" alt="" draggable="false" data-client-lightbox-image>
+            <figcaption id="client-lightbox-title" data-client-lightbox-title>Gallery image</figcaption>
+          </figure>
+
+          <button class="client-lightbox-nav client-lightbox-nav-next" type="button" aria-label="Next image" data-client-lightbox-next>
+            <span aria-hidden="true">&#8594;</span>
+          </button>
+        </section>
+
+        <section class="client-feedback-panel" aria-labelledby="client-feedback-heading">
+          <div class="client-feedback-heading">
+            <p class="section-kicker">Your review</p>
+            <h2 id="client-feedback-heading">Rate this image</h2>
+            <p>Your rating and comment are private and can be updated at any time.</p>
+          </div>
+
+          <form class="client-feedback-form" data-client-feedback-form>
+            <fieldset>
+              <legend>Star rating</legend>
+              <div class="client-rating-stars" role="group" aria-label="Choose a rating from one to five stars">
+                <button type="button" aria-label="1 star" aria-pressed="false" data-client-rating="1"><span aria-hidden="true">&#9733;</span></button>
+                <button type="button" aria-label="2 stars" aria-pressed="false" data-client-rating="2"><span aria-hidden="true">&#9733;</span></button>
+                <button type="button" aria-label="3 stars" aria-pressed="false" data-client-rating="3"><span aria-hidden="true">&#9733;</span></button>
+                <button type="button" aria-label="4 stars" aria-pressed="false" data-client-rating="4"><span aria-hidden="true">&#9733;</span></button>
+                <button type="button" aria-label="5 stars" aria-pressed="false" data-client-rating="5"><span aria-hidden="true">&#9733;</span></button>
+              </div>
+              <p class="client-rating-value" data-client-rating-value>No rating selected</p>
+            </fieldset>
+
+            <label class="client-comment-field" for="client-image-comment">
+              <span>Comment</span>
+              <textarea id="client-image-comment" name="comment" rows="6" maxlength="1500" placeholder="Share retouching notes, favourites, or anything you would like me to know." data-client-feedback-comment></textarea>
+            </label>
+            <p class="client-comment-count" data-client-comment-count>0 / 1500</p>
+
+            <div class="client-feedback-actions">
+              <button class="submit-button" type="submit" data-client-feedback-save>Save feedback</button>
+              <button class="text-button" type="button" data-client-feedback-clear hidden>Clear feedback</button>
+            </div>
+            <p class="form-status client-feedback-status" data-client-feedback-status aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script src="client-area.js?v=5"></script>
   </body>
 </html>

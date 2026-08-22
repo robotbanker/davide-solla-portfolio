@@ -213,7 +213,7 @@ textarea:focus-visible {
   display: flex;
   gap: 6px;
   margin: 18px auto 0;
-  max-width: 760px;
+  max-width: 920px;
   padding: 6px;
   position: sticky;
   top: 14px;
@@ -996,5 +996,243 @@ summary {
   .cover-grid,
   .image-grid {
     grid-template-columns: 1fr;
+  }
+}
+.client-pill-row {
+  align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.client-pill.is-feedback {
+  border-color: rgba(255, 77, 0, 0.64);
+  color: var(--accent);
+}
+.client-download-setting {
+  align-items: center;
+  background: rgba(247, 243, 234, 0.04);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: 14px;
+  text-transform: none;
+}
+
+.client-download-setting input {
+  accent-color: var(--accent);
+  height: 22px;
+  margin: 0;
+  min-height: 0;
+  width: 22px;
+}
+
+.client-download-setting span {
+  display: grid;
+  gap: 4px;
+}
+
+.client-download-setting strong {
+  color: var(--ink);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.client-download-setting small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+.feedback-editor,
+.feedback-client-list {
+  display: grid;
+  gap: 18px;
+}
+
+.feedback-summary {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.feedback-summary > div {
+  background: #0f0e0c;
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+}
+
+.feedback-summary strong {
+  color: var(--accent);
+  font-family: var(--display);
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.feedback-summary span,
+.feedback-client-head > span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.feedback-client-group {
+  background: #0f0e0c;
+  border: 1px solid var(--line);
+  padding: 18px;
+}
+
+.feedback-client-head {
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+}
+
+.feedback-client-head h3 {
+  margin: 4px 0 0;
+}
+
+.feedback-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.feedback-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  min-width: 0;
+}
+
+.feedback-card-image {
+  align-items: center;
+  background: var(--field);
+  color: var(--dim);
+  display: flex;
+  justify-content: center;
+  min-height: 142px;
+  overflow: hidden;
+}
+
+.feedback-card-image img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.feedback-card-copy {
+  min-width: 0;
+  padding: 14px;
+}
+
+.feedback-card-meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  justify-content: space-between;
+}
+
+.feedback-stars {
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+.feedback-card time,
+.feedback-card-meta > span:not(.feedback-stars) {
+  color: var(--dim);
+  font-size: 10px;
+}
+
+.feedback-card h4 {
+  font-size: 12px;
+  margin: 14px 0 7px;
+}
+
+.feedback-comment {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.feedback-comment.is-empty {
+  color: var(--dim);
+  font-style: italic;
+}
+
+.feedback-empty {
+  border: 1px dashed var(--line-strong);
+  padding: clamp(24px, 5vw, 54px);
+  text-align: center;
+}
+
+.feedback-empty h3 {
+  margin: 10px 0;
+}
+
+.feedback-empty p:last-child {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 600px;
+}
+@media (max-width: 760px) {
+  .settings-grid,
+  .album-fields,
+  .upload-options,
+  .lightroom-grid,
+  .client-fields,
+  .card-fields,
+  .field-grid,
+  .field-grid.three {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-actions,
+  .row-actions,
+  .card-actions,
+  .newsletter-editor-actions div {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .client-toolbar,
+  .client-card-head,
+  .feedback-client-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cover-grid,
+  .image-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .client-pill-row {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .feedback-summary,
+  .feedback-card {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-card-image {
+    aspect-ratio: 16 / 10;
+    min-height: 0;
   }
 }
