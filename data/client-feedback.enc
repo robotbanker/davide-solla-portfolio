@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "algorithm": "aes-256-gcm",
+  "iv": "1P27QxYtxTamEzmz",
+  "tag": "dVWxeqna+r2Y2lTBri5owA==",
+  "data": "drBrPId/VbGaTVXaCwHo8ZGsqpPMQY6F4ep7+V3VvpixivzWAC/7kqqpEMw3ucrGogiiyGMMtoc1a7paP+ayHyA="
+}
