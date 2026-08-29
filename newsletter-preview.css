@@ -7,10 +7,10 @@
   --charcoal: #080807;
   --panel: #11100e;
   --line: rgba(241, 237, 230, 0.13);
-  --warm-line: rgba(188, 166, 110, 0.28);
-  --accent: #bca66e;
-  --display: "Didot", "Bodoni 72", "Baskerville", "Times New Roman", serif;
-  --sans: "Avenir Next", "Neue Haas Grotesk Text", "Helvetica Neue", Arial, sans-serif;
+  --warm-line: rgba(255, 77, 0, 0.34);
+  --accent: #ff4d00;
+  --display: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  --sans: "Helvetica Neue", "Avenir Next", Arial, sans-serif;
 }
 
 * {
@@ -42,6 +42,7 @@ img {
   gap: 28px;
   justify-content: space-between;
   padding: 20px max(22px, calc((100vw - 1280px) / 2 + 28px));
+  border-top: 5px solid var(--accent);
 }
 
 .preview-brand {
@@ -99,7 +100,9 @@ img {
 }
 
 .preview-intro h1 {
-  font-size: clamp(38px, 7vw, 68px);
+  font-size: clamp(58px, 9vw, 112px);
+  letter-spacing: -0.055em;
+  line-height: 0.86;
   margin-bottom: 22px;
 }
 

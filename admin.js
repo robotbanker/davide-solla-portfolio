@@ -9,6 +9,7 @@ const albumList = document.querySelector("[data-album-list]");
 const albumEditor = document.querySelector("[data-album-editor]");
 const sectionEditor = document.querySelector("[data-section-editor]");
 const clientEditor = document.querySelector("[data-client-editor]");
+const feedbackEditor = document.querySelector("[data-client-feedback-editor]");
 const saveButton = document.querySelector("[data-save-site]");
 const createAlbumButton = document.querySelector("[data-create-album]");
 const createAlbumForm = document.querySelector("[data-create-album-form]");
@@ -128,6 +129,8 @@ const ensureSiteShape = () => {
   site.clients = Array.isArray(site.clients) ? site.clients : [];
   site.clients.forEach((client, index) => {
     client.id = client.id || `client-${Date.now().toString(36)}-${index + 1}`;
+    client.downloadEnabled = client.downloadEnabled === true;
+    client.feedback = Array.isArray(client.feedback) ? client.feedback : [];
   });
 };
 
@@ -295,6 +298,7 @@ const renderClients = () => {
   const clientCards = clients.map((client) => {
     const hasPassword = Boolean(client.passwordHash || client.password);
     const hasGallery = Boolean(client.lightroomUrl);
+    const feedbackCount = client.feedback?.length || 0;
 
     return `
       <article class="client-card" data-client-id="${escapeHtml(client.id)}">
@@ -303,7 +307,10 @@ const renderClients = () => {
             <p class="admin-kicker">${escapeHtml(hasGallery ? "Gallery assigned" : "Awaiting gallery")}</p>
             <h3>${escapeHtml(client.name || client.email || "New client")}</h3>
           </div>
-          <span class="client-pill ${hasPassword ? "is-ready" : ""}">${hasPassword ? "Password set" : "Needs password"}</span>
+          <div class="client-pill-row">
+            ${feedbackCount ? `<span class="client-pill is-feedback">${feedbackCount} review${feedbackCount === 1 ? "" : "s"}</span>` : ""}
+            <span class="client-pill ${hasPassword ? "is-ready" : ""}">${hasPassword ? "Password set" : "Needs password"}</span>
+          </div>
         </div>
         <div class="client-fields">
           <label>
@@ -322,6 +329,13 @@ const renderClients = () => {
             <span>Lightroom gallery link</span>
             <input data-client-field="lightroomUrl" placeholder="https://lightroom.adobe.com/..." value="${escapeHtml(client.lightroomUrl || "")}">
           </label>
+          <label class="client-download-setting span-all">
+            <input data-client-download-enabled type="checkbox" ${client.downloadEnabled ? "checked" : ""}>
+            <span>
+              <strong>Allow gallery downloads</strong>
+              <small>${client.downloadEnabled ? "The download button is visible to this client." : "Downloads stay hidden until you enable them."}</small>
+            </span>
+          </label>
         </div>
         <div class="row-actions client-card-actions">
           <a class="button-link secondary ${client.lightroomUrl ? "" : "is-disabled"}" href="${escapeHtml(client.lightroomUrl || "#")}" target="_blank" rel="noreferrer">Open gallery</a>
@@ -338,6 +352,105 @@ const renderClients = () => {
     </div>
     <div class="client-grid">
       ${clientCards || `<p class="empty-state">No client logins yet.</p>`}
+    </div>
+  `;
+};
+
+const feedbackTimestamp = (value) => {
+  const date = new Date(value || "");
+
+  if (!Number.isFinite(date.getTime())) {
+    return { iso: "", label: "Recently updated" };
+  }
+
+  return {
+    iso: date.toISOString(),
+    label: new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    }).format(date)
+  };
+};
+
+const renderFeedbackStars = (rating) => {
+  const value = Math.min(Math.max(Math.round(Number(rating) || 0), 0), 5);
+  return `
+    <span class="feedback-stars" role="img" aria-label="${value} out of 5 stars">
+      <span aria-hidden="true">${"★".repeat(value)}${"☆".repeat(5 - value)}</span>
+    </span>
+  `;
+};
+
+const renderFeedback = () => {
+  if (!feedbackEditor) {
+    return;
+  }
+
+  const clientsWithFeedback = (site.clients || [])
+    .map((client) => ({
+      client,
+      feedback: [...(client.feedback || [])].sort((left, right) => (
+        Date.parse(right.updatedAt || right.createdAt || "") - Date.parse(left.updatedAt || left.createdAt || "")
+      ))
+    }))
+    .filter(({ feedback }) => feedback.length);
+  const allFeedback = clientsWithFeedback.flatMap(({ feedback }) => feedback);
+  const ratedFeedback = allFeedback.filter((item) => Number(item.rating) > 0);
+  const commentedFeedback = allFeedback.filter((item) => item.comment);
+  const averageRating = ratedFeedback.length
+    ? (ratedFeedback.reduce((total, item) => total + Number(item.rating), 0) / ratedFeedback.length).toFixed(1)
+    : "—";
+
+  if (!allFeedback.length) {
+    feedbackEditor.innerHTML = `
+      <div class="feedback-empty">
+        <p class="admin-kicker">No feedback yet</p>
+        <h3>Client responses will appear here</h3>
+        <p>Ratings and comments are grouped by client as soon as they save feedback from an expanded gallery image.</p>
+      </div>
+    `;
+    return;
+  }
+
+  feedbackEditor.innerHTML = `
+    <div class="feedback-summary" aria-label="Client feedback summary">
+      <div><strong>${allFeedback.length}</strong><span>Reviewed images</span></div>
+      <div><strong>${averageRating}</strong><span>Average rating</span></div>
+      <div><strong>${commentedFeedback.length}</strong><span>Comments</span></div>
+    </div>
+    <div class="feedback-client-list">
+      ${clientsWithFeedback.map(({ client, feedback }) => `
+        <section class="feedback-client-group" aria-labelledby="feedback-client-${escapeHtml(client.id)}">
+          <div class="feedback-client-head">
+            <div>
+              <p class="admin-kicker">${feedback.length} reviewed image${feedback.length === 1 ? "" : "s"}</p>
+              <h3 id="feedback-client-${escapeHtml(client.id)}">${escapeHtml(client.name || client.email || "Client")}</h3>
+            </div>
+            <span>${escapeHtml(client.email || "")}</span>
+          </div>
+          <div class="feedback-grid">
+            ${feedback.map((item, index) => {
+              const timestamp = feedbackTimestamp(item.updatedAt || item.createdAt);
+              const imageLabel = item.imageAlt || `Gallery image ${index + 1}`;
+              return `
+                <article class="feedback-card">
+                  <div class="feedback-card-image">
+                    ${item.imageSrc ? `<img src="${escapeHtml(item.imageSrc)}" alt="${escapeHtml(imageLabel)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : `<span aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>`}
+                  </div>
+                  <div class="feedback-card-copy">
+                    <div class="feedback-card-meta">
+                      ${renderFeedbackStars(item.rating)}
+                      ${timestamp.iso ? `<time datetime="${timestamp.iso}">${escapeHtml(timestamp.label)}</time>` : `<span>${escapeHtml(timestamp.label)}</span>`}
+                    </div>
+                    <h4>${escapeHtml(imageLabel)}</h4>
+                    <p class="feedback-comment ${item.comment ? "" : "is-empty"}">${escapeHtml(item.comment || "No written comment.")}</p>
+                  </div>
+                </article>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      `).join("")}
     </div>
   `;
 };
@@ -394,10 +507,11 @@ const renderAlbumList = () => {
 
 const renderCropFrame = (item, album, type, index, label) => {
   const position = parsePosition(item.previewPosition);
+  const previewSrc = item.previewSrc || item.src;
 
   return `
     <button class="crop-frame" type="button" data-crop-target="${type}:${index}" aria-label="Reposition ${escapeHtml(label)} preview">
-      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || album.title)}" style="object-position: ${formatPosition(position.x, position.y)}">
+      <img src="${escapeHtml(previewSrc)}" alt="${escapeHtml(item.alt || album.title)}" style="object-position: ${formatPosition(position.x, position.y)}">
       <span>${escapeHtml(label)}</span>
     </button>
   `;
@@ -671,6 +785,7 @@ const render = () => {
   ensureSiteShape();
   renderSections();
   renderClients();
+  renderFeedback();
   renderAlbumList();
   renderAlbumEditor();
 };
@@ -691,12 +806,37 @@ const loadSite = async () => {
 
 const saveSite = async () => {
   setStatus("Saving changes...");
+  const previewSources = new Map();
+  const albums = (site.albums || []).map((album) => ({
+    ...album,
+    covers: (album.covers || []).map(({ previewSrc, ...cover }) => {
+      if (previewSrc && cover.src) previewSources.set(cover.src, previewSrc);
+      return cover;
+    }),
+    images: (album.images || []).map(({ previewSrc, ...image }) => {
+      if (previewSrc && image.src) previewSources.set(image.src, previewSrc);
+      return image;
+    })
+  }));
+  const sitePayload = {
+    ...site,
+    albums,
+    clients: (site.clients || []).map(({ feedback, ...client }) => client)
+  };
   const response = await api("site", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ site })
+    body: JSON.stringify({ site: sitePayload })
   });
   site = response.site || site;
+  ensureSiteShape();
+  (site.albums || []).forEach((album) => {
+    [...(album.covers || []), ...(album.images || [])].forEach((item) => {
+      if (previewSources.has(item.src)) item.previewSrc = previewSources.get(item.src);
+    });
+  });
+  renderClients();
+  renderFeedback();
   markClean();
 
   if (response.deployment?.triggered) {
@@ -792,6 +932,7 @@ const moveAlbum = (albumId, direction) => {
 
 const buildCoverFromImage = (album, image) => ({
   src: image.src,
+  ...(image.previewSrc ? { previewSrc: image.previewSrc } : {}),
   alt: image.alt || album.title,
   previewPosition: image.previewPosition || "50% 50%",
   className: album.section === "fine-art" ? defaultCoverStyle : ""
@@ -839,7 +980,9 @@ const createClient = () => {
     email: "",
     password: "",
     passwordHash: "",
-    lightroomUrl: ""
+    lightroomUrl: "",
+    downloadEnabled: false,
+    feedback: []
   });
   markDirty();
   render();
@@ -985,7 +1128,7 @@ document.addEventListener("click", async (event) => {
     site.clients = site.clients.filter((client) => client.id !== removeClientButton.dataset.removeClient);
     markDirty();
     render();
-    setStatus("Client removed. Save changes to publish.");
+    setStatus("Client removed. Save changes to publish and delete their saved gallery feedback.");
     return;
   }
 
@@ -1106,7 +1249,7 @@ document.addEventListener("click", async (event) => {
 
       markDirty();
       render();
-      setStatus(`${images.length} Lightroom image${images.length === 1 ? "" : "s"} imported. Save changes to publish.`);
+      setStatus(`${images.length} Lightroom image${images.length === 1 ? "" : "s"} imported. The Lightroom previews stay visible while permanent copies publish; save changes to finish.`);
     } catch (error) {
       setStatus(error.message);
       importLightroomButton.disabled = false;
@@ -1157,6 +1300,7 @@ const handleEditableChange = (event) => {
   const sectionField = event.target.closest("[data-section-field]");
   const clientField = event.target.closest("[data-client-field]");
   const clientPassword = event.target.closest("[data-client-password]");
+  const clientDownloadEnabled = event.target.closest("[data-client-download-enabled]");
   const albumField = event.target.closest("[data-album-field]");
   const projectField = event.target.closest("[data-project-field]");
   const projectCreditLines = event.target.closest("[data-credit-lines]");
@@ -1175,7 +1319,7 @@ const handleEditableChange = (event) => {
     return;
   }
 
-  if (clientField || clientPassword) {
+  if (clientField || clientPassword || clientDownloadEnabled) {
     const card = event.target.closest("[data-client-id]");
     const client = site.clients.find((item) => item.id === card?.dataset.clientId);
 
@@ -1192,6 +1336,16 @@ const handleEditableChange = (event) => {
         client.password = clientPassword.value;
       } else {
         delete client.password;
+      }
+    }
+
+    if (clientDownloadEnabled) {
+      client.downloadEnabled = clientDownloadEnabled.checked;
+      const settingCopy = clientDownloadEnabled.closest(".client-download-setting")?.querySelector("small");
+      if (settingCopy) {
+        settingCopy.textContent = client.downloadEnabled
+          ? "The download button is visible to this client."
+          : "Downloads stay hidden until you enable them.";
       }
     }
 

@@ -136,6 +136,10 @@
   color: var(--muted);
 }
 
+.field-notes-issue .text-link-light {
+  color: #090909;
+}
+
 .issue-head {
   align-items: start;
   border-bottom: 1px solid var(--warm-line);
@@ -425,4 +429,405 @@
     margin-bottom: 22px;
   }
 
+}
+
+/* 2026 editorial art direction — Field Notes journal */
+.field-notes-page {
+  --field-gutter: max(22px, calc((100vw - 1500px) / 2 + 34px));
+  --field-measure: 760px;
+  --field-wide: 1080px;
+  background: #f2ede3;
+  color: #090909;
+}
+
+.field-notes-hero {
+  align-items: stretch;
+  background: #ff4d00;
+  border: 0;
+  gap: clamp(58px, 8vw, 132px);
+  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.56fr);
+  min-height: 88svh;
+  padding: clamp(150px, 15vw, 228px) var(--field-gutter) clamp(76px, 8vw, 120px);
+  position: relative;
+}
+
+.field-notes-hero::before {
+  color: rgba(9, 9, 9, 0.58);
+  content: "Journal / Issue archive / MMXXVI";
+  font-size: 9px;
+  font-weight: 800;
+  left: var(--field-gutter);
+  letter-spacing: 0.18em;
+  position: absolute;
+  text-transform: uppercase;
+  top: 122px;
+}
+
+.field-notes-hero-copy {
+  align-self: end;
+  max-width: 980px;
+}
+
+.field-notes-hero .section-kicker {
+  color: #090909;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.field-notes-hero h1 {
+  color: #090909;
+  font-size: clamp(72px, 10vw, 158px);
+  letter-spacing: -0.065em;
+  line-height: 0.82;
+  max-width: 8ch;
+}
+
+.field-notes-hero-copy p:not(.section-kicker) {
+  border-top: 1px solid rgba(9, 9, 9, 0.5);
+  color: rgba(9, 9, 9, 0.7);
+  font-size: 16px;
+  line-height: 1.7;
+  margin-top: clamp(42px, 6vw, 78px);
+  max-width: 600px;
+  padding-top: 18px;
+}
+
+.field-notes-signup {
+  align-self: end;
+  background: #090909;
+  border-top: 4px solid #f2ede3;
+  color: #f2ede3;
+  margin: 0;
+  padding: 30px;
+}
+
+.field-notes-signup::before {
+  color: #ff4d00;
+  content: "Join the monthly edit";
+  display: block;
+  font-family: var(--display);
+  font-size: clamp(30px, 3vw, 46px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.field-notes-signup .newsletter-fields {
+  margin-top: 22px;
+}
+
+.field-notes-signup .submit-button {
+  background: #ff4d00;
+  border-color: #ff4d00;
+  color: #090909;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.field-notes-signup .submit-button:hover,
+.field-notes-signup .submit-button:focus-visible {
+  background: #f2ede3;
+  border-color: #f2ede3;
+  color: #090909;
+}
+
+.field-notes-shell {
+  grid-template-columns: minmax(250px, 310px) minmax(0, 1fr);
+}
+
+.field-notes-archive {
+  background: #090909;
+  border-right-color: rgba(242, 237, 227, 0.18);
+  color: #f2ede3;
+}
+
+.archive-inner {
+  padding-bottom: 70px;
+  padding-top: 68px;
+  top: 72px;
+}
+
+.field-notes-archive .section-kicker {
+  color: #ff4d00;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+.archive-link {
+  border-top-color: rgba(242, 237, 227, 0.18);
+  color: rgba(242, 237, 227, 0.62);
+  padding: 24px 0;
+}
+
+.archive-link:last-child {
+  border-bottom-color: rgba(242, 237, 227, 0.18);
+}
+
+.archive-link span {
+  color: #f2ede3;
+  font-size: 24px;
+  letter-spacing: -0.03em;
+}
+
+.archive-link small {
+  color: rgba(242, 237, 227, 0.42);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.archive-link[aria-current="page"]::before {
+  background: #ff4d00;
+  width: 3px;
+}
+
+.archive-link[aria-current="page"] span,
+.archive-link:hover span,
+.archive-link:focus-visible span {
+  color: #ff4d00;
+}
+
+.field-notes-issue {
+  color: #090909;
+  counter-reset: field-section;
+  padding: clamp(68px, 7vw, 108px) var(--field-gutter) clamp(100px, 12vw, 180px) clamp(42px, 6vw, 96px);
+}
+
+.field-notes-status {
+  color: rgba(9, 9, 9, 0.56);
+}
+
+.issue-head {
+  border-bottom: 2px solid #090909;
+  gap: 36px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-bottom: clamp(54px, 7vw, 96px);
+  max-width: var(--field-wide);
+  padding-bottom: 36px;
+}
+
+.issue-head .section-kicker {
+  color: #ff4d00;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.issue-head h2 {
+  color: #090909;
+  font-size: clamp(58px, 7vw, 106px);
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+  max-width: 9ch;
+}
+
+.issue-head p:not(.section-kicker) {
+  color: rgba(9, 9, 9, 0.68);
+  font-size: 17px;
+}
+
+.issue-actions .text-link {
+  border-color: rgba(9, 9, 9, 0.44);
+  color: #090909;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.issue-actions .text-link:hover,
+.issue-actions .text-link:focus-visible {
+  background: #090909;
+  border-color: #090909;
+  color: #f2ede3;
+}
+
+.field-section {
+  border-top-color: rgba(9, 9, 9, 0.28);
+  counter-increment: field-section;
+  gap: 0 clamp(34px, 5vw, 76px);
+  grid-template-columns: 150px minmax(0, var(--field-measure));
+  max-width: var(--field-wide);
+  padding-top: 48px;
+}
+
+.field-section + .field-section {
+  margin-top: clamp(58px, 8vw, 106px);
+}
+
+.field-section > .section-kicker {
+  color: #ff4d00;
+  display: grid;
+  font-size: 9px;
+  gap: 12px;
+  letter-spacing: 0.16em;
+}
+
+.field-section > .section-kicker::before {
+  color: #090909;
+  content: "0" counter(field-section);
+  font-family: var(--display);
+  font-size: 34px;
+  font-style: italic;
+  letter-spacing: -0.04em;
+}
+
+.field-section-intro,
+.field-feature p,
+.field-story p,
+.field-note p {
+  color: rgba(9, 9, 9, 0.68);
+}
+
+.field-feature h3,
+.field-story h3,
+.field-note h3,
+.field-list h3 {
+  color: #090909;
+  letter-spacing: -0.035em;
+}
+
+.field-feature h3,
+.field-story h3,
+.field-note h3 {
+  font-size: clamp(38px, 4.5vw, 62px);
+  line-height: 0.98;
+}
+
+.field-meta {
+  color: #a83200;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+
+.field-notes-issue .section-kicker,
+.field-section > .section-kicker {
+  color: #a83200;
+}
+
+.field-source,
+.field-why {
+  color: rgba(9, 9, 9, 0.5) !important;
+}
+
+.field-image {
+  background: #090909;
+  border: 0;
+  margin-bottom: 34px;
+}
+
+.field-image figcaption {
+  color: rgba(242, 237, 227, 0.56);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 12px 14px;
+}
+
+.field-list article,
+.field-story + .field-story {
+  border-top-color: rgba(9, 9, 9, 0.24);
+  padding: 38px 0 42px;
+}
+
+.field-note {
+  border-top: 3px solid #ff4d00;
+  padding-top: 28px;
+}
+
+@media (max-width: 980px) {
+  .field-notes-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-top: 156px;
+  }
+
+  .field-notes-hero::before {
+    top: 112px;
+  }
+
+  .field-notes-signup {
+    max-width: 580px;
+  }
+
+  .field-notes-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .field-notes-archive {
+    border-bottom: 0;
+  }
+
+  .archive-inner {
+    padding: 26px var(--field-gutter);
+  }
+
+  .field-notes-archive nav {
+    grid-auto-columns: minmax(180px, 1fr);
+  }
+
+  .archive-link {
+    border-bottom-color: rgba(242, 237, 227, 0.18);
+    padding-right: 26px;
+  }
+
+  .field-notes-issue {
+    padding-left: var(--field-gutter);
+  }
+
+  .field-section {
+    display: block;
+  }
+
+  .field-section > .section-kicker {
+    align-items: baseline;
+    display: flex;
+    margin-bottom: 28px;
+  }
+}
+
+@media (max-width: 720px) {
+  .field-notes-hero {
+    padding: 134px 18px 70px;
+  }
+
+  .field-notes-hero::before {
+    left: 18px;
+    top: 100px;
+  }
+
+  .field-notes-hero h1 {
+    font-size: clamp(62px, 19vw, 92px);
+    line-height: 0.82;
+  }
+
+  .field-notes-hero-copy p:not(.section-kicker) {
+    font-size: 15px;
+  }
+
+  .field-notes-signup {
+    padding: 24px 20px;
+  }
+
+  .archive-inner,
+  .field-notes-issue {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .field-notes-issue {
+    padding-bottom: 96px;
+    padding-top: 64px;
+  }
+
+  .issue-head {
+    grid-template-columns: 1fr;
+  }
+
+  .issue-head h2 {
+    font-size: clamp(52px, 16vw, 78px);
+  }
+
+  .field-section {
+    padding-top: 36px;
+  }
+
+  .field-section > .section-kicker::before {
+    font-size: 27px;
+  }
 }

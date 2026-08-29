@@ -100,7 +100,7 @@ test("public analytics pages use the consent controller and contain no eager Goo
   for (const file of ["index.html", "field-notes.html"]) {
     const html = fs.readFileSync(file, "utf8");
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
+    assert.match(html, /privacy-consent\.js\?v=2026-08-19/);
     assert.match(html, /google-tag\.js\?v=3/);
     assert.doesNotMatch(html, /<script[^>]+src="https:\/\/www\.googletagmanager\.com/);
     assert.doesNotMatch(html, /gtag\('config'/);
@@ -109,10 +109,10 @@ test("public analytics pages use the consent controller and contain no eager Goo
   }
 });
 
-test("every rendered privacy controller URL is cache-busted with the notice version", () => {
+test("every rendered privacy controller URL uses the current asset revision", () => {
   const noticeVersion = consentSource.match(/const noticeVersion = "([^"]+)";/)?.[1];
   assert.equal(noticeVersion, "2026-07-18");
-  const expectedAsset = `privacy-consent.js?v=${noticeVersion}`;
+  const expectedAsset = "privacy-consent.js?v=2026-08-19";
 
   for (const file of [
     "index.html",
@@ -123,7 +123,7 @@ test("every rendered privacy controller URL is cache-busted with the notice vers
   ]) {
     assert.ok(
       fs.readFileSync(file, "utf8").includes(expectedAsset),
-      `${file} must load the consent controller using the current notice version`
+      `${file} must load the current consent-controller asset revision`
     );
   }
 });

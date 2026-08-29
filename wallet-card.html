@@ -11,11 +11,11 @@
         --soft-ink: #cfcac1;
         --paper: #030303;
         --panel: #101012;
-        --accent: #e33b42;
-        --cyan: #48d7df;
+        --accent: #ff4d00;
+        --cyan: #ff4d00;
         --line: rgba(246, 246, 243, 0.18);
-        --display: "Didot", "Bodoni 72", "Baskerville", "Times New Roman", serif;
-        --sans: "Avenir Next", "Neue Haas Grotesk Text", "Helvetica Neue", Arial, sans-serif;
+        --display: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+        --sans: "Helvetica Neue", "Avenir Next", Arial, sans-serif;
       }
 
       * {
@@ -34,6 +34,18 @@
         min-height: 100svh;
         margin: 0;
         padding: 32px;
+        position: relative;
+      }
+
+      body::before {
+        background: var(--accent);
+        content: "";
+        height: 5px;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 2;
       }
 
       main {
@@ -53,9 +65,10 @@
 
       .brand strong {
         font-family: var(--display);
-        font-size: clamp(28px, 5vw, 52px);
+        font-size: clamp(48px, 8vw, 108px);
         font-weight: 400;
-        line-height: 0.95;
+        letter-spacing: -0.06em;
+        line-height: 0.78;
       }
 
       .brand span {
@@ -68,9 +81,10 @@
       }
 
       .card-preview {
-        background: rgba(3, 3, 3, 0.58);
-        border: 1px solid var(--line);
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.46);
+        background: #030303;
+        border: 1px solid rgba(245, 243, 238, 0.28);
+        border-top: 4px solid var(--accent);
+        box-shadow: none;
         padding: clamp(12px, 2.2vw, 22px);
       }
 
@@ -101,7 +115,8 @@
       }
 
       .actions a:first-child {
-        background: var(--ink);
+        background: var(--accent);
+        border-color: var(--accent);
         color: #070707;
       }
 
@@ -136,6 +151,10 @@
       }
 
       @media print {
+        body::before {
+          display: none;
+        }
+
         body {
           background: white;
           display: block;

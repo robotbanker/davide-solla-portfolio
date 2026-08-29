@@ -484,8 +484,8 @@ test("the real transport refuses redirects for the signed PII body", async () =>
 
 test("the homepage cache keys include the current script and stylesheet revisions", () => {
   const html = fs.readFileSync("index.html", "utf8");
-  assert.match(html, /script\.js\?v=30/);
-  assert.match(html, /styles\.css\?v=30/);
-  assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
+  assert.match(html, /script\.js\?v=32/);
+  assert.match(html, /styles\.css\?v=32/);
+  assert.match(html, /privacy-consent\.js\?v=2026-08-19/);
   assert.match(html, /google-tag\.js\?v=3/);
 });
