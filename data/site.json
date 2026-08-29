@@ -406,7 +406,7 @@
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
           "alt": "Khiazy - Jazz Editoria 7",
           "previewPosition": "50% 50%",
-          "className": "tile-tall"
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -484,5 +484,5 @@
       "category": "Artist Portrait"
     }
   ],
-  "updatedAt": "2026-08-29T08:51:49.833Z"
+  "updatedAt": "2026-08-29T08:52:16.645Z"
 }
