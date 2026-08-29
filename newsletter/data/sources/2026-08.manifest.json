@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-08",
+  "dateChecked": "2026-08-21",
+  "status": "research-approved",
+  "manifestNotes": "Facts were checked against official gallery, museum, artist-controlled or brand sources on 21 August 2026. The four external images returned HTTP 200 with an image/jpeg content type during production checks. Brand and institutional page imagery should receive the sender’s final usage review before live distribution. Kyazi’s portrait series is original Davide Studios work supplied by the user for this issue and published through the matching davidesolla.com asset paths.",
+  "sources": [
+    {
+      "sourceId": "art-japanese-women-photographers",
+      "section": "Art",
+      "storyTitle": "Japanese Women Photographers: From 1950s to Now",
+      "officialSourceUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+      "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+      "imageCredit": "TOKIWA Toyoko, Waiting Room of Byobugaura Prefectural Hospital, 1956. Courtesy Museum of Yokohama Urban History and Aperture.",
+      "usageStatus": "Official exhibition-page JPEG embedded and directly verified. Confirm distribution permission before a live audience send.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "A photography-led exhibition that materially rebalances authorship, canon formation and Japan’s visual history across generations."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Tom Hunter Selects",
+      "officialSourceUrl": "https://www.vam.ac.uk/event/61KvA3gqEnb/tom-hunter-selects-2026",
+      "bookingUrl": "https://www.vam.ac.uk/event/61KvA3gqEnb/tom-hunter-selects-2026",
+      "imageCredit": "No newsletter image used; official display imagery remains on the V&A page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "An East London display connecting archive, documentary practice, museum collection and youth-led interpretation."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Cecily Brown: Picture Making",
+      "officialSourceUrl": "https://www.serpentinegalleries.org/whats-on/cecily-brown-picture-making/",
+      "bookingUrl": "https://www.serpentinegalleries.org/whats-on/cecily-brown-picture-making/",
+      "imageCredit": "No newsletter image used; official installation views remain on the Serpentine page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "A late-summer painting exhibition with direct relevance to gesture, visual ambiguity, landscape memory and the movement of figures through an image."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Musquiqui Chihying: A Life of Navigation",
+      "officialSourceUrl": "https://www.southbankcentre.co.uk/whats-on/musquiqui-chihying-a-life-of-navigation/",
+      "bookingUrl": "https://www.southbankcentre.co.uk/whats-on/musquiqui-chihying-a-life-of-navigation/",
+      "imageCredit": "No newsletter image used; official exhibition imagery remains on the Southbank Centre page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "A new multimedia exhibition using humour, performance and screen language to examine technology, automation and power."
+    },
+    {
+      "sourceId": "fashion-bottega-fall-2026",
+      "section": "Fashion",
+      "storyTitle": "Bottega Veneta: Fall 2026 — Venice, Unfiltered",
+      "officialSourceUrl": "https://www.bottegaveneta.com/en-gb/fall-2026-campaign.html",
+      "bookingUrl": null,
+      "imageCredit": "Official Bottega Veneta Fall 2026 collection image from the house’s media stream.",
+      "usageStatus": "Official same-collection JPEG embedded and browser-verified. It is a Fall 2026 collection image rather than a campaign still; confirm press/send permission before live distribution.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "A current campaign that treats Venice as lived environment, balancing craft, private interiors, metropolitan fragments and analogue texture."
+    },
+    {
+      "sourceId": "fashion-balmain-lheure-du-loup",
+      "section": "Fashion",
+      "storyTitle": "Balmain: L’heure du loup",
+      "officialSourceUrl": "https://balmain.com/en-gb/pages/fall-winter-2026-campaign",
+      "bookingUrl": null,
+      "imageCredit": "Official Balmain Fall/Winter 2026 campaign image. Photographer: Suffo Moncloa.",
+      "usageStatus": "Official brand campaign JPEG embedded and directly verified. Confirm press/send permission before live distribution.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "The campaign’s neo-noir light, modernist architecture and narrative withholding align closely with a cinematic image-led edit."
+    },
+    {
+      "sourceId": "fashion-dior-winter-2026",
+      "section": "Fashion",
+      "storyTitle": "Dior: Winter 2026-2027 Campaign",
+      "officialSourceUrl": "https://www.dior.com/en_gb/fashion/news-savoir-faire/folder-news-and-events/winter-2026-2027-campaign",
+      "bookingUrl": null,
+      "imageCredit": "Official Dior Winter 2026-2027 campaign image. Photograph: David Sims.",
+      "usageStatus": "Official Dior campaign JPEG embedded and directly verified. Confirm press/send permission before live distribution.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "A painterly campaign where landscape, prop and garment share a restrained but gently uncanny frame."
+    },
+    {
+      "section": "On the Field",
+      "storyTitle": "Kyazi: Presence, Practice",
+      "officialSourceUrl": "https://soundcloud.com/kyazi-kihaya-blues",
+      "supportingSourceUrl": "https://music.apple.com/us/artist/kihaya-blues/1579158508",
+      "bookingUrl": null,
+      "imageCredit": "Kyazi Lugangira, London, 2026. Photographs: Davide Studios.",
+      "usageStatus": "Original Davide Studios photographs supplied by the user for inclusion in this issue. Three newsletter assets are published through matching davidesolla.com paths.",
+      "dateChecked": "2026-08-21",
+      "selectedBecause": "The three photographs form a complete visual movement from formal presence to musician, instrument and practice."
+    }
+  ]
+}

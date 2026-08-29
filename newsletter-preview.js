@@ -7,6 +7,7 @@ const dataLink = document.querySelector("[data-data-link]");
 const sourcesLink = document.querySelector("[data-sources-link]");
 const requestedIssue = new URLSearchParams(window.location.search).get("issue");
 const adminToken = () => sessionStorage.getItem("davide-admin-session") || "";
+const defaultSectionOrder = Object.freeze(["art", "fashion", "onTheField"]);
 
 if (requestedIssue) {
   issueInput.value = requestedIssue;
@@ -22,11 +23,22 @@ const isUrl = (value) => /^https?:\/\//i.test(String(value || ""));
 
 const absoluteImageUrl = (src, baseUrl) => {
   try {
-    const value = new URL(String(src || ""), `${String(baseUrl || "").replace(/\/+$/, "")}/`);
+    const base = new URL(`${String(baseUrl || "").replace(/\/+$/, "")}/`, window.location.href);
+    const value = new URL(String(src || ""), base);
     return ["http:", "https:"].includes(value.protocol) ? value.href : "";
   } catch {
     return "";
   }
+};
+
+const sectionOrderForIssue = (issue) => {
+  const requestedOrder = issue?.sectionOrder;
+  const isValid = Array.isArray(requestedOrder)
+    && requestedOrder.length === defaultSectionOrder.length
+    && new Set(requestedOrder).size === defaultSectionOrder.length
+    && defaultSectionOrder.every((section) => requestedOrder.includes(section));
+
+  return isValid ? requestedOrder : defaultSectionOrder;
 };
 
 const rotatingImageForIssue = (issue, field) => {
@@ -38,6 +50,12 @@ const rotatingImageForIssue = (issue, field) => {
   return pool[Math.abs((year * 12) + month - 1) % pool.length];
 };
 
+const fieldImagesForIssue = (issue, field) => {
+  if (Array.isArray(field?.gallery) && field.gallery.length) return field.gallery;
+  const image = rotatingImageForIssue(issue, field);
+  return image ? [image] : [];
+};
+
 const renderCta = (label, url) => {
   if (!isUrl(url)) {
     return `<span class="source-label">${escapeHtml(label || "Source required")}</span>`;
@@ -47,11 +65,44 @@ const renderCta = (label, url) => {
 };
 
 const renderImage = (image, issue, credit) => {
-  const src = absoluteImageUrl(image?.src, issue.site?.baseUrl);
+  const src = absoluteImageUrl(image?.src, issue.site?.previewBaseUrl || issue.site?.baseUrl);
   if (!src) return "";
   return `
     <img src="${escapeHtml(src)}" alt="${escapeHtml(image.alt || "")}">
     <p class="image-credit">${escapeHtml(credit || image.credit || image.label || "")}</p>
+  `;
+};
+
+const renderFieldEditorial = (issue, field) => {
+  const images = fieldImagesForIssue(issue, field);
+  const hasGallery = Array.isArray(field.gallery) && field.gallery.length > 0;
+
+  if (!hasGallery) {
+    const image = images[0];
+    return `
+      ${renderImage(image, issue, image?.credit || image?.label || image?.recommendedSize || "")}
+      <article class="field-card">
+        <p>${escapeHtml(field.note || "")}</p>
+        ${field.cta ? renderCta(field.cta.label, field.cta.url) : ""}
+      </article>
+    `;
+  }
+
+  const paragraphs = (Array.isArray(field.paragraphs) ? field.paragraphs : [field.note])
+    .filter((paragraph) => String(paragraph || "").trim());
+
+  return `
+    <article class="field-editorial">
+      <h3>${escapeHtml(field.title || "")}</h3>
+      ${paragraphs[0] ? `<p>${escapeHtml(paragraphs[0])}</p>` : ""}
+    </article>
+    ${images.map((image, index) => `
+      <figure class="field-frame">
+        ${renderImage(image, issue, image?.credit || image?.label || image?.recommendedSize || "")}
+      </figure>
+      ${paragraphs[index + 1] ? `<article class="field-copy${index === images.length - 1 ? " field-copy-closing" : ""}"><p>${escapeHtml(paragraphs[index + 1])}</p></article>` : ""}
+    `).join("")}
+    ${field.cta ? `<div class="field-cta">${renderCta(field.cta.label, field.cta.url)}</div>` : ""}
   `;
 };
 
@@ -69,7 +120,50 @@ const renderIssue = (issue, manifest) => {
   const art = issue.sections.art;
   const fashion = issue.sections.fashion;
   const field = issue.sections.onTheField;
-  const fieldImage = rotatingImageForIssue(issue, field);
+  const renderedSections = {
+    art: `
+      <section class="newsletter-section">
+        <p class="preview-kicker">${escapeHtml(art.label)}</p>
+        <p class="section-intro">${escapeHtml(art.intro)}</p>
+        <article class="feature">
+          ${renderImage(
+            art.featured.image,
+            issue,
+            art.featured.image?.credit || art.featured.image?.label || art.featured.image?.recommendedSize || ""
+          )}
+          <p class="meta">${escapeHtml(art.featured.institution)} / ${escapeHtml(art.featured.location)} / ${escapeHtml(art.featured.dates)}</p>
+          <h3>${escapeHtml(art.featured.title)}</h3>
+          <p>${escapeHtml(art.featured.description)}</p>
+          <p class="why">Why it matters visually: ${escapeHtml(art.featured.whyItMatters)}</p>
+          ${renderCta(art.featured.ctaLabel, art.featured.bookingUrl || art.featured.sourceUrl)}
+        </article>
+        <div class="event-list">${art.items.map(renderEvent).join("")}</div>
+      </section>
+    `,
+    fashion: `
+      <section class="newsletter-section">
+        <p class="preview-kicker">${escapeHtml(fashion.label)}</p>
+        <p class="section-intro">${escapeHtml(fashion.intro)}</p>
+        ${fashion.stories.map((story) => `
+          <article class="story">
+            ${renderImage(story.image, issue, story.imageCredit)}
+            <p class="meta">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
+            <h3>${escapeHtml(story.title)}</h3>
+            <p>${escapeHtml(story.commentary)}</p>
+            <p class="image-credit">Source visual: ${escapeHtml(story.imageCredit || "Usage pending")}</p>
+            ${renderCta("View official source", story.sourceUrl)}
+          </article>
+        `).join("")}
+      </section>
+    `,
+    onTheField: `
+      <section class="newsletter-section">
+        <p class="preview-kicker">${escapeHtml(field.label)}</p>
+        <p class="section-intro">${escapeHtml(field.intro)}</p>
+        ${renderFieldEditorial(issue, field)}
+      </section>
+    `
+  };
 
   previewRoot.innerHTML = `
     <header class="newsletter-head">
@@ -79,52 +173,7 @@ const renderIssue = (issue, manifest) => {
       <p class="opening-note">${escapeHtml(issue.openingNote)}</p>
     </header>
 
-    <section class="newsletter-section">
-      <p class="preview-kicker">${escapeHtml(art.label)}</p>
-      <p class="section-intro">${escapeHtml(art.intro)}</p>
-      <article class="feature">
-        ${renderImage(
-          art.featured.image,
-          issue,
-          art.featured.image?.credit || art.featured.image?.label || art.featured.image?.recommendedSize || ""
-        )}
-        <p class="meta">${escapeHtml(art.featured.institution)} / ${escapeHtml(art.featured.location)} / ${escapeHtml(art.featured.dates)}</p>
-        <h3>${escapeHtml(art.featured.title)}</h3>
-        <p>${escapeHtml(art.featured.description)}</p>
-        <p class="why">Why it matters visually: ${escapeHtml(art.featured.whyItMatters)}</p>
-        ${renderCta(art.featured.ctaLabel, art.featured.bookingUrl || art.featured.sourceUrl)}
-      </article>
-      <div class="event-list">${art.items.map(renderEvent).join("")}</div>
-    </section>
-
-    <section class="newsletter-section">
-      <p class="preview-kicker">${escapeHtml(fashion.label)}</p>
-      <p class="section-intro">${escapeHtml(fashion.intro)}</p>
-      ${fashion.stories.map((story, index) => `
-        <article class="story">
-          ${renderImage(story.image, issue, story.imageCredit)}
-          <p class="meta">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
-          <h3>${escapeHtml(story.title)}</h3>
-          <p>${escapeHtml(story.commentary)}</p>
-          <p class="image-credit">Source visual: ${escapeHtml(story.imageCredit || "Usage pending")}</p>
-          ${renderCta("View official source", story.sourceUrl)}
-        </article>
-      `).join("")}
-    </section>
-
-    <section class="newsletter-section">
-      <p class="preview-kicker">${escapeHtml(field.label)}</p>
-      <p class="section-intro">${escapeHtml(field.intro)}</p>
-      ${renderImage(
-        fieldImage,
-        issue,
-        fieldImage?.credit || fieldImage?.label || fieldImage?.recommendedSize || ""
-      )}
-      <article class="field-card">
-        <p>${escapeHtml(field.note || "")}</p>
-        ${field.cta ? renderCta(field.cta.label, field.cta.url) : ""}
-      </article>
-    </section>
+    ${sectionOrderForIssue(issue).map((sectionKey) => renderedSections[sectionKey]).join("")}
 
     <footer class="footer-preview">
       <strong>${escapeHtml(issue.footer.wordmark)}</strong>
@@ -142,7 +191,7 @@ const setLinks = (issueId) => {
 };
 
 const loadIssue = async () => {
-  const issueId = issueInput.value.trim() || "2026-07";
+  const issueId = issueInput.value.trim() || "2026-08";
   issueInput.value = issueId;
   setLinks(issueId);
   statusMessage.textContent = "Loading issue...";

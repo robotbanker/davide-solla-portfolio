@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { loadIssue, loadManifest, renderEmail, validateIssue } = require("./lib/render-email");
 
-const issueId = process.argv[2] || "2026-07";
+const issueId = process.argv[2] || "2026-08";
 const strict = process.argv.includes("--strict");
 const outputDir = path.join(__dirname, "dist");
 const outputPath = path.join(outputDir, `${issueId}.html`);
@@ -28,7 +28,8 @@ if (!strict) {
 }
 
 fs.mkdirSync(outputDir, { recursive: true });
-fs.writeFileSync(outputPath, renderEmail(issue), "utf8");
+const html = `${renderEmail(issue).replace(/[ \t]+$/gm, "").trimEnd()}\n`;
+fs.writeFileSync(outputPath, html, "utf8");
 
 console.log(`Built newsletter email: ${path.relative(process.cwd(), outputPath)}`);
 if (issue.status !== "research-approved") {
