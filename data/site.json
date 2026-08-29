@@ -406,7 +406,7 @@
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
           "alt": "Khiazy - Jazz Editoria 7",
           "previewPosition": "50% 50%",
-          "className": ""
+          "className": "tile-tall"
         }
       ],
       "images": [
@@ -480,8 +480,9 @@
           "alt": "Khiazy - Jazz Editoria 14",
           "previewPosition": "50% 50%"
         }
-      ]
+      ],
+      "category": "Artist Portrait"
     }
   ],
-  "updatedAt": "2026-08-29T08:47:07.572Z"
+  "updatedAt": "2026-08-29T08:50:41.033Z"
 }
