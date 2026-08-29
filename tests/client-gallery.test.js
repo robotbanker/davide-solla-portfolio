@@ -47,6 +47,16 @@ const adobeResponse = (status, body, url = "") => ({
   text: async () => typeof body === "string" ? body : JSON.stringify(body)
 });
 
+const adobeImageResponse = (body, url) => ({
+  ok: true,
+  status: 200,
+  url,
+  headers: {
+    get: (name) => String(name).toLowerCase() === "content-type" ? "image/jpeg" : null
+  },
+  arrayBuffer: async () => body
+});
+
 const withClientGalleryBackend = async (operation) => {
   const root = path.resolve(__dirname, "..");
   const keyFor = (filePath) => path.relative(root, String(filePath)).split(path.sep).join("/");
@@ -143,6 +153,10 @@ const withClientGalleryBackend = async (operation) => {
       });
     }
 
+    if (target.includes("/renditions/asset-")) {
+      return adobeImageResponse(Buffer.from([0xff, 0xd8, 0xff, 0xd9]), target);
+    }
+
     throw new Error(`Unexpected fetch in client gallery test: ${target}`);
   };
 
@@ -185,6 +199,50 @@ const adminLogin = async () => {
   assert.equal(res.statusCode, 200);
   return json(res).token;
 };
+
+test("Lightroom imports keep working previews until permanent copies are deployed", async () => {
+  await withClientGalleryBackend(async ({ files }) => {
+    const token = await adminLogin();
+    const importResponse = response();
+    await handleAdminRequest(request({
+      url: "/api/admin?action=lightroom",
+      authorization: `Bearer ${token}`,
+      body: { url: "https://lightroom.adobe.com/shares/abcdef123456" }
+    }), importResponse);
+
+    assert.equal(importResponse.statusCode, 200);
+    const imported = json(importResponse).imported;
+    assert.equal(imported.length, 2);
+    assert.match(imported[0].src, /^assets\/images\/uploads\//);
+    assert.match(imported[0].previewSrc, /^https:\/\/photos\.adobe\.io\//);
+    assert.match(imported[0].previewSrc, /api_key=LightroomMobileWeb1/);
+    assert.equal(files.has(imported[0].src), true);
+
+    const saveResponse = response();
+    await handleAdminRequest(request({
+      url: "/api/admin?action=site",
+      authorization: `Bearer ${token}`,
+      body: {
+        site: {
+          version: 1,
+          sections: {},
+          albums: [{
+            id: "preview-test",
+            covers: [{ ...imported[0] }],
+            images: imported
+          }]
+        }
+      }
+    }), saveResponse);
+
+    assert.equal(saveResponse.statusCode, 200);
+    const savedAlbum = json(saveResponse).site.albums[0];
+    assert.equal("previewSrc" in savedAlbum.covers[0], false);
+    assert.equal("previewSrc" in savedAlbum.images[0], false);
+    const publicSite = JSON.parse(files.get("data/site.json"));
+    assert.equal("previewSrc" in publicSite.albums[0].images[0], false);
+  });
+});
 
 test("client feedback is authenticated, image-scoped, encrypted, and visible only in private admin data", async () => {
   await withClientGalleryBackend(async ({ files }) => {

@@ -44,12 +44,19 @@ test("the admin provides per-client download control and a feedback review surfa
   assert.match(adminHtml, /data-admin-tab="feedback"/);
   assert.match(adminHtml, /data-client-feedback-editor/);
   assert.match(adminHtml, /admin\.css\?v=11/);
-  assert.match(adminHtml, /admin\.js\?v=11/);
+  assert.match(adminHtml, /admin\.js\?v=12/);
   assert.match(adminScript, /data-client-download-enabled/);
   assert.match(adminScript, /client\.downloadEnabled = clientDownloadEnabled\.checked/);
   assert.match(adminScript, /const renderFeedback = \(\) =>/);
   assert.match(adminScript, /client\.feedback/);
   assert.match(adminScript, /clients: \(site\.clients \|\| \[\]\)\.map\(\(\{ feedback, \.\.\.client \}\) => client\)/);
+});
+
+test("the admin keeps Lightroom previews visible while permanent images deploy", () => {
+  assert.match(adminScript, /const previewSrc = item\.previewSrc \|\| item\.src/);
+  assert.match(adminScript, /const previewSources = new Map\(\)/);
+  assert.match(adminScript, /previewSources\.has\(item\.src\)/);
+  assert.match(adminScript, /Lightroom previews stay visible while permanent copies publish/);
 });
 
 test("the encrypted feedback store is denied by the production static router", () => {

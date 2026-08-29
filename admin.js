@@ -507,10 +507,11 @@ const renderAlbumList = () => {
 
 const renderCropFrame = (item, album, type, index, label) => {
   const position = parsePosition(item.previewPosition);
+  const previewSrc = item.previewSrc || item.src;
 
   return `
     <button class="crop-frame" type="button" data-crop-target="${type}:${index}" aria-label="Reposition ${escapeHtml(label)} preview">
-      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || album.title)}" style="object-position: ${formatPosition(position.x, position.y)}">
+      <img src="${escapeHtml(previewSrc)}" alt="${escapeHtml(item.alt || album.title)}" style="object-position: ${formatPosition(position.x, position.y)}">
       <span>${escapeHtml(label)}</span>
     </button>
   `;
@@ -805,8 +806,21 @@ const loadSite = async () => {
 
 const saveSite = async () => {
   setStatus("Saving changes...");
+  const previewSources = new Map();
+  const albums = (site.albums || []).map((album) => ({
+    ...album,
+    covers: (album.covers || []).map(({ previewSrc, ...cover }) => {
+      if (previewSrc && cover.src) previewSources.set(cover.src, previewSrc);
+      return cover;
+    }),
+    images: (album.images || []).map(({ previewSrc, ...image }) => {
+      if (previewSrc && image.src) previewSources.set(image.src, previewSrc);
+      return image;
+    })
+  }));
   const sitePayload = {
     ...site,
+    albums,
     clients: (site.clients || []).map(({ feedback, ...client }) => client)
   };
   const response = await api("site", {
@@ -816,6 +830,11 @@ const saveSite = async () => {
   });
   site = response.site || site;
   ensureSiteShape();
+  (site.albums || []).forEach((album) => {
+    [...(album.covers || []), ...(album.images || [])].forEach((item) => {
+      if (previewSources.has(item.src)) item.previewSrc = previewSources.get(item.src);
+    });
+  });
   renderClients();
   renderFeedback();
   markClean();
@@ -913,6 +932,7 @@ const moveAlbum = (albumId, direction) => {
 
 const buildCoverFromImage = (album, image) => ({
   src: image.src,
+  ...(image.previewSrc ? { previewSrc: image.previewSrc } : {}),
   alt: image.alt || album.title,
   previewPosition: image.previewPosition || "50% 50%",
   className: album.section === "fine-art" ? defaultCoverStyle : ""
@@ -1229,7 +1249,7 @@ document.addEventListener("click", async (event) => {
 
       markDirty();
       render();
-      setStatus(`${images.length} Lightroom image${images.length === 1 ? "" : "s"} imported. Save changes to publish.`);
+      setStatus(`${images.length} Lightroom image${images.length === 1 ? "" : "s"} imported. The Lightroom previews stay visible while permanent copies publish; save changes to finish.`);
     } catch (error) {
       setStatus(error.message);
       importLightroomButton.disabled = false;
