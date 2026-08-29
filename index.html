@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-GB" data-analytics="enabled">
   <head>
-    <script src="privacy-consent.js?v=2026-08-19" defer></script>
+    <script src="privacy-consent.js?v=2026-07-18" defer></script>
     <script src="google-tag.js?v=3" defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,7 +28,7 @@
     <link rel="apple-touch-icon" href="assets/images/favicon.png">
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#080807">
-    <link rel="stylesheet" href="styles.css?v=32">
+    <link rel="stylesheet" href="styles.css?v=30">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -221,8 +221,7 @@
       }
     </script>
   </head>
-  <body class="home-page">
-    <a class="skip-link" href="#work">Skip to selected work</a>
+  <body>
     <header class="site-header" data-header>
       <a class="brand" href="#top" aria-label="Davide Solla home">
         <span>Davide Solla</span>
@@ -238,13 +237,13 @@
           </svg>
         </a>
 
-        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-controls="site-navigation" aria-expanded="false" data-menu-toggle>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-toggle>
           <span></span>
           <span></span>
         </button>
       </div>
 
-      <nav class="site-nav" id="site-navigation" data-nav aria-label="Main navigation">
+      <nav class="site-nav" data-nav aria-label="Main navigation">
         <a href="#work">Work</a>
         <a href="#services">Services</a>
         <a href="#fine-art">Fine Art</a>
@@ -262,7 +261,7 @@
       </nav>
     </header>
 
-    <main id="top" tabindex="-1">
+    <main id="top">
       <section class="hero" aria-label="Davide Solla portfolio introduction">
         <div class="hero-media">
           <picture>
@@ -273,14 +272,9 @@
         </div>
         <div class="hero-shade"></div>
 
-        <div class="hero-edition" aria-hidden="true">
-          <span>Selected works</span>
-          <span>MMXXVI</span>
-        </div>
-
         <div class="hero-content">
-          <p class="eyebrow"><span>London fashion & editorial photographer</span><span>London ↔ Naples</span></p>
-          <h1><span>Davide</span><span>Solla</span></h1>
+          <p class="eyebrow">London fashion & editorial photographer</p>
+          <h1>Davide Solla</h1>
           <p class="hero-copy">Cinematic fashion, beauty, and portrait photography shaped with controlled light, colour, and a fine-art sense of story.</p>
           <div class="hero-actions">
             <a class="text-link text-link-light hero-secondary" href="#work">View work</a>
@@ -290,73 +284,72 @@
         </div>
 
         <div class="hero-notes" aria-label="Studio summary">
-          <span>Fashion / Beauty / Portraiture</span>
-          <a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
+          <span>London / Naples · Fashion · Beauty · Model portfolios</span>
         </div>
       </section>
 
-      <section class="section-pad work-section" id="work" tabindex="-1">
+      <section class="section-pad work-section" id="work">
         <div class="section-heading">
           <p class="section-kicker" data-work-kicker>Selected editorials</p>
           <h2 data-work-heading>London fashion editorials, beauty stories, and cinematic portrait work.</h2>
         </div>
 
         <div class="editorial-grid" data-editorial-grid>
-          <a class="work-tile tile-wide" href="/work/roxana" data-gallery="roxana" data-cover-index="0" aria-label="Open Roxana story">
+          <a class="work-tile tile-large" href="/work/roxana" data-gallery="roxana" aria-label="Open Roxana story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/roxana-01-720.avif 720w, assets/images/responsive/roxana-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 58vw">
-              <source type="image/webp" srcset="assets/images/responsive/roxana-01-720.webp 720w, assets/images/responsive/roxana-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 58vw">
-              <img src="assets/images/roxana-01.jpg" srcset="assets/images/responsive/roxana-01-720.jpg 720w, assets/images/responsive/roxana-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 58vw" alt="London editorial beauty portrait in warm directional light" width="1920" height="1280" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/roxana-01-720.avif 720w, assets/images/responsive/roxana-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
+              <source type="image/webp" srcset="assets/images/responsive/roxana-01-720.webp 720w, assets/images/responsive/roxana-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
+              <img src="assets/images/roxana-01.jpg" srcset="assets/images/responsive/roxana-01-720.jpg 720w, assets/images/responsive/roxana-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw" alt="London editorial beauty portrait in warm directional light" width="1920" height="1280" loading="lazy" decoding="async">
             </picture>
             <span>Roxana</span>
           </a>
-          <a class="work-tile tile-large" href="/work/cosmic" data-gallery="cosmic" data-cover-index="0" aria-label="Open Cosmic Girl story">
+          <a class="work-tile" href="/work/cosmic" data-gallery="cosmic" aria-label="Open Cosmic Girl story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/cosmic-01-720.avif 720w, assets/images/responsive/cosmic-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 34vw">
-              <source type="image/webp" srcset="assets/images/responsive/cosmic-01-720.webp 720w, assets/images/responsive/cosmic-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 34vw">
-              <img src="assets/images/cosmic-01.jpg" srcset="assets/images/responsive/cosmic-01-720.jpg 720w, assets/images/responsive/cosmic-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 34vw" alt="Cosmic Girl full-length fashion portrait with futuristic styling" width="1365" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/cosmic-02-720.avif 720w, assets/images/responsive/cosmic-02-1200.avif 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <source type="image/webp" srcset="assets/images/responsive/cosmic-02-720.webp 720w, assets/images/responsive/cosmic-02-1200.webp 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <img src="assets/images/cosmic-02.jpg" srcset="assets/images/responsive/cosmic-02-720.jpg 720w, assets/images/responsive/cosmic-02-1200.jpg 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw" alt="Cosmic Girl cinematic fashion close portrait with blue-red light" width="2048" height="1445" loading="lazy" decoding="async">
             </picture>
             <span>Cosmic Girl</span>
           </a>
-          <a class="work-tile tile-wide" href="/work/sophie" data-gallery="sophie" data-cover-index="0" aria-label="Open Sophie story">
+          <a class="work-tile" href="/work/julia" data-gallery="julia" aria-label="Open Julia story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/sophie-01-720.avif 720w, assets/images/responsive/sophie-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 84vw">
-              <source type="image/webp" srcset="assets/images/responsive/sophie-01-720.webp 720w, assets/images/responsive/sophie-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 84vw">
-              <img src="assets/images/sophie-01.jpg" srcset="assets/images/responsive/sophie-01-720.jpg 720w, assets/images/responsive/sophie-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 84vw" alt="Nocturnal Soho fashion editorial portrait in London" width="2048" height="1482" loading="lazy" decoding="async">
-            </picture>
-            <span>Sophie</span>
-          </a>
-          <a class="work-tile tile-large" href="/work/inna" data-gallery="inna" data-cover-index="0" aria-label="Open Inna story">
-            <img src="assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg" alt="Inna Gallery 1" width="1365" height="2048" loading="lazy" decoding="async">
-            <span>Inna</span>
-          </a>
-          <a class="work-tile tile-tall" href="/work/julia" data-gallery="julia" data-cover-index="0" aria-label="Open Julia story">
-            <picture>
-              <source type="image/avif" srcset="assets/images/responsive/julia-01-720.avif 720w, assets/images/responsive/julia-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw">
-              <source type="image/webp" srcset="assets/images/responsive/julia-01-720.webp 720w, assets/images/responsive/julia-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw">
-              <img src="assets/images/julia-01.jpg" srcset="assets/images/responsive/julia-01-720.jpg 720w, assets/images/responsive/julia-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw" alt="Quiet editorial portrait with refined winter styling" width="1536" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/julia-01-720.avif 720w, assets/images/responsive/julia-01-1200.avif 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <source type="image/webp" srcset="assets/images/responsive/julia-01-720.webp 720w, assets/images/responsive/julia-01-1200.webp 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <img src="assets/images/julia-01.jpg" srcset="assets/images/responsive/julia-01-720.jpg 720w, assets/images/responsive/julia-01-1200.jpg 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw" alt="Quiet editorial portrait with refined winter styling" width="1536" height="2048" loading="lazy" decoding="async">
             </picture>
             <span>Julia</span>
           </a>
-          <a class="work-tile" href="/work/harvey" data-gallery="harvey" data-cover-index="0" aria-label="Open Harvey story">
+          <a class="work-tile tile-wide" href="/work/sophie" data-gallery="sophie" aria-label="Open Sophie story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/harvey-01-720.avif 720w, assets/images/responsive/harvey-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw">
-              <source type="image/webp" srcset="assets/images/responsive/harvey-01-720.webp 720w, assets/images/responsive/harvey-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw">
-              <img src="assets/images/harvey-01.jpg" srcset="assets/images/responsive/harvey-01-720.jpg 720w, assets/images/responsive/harvey-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 25vw" alt="Menswear portrait with moody London studio light" width="1528" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/sophie-01-720.avif 720w, assets/images/responsive/sophie-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
+              <source type="image/webp" srcset="assets/images/responsive/sophie-01-720.webp 720w, assets/images/responsive/sophie-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
+              <img src="assets/images/sophie-01.jpg" srcset="assets/images/responsive/sophie-01-720.jpg 720w, assets/images/responsive/sophie-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw" alt="Nocturnal Soho fashion editorial portrait in London" width="2048" height="1482" loading="lazy" decoding="async">
+            </picture>
+            <span>Sophie</span>
+          </a>
+          <a class="work-tile" href="/work/harvey" data-gallery="harvey" aria-label="Open Harvey story">
+            <picture>
+              <source type="image/avif" srcset="assets/images/responsive/harvey-01-720.avif 720w, assets/images/responsive/harvey-01-1200.avif 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <source type="image/webp" srcset="assets/images/responsive/harvey-01-720.webp 720w, assets/images/responsive/harvey-01-1200.webp 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <img src="assets/images/harvey-01.jpg" srcset="assets/images/responsive/harvey-01-720.jpg 720w, assets/images/responsive/harvey-01-1200.jpg 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw" alt="Menswear portrait with moody London studio light" width="1528" height="2048" loading="lazy" decoding="async">
             </picture>
             <span>Harvey</span>
           </a>
-          <a class="work-tile tile-large" href="/work/dark-baroque" data-gallery="dark-baroque" data-cover-index="0" aria-label="Open Dark Baroque story">
+          <button class="work-tile" type="button" data-gallery="studio" aria-label="Open Studio gallery">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/dark-baroque-06-720.avif 720w, assets/images/responsive/dark-baroque-06-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 67vw">
-              <source type="image/webp" srcset="assets/images/responsive/dark-baroque-06-720.webp 720w, assets/images/responsive/dark-baroque-06-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 67vw">
-              <img src="assets/images/dark-baroque-06.jpg" srcset="assets/images/responsive/dark-baroque-06-720.jpg 720w, assets/images/responsive/dark-baroque-06-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 67vw" alt="Dark Baroque fashion portrait with theatrical red-room styling" width="1365" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/studio-02-720.avif 720w, assets/images/responsive/studio-02-1200.avif 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <source type="image/webp" srcset="assets/images/responsive/studio-02-720.webp 720w, assets/images/responsive/studio-02-1200.webp 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw">
+              <img src="assets/images/studio-02.jpg" srcset="assets/images/responsive/studio-02-720.jpg 720w, assets/images/responsive/studio-02-1200.jpg 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw" alt="Controlled studio fashion portrait for a London portfolio session" width="1754" height="2048" loading="lazy" decoding="async">
+            </picture>
+            <span>Studio</span>
+          </button>
+          <a class="work-tile tile-wide" href="/work/dark-baroque" data-gallery="dark-baroque" aria-label="Open Dark Baroque story">
+            <picture>
+              <source type="image/avif" srcset="assets/images/responsive/dark-baroque-01-720.avif 720w, assets/images/responsive/dark-baroque-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
+              <source type="image/webp" srcset="assets/images/responsive/dark-baroque-01-720.webp 720w, assets/images/responsive/dark-baroque-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
+              <img src="assets/images/dark-baroque-01.jpg" srcset="assets/images/responsive/dark-baroque-01-720.jpg 720w, assets/images/responsive/dark-baroque-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw" alt="Dark Baroque fashion portrait on a leather chaise beneath a chandelier" width="2048" height="1365" loading="lazy" decoding="async">
             </picture>
             <span>Dark Baroque</span>
-          </a>
-          <a class="work-tile" href="/work/kihaya-blues" data-gallery="kihaya-blues" data-cover-index="0" aria-label="Open Kihaya Blues story">
-            <img src="assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-a493eb2f.jpg" alt="Kihaya Blues studio portrait in low-key light" width="1365" height="2048" loading="lazy" decoding="async">
-            <span>Kihaya Blues</span>
           </a>
         </div>
       </section>
@@ -370,7 +363,7 @@
         </div>
       </section>
 
-      <section class="service-detail section-pad" id="services" aria-labelledby="services-heading" tabindex="-1">
+      <section class="service-detail section-pad" id="services" aria-labelledby="services-heading">
         <div class="section-heading">
           <p class="section-kicker">Photography services in London</p>
           <h2 id="services-heading">Editorial image-making for people, portfolios, and campaigns.</h2>
@@ -396,7 +389,7 @@
         <a class="text-link text-link-light section-cta" href="#contact">Discuss a shoot</a>
       </section>
 
-      <section class="section-pad fine-art-section" id="fine-art" tabindex="-1">
+      <section class="section-pad fine-art-section" id="fine-art">
         <div class="section-heading split-heading">
           <div>
             <p class="section-kicker" data-fine-art-kicker>Fine art</p>
@@ -409,43 +402,35 @@
         </div>
 
         <div class="fine-grid" data-fine-grid>
-          <a class="fine-image fine-tall" href="/work/kintsugi" data-gallery="kintsugi" data-cover-index="0" aria-label="Open Kintsugi story">
+          <a class="fine-image fine-tall" href="/work/kintsugi" data-gallery="kintsugi" aria-label="Open Kintsugi story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/fine-art-01-720.avif 720w, assets/images/responsive/fine-art-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
-              <source type="image/webp" srcset="assets/images/responsive/fine-art-01-720.webp 720w, assets/images/responsive/fine-art-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
-              <img src="assets/images/fine-art-01.jpg" srcset="assets/images/responsive/fine-art-01-720.jpg 720w, assets/images/responsive/fine-art-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw" alt="Fine-art portrait with sculptural styling and transformation theme" width="1352" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/fine-art-01-720.avif 720w, assets/images/responsive/fine-art-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw">
+              <source type="image/webp" srcset="assets/images/responsive/fine-art-01-720.webp 720w, assets/images/responsive/fine-art-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw">
+              <img src="assets/images/fine-art-01.jpg" srcset="assets/images/responsive/fine-art-01-720.jpg 720w, assets/images/responsive/fine-art-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw" alt="Fine-art portrait with sculptural styling and transformation theme" width="1352" height="2048" loading="eager" decoding="async">
             </picture>
             <span>Kintsugi</span>
           </a>
-          <a class="fine-image" href="/work/kintsugi" data-gallery="kintsugi" data-cover-index="1" aria-label="Open Kintsugi Study I story">
+          <a class="fine-image" href="/work/kintsugi" data-gallery="kintsugi" aria-label="Open Kintsugi Study I story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/kintsugi-01-720.avif 720w, assets/images/responsive/kintsugi-01-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw">
-              <source type="image/webp" srcset="assets/images/responsive/kintsugi-01-720.webp 720w, assets/images/responsive/kintsugi-01-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw">
-              <img src="assets/images/kintsugi-01.jpg" srcset="assets/images/responsive/kintsugi-01-720.jpg 720w, assets/images/responsive/kintsugi-01-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw" alt="Kintsugi fine-art portrait study with delicate texture" width="1365" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/kintsugi-01-720.avif 720w, assets/images/responsive/kintsugi-01-1200.avif 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw">
+              <source type="image/webp" srcset="assets/images/responsive/kintsugi-01-720.webp 720w, assets/images/responsive/kintsugi-01-1200.webp 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw">
+              <img src="assets/images/kintsugi-01.jpg" srcset="assets/images/responsive/kintsugi-01-720.jpg 720w, assets/images/responsive/kintsugi-01-1200.jpg 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw" alt="Kintsugi fine-art portrait study with delicate texture" width="1365" height="2048" loading="eager" decoding="async">
             </picture>
             <span>Kintsugi</span>
           </a>
-          <a class="fine-image" href="/work/kintsugi" data-gallery="kintsugi" data-cover-index="2" aria-label="Open Kintsugi Study II story">
+          <a class="fine-image" href="/work/kintsugi" data-gallery="kintsugi" aria-label="Open Kintsugi Study II story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/kintsugi-02-720.avif 720w, assets/images/responsive/kintsugi-02-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 34vw">
-              <source type="image/webp" srcset="assets/images/responsive/kintsugi-02-720.webp 720w, assets/images/responsive/kintsugi-02-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 34vw">
-              <img src="assets/images/kintsugi-02.jpg" srcset="assets/images/responsive/kintsugi-02-720.jpg 720w, assets/images/responsive/kintsugi-02-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 34vw" alt="Kintsugi fine-art portrait study with contemplative pose" width="1365" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/kintsugi-02-720.avif 720w, assets/images/responsive/kintsugi-02-1200.avif 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw">
+              <source type="image/webp" srcset="assets/images/responsive/kintsugi-02-720.webp 720w, assets/images/responsive/kintsugi-02-1200.webp 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw">
+              <img src="assets/images/kintsugi-02.jpg" srcset="assets/images/responsive/kintsugi-02-720.jpg 720w, assets/images/responsive/kintsugi-02-1200.jpg 1200w" sizes="(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw" alt="Kintsugi fine-art portrait study with contemplative pose" width="1365" height="2048" loading="eager" decoding="async">
             </picture>
             <span>Kintsugi</span>
           </a>
-          <a class="fine-image fine-portrait" href="/work/petals" data-gallery="petals" data-cover-index="0" aria-label="Open Petals fine art story">
+          <a class="fine-image fine-portrait" href="/work/petals" data-gallery="petals" aria-label="Open Petals fine art story">
             <picture>
-              <source type="image/avif" srcset="assets/images/responsive/fine-art-02-720.avif 720w, assets/images/responsive/fine-art-02-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
-              <source type="image/webp" srcset="assets/images/responsive/fine-art-02-720.webp 720w, assets/images/responsive/fine-art-02-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw">
-              <img src="assets/images/fine-art-02.jpg" srcset="assets/images/responsive/fine-art-02-720.jpg 720w, assets/images/responsive/fine-art-02-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw" alt="Fine-art portrait with rose petals on white silk" width="1366" height="2048" loading="lazy" decoding="async">
-            </picture>
-            <span>Petals</span>
-          </a>
-          <a class="fine-image fine-tall" href="/work/petals" data-gallery="petals" data-cover-index="1" aria-label="Open Petals Study II story">
-            <picture>
-              <source type="image/avif" srcset="assets/images/responsive/petals-03-720.avif 720w, assets/images/responsive/petals-03-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 58vw">
-              <source type="image/webp" srcset="assets/images/responsive/petals-03-720.webp 720w, assets/images/responsive/petals-03-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 58vw">
-              <img src="assets/images/petals-03.jpg" srcset="assets/images/responsive/petals-03-720.jpg 720w, assets/images/responsive/petals-03-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 100vw, 58vw" alt="Petals fine-art portrait with white silk and rose petals" width="1365" height="2048" loading="lazy" decoding="async">
+              <source type="image/avif" srcset="assets/images/responsive/fine-art-02-720.avif 720w, assets/images/responsive/fine-art-02-1200.avif 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw">
+              <source type="image/webp" srcset="assets/images/responsive/fine-art-02-720.webp 720w, assets/images/responsive/fine-art-02-1200.webp 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw">
+              <img src="assets/images/fine-art-02.jpg" srcset="assets/images/responsive/fine-art-02-720.jpg 720w, assets/images/responsive/fine-art-02-1200.jpg 1200w" sizes="(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw" alt="Fine-art portrait with rose petals on white silk" width="1366" height="2048" loading="eager" decoding="async">
             </picture>
             <span>Petals</span>
           </a>
@@ -471,7 +456,7 @@
         <p class="print-shop-status" data-print-shop-status aria-live="polite"></p>
       </section>
 
-      <section class="about section-pad" id="about" tabindex="-1">
+      <section class="about section-pad" id="about">
         <div class="about-copy">
           <p class="section-kicker">About</p>
           <h2>London-based, Naples-born photographer working between cinematic instinct and studio discipline.</h2>
@@ -488,7 +473,7 @@
         </figure>
       </section>
 
-      <section class="contact section-pad" id="contact" tabindex="-1">
+      <section class="contact section-pad" id="contact">
         <div class="contact-intro">
           <p class="section-kicker">Commissions</p>
           <h2>Book a fashion, portrait, or editorial shoot in London.</h2>
@@ -543,7 +528,7 @@
       <a href="#top">Back to top</a>
     </footer>
 
-    <div class="print-order-modal" data-print-order-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="print-order-title" inert>
+    <div class="print-order-modal" data-print-order-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="print-order-title">
       <div class="print-order-panel">
         <button class="print-order-close" type="button" aria-label="Close print order" data-print-order-close></button>
 
@@ -617,7 +602,7 @@
       </div>
     </div>
 
-    <div class="gallery-modal" data-gallery-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gallery-title" inert>
+    <div class="gallery-modal" data-gallery-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gallery-title">
       <div class="gallery-panel">
         <header class="gallery-header">
           <button class="gallery-back" type="button" data-gallery-close>Back to work</button>
@@ -638,7 +623,7 @@
       </div>
     </div>
 
-    <div class="image-lightbox" data-image-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Expanded gallery image" inert>
+    <div class="image-lightbox" data-image-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Expanded gallery image">
       <button class="image-lightbox-close" type="button" aria-label="Close image" data-image-lightbox-close></button>
       <button class="image-lightbox-nav image-lightbox-nav-prev" type="button" aria-label="Previous expanded image" data-image-lightbox-prev></button>
       <button class="image-lightbox-nav image-lightbox-nav-next" type="button" aria-label="Next expanded image" data-image-lightbox-next></button>
@@ -648,6 +633,6 @@
       </figure>
     </div>
 
-    <script src="script.js?v=32"></script>
+    <script src="script.js?v=30"></script>
   </body>
 </html>

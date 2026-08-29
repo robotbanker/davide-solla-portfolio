@@ -34,7 +34,7 @@ test("every already-public album has one unique, server-rendered project URL", (
     const html = renderProjectPage(siteData, slug);
     assert.match(html, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/work/${slug}">`));
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=2026-08-19/);
+    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
     assert.match(html, /google-tag\.js\?v=3/);
     assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large">/);
     assert.match(html, /<script type="application\/ld\+json">/);
@@ -204,18 +204,13 @@ test("the image sitemap names every stable project and its owned images", () => 
 test("homepage portfolio tiles expose stable links without removing the modal experience", () => {
   const homepage = fs.readFileSync("index.html", "utf8");
   const browserScript = fs.readFileSync("script.js", "utf8");
-  const fallbackGalleryIds = [...new Set([...homepage.matchAll(/data-gallery="([^"]+)"/g)].map((match) => match[1]))].sort();
-  const publicGalleryIds = listProjectPages(siteData).map((album) => album.id).sort();
-
-  assert.deepEqual(fallbackGalleryIds, publicGalleryIds);
   for (const match of homepage.matchAll(/data-gallery="([^"]+)"/g)) {
     const album = listProjectPages(siteData).find((candidate) => candidate.id === match[1]);
     if (album) {
       assert.match(homepage, new RegExp(`href="/work/${projectSlug(album)}"[^>]+data-gallery="${album.id}"`));
     }
   }
-  assert.match(homepage, /href="\/work\/inna"[^>]+data-gallery="inna"/);
-  assert.doesNotMatch(homepage, /data-gallery="studio"/);
+  assert.match(homepage, /<button class="work-tile" type="button" data-gallery="studio"/);
   assert.match(homepage, /data-gallery-project-page href="\/#work"/);
   assert.match(browserScript, /button\.href = `\/work\/\$\{encodeURIComponent\(item\.projectSlug\)\}`/);
   assert.match(browserScript, /galleryProjectPageLink\.hidden = !slug/);

@@ -10,24 +10,6 @@
   const validChoices = new Set(["granted", "denied"]);
   let analyticsStarted = false;
   let lastFocusedElement = null;
-  const settingsBackgroundState = new Map();
-
-  const setSettingsBackgroundInert = (modal, isInert) => {
-    if (isInert) {
-      if (settingsBackgroundState.size) return;
-      [...document.body.children].forEach((element) => {
-        if (element === modal || element.tagName === "SCRIPT") return;
-        settingsBackgroundState.set(element, element.inert);
-        element.inert = true;
-      });
-      return;
-    }
-
-    settingsBackgroundState.forEach((wasInert, element) => {
-      element.inert = wasInert;
-    });
-    settingsBackgroundState.clear();
-  };
 
   const emptyDecision = () => ({ analytics: "unset", version: noticeVersion });
 
@@ -160,7 +142,6 @@
     if (!modal || modal.hidden) return;
     modal.hidden = true;
     document.body.classList.remove("privacy-panel-open");
-    setSettingsBackgroundInert(modal, false);
     lastFocusedElement?.focus?.();
   };
 
@@ -170,7 +151,6 @@
     lastFocusedElement = trigger || document.activeElement;
     modal.hidden = false;
     document.body.classList.add("privacy-panel-open");
-    setSettingsBackgroundInert(modal, true);
     updateVisibleState();
     modal.querySelector("[data-privacy-close]")?.focus();
   };

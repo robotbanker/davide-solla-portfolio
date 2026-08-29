@@ -59,96 +59,6 @@ let lastPrintOrderTrigger = null;
 let editorialLayoutFrame = null;
 const enquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v1";
 const pendingEnquiryStorageKey = "davide-studios-pending-enquiry-v1";
-const focusableSelector = [
-  'a[href]:not([tabindex="-1"])',
-  'button:not([disabled]):not([tabindex="-1"])',
-  'input:not([disabled]):not([type="hidden"]):not([tabindex="-1"])',
-  'select:not([disabled]):not([tabindex="-1"])',
-  'textarea:not([disabled]):not([tabindex="-1"])',
-  '[tabindex]:not([tabindex="-1"])'
-].join(",");
-const modalLayers = [printOrderModal, galleryModal, imageLightbox].filter(Boolean);
-const modalBackgroundState = new Map();
-const menuBackgroundState = new Map();
-
-const focusableElements = (container) => [...container.querySelectorAll(focusableSelector)]
-  .filter((element) => !element.hidden && element.getClientRects().length > 0);
-
-const trapFocus = (event, container) => {
-  if (event.key !== "Tab" || !container) {
-    return false;
-  }
-
-  const focusable = focusableElements(container);
-
-  if (!focusable.length) {
-    event.preventDefault();
-    return true;
-  }
-
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  const active = document.activeElement;
-
-  if (!container.contains(active)) {
-    event.preventDefault();
-    (event.shiftKey ? last : first).focus({ preventScroll: true });
-  } else if (event.shiftKey && active === first) {
-    event.preventDefault();
-    last.focus({ preventScroll: true });
-  } else if (!event.shiftKey && active === last) {
-    event.preventDefault();
-    first.focus({ preventScroll: true });
-  }
-
-  return true;
-};
-
-const setModalBackgroundInert = (isInert, activeLayer = null) => {
-  if (isInert) {
-    if (modalBackgroundState.size) {
-      return;
-    }
-
-    [...body.children].forEach((element) => {
-      if (element === activeLayer || element.tagName === "SCRIPT") {
-        return;
-      }
-
-      modalBackgroundState.set(element, element.inert);
-      element.inert = true;
-    });
-    return;
-  }
-
-  modalBackgroundState.forEach((wasInert, element) => {
-    element.inert = wasInert;
-  });
-  modalBackgroundState.clear();
-};
-
-const setMenuBackgroundInert = (isInert) => {
-  if (isInert) {
-    if (menuBackgroundState.size) {
-      return;
-    }
-
-    [...body.children].forEach((element) => {
-      if (element === header || element.tagName === "SCRIPT" || modalLayers.includes(element)) {
-        return;
-      }
-
-      menuBackgroundState.set(element, element.inert);
-      element.inert = true;
-    });
-    return;
-  }
-
-  menuBackgroundState.forEach((wasInert, element) => {
-    element.inert = wasInert;
-  });
-  menuBackgroundState.clear();
-};
 
 const boundedAttributionValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
 const analyticsConsentState = () => {
@@ -239,7 +149,7 @@ const defaultSiteData = {
       title: "Roxana",
       kicker: "Editorial story",
       description: "A polished London beauty editorial shaped with soft glamour, reflective colour, and poised studio direction.",
-      covers: [{ src: "assets/images/roxana-01.jpg", alt: "London editorial beauty portrait in warm directional light", className: "tile-wide", previewPosition: "50% 50%" }],
+      covers: [{ src: "assets/images/roxana-01.jpg", alt: "London editorial beauty portrait in warm directional light", className: "tile-large", previewPosition: "50% 52%" }],
       images: [
         { src: "assets/images/roxana-01.jpg", alt: "Roxana editorial beauty portrait in warm directional light" },
         { src: "assets/images/roxana-02.jpg", alt: "Roxana London fashion portrait with refined styling" },
@@ -253,7 +163,7 @@ const defaultSiteData = {
       title: "Cosmic Girl",
       kicker: "Fashion editorial",
       description: "A futuristic fashion editorial with blue-red studio light, metallic texture, and a beauty mood built around gaze and gesture.",
-      covers: [{ src: "assets/images/cosmic-01.jpg", alt: "Cosmic Girl full-length fashion portrait with futuristic styling", className: "tile-large", previewPosition: "49% 38%" }],
+      covers: [{ src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic fashion close portrait with blue-red light", className: "", previewPosition: "50% 52%" }],
       images: [
         { src: "assets/images/cosmic-01.jpg", alt: "Cosmic Girl full-length fashion portrait with futuristic styling", previewPosition: "50% 18%" },
         { src: "assets/images/cosmic-02.jpg", alt: "Cosmic Girl cinematic close portrait with blue-red studio light" },
@@ -312,21 +222,18 @@ const defaultSiteData = {
       ]
     },
     {
-      id: "inna",
+      id: "studio",
       section: "editorials",
-      title: "Inna",
-      kicker: "Studio Portrait",
-      description: "A portraiture experiment between light and emotions",
-      covers: [{ src: "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg", alt: "Inna Gallery 1", className: "tile-large", previewPosition: "50% 50%" }],
+      title: "Studio",
+      kicker: "Studio fashion",
+      description: "Controlled London studio fashion portraits built around posture, styling, and a clean high-fashion atmosphere.",
+      covers: [{ src: "assets/images/studio-02.jpg", alt: "Controlled studio fashion portrait for a London portfolio session", className: "", previewPosition: "50% 38%" }],
       images: [
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg", alt: "Inna Gallery 1", previewPosition: "50% 27%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg", alt: "Inna Gallery 2", previewPosition: "50% 50%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-3-4c2c263a.jpg", alt: "Inna Gallery 3", previewPosition: "50% 50%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-4-22adb185.jpg", alt: "Inna Gallery 4", previewPosition: "50% 50%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg", alt: "Inna Gallery 6", previewPosition: "50% 50%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg", alt: "Inna Gallery 8", previewPosition: "50% 50%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg", alt: "Inna Gallery 13", previewPosition: "50% 50%" },
-        { src: "assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg", alt: "Inna Gallery 16", previewPosition: "50% 50%" }
+        { src: "assets/images/studio-01.jpg", alt: "London studio fashion portrait with elegant styling" },
+        { src: "assets/images/studio-02.jpg", alt: "Studio editorial portrait for a model portfolio" },
+        { src: "assets/images/studio-03.jpg", alt: "Studio beauty portrait with controlled light" },
+        { src: "assets/images/studio-04.jpg", alt: "Studio fashion study with clean high-fashion atmosphere" },
+        { src: "assets/images/studio-05.jpg", alt: "London studio editorial portrait with poised styling" }
       ]
     },
     {
@@ -335,7 +242,7 @@ const defaultSiteData = {
       title: "Dark Baroque",
       kicker: "Fashion editorial",
       description: "A theatrical fashion editorial shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
-      covers: [{ src: "assets/images/dark-baroque-06.jpg", alt: "Dark Baroque fashion portrait with theatrical red-room styling", className: "tile-large", previewPosition: "50% 50%" }],
+      covers: [{ src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque fashion portrait on a leather chaise beneath a chandelier", className: "tile-wide", previewPosition: "50% 42%" }],
       images: [
         { src: "assets/images/dark-baroque-01.jpg", alt: "Dark Baroque reclining portrait with red velvet drapery and chandelier" },
         { src: "assets/images/dark-baroque-02.jpg", alt: "Dark Baroque staged fashion portrait with blue satin and ivory floral prop" },
@@ -370,10 +277,7 @@ const defaultSiteData = {
       title: "Petals",
       kicker: "Fine art portrait",
       description: "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
-      covers: [
-        { src: "assets/images/fine-art-02.jpg", alt: "Fine-art portrait with rose petals on white silk", className: "fine-portrait" },
-        { src: "assets/images/petals-03.jpg", alt: "Petals fine-art portrait with white silk and rose petals", className: "fine-tall", previewPosition: "50% 48%" }
-      ],
+      covers: [{ src: "assets/images/fine-art-02.jpg", alt: "Fine-art portrait with rose petals on white silk", className: "fine-portrait" }],
       images: [
         { src: "assets/images/fine-art-02.jpg", alt: "Fine-art portrait with rose petals on white silk" },
         { src: "assets/images/petals-02.jpg", alt: "Petals fine-art portrait with softness and body" },
@@ -389,7 +293,7 @@ const categoryByGallery = {
   julia: "Portrait",
   sophie: "Fashion",
   harvey: "Portrait",
-  inna: "Portrait",
+  studio: "Model portfolio",
   "dark-baroque": "Fashion",
   kintsugi: "Fine Art",
   petals: "Fine Art"
@@ -401,7 +305,7 @@ const locationByGallery = {
   julia: "London",
   sophie: "Soho, London",
   harvey: "London studio",
-  inna: "London studio",
+  studio: "London studio",
   "dark-baroque": "London",
   kintsugi: "London",
   petals: "London"
@@ -428,14 +332,6 @@ const imageDimensions = {
   "assets/images/harvey-02.jpg": [1328, 2048],
   "assets/images/harvey-03.jpg": [1920, 1300],
   "assets/images/hero-cosmic-girl.jpg": [1733, 1355],
-  "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg": [1365, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg": [1365, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-3-4c2c263a.jpg": [1365, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-4-22adb185.jpg": [2048, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg": [2048, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg": [1314, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg": [1536, 2048],
-  "assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg": [1269, 2048],
   "assets/images/julia-01.jpg": [1536, 2048],
   "assets/images/julia-02.jpg": [2048, 1365],
   "assets/images/julia-03.jpg": [2048, 1351],
@@ -540,36 +436,17 @@ const createResponsivePicture = (image, src, sizes = "100vw") => {
 };
 
 const getCoverSizes = (item, baseClass) => {
-  if (baseClass === "work-tile") {
-    const desktopSize = {
-      roxana: "58vw",
-      cosmic: "34vw",
-      sophie: "84vw",
-      inna: "42vw",
-      julia: "25vw",
-      harvey: "25vw",
-      "dark-baroque": "67vw"
-    }[item.galleryId] || "34vw";
-    const tabletSize = ["roxana", "sophie", "dark-baroque"].includes(item.galleryId)
-      ? "100vw"
-      : "50vw";
+  const isFeature = /\b(tile-large|tile-wide|tile-tall|fine-tall|fine-portrait|fine-wide)\b/.test(item.className || "");
 
-    return `(max-width: 720px) 100vw, (max-width: 980px) ${tabletSize}, ${desktopSize}`;
+  if (baseClass === "work-tile") {
+    return isFeature
+      ? "(max-width: 720px) 100vw, (max-width: 980px) 100vw, 50vw"
+      : "(max-width: 720px) 50vw, (max-width: 980px) 50vw, 25vw";
   }
 
-  const coverKey = `${item.galleryId}:${item.coverIndex || 0}`;
-  const desktopSize = {
-    "kintsugi:0": "50vw",
-    "kintsugi:1": "42vw",
-    "kintsugi:2": "34vw",
-    "petals:0": "50vw",
-    "petals:1": "58vw"
-  }[coverKey] || "34vw";
-  const tabletSize = ["kintsugi:0", "petals:0", "petals:1"].includes(coverKey)
-    ? "100vw"
-    : "50vw";
-
-  return `(max-width: 720px) 100vw, (max-width: 980px) ${tabletSize}, ${desktopSize}`;
+  return isFeature
+    ? "(max-width: 720px) 100vw, (max-width: 980px) 50vw, 42vw"
+    : "(max-width: 720px) 50vw, (max-width: 980px) 50vw, 30vw";
 };
 
 const scrollToTarget = (hash, smooth = true) => {
@@ -684,7 +561,6 @@ const createImageButton = (item, baseClass) => {
     button.type = "button";
   }
   button.dataset.gallery = item.galleryId;
-  button.dataset.coverIndex = String(item.coverIndex || 0);
   button.setAttribute("aria-label", `Open ${item.title} story`);
 
   const image = document.createElement("img");
@@ -859,9 +735,7 @@ const closePrintOrder = () => {
   const trigger = lastPrintOrderTrigger;
   printOrderModal.classList.remove("is-open");
   printOrderModal.setAttribute("aria-hidden", "true");
-  printOrderModal.inert = true;
   body.classList.remove("print-order-open");
-  setModalBackgroundInert(false);
   activePrintOrderProduct = null;
   printOrderForm?.reset();
   resetPrintOrderFeedback();
@@ -926,8 +800,6 @@ const openPrintOrder = (product, trigger) => {
     }
   }
 
-  setModalBackgroundInert(true, printOrderModal);
-  printOrderModal.inert = false;
   printOrderModal.classList.add("is-open");
   printOrderModal.setAttribute("aria-hidden", "false");
   body.classList.add("print-order-open");
@@ -1147,9 +1019,8 @@ const publicProjectSlug = (album = {}) => {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) ? slug : "";
 };
 
-const normaliseCover = (album, cover, baseClass = "work-tile", coverIndex = 0) => ({
+const normaliseCover = (album, cover, baseClass = "work-tile") => ({
   galleryId: album.id,
-  coverIndex,
   projectSlug: publicProjectSlug(album),
   title: album.title,
   label: cover.label || album.title,
@@ -1161,16 +1032,12 @@ const normaliseCover = (album, cover, baseClass = "work-tile", coverIndex = 0) =
     ? scopedCoverClass(baseClass, cover.workClassName || cover.className)
     : scopedCoverClass(baseClass, cover.fineClassName || cover.className),
   previewPosition: cover.previewPosition || "",
-  loading: "lazy"
+  loading: album.section === "fine-art" ? "eager" : "lazy"
 });
 
 const renderPortfolio = (siteData) => {
   const data = siteData && Array.isArray(siteData.albums) ? siteData : defaultSiteData;
   const sections = data.sections || defaultSiteData.sections;
-  const fallbackOrder = ["roxana", "cosmic", "sophie", "inna", "julia", "harvey", "kintsugi", "petals", "dark-baroque"];
-  const albums = data === defaultSiteData
-    ? [...data.albums].sort((first, second) => fallbackOrder.indexOf(first.id) - fallbackOrder.indexOf(second.id))
-    : data.albums;
 
   setText("[data-work-kicker]", sections.work?.kicker);
   setText("[data-work-heading]", sections.work?.heading);
@@ -1178,29 +1045,29 @@ const renderPortfolio = (siteData) => {
   setText("[data-fine-art-heading]", sections.fineArt?.heading);
   setText("[data-fine-art-intro]", sections.fineArt?.intro);
 
-  galleries = albums.reduce((collection, album) => {
+  galleries = data.albums.reduce((collection, album) => {
     collection[album.id] = album;
     return collection;
   }, {});
 
-  galleryOrder = [...albums]
+  galleryOrder = [...data.albums]
     .filter((album) => album.section === "editorials" || album.section === "fine-art")
     .map((album) => album.id);
 
   if (editorialGrid) {
     editorialGrid.innerHTML = "";
-    [...albums]
+    [...data.albums]
       .filter((album) => album.section === "editorials")
-      .flatMap((album) => (album.covers || []).slice(0, 1).map((cover, coverIndex) => normaliseCover(album, cover, "work-tile", coverIndex)))
+      .flatMap((album) => (album.covers || []).slice(0, 1).map((cover) => normaliseCover(album, cover, "work-tile")))
       .forEach((cover) => editorialGrid.append(createImageButton(cover, "work-tile")));
     queueEditorialLayout();
   }
 
   if (fineGrid) {
     fineGrid.innerHTML = "";
-    albums
+    data.albums
       .filter((album) => album.section === "fine-art")
-      .flatMap((album) => (album.covers || []).map((cover, coverIndex) => normaliseCover(album, cover, "fine-image", coverIndex)))
+      .flatMap((album) => (album.covers || []).map((cover) => normaliseCover(album, cover, "fine-image")))
       .forEach((cover) => fineGrid.append(createImageButton(cover, "fine-image")));
   }
 
@@ -1284,25 +1151,11 @@ const setHeaderState = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 24);
 };
 
-const closeMenu = ({ returnFocus = false } = {}) => {
+const closeMenu = () => {
   body.classList.remove("menu-open");
   header.classList.remove("is-open");
   menuToggle.setAttribute("aria-expanded", "false");
   menuToggle.setAttribute("aria-label", "Open navigation");
-  setMenuBackgroundInert(false);
-
-  if (returnFocus) {
-    requestAnimationFrame(() => menuToggle.focus({ preventScroll: true }));
-  }
-};
-
-const openMenu = () => {
-  body.classList.add("menu-open");
-  header.classList.add("is-open");
-  menuToggle.setAttribute("aria-expanded", "true");
-  menuToggle.setAttribute("aria-label", "Close navigation");
-  setMenuBackgroundInert(true);
-  requestAnimationFrame(() => nav.querySelector("a")?.focus({ preventScroll: true }));
 };
 
 const setActiveNavLink = (hash) => {
@@ -1596,8 +1449,6 @@ const openGallery = (galleryId) => {
     galleryStrip.append(frame);
   });
 
-  setModalBackgroundInert(true, galleryModal);
-  galleryModal.inert = false;
   galleryModal.classList.add("is-open");
   galleryModal.setAttribute("aria-hidden", "false");
   body.classList.add("gallery-open");
@@ -1615,33 +1466,24 @@ const openGallery = (galleryId) => {
 const openImageLightbox = (index) => {
   lastLightboxTrigger = document.activeElement;
   showLightboxImage(index);
-  galleryModal.setAttribute("aria-hidden", "true");
-  galleryModal.inert = true;
-  imageLightbox.inert = false;
   imageLightbox.classList.add("is-open");
   imageLightbox.setAttribute("aria-hidden", "false");
   body.classList.add("image-open");
   requestAnimationFrame(() => imageLightboxClose.focus({ preventScroll: true }));
 };
 
-const closeImageLightbox = (restoreGallery = true) => {
+const closeImageLightbox = () => {
   const shouldReturnFocus = imageLightbox.classList.contains("is-open") && galleryModal.classList.contains("is-open");
 
   imageLightbox.classList.remove("is-open");
   imageLightbox.setAttribute("aria-hidden", "true");
-  imageLightbox.inert = true;
   body.classList.remove("image-open");
   imageLightboxImage.src = "";
   imageLightboxImage.removeAttribute("srcset");
   imageLightboxImage.alt = "";
   imageLightboxCaption.textContent = "";
 
-  if (restoreGallery && galleryModal.classList.contains("is-open")) {
-    galleryModal.setAttribute("aria-hidden", "false");
-    galleryModal.inert = false;
-  }
-
-  if (restoreGallery && shouldReturnFocus && lastLightboxTrigger) {
+  if (shouldReturnFocus && lastLightboxTrigger) {
     lastLightboxTrigger.focus({ preventScroll: true });
   }
 
@@ -1651,12 +1493,10 @@ const closeImageLightbox = (restoreGallery = true) => {
 const closeGallery = () => {
   const trigger = lastGalleryTrigger;
 
-  closeImageLightbox(false);
+  closeImageLightbox();
   galleryModal.classList.remove("is-open");
   galleryModal.setAttribute("aria-hidden", "true");
-  galleryModal.inert = true;
   body.classList.remove("gallery-open");
-  setModalBackgroundInert(false);
   activeGallery = null;
   activeGalleryIndex = -1;
   updateGalleryNavigation();
@@ -1669,11 +1509,10 @@ const closeGallery = () => {
 };
 
 menuToggle.addEventListener("click", () => {
-  if (body.classList.contains("menu-open")) {
-    closeMenu({ returnFocus: true });
-  } else {
-    openMenu();
-  }
+  const isOpen = body.classList.toggle("menu-open");
+  header.classList.toggle("is-open", isOpen);
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
 });
 
 nav.addEventListener("click", (event) => {
@@ -1686,7 +1525,6 @@ nav.addEventListener("click", (event) => {
     if (scrollToTarget(link.hash)) {
       setActiveNavLink(link.hash);
       history.pushState(null, "", link.hash);
-      requestAnimationFrame(() => document.querySelector(link.hash)?.focus({ preventScroll: true }));
     }
 
     return;
@@ -1701,14 +1539,13 @@ document.addEventListener("click", (event) => {
   if (!event.defaultPrevented) {
     const anchor = event.target.closest('a[href^="#"]');
 
-    if (anchor && anchor.hash && !anchor.classList.contains("skip-link")) {
+    if (anchor && anchor.hash) {
       event.preventDefault();
       closeMenu();
 
       if (scrollToTarget(anchor.hash)) {
         setActiveNavLink(anchor.hash);
         history.pushState(null, "", anchor.hash);
-        requestAnimationFrame(() => document.querySelector(anchor.hash)?.focus({ preventScroll: true }));
       }
 
       return;
@@ -1822,26 +1659,6 @@ imageLightbox.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Tab") {
-    const activeModal = imageLightbox.classList.contains("is-open")
-      ? imageLightbox
-      : printOrderModal?.classList.contains("is-open")
-        ? printOrderModal
-        : galleryModal.classList.contains("is-open")
-          ? galleryModal
-          : null;
-
-    if (activeModal) {
-      trapFocus(event, activeModal);
-      return;
-    }
-
-    if (body.classList.contains("menu-open")) {
-      trapFocus(event, header);
-      return;
-    }
-  }
-
   if ((event.key === "ArrowRight" || event.key === "ArrowDown") && galleryModal.classList.contains("is-open")) {
     event.preventDefault();
 
@@ -1882,7 +1699,7 @@ document.addEventListener("keydown", (event) => {
       return;
     }
 
-    closeMenu({ returnFocus: body.classList.contains("menu-open") });
+    closeMenu();
   }
 });
 
