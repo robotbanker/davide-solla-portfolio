@@ -394,7 +394,94 @@
           "alt": "Dark Baroque fashion portrait with theatrical red-room styling"
         }
       ]
+    },
+    {
+      "id": "kihaya-blues",
+      "section": "editorials",
+      "title": "Kihaya Blues",
+      "kicker": "Editorial story",
+      "description": "",
+      "covers": [
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-e692d020.jpg",
+          "alt": "Khiazy - Jazz Editoria 1",
+          "previewPosition": "50% 50%",
+          "className": ""
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-e692d020.jpg",
+          "alt": "Khiazy - Jazz Editoria 1",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-2-08bae288.jpg",
+          "alt": "Khiazy - Jazz Editoria 2",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-3-05eb0cfb.jpg",
+          "alt": "Khiazy - Jazz Editoria 3",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-4-3cb26cd3.jpg",
+          "alt": "Khiazy - Jazz Editoria 4",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-5-86c9798f.jpg",
+          "alt": "Khiazy - Jazz Editoria 5",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-6-04710789.jpg",
+          "alt": "Khiazy - Jazz Editoria 6",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c505b6a2.jpg",
+          "alt": "Khiazy - Jazz Editoria 7",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-8-59f5d7ab.jpg",
+          "alt": "Khiazy - Jazz Editoria 8",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-9-147f836f.jpg",
+          "alt": "Khiazy - Jazz Editoria 9",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-10-d33bdc3c.jpg",
+          "alt": "Khiazy - Jazz Editoria 10",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-11-17cc684d.jpg",
+          "alt": "Khiazy - Jazz Editoria 11",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-12-1228ceb0.jpg",
+          "alt": "Khiazy - Jazz Editoria 12",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-13-b68b5433.jpg",
+          "alt": "Khiazy - Jazz Editoria 13",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-14-d1318f76.jpg",
+          "alt": "Khiazy - Jazz Editoria 14",
+          "previewPosition": "50% 50%"
+        }
+      ]
     }
   ],
-  "updatedAt": "2026-08-26T12:41:59.508Z"
+  "updatedAt": "2026-08-29T08:08:35.491Z"
 }
