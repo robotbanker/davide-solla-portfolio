@@ -19,38 +19,67 @@
   },
   "albums": [
     {
-      "id": "roxana",
+      "id": "dreamland",
       "section": "editorials",
-      "title": "Roxana",
+      "title": "Dreamland",
       "kicker": "Editorial story",
-      "description": "A polished London beauty editorial shaped with soft glamour, reflective colour, and poised studio direction.",
+      "description": "",
       "covers": [
         {
-          "src": "assets/images/roxana-01.jpg",
-          "alt": "London editorial beauty portrait in warm directional light",
-          "previewPosition": "50% 50%",
+          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+          "alt": "Dreamland 2",
+          "previewPosition": "51% 50%",
           "className": "tile-wide"
         }
       ],
       "images": [
         {
-          "src": "assets/images/roxana-01.jpg",
-          "alt": "Roxana editorial beauty portrait in warm directional light"
+          "src": "assets/images/uploads/2026-08-31/dreamland-1-799451ec.jpg",
+          "alt": "Dreamland 1",
+          "previewPosition": "82% 34%"
         },
         {
-          "src": "assets/images/roxana-02.jpg",
-          "alt": "Roxana London fashion portrait with refined styling"
+          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+          "alt": "Dreamland 2",
+          "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/roxana-03.jpg",
-          "alt": "Roxana beauty portrait with cinematic colour"
+          "src": "assets/images/uploads/2026-08-31/dreamland-3-209c5ba6.jpg",
+          "alt": "Dreamland 3",
+          "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/roxana-04.jpg",
-          "alt": "Roxana editorial portrait with sculptural styling",
-          "previewPosition": "57% 41%"
+          "src": "assets/images/uploads/2026-08-31/dreamland-4-53c4863e.jpg",
+          "alt": "Dreamland 4",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-5-562662aa.jpg",
+          "alt": "Dreamland 5",
+          "previewPosition": "48% 58%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-6-f4bf8e9a.jpg",
+          "alt": "Dreamland 6",
+          "previewPosition": "55% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-7-f3f17967.jpg",
+          "alt": "Dreamland 7",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-8-c14f2cd3.jpg",
+          "alt": "Dreamland 8",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-9-f8b31fdb.jpg",
+          "alt": "Dreamland 9",
+          "previewPosition": "80% 51%"
         }
-      ]
+      ],
+      "location": "Portugal"
     },
     {
       "id": "cosmic",
@@ -484,68 +513,39 @@
       "category": "Studio Portrait"
     },
     {
-      "id": "dreamland",
+      "id": "roxana",
       "section": "editorials",
-      "title": "Dreamland",
+      "title": "Roxana",
       "kicker": "Editorial story",
-      "description": "",
+      "description": "A polished London beauty editorial shaped with soft glamour, reflective colour, and poised studio direction.",
       "covers": [
         {
-          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
-          "alt": "Dreamland 2",
-          "previewPosition": "51% 50%",
+          "src": "assets/images/roxana-01.jpg",
+          "alt": "London editorial beauty portrait in warm directional light",
+          "previewPosition": "50% 50%",
           "className": "tile-wide"
         }
       ],
       "images": [
         {
-          "src": "assets/images/uploads/2026-08-31/dreamland-1-799451ec.jpg",
-          "alt": "Dreamland 1",
-          "previewPosition": "82% 34%"
+          "src": "assets/images/roxana-01.jpg",
+          "alt": "Roxana editorial beauty portrait in warm directional light"
         },
         {
-          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
-          "alt": "Dreamland 2",
-          "previewPosition": "50% 50%"
+          "src": "assets/images/roxana-02.jpg",
+          "alt": "Roxana London fashion portrait with refined styling"
         },
         {
-          "src": "assets/images/uploads/2026-08-31/dreamland-3-209c5ba6.jpg",
-          "alt": "Dreamland 3",
-          "previewPosition": "50% 50%"
+          "src": "assets/images/roxana-03.jpg",
+          "alt": "Roxana beauty portrait with cinematic colour"
         },
         {
-          "src": "assets/images/uploads/2026-08-31/dreamland-4-53c4863e.jpg",
-          "alt": "Dreamland 4",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-08-31/dreamland-5-562662aa.jpg",
-          "alt": "Dreamland 5",
-          "previewPosition": "48% 58%"
-        },
-        {
-          "src": "assets/images/uploads/2026-08-31/dreamland-6-f4bf8e9a.jpg",
-          "alt": "Dreamland 6",
-          "previewPosition": "55% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-08-31/dreamland-7-f3f17967.jpg",
-          "alt": "Dreamland 7",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-08-31/dreamland-8-c14f2cd3.jpg",
-          "alt": "Dreamland 8",
-          "previewPosition": "50% 50%"
-        },
-        {
-          "src": "assets/images/uploads/2026-08-31/dreamland-9-f8b31fdb.jpg",
-          "alt": "Dreamland 9",
-          "previewPosition": "80% 51%"
+          "src": "assets/images/roxana-04.jpg",
+          "alt": "Roxana editorial portrait with sculptural styling",
+          "previewPosition": "57% 41%"
         }
-      ],
-      "location": "Portugal"
+      ]
     }
   ],
-  "updatedAt": "2026-08-31T18:15:16.993Z"
+  "updatedAt": "2026-08-31T18:15:53.212Z"
 }
