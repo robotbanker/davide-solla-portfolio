@@ -482,7 +482,70 @@
         }
       ],
       "category": "Studio Portrait"
+    },
+    {
+      "id": "dreamland",
+      "section": "editorials",
+      "title": "Dreamland",
+      "kicker": "Editorial story",
+      "description": "",
+      "covers": [
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+          "alt": "Dreamland 2",
+          "previewPosition": "51% 50%",
+          "className": "tile-wide"
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-1-799451ec.jpg",
+          "alt": "Dreamland 1",
+          "previewPosition": "54% 30%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+          "alt": "Dreamland 2",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-3-209c5ba6.jpg",
+          "alt": "Dreamland 3",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-4-53c4863e.jpg",
+          "alt": "Dreamland 4",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-5-562662aa.jpg",
+          "alt": "Dreamland 5",
+          "previewPosition": "48% 58%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-6-f4bf8e9a.jpg",
+          "alt": "Dreamland 6",
+          "previewPosition": "55% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-7-f3f17967.jpg",
+          "alt": "Dreamland 7",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-8-c14f2cd3.jpg",
+          "alt": "Dreamland 8",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-9-f8b31fdb.jpg",
+          "alt": "Dreamland 9",
+          "previewPosition": "80% 51%"
+        }
+      ],
+      "location": "Portugal"
     }
   ],
-  "updatedAt": "2026-08-29T08:53:32.937Z"
+  "updatedAt": "2026-08-31T18:12:21.002Z"
 }
