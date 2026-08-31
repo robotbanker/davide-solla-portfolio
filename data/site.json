@@ -29,7 +29,7 @@
           "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
           "alt": "Dreamland 2",
           "previewPosition": "51% 50%",
-          "className": "tile-wide"
+          "className": "tile-large"
         }
       ],
       "images": [
@@ -547,5 +547,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-08-31T18:15:53.212Z"
+  "updatedAt": "2026-08-31T18:20:07.557Z"
 }
