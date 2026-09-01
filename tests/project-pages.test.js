@@ -54,6 +54,9 @@ test("project structured data uses visible images and truthful creator metadata"
   assert.equal(gallery.image.length, 7);
   assert.ok(gallery.image.every((image) => image.contentUrl.startsWith("https://www.davidesolla.com/assets/images/")));
   assert.ok(gallery.image.every((image) => image.creator.name === "Davide Solla"));
+  assert.ok(gallery.image.every((image) => image.width > 0 && image.height > 0));
+  assert.ok(gallery.image.every((image) => image.license === "https://www.davidesolla.com/image-licensing"));
+  assert.match(html, /<img[^>]+width="\d+" height="\d+"/);
 });
 
 test("project pages omit location metadata when the public source has no evidence", () => {
@@ -169,6 +172,11 @@ test("unknown project slugs return a noindex 404 and HEAD returns no body", () =
   handleProjectPageRequest({ method: "HEAD", url: "/work/cosmic", headers: {} }, head);
   assert.equal(head.statusCode, 200);
   assert.equal(head.body, undefined);
+
+  const trailing = response();
+  handleProjectPageRequest({ method: "GET", url: "/work/cosmic/", headers: {} }, trailing);
+  assert.equal(trailing.statusCode, 308);
+  assert.equal(trailing.headers.location, "/work/cosmic");
 });
 
 test("the image sitemap names every stable project and its owned images", () => {
@@ -204,13 +212,15 @@ test("the image sitemap names every stable project and its owned images", () => 
 test("homepage portfolio tiles expose stable links without removing the modal experience", () => {
   const homepage = fs.readFileSync("index.html", "utf8");
   const browserScript = fs.readFileSync("script.js", "utf8");
-  for (const match of homepage.matchAll(/data-gallery="([^"]+)"/g)) {
-    const album = listProjectPages(siteData).find((candidate) => candidate.id === match[1]);
-    if (album) {
-      assert.match(homepage, new RegExp(`href="/work/${projectSlug(album)}"[^>]+data-gallery="${album.id}"`));
-    }
+  for (const album of listProjectPages(siteData)) {
+    assert.match(
+      homepage,
+      new RegExp(`href="/work/${projectSlug(album)}"[^>]+data-gallery="${album.id}"`)
+    );
   }
-  assert.match(homepage, /<button class="work-tile" type="button" data-gallery="studio"/);
+  assert.match(homepage, /<script id="site-data" type="application\/json">/);
+  assert.match(browserScript, /renderPortfolio\(embeddedSiteData, \{ replaceMarkup: false \}\)/);
+  assert.doesNotMatch(browserScript, /data\/site\.json\?v=\$\{Date\.now\(\)\}/);
   assert.match(homepage, /data-gallery-project-page href="\/#work"/);
   assert.match(browserScript, /button\.href = `\/work\/\$\{encodeURIComponent\(item\.projectSlug\)\}`/);
   assert.match(browserScript, /galleryProjectPageLink\.hidden = !slug/);
@@ -234,6 +244,7 @@ test("Field Notes routing preserves legacy issues and never serves protected sou
   const fieldNotesBrowserSource = fs.readFileSync("field-notes.js", "utf8");
   const safeNotFound = fs.readFileSync("404.html", "utf8");
   const legacyRoute = config.routes.find((route) => route.src === "/field-notes\\.html");
+  const archiveRoute = config.routes.find((route) => route.src === "/field-notes");
   const rootSlashRoute = config.routes.find((route) => route.src === "/field-notes/");
   const denyRoute = config.routes.find((route) => route.dest === "/404.html" && route.status === 404);
   const apiHeaderRoute = config.routes.find((route) => route.src === "/api/(.*)" && route.continue === true);
@@ -243,6 +254,7 @@ test("Field Notes routing preserves legacy issues and never serves protected sou
 
   assert.equal(config.redirects.some((route) => route.source === "/field-notes.html"), false);
   assert.equal(legacyRoute.dest, "/api/field-notes?legacy=1");
+  assert.equal(archiveRoute.dest, "/api/field-notes?archive=1&public=1");
   assert.equal(rootSlashRoute.status, 308);
   assert.equal(rootSlashRoute.headers.Location, "/field-notes");
   assert.match(denyRoute.src, /newsletter\/\(\?:lib/);

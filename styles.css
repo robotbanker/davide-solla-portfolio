@@ -418,18 +418,21 @@ body.menu-open .menu-toggle span:last-child {
 h1,
 h2,
 h3,
-p {
+p,
+.hero-title {
   margin-top: 0;
 }
 
 h1,
-h2 {
+h2,
+.hero-title {
   font-weight: 400;
   line-height: 1;
   text-wrap: balance;
 }
 
-h1 {
+h1,
+.hero-title {
   font-family: var(--display);
   font-size: 76px;
   margin-bottom: 24px;
@@ -2634,7 +2637,8 @@ h2 {
 }
 
 @media (max-width: 980px) {
-  h1 {
+  h1,
+  .hero-title {
     font-size: 58px;
   }
 
@@ -2821,7 +2825,8 @@ h2 {
     padding: 132px 20px 128px;
   }
 
-  h1 {
+  h1,
+  .hero-title {
     font-size: 44px;
   }
 
@@ -3198,7 +3203,8 @@ h2 {
     padding-top: 124px;
   }
 
-  h1 {
+  h1,
+  .hero-title {
     font-size: 42px;
   }
 

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { generateSitemap } = require("../lib/seo");
+const { loadFieldNotesPublications } = require("../lib/field-notes-pages");
 
 const rootDir = path.resolve(__dirname, "..");
 const readJson = (relativePath) => JSON.parse(
@@ -8,9 +9,10 @@ const readJson = (relativePath) => JSON.parse(
 );
 
 const siteData = readJson("data/site.json");
-const newsletterIndex = readJson("newsletter/data/issues/index.json");
+const publications = loadFieldNotesPublications();
 const sitemap = generateSitemap(siteData, {
-  newsletterIssues: newsletterIndex.issues
+  newsletterIssues: publications.map((publication) => publication.indexEntry),
+  newsletterIssueDocuments: publications.map((publication) => publication.issue)
 });
 
 fs.writeFileSync(path.join(rootDir, "sitemap.xml"), sitemap, "utf8");

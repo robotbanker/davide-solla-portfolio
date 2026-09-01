@@ -65,6 +65,9 @@ test("an issue is fully rendered in the initial HTML with unique Article metadat
   assert.match(html, /A July edit moving between garment and image/);
   assert.doesNotMatch(html, /Loading Field Notes/);
   assert.match(html, /data-field-notes-prerendered/);
+  assert.equal((html.match(/<h1>/g) || []).length, 1);
+  assert.match(html, /<time datetime="[^"]+">/);
+  assert.match(html, /By Davide Solla/);
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.davidesolla\.com\/field-notes\/2026-07">/);
   assert.match(html, /<meta property="og:type" content="article">/);
   assert.match(html, /<meta property="og:url" content="https:\/\/www\.davidesolla\.com\/field-notes\/2026-07">/);
@@ -76,11 +79,15 @@ test("an issue is fully rendered in the initial HTML with unique Article metadat
   assert.ok(match);
   const graph = JSON.parse(match[1])["@graph"];
   const article = graph.find((node) => node["@type"] === "Article");
+  const person = graph.find((node) => node["@type"] === "Person");
+  const organization = graph.find((node) => node["@type"] === "Organization");
   assert.equal(article.url, "https://www.davidesolla.com/field-notes/2026-07");
   assert.equal(article.datePublished, metadata.publishedAt);
   assert.equal(article.dateModified, metadata.updatedAt);
   assert.equal(article.author["@id"], "https://www.davidesolla.com/#person");
   assert.equal(article.publisher["@id"], "https://www.davidesolla.com/#organization");
+  assert.equal(person.name, "Davide Solla");
+  assert.equal(organization.name, "Davide Solla Studios");
 
   assert.match(html, /href="\/field-notes\/2026-07" aria-current="page"/);
   assert.match(html, /href="\/field-notes\/2026-06"/);
@@ -141,6 +148,7 @@ test("the clean issue route is crawlable, while the direct API alias is noindex"
   handleFieldNotesPageRequest(request("/field-notes/2026-07"), clean);
   assert.equal(clean.statusCode, 200);
   assert.equal(clean.headers["x-robots-tag"], undefined);
+  assert.match(clean.headers["cache-control"], /s-maxage=3600/);
   assert.match(clean.headers["content-security-policy"], /default-src 'self'/);
   assert.match(clean.body, /Schiaparelli: Fashion Becomes Art/);
 
@@ -148,6 +156,7 @@ test("the clean issue route is crawlable, while the direct API alias is noindex"
   handleFieldNotesPageRequest(request("/api/field-notes?issueId=2026-07"), alias);
   assert.equal(alias.statusCode, 200);
   assert.equal(alias.headers["x-robots-tag"], "noindex, nofollow");
+  assert.equal(alias.headers["cache-control"], "no-store");
 
   const head = response();
   handleFieldNotesPageRequest(request("/field-notes/2026-07", "HEAD"), head);
@@ -158,8 +167,14 @@ test("the clean issue route is crawlable, while the direct API alias is noindex"
 test("moving and legacy aliases redirect with the correct permanence", () => {
   const latest = response();
   handleFieldNotesPageRequest(request("/field-notes"), latest);
-  assert.equal(latest.statusCode, 307);
-  assert.equal(latest.headers.location, `/field-notes/${entries[0].issueId}`);
+  assert.equal(latest.statusCode, 200);
+  assert.match(latest.body, new RegExp(`href="/field-notes/${entries[0].issueId}"`));
+  assert.match(latest.headers["cache-control"], /s-maxage=3600/);
+
+  const productionRewrite = response();
+  handleFieldNotesPageRequest(request("/api/field-notes?public=1"), productionRewrite);
+  assert.equal(productionRewrite.statusCode, 200);
+  assert.match(productionRewrite.body, /Field Notes archive/);
 
   const legacy = response();
   handleFieldNotesPageRequest(request("/field-notes.html?issue=2026-06"), legacy);

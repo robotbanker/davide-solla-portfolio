@@ -124,7 +124,7 @@ const pendingEnquiry = () => {
   return value;
 };
 
-const defaultSiteData = {
+const legacySiteData = {
   sections: {
     work: {
       kicker: "Selected editorials",
@@ -286,6 +286,19 @@ const defaultSiteData = {
     }
   ]
 };
+
+const embeddedSiteData = (() => {
+  const element = document.querySelector("#site-data");
+  if (!element) return null;
+  try {
+    const data = JSON.parse(element.textContent || "null");
+    return data && Array.isArray(data.albums) ? data : null;
+  } catch (error) {
+    return null;
+  }
+})();
+
+const defaultSiteData = embeddedSiteData || legacySiteData;
 
 const categoryByGallery = {
   roxana: "Beauty",
@@ -1032,10 +1045,10 @@ const normaliseCover = (album, cover, baseClass = "work-tile") => ({
     ? scopedCoverClass(baseClass, cover.workClassName || cover.className)
     : scopedCoverClass(baseClass, cover.fineClassName || cover.className),
   previewPosition: cover.previewPosition || "",
-  loading: album.section === "fine-art" ? "eager" : "lazy"
+  loading: "lazy"
 });
 
-const renderPortfolio = (siteData) => {
+const renderPortfolio = (siteData, { replaceMarkup = true } = {}) => {
   const data = siteData && Array.isArray(siteData.albums) ? siteData : defaultSiteData;
   const sections = data.sections || defaultSiteData.sections;
 
@@ -1054,16 +1067,17 @@ const renderPortfolio = (siteData) => {
     .filter((album) => album.section === "editorials" || album.section === "fine-art")
     .map((album) => album.id);
 
-  if (editorialGrid) {
+  if (editorialGrid && replaceMarkup) {
     editorialGrid.innerHTML = "";
     [...data.albums]
       .filter((album) => album.section === "editorials")
       .flatMap((album) => (album.covers || []).slice(0, 1).map((cover) => normaliseCover(album, cover, "work-tile")))
       .forEach((cover) => editorialGrid.append(createImageButton(cover, "work-tile")));
-    queueEditorialLayout();
   }
 
-  if (fineGrid) {
+  if (editorialGrid) queueEditorialLayout();
+
+  if (fineGrid && replaceMarkup) {
     fineGrid.innerHTML = "";
     data.albums
       .filter((album) => album.section === "fine-art")
@@ -1071,7 +1085,7 @@ const renderPortfolio = (siteData) => {
       .forEach((cover) => fineGrid.append(createImageButton(cover, "fine-image")));
   }
 
-  if (servicesList && Array.isArray(sections.services)) {
+  if (servicesList && replaceMarkup && Array.isArray(sections.services)) {
     servicesList.innerHTML = "";
     sections.services.forEach((service) => {
       const item = document.createElement("span");
@@ -1134,8 +1148,13 @@ const loadPrintShopData = async () => {
 };
 
 const loadSiteData = async () => {
+  if (embeddedSiteData) {
+    renderPortfolio(embeddedSiteData, { replaceMarkup: false });
+    return;
+  }
+
   try {
-    const response = await fetch(`data/site.json?v=${Date.now()}`, { cache: "no-store" });
+    const response = await fetch("data/site.json");
 
     if (!response.ok) {
       throw new Error("Site data unavailable");

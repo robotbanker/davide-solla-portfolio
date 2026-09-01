@@ -6,7 +6,9 @@ const { handleContactRequest } = require("./lib/contact");
 const { handlePrintsRequest, handleStripeWebhookRequest } = require("./lib/creativehub");
 const { handleNewsletterRequest } = require("./lib/newsletter");
 const { handleFieldNotesPageRequest } = require("./lib/field-notes-pages");
+const { handleHomepageRequest } = require("./lib/homepage");
 const { handleProjectPageRequest } = require("./lib/project-pages");
+const { handleServicePageRequest } = require("./lib/service-pages");
 const { setSecurityHeaders } = require("./lib/security");
 
 const rootDir = __dirname;
@@ -30,7 +32,7 @@ const mimeTypes = {
 const publicFiles = new Set([
   "404.html", "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
   "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
-  "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
+  "image-licensing.html", "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
   "newsletter-signup.js", "preferences.html", "preferences.js",
   "privacy-consent.js", "privacy.html", "project-page.css",
   "robots.txt", "script.js", "sitemap.xml", "site.webmanifest", "styles.css", "wallet-card.html"
@@ -46,6 +48,11 @@ const isPublicPath = (relativePath) => publicFiles.has(relativePath)
   || relativePath.startsWith("assets/")
   || relativePath.startsWith("apple-wallet/");
 
+const noindexStaticPaths = new Set([
+  "admin.html", "client-area.html", "data/site.json", "newsletter-preview.html",
+  "preferences.html", "wallet-card.html"
+]);
+
 const serveStatic = (req, res) => {
   const requestUrl = new URL(req.url, `http://localhost:${port}`);
   let pathname;
@@ -55,6 +62,8 @@ const serveStatic = (req, res) => {
       ? "/preferences.html"
       : requestUrl.pathname === "/privacy"
         ? "/privacy.html"
+        : requestUrl.pathname === "/image-licensing"
+          ? "/image-licensing.html"
         : requestUrl.pathname;
     pathname = decodeURIComponent(requestedPath === "/" ? "/index.html" : requestedPath);
   } catch (error) {
@@ -89,10 +98,10 @@ const serveStatic = (req, res) => {
 
     res.statusCode = 200;
     res.setHeader("content-type", mimeTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream");
-    if (relativePath === "preferences.html") {
+    if (noindexStaticPaths.has(relativePath) || relativePath.startsWith("apple-wallet/")) {
       res.setHeader("cache-control", "no-store");
-      res.setHeader("referrer-policy", "no-referrer");
       res.setHeader("x-robots-tag", "noindex, nofollow");
+      if (relativePath === "preferences.html") res.setHeader("referrer-policy", "no-referrer");
     } else if (isCacheableStaticPath(relativePath)) {
       res.setHeader("cache-control", "public, max-age=31536000, stale-while-revalidate=86400");
     }
@@ -105,6 +114,24 @@ const server = http.createServer((req, res) => {
 
   const pathname = new URL(req.url, `http://localhost:${port}`).pathname;
 
+  const redirects = new Map([
+    ["/index.html", "/"],
+    ["/privacy.html", "/privacy"],
+    ["/image-licensing.html", "/image-licensing"]
+  ]);
+  if (redirects.has(pathname)) {
+    res.statusCode = 308;
+    res.setHeader("location", redirects.get(pathname));
+    res.setHeader("cache-control", "no-store");
+    res.end();
+    return;
+  }
+
+  if (pathname === "/" || pathname === "/api/homepage") {
+    handleHomepageRequest(req, res);
+    return;
+  }
+
   if (pathname === "/field-notes"
     || pathname === "/field-notes/"
     || pathname === "/field-notes.html"
@@ -116,6 +143,11 @@ const server = http.createServer((req, res) => {
 
   if (pathname.startsWith("/work/") || pathname === "/api/project") {
     handleProjectPageRequest(req, res);
+    return;
+  }
+
+  if (pathname.startsWith("/services/") || pathname === "/api/service") {
+    handleServicePageRequest(req, res);
     return;
   }
 

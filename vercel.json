@@ -5,6 +5,16 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/image-licensing.html",
+      "destination": "/image-licensing",
+      "permanent": true
     }
   ],
   "routes": [
@@ -20,6 +30,10 @@
         "Location": "https://www.davidesolla.com/$1"
       },
       "status": 308
+    },
+    {
+      "src": "/",
+      "dest": "/api/homepage?public=1"
     },
     {
       "src": "/field-notes/",
@@ -45,10 +59,10 @@
     },
     {
       "src": "/field-notes",
-      "dest": "/api/field-notes?public=1"
+      "dest": "/api/field-notes?archive=1&public=1"
     },
     {
-      "src": "/(?:api/.*\\.js|lib(?:/.*)?|tests(?:/.*)?|scripts(?:/.*)?|\\.github(?:/.*)?|newsletter/(?:lib(?:/.*)?|data/(?:issues|sources)(?:/.*)?|build-email\\.js)|data/(?:admin-site\\.(?:json|enc)|client-feedback\\.enc)|server\\.js|package(?:-lock)?\\.json|README\\.md|NEWSLETTER_SYSTEM\\.md|\\.env.*|\\.git(?:/.*)?|vercel\\.json)$",
+      "src": "/(?:api/.*\\.js|app-shell(?:/.*)?|ios(?:/.*)?|lib(?:/.*)?|tests(?:/.*)?|scripts(?:/.*)?|\\.github(?:/.*)?|newsletter/(?:lib(?:/.*)?|data/(?:issues|sources)(?:/.*)?|build-email\\.js)|data/(?:admin-site\\.(?:json|enc)|client-feedback\\.enc)|capacitor\\.config\\.json|server\\.js|package(?:-lock)?\\.json|README\\.md|NEWSLETTER_SYSTEM\\.md|\\.env.*|\\.git(?:/.*)?|vercel\\.json)$",
       "dest": "/404.html",
       "headers": {
         "Cache-Control": "no-store",
@@ -57,8 +71,26 @@
       "status": 404
     },
     {
-      "src": "/work/([a-z0-9-]+)/?",
+      "src": "/work/([a-z0-9-]+)/",
+      "headers": {
+        "Location": "/work/$1"
+      },
+      "status": 308
+    },
+    {
+      "src": "/work/([a-z0-9-]+)",
       "dest": "/api/project?slug=$1&public=1"
+    },
+    {
+      "src": "/services/([a-z0-9-]+)/",
+      "headers": {
+        "Location": "/services/$1"
+      },
+      "status": 308
+    },
+    {
+      "src": "/services/([a-z0-9-]+)",
+      "dest": "/api/service?slug=$1&public=1"
     },
     {
       "src": "/preferences",
@@ -89,6 +121,18 @@
         "Cross-Origin-Opener-Policy": "same-origin",
         "Content-Security-Policy": "default-src 'self'; base-uri 'none'; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com; font-src 'self'; form-action 'self'; frame-ancestors 'none'; frame-src 'none'; img-src 'self' data: blob: https:; object-src 'none'; script-src 'self' https://www.googletagmanager.com 'sha256-R1uaZHWYzppApCvDocdOpS69oTgzRBLYecQ/n6RfIGk=' 'sha256-te71Eqs5ujX5KZiCh/Opd6GJTyfvc2AIT6hSli2ZudQ='; style-src 'self'; style-src-attr 'unsafe-inline'; upgrade-insecure-requests"
       }
+    },
+    {
+      "src": "/image-licensing",
+      "dest": "/image-licensing.html"
+    },
+    {
+      "src": "/(?:admin|client-area|newsletter-preview|preferences|wallet-card)\\.html|/data/site\\.json|/apple-wallet/(.*)",
+      "headers": {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow"
+      },
+      "continue": true
     },
     {
       "src": "/api/(.*)",

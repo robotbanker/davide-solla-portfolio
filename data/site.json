@@ -24,6 +24,7 @@
       "title": "Roxana",
       "kicker": "Editorial story",
       "description": "A polished London beauty editorial shaped with soft glamour, reflective colour, and poised studio direction.",
+      "servicePath": "/services/beauty-photographer-london",
       "covers": [
         {
           "src": "assets/images/roxana-01.jpg",
@@ -58,6 +59,7 @@
       "title": "Cosmic Girl",
       "kicker": "Fashion editorial",
       "description": "A futuristic fashion editorial with blue-red studio light, metallic texture, and a beauty mood built around gaze and gesture.",
+      "servicePath": "/services/fashion-photographer-london",
       "covers": [
         {
           "src": "assets/images/cosmic-01.jpg",
@@ -104,6 +106,7 @@
       "title": "Sophie",
       "kicker": "Night editorial",
       "description": "A nocturnal Soho sequence with cinematic street light, motion, and after-dark fashion energy.",
+      "servicePath": "/services/fashion-photographer-london",
       "covers": [
         {
           "src": "assets/images/sophie-01.jpg",
@@ -156,11 +159,14 @@
       "section": "editorials",
       "title": "Inna",
       "kicker": "Studio Portrait",
-      "description": "A portraiture experiment between light and emotions",
+      "category": "Studio portrait",
+      "description": "A studio portrait series with Inna moving between black and white styling, expressive poses, and sculpted bands of light across a textured backdrop.",
+      "metaDescription": "Inna is a studio portrait series by Davide Solla, pairing expressive poses with black-and-white styling, textured backdrops and sculpted bands of light.",
+      "servicePath": "/services/model-portfolio-photographer-london",
       "covers": [
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
-          "alt": "Inna Gallery 1",
+          "alt": "Inna in a black dress beneath bands of studio light",
           "previewPosition": "50% 50%",
           "className": "tile-large"
         }
@@ -168,42 +174,42 @@
       "images": [
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
-          "alt": "Inna Gallery 1",
+          "alt": "Inna in a black dress beneath bands of studio light",
           "previewPosition": "50% 27%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg",
-          "alt": "Inna Gallery 2",
+          "alt": "Inna raising one hand in a shadowed black-dress studio portrait",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-3-4c2c263a.jpg",
-          "alt": "Inna Gallery 3",
+          "alt": "Inna posing against a textured backdrop crossed by bands of light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-4-22adb185.jpg",
-          "alt": "Inna Gallery 4",
+          "alt": "Inna crouching barefoot in a black dress against a textured studio backdrop",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg",
-          "alt": "Inna Gallery 6",
+          "alt": "Inna seated on a stool in an oversized white shirt and black boots",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg",
-          "alt": "Inna Gallery 8",
+          "alt": "Inna reclining on a wooden chair in a white shirt and black boots",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg",
-          "alt": "Inna Gallery 13",
+          "alt": "Inna curled on a reflective floor in an oversized white shirt",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg",
-          "alt": "Inna Gallery 16",
+          "alt": "Inna seated barefoot on a reflective floor beneath a diagonal beam of light",
           "previewPosition": "50% 50%"
         }
       ]
@@ -214,6 +220,7 @@
       "title": "Julia",
       "kicker": "Portrait story",
       "description": "A quiet fashion portrait series with winter styling, direct expression, and a restrained editorial palette.",
+      "servicePath": "/services/model-portfolio-photographer-london",
       "covers": [
         {
           "src": "assets/images/julia-01.jpg",
@@ -251,6 +258,7 @@
       "title": "Harvey",
       "kicker": "Studio Portrait",
       "description": "A masculine portrait study with low-key light, sculptural shadow, and an intimate studio mood.",
+      "servicePath": "/services/model-portfolio-photographer-london",
       "covers": [
         {
           "src": "assets/images/harvey-01.jpg",
@@ -280,6 +288,7 @@
       "title": "Kintsugi",
       "kicker": "Fine art collection",
       "description": "Self-produced fine-art portrait studies in beauty, fracture, repair, and transformation.",
+      "servicePath": "/services/fine-art-portrait-commissions",
       "covers": [
         {
           "src": "assets/images/fine-art-01.jpg",
@@ -326,6 +335,7 @@
       "title": "Petals",
       "kicker": "Fine art portrait",
       "description": "A standalone fine-art portrait built around softness, body, silk, and scattered rose petals.",
+      "servicePath": "/services/fine-art-portrait-commissions",
       "covers": [
         {
           "src": "assets/images/fine-art-02.jpg",
@@ -360,6 +370,7 @@
       "title": "Dark Baroque",
       "kicker": "Fashion editorial",
       "description": "A theatrical fashion editorial shaped with candlelight, velvet drapery, black satin, pearls, and baroque glamour.",
+      "servicePath": "/services/fashion-photographer-london",
       "covers": [
         {
           "src": "assets/images/dark-baroque-06.jpg",
@@ -400,11 +411,16 @@
       "section": "editorials",
       "title": "Kihaya Blues",
       "kicker": "Editorial story",
+      "category": "Musician portrait",
       "description": "A low-key studio portrait series moving between formal stillness and electric performance, shaped by deep blue light and the presence of the guitar.",
+      "location": "London",
+      "year": 2026,
+      "metaDescription": "London musician portraits of Kihaya Blues founder Kyazi Lugangira, photographed in black tailoring with a Fender Telecaster and dramatic studio light.",
+      "servicePath": "/services/artist-portrait-photographer-london",
       "covers": [
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-a493eb2f.jpg",
-          "alt": "Khiazy - Jazz Editoria 1",
+          "alt": "Kyazi Lugangira in a black suit and hat against a dark studio background",
           "previewPosition": "50% 50%",
           "className": ""
         }
@@ -412,72 +428,72 @@
       "images": [
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-a493eb2f.jpg",
-          "alt": "Khiazy - Jazz Editoria 1",
+          "alt": "Kyazi Lugangira in a black suit and hat against a dark studio background",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-2-69ae13f0.jpg",
-          "alt": "Khiazy - Jazz Editoria 2",
+          "alt": "Kyazi Lugangira holding a white Fender Telecaster against a black background",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-3-a1364e81.jpg",
-          "alt": "Khiazy - Jazz Editoria 3",
+          "alt": "Side-profile portrait of Kyazi Lugangira in a black hat with rim light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-4-dfb8a25a.jpg",
-          "alt": "Khiazy - Jazz Editoria 4",
+          "alt": "Close portrait of Kyazi Lugangira in a black hat and sunglasses",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-5-e368b95b.jpg",
-          "alt": "Khiazy - Jazz Editoria 5",
+          "alt": "Kyazi Lugangira in sunglasses with a Fender Telecaster headstock in frame",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-6-99266bc7.jpg",
-          "alt": "Khiazy - Jazz Editoria 6",
+          "alt": "Full-length portrait of Kyazi Lugangira beneath a bright studio light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-4d7811f1.jpg",
-          "alt": "Khiazy - Jazz Editoria 7",
+          "alt": "Kyazi Lugangira holding a white Fender Telecaster in blue-green backlight",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-8-238d6db6.jpg",
-          "alt": "Khiazy - Jazz Editoria 8",
+          "alt": "Kyazi Lugangira with a white Fender Telecaster in dramatic rim light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-9-47a61a26.jpg",
-          "alt": "Khiazy - Jazz Editoria 9",
+          "alt": "Full-length portrait of Kyazi Lugangira with a white electric guitar",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-10-4a5f7419.jpg",
-          "alt": "Khiazy - Jazz Editoria 10",
+          "alt": "Kyazi Lugangira holding a white Fender Telecaster in deep shadow and rim light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-11-7036918c.jpg",
-          "alt": "Khiazy - Jazz Editoria 11",
+          "alt": "Kyazi Lugangira seated with a Fender Telecaster beneath a studio spotlight",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-12-239dabf2.jpg",
-          "alt": "Khiazy - Jazz Editoria 12",
+          "alt": "Close detail of Kyazi Lugangira’s hand beside a Fender Telecaster headstock",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-13-3c1fc4ee.jpg",
-          "alt": "Khiazy - Jazz Editoria 13",
+          "alt": "Close portrait of Kyazi Lugangira behind a white Fender Telecaster in warm rim light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-14-de0f341a.jpg",
-          "alt": "Khiazy - Jazz Editoria 14",
+          "alt": "Kyazi Lugangira seated with a white Fender Telecaster beneath a circular studio light",
           "previewPosition": "50% 50%"
         }
       ]
