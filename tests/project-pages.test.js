@@ -5,6 +5,7 @@ const test = require("node:test");
 const {
   handleProjectPageRequest,
   listProjectPages,
+  projectImages,
   projectSlug,
   renderProjectPage,
   verifiedCredits
@@ -57,6 +58,44 @@ test("project structured data uses visible images and truthful creator metadata"
   assert.ok(gallery.image.every((image) => image.width > 0 && image.height > 0));
   assert.ok(gallery.image.every((image) => image.license === "https://www.davidesolla.com/image-licensing"));
   assert.match(html, /<img[^>]+width="\d+" height="\d+"/);
+});
+
+test("Dreamland and Kihaya Blues preserve their authored covers, image order, and indexable SEO", () => {
+  const expected = {
+    dreamland: {
+      cover: "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+      first: "assets/images/uploads/2026-08-31/dreamland-1-799451ec.jpg",
+      count: 9,
+      location: "Portugal"
+    },
+    "kihaya-blues": {
+      cover: "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
+      first: "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-b91dfd12.jpg",
+      count: 14,
+      location: "London"
+    }
+  };
+
+  for (const [slug, details] of Object.entries(expected)) {
+    const album = siteData.albums.find((item) => item.id === slug);
+    assert.ok(album, `${slug} must remain in public site data`);
+    assert.equal(album.covers[0].src, details.cover);
+    assert.equal(album.images[0].src, details.first);
+    assert.equal(album.images.length, details.count);
+    assert.deepEqual(projectImages(album).map((image) => image.src), album.images.map((image) => image.src));
+    assert.ok(album.images.every((image) => fs.existsSync(image.src)), `${slug} must not reference missing images`);
+
+    const html = renderProjectPage(siteData, slug);
+    assert.match(html, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/work/${slug}">`));
+    assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large">/);
+    assert.match(html, new RegExp(`<dt>Location</dt><dd>${details.location}</dd>`));
+    assert.ok(html.indexOf(details.first) < html.indexOf(details.cover), `${slug} must render its authored first frame before its cover image`);
+
+    const structured = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+    const gallery = structured["@graph"].find((item) => item["@type"] === "ImageGallery");
+    assert.equal(gallery.image.length, details.count);
+    assert.ok(gallery.image.every((image) => image.width > 0 && image.height > 0));
+  }
 });
 
 test("project pages omit location metadata when the public source has no evidence", () => {
@@ -128,8 +167,9 @@ test("verified credits follow the album id rather than its array position", () =
 
 test("untrusted project text is escaped in HTML and JSON-LD", () => {
   const hostile = structuredClone(siteData);
-  hostile.albums[0] = {
-    ...hostile.albums[0],
+  const roxanaIndex = hostile.albums.findIndex((album) => album.id === "roxana");
+  hostile.albums[roxanaIndex] = {
+    ...hostile.albums[roxanaIndex],
     title: "Roxana <script>alert(1)</script>",
     description: "A story & <img src=x onerror=alert(1)>"
   };

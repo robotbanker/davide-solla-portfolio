@@ -19,6 +19,76 @@
   },
   "albums": [
     {
+      "id": "dreamland",
+      "section": "editorials",
+      "title": "Dreamland",
+      "kicker": "Editorial story",
+      "category": "Editorial portrait",
+      "description": "A coastal portrait story photographed in Portugal, moving from ivory light to black silhouettes across rock, tide pools, and open Atlantic sky.",
+      "location": "Portugal",
+      "year": 2026,
+      "metaDescription": "Dreamland is a cinematic coastal portrait editorial photographed in Portugal by Davide Solla, shaped by movement, fashion styling and Atlantic light.",
+      "servicePath": "/services/fashion-photographer-london",
+      "projectPage": {
+        "updatedAt": "2026-09-01"
+      },
+      "covers": [
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+          "alt": "Woman in an ivory dress seated on moss-covered rocks beside the Atlantic surf in Portugal",
+          "previewPosition": "51% 50%",
+          "className": "tile-large"
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-1-799451ec.jpg",
+          "alt": "Close coastal portrait of a woman shading her eyes in warm sunlight",
+          "previewPosition": "82% 34%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
+          "alt": "Woman in an ivory dress seated on moss-covered rocks beside the Atlantic surf in Portugal",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-3-209c5ba6.jpg",
+          "alt": "Vertical coastal portrait of a woman seated among tidal rocks beneath a clear blue sky",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-4-53c4863e.jpg",
+          "alt": "Woman in a flowing ivory dress moving across the rocky Portugal coast",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-5-562662aa.jpg",
+          "alt": "Woman in a black dress posed against layered coastal cliffs",
+          "previewPosition": "48% 58%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-6-f4bf8e9a.jpg",
+          "alt": "Woman in a black dress leaning into sunlight on a secluded beach in Portugal",
+          "previewPosition": "55% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-7-f3f17967.jpg",
+          "alt": "Woman in a flowing black dress moving across a cliff-lined beach",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-8-c14f2cd3.jpg",
+          "alt": "Close movement portrait of a woman in a black dress beside Atlantic surf",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-08-31/dreamland-9-f8b31fdb.jpg",
+          "alt": "Wide portrait of a woman dancing in a black dress on a Portugal beach",
+          "previewPosition": "80% 51%"
+        }
+      ]
+    },
+    {
       "id": "roxana",
       "section": "editorials",
       "title": "Roxana",
@@ -411,93 +481,96 @@
       "section": "editorials",
       "title": "Kihaya Blues",
       "kicker": "Editorial story",
-      "category": "Musician portrait",
+      "category": "Studio Portrait",
       "description": "A low-key studio portrait series moving between formal stillness and electric performance, shaped by deep blue light and the presence of the guitar.",
       "location": "London",
       "year": 2026,
       "metaDescription": "London musician portraits of Kihaya Blues founder Kyazi Lugangira, photographed in black tailoring with a Fender Telecaster and dramatic studio light.",
       "servicePath": "/services/artist-portrait-photographer-london",
+      "projectPage": {
+        "updatedAt": "2026-09-01"
+      },
       "covers": [
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-a493eb2f.jpg",
-          "alt": "Kyazi Lugangira in a black suit and hat against a dark studio background",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
+          "alt": "Kyazi Lugangira holding a white Fender Telecaster in blue-green backlight",
           "previewPosition": "50% 50%",
-          "className": ""
+          "className": "tile-large"
         }
       ],
       "images": [
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-a493eb2f.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-b91dfd12.jpg",
           "alt": "Kyazi Lugangira in a black suit and hat against a dark studio background",
-          "previewPosition": "50% 50%"
+          "previewPosition": "44% 18%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-2-69ae13f0.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-2-c934557f.jpg",
           "alt": "Kyazi Lugangira holding a white Fender Telecaster against a black background",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-3-a1364e81.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-3-8bf117c1.jpg",
           "alt": "Side-profile portrait of Kyazi Lugangira in a black hat with rim light",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-4-dfb8a25a.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-4-8fbfd349.jpg",
           "alt": "Close portrait of Kyazi Lugangira in a black hat and sunglasses",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-5-e368b95b.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-5-4e04d925.jpg",
           "alt": "Kyazi Lugangira in sunglasses with a Fender Telecaster headstock in frame",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-6-99266bc7.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-6-0d7654f7.jpg",
           "alt": "Full-length portrait of Kyazi Lugangira beneath a bright studio light",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-4d7811f1.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
           "alt": "Kyazi Lugangira holding a white Fender Telecaster in blue-green backlight",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-8-238d6db6.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-8-c8c88e64.jpg",
           "alt": "Kyazi Lugangira with a white Fender Telecaster in dramatic rim light",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-9-47a61a26.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-9-b86bd885.jpg",
           "alt": "Full-length portrait of Kyazi Lugangira with a white electric guitar",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-10-4a5f7419.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-10-f79d29a3.jpg",
           "alt": "Kyazi Lugangira holding a white Fender Telecaster in deep shadow and rim light",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-11-7036918c.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-11-3a923662.jpg",
           "alt": "Kyazi Lugangira seated with a Fender Telecaster beneath a studio spotlight",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-12-239dabf2.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-12-6355dc8e.jpg",
           "alt": "Close detail of Kyazi Lugangira’s hand beside a Fender Telecaster headstock",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-13-3c1fc4ee.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-13-fdefd3ee.jpg",
           "alt": "Close portrait of Kyazi Lugangira behind a white Fender Telecaster in warm rim light",
           "previewPosition": "50% 50%"
         },
         {
-          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-14-de0f341a.jpg",
+          "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-14-4d8a23ff.jpg",
           "alt": "Kyazi Lugangira seated with a white Fender Telecaster beneath a circular studio light",
           "previewPosition": "50% 50%"
         }
       ]
     }
   ],
-  "updatedAt": "2026-08-29T08:10:36.824Z"
+  "updatedAt": "2026-09-01T22:30:00.000Z"
 }
