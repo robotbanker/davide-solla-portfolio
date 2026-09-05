@@ -102,10 +102,11 @@ test("August gallery validation and public escaping fail closed", () => {
   assert.match(html, /Kyazi &lt;script&gt;alert\(1\)&lt;\/script&gt;/);
 });
 
-test("the Field Notes root is a stable archive that links the published August issue", () => {
+test("the Field Notes root opens the published August issue in full", () => {
   const result = response();
   handleFieldNotesPageRequest({ method: "GET", url: "/field-notes", headers: {} }, result);
   assert.equal(result.statusCode, 200);
   assert.match(result.body, /href="\/field-notes\/2026-08"/);
-  assert.match(result.body, /<link rel="canonical" href="https:\/\/www\.davidesolla\.com\/field-notes">/);
+  assert.match(result.body, /data-field-notes-prerendered/);
+  assert.match(result.body, /<link rel="canonical" href="https:\/\/www\.davidesolla\.com\/field-notes\/2026-08">/);
 });

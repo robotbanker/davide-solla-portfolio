@@ -1,14 +1,14 @@
 :root {
-  --ink: #f1ede6;
-  --soft-ink: #cfc6bb;
-  --muted: #a9a29a;
-  --paper: #0b0a09;
-  --bone: #151310;
-  --charcoal: #080807;
-  --panel: #11100e;
-  --line: rgba(241, 237, 230, 0.13);
-  --warm-line: rgba(188, 166, 110, 0.28);
-  --accent: #bca66e;
+  --ink: #f0f0ee;
+  --soft-ink: #cecece;
+  --muted: #a8a8aa;
+  --paper: #09090b;
+  --bone: #151518;
+  --charcoal: #08080a;
+  --panel: #101013;
+  --line: rgba(240, 240, 238, 0.13);
+  --warm-line: rgba(214, 214, 216, 0.28);
+  --accent: #d6d6d8;
   --display: "Didot", "Bodoni 72", "Baskerville", "Times New Roman", serif;
   --sans: "Avenir Next", "Neue Haas Grotesk Text", "Helvetica Neue", Arial, sans-serif;
 }
@@ -36,7 +36,7 @@ img {
 
 .preview-header {
   align-items: center;
-  background: rgba(11, 10, 9, 0.94);
+  background: rgba(9, 9, 11, 0.94);
   border-bottom: 1px solid var(--line);
   display: flex;
   gap: 28px;
@@ -128,7 +128,7 @@ img {
 .preview-controls input {
   background: transparent;
   border: 0;
-  border-bottom: 1px solid rgba(241, 237, 230, 0.32);
+  border-bottom: 1px solid rgba(240, 240, 238, 0.32);
   color: var(--ink);
   min-height: 42px;
   min-width: 160px;
@@ -136,7 +136,7 @@ img {
 
 .preview-controls button {
   background: transparent;
-  border: 1px solid rgba(241, 237, 230, 0.46);
+  border: 1px solid rgba(240, 240, 238, 0.46);
   color: var(--ink);
   cursor: pointer;
   font-size: 12px;
@@ -284,7 +284,7 @@ img {
 }
 
 .cta {
-  border: 1px solid rgba(241, 237, 230, 0.46);
+  border: 1px solid rgba(240, 240, 238, 0.46);
   display: inline-block;
   font-size: 11px;
   font-weight: 700;
@@ -340,4 +340,44 @@ img {
   .newsletter-preview {
     padding: 26px 20px;
   }
+}
+
+/* Authenticated editorial review shares the studio's neutral visual language. */
+:root { color-scheme: dark; --line: rgba(240,240,238,.18); --warm-line: var(--line); }
+body { line-height: 1.65; }
+button, input, select, textarea { font: inherit; }
+[hidden] { display: none !important; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.preview-header { background: #08080a; padding: 24px clamp(24px, 4.4vw, 80px); }
+.preview-brand span { font-size: 28px; letter-spacing: -.035em; }
+.preview-brand small, .preview-kicker, .preview-actions, .preview-controls span, .preview-controls p, .source-label { color: var(--muted); font-size: 12px; font-weight: 400; letter-spacing: .08em; }
+.preview-actions a { min-height: 44px; align-content: center; }
+.preview-shell { padding: 64px clamp(24px, 4.4vw, 80px); }
+.preview-intro { max-width: 920px; }
+.preview-intro h1 { font-size: clamp(44px, 5.8vw, 80px); letter-spacing: -.04em; line-height: 1.05; max-width: 22ch; }
+.preview-controls { border-block: 1px solid var(--line); padding: 24px 0; margin: 38px 0; gap: 20px; }
+.preview-controls label span { font-size: 14px; text-transform: none; letter-spacing: 0; }
+.preview-controls input { background: #17171b; border: 1px solid rgba(240,240,238,.3); color: var(--ink); font-size: 16px; min-height: 48px; padding: 10px 14px; }
+.preview-controls button { background: var(--ink); color: #08080a; min-height: 48px; font-weight: 500; letter-spacing: .06em; }
+.preview-stage { padding: 46px 24px; background: #141417; border: 1px solid var(--line); }
+.newsletter-preview { border: 1px solid var(--line); max-width: 820px; padding: clamp(26px, 5vw, 68px); }
+.newsletter-preview h1 { font-size: clamp(48px, 7vw, 84px); letter-spacing: -.045em; }
+.newsletter-preview h2, .newsletter-preview h3 { letter-spacing: -.025em; }
+.image-credit { font-size: 12px; line-height: 1.6; }
+.feature p, .story p, .field-card p, .field-copy p, .field-editorial p { font-size: 16px; line-height: 1.8; }
+@media (max-width: 720px) {
+  .preview-header { align-items: start; gap: 20px; flex-direction: column; }
+  .preview-shell { padding: 40px 24px; }
+  .preview-stage { padding: 0; background: transparent; border: 0; margin-inline: -10px; }
+  .newsletter-preview { padding: 28px 20px; }
+  .preview-controls { align-items: stretch; }
+  .preview-controls input { width: 100%; }
+}
+
+.preview-intro h1 { font-size: clamp(32px, 3.6vw, 52px); max-width: 30ch; }
+.preview-intro p:not(.preview-kicker) { font-size: 16px; max-width: 76ch; }
+@media (max-width: 720px) {
+  .preview-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 22px; }
+  .preview-shell { padding-top: 32px; }
+  .preview-controls { margin-block: 28px; }
 }

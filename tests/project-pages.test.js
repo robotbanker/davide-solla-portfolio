@@ -294,7 +294,7 @@ test("Field Notes routing preserves legacy issues and never serves protected sou
 
   assert.equal(config.redirects.some((route) => route.source === "/field-notes.html"), false);
   assert.equal(legacyRoute.dest, "/api/field-notes?legacy=1");
-  assert.equal(archiveRoute.dest, "/api/field-notes?archive=1&public=1");
+  assert.equal(archiveRoute.dest, "/api/field-notes?public=1");
   assert.equal(rootSlashRoute.status, 308);
   assert.equal(rootSlashRoute.headers.Location, "/field-notes");
   assert.match(denyRoute.src, /newsletter\/\(\?:lib/);

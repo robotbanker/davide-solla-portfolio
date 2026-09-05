@@ -16,7 +16,7 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.equal((clientHtml.match(/data-client-rating="[1-5]"/g) || []).length, 5);
   assert.match(clientHtml, /data-client-feedback-comment/);
   assert.match(clientHtml, /maxlength="1500"/);
-  assert.match(clientHtml, /styles\.css\?v=33/);
+  assert.match(clientHtml, /styles\.css\?v=20260905/);
   assert.match(clientHtml, /client-area\.js\?v=5/);
   assert.match(clientStyles, /\.client-lightbox\s*\{/);
   assert.match(clientStyles, /body\.client-lightbox-open/);
@@ -43,7 +43,7 @@ test("client interactions use the signed session and keep downloads permission-g
 test("the admin provides per-client download control and a feedback review surface", () => {
   assert.match(adminHtml, /data-admin-tab="feedback"/);
   assert.match(adminHtml, /data-client-feedback-editor/);
-  assert.match(adminHtml, /admin\.css\?v=11/);
+  assert.match(adminHtml, /admin\.css\?v=20260905/);
   assert.match(adminHtml, /admin\.js\?v=12/);
   assert.match(adminScript, /data-client-download-enabled/);
   assert.match(adminScript, /client\.downloadEnabled = clientDownloadEnabled\.checked/);

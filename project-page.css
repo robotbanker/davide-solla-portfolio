@@ -7,8 +7,8 @@
 .project-site-header {
   align-items: center;
   backdrop-filter: blur(18px);
-  background: rgba(8, 8, 7, 0.88);
-  border-bottom: 1px solid rgba(241, 237, 230, 0.12);
+  background: rgba(8, 8, 10, 0.88);
+  border-bottom: 1px solid rgba(240, 240, 238, 0.12);
   display: flex;
   justify-content: space-between;
   left: 0;
@@ -55,7 +55,7 @@
 .project-site-header nav a,
 .project-footer a,
 .project-footer button {
-  color: rgba(241, 237, 230, 0.74);
+  color: rgba(240, 240, 238, 0.74);
   text-decoration: none;
 }
 
@@ -86,7 +86,7 @@
 
 .project-breadcrumb {
   align-items: center;
-  color: rgba(241, 237, 230, 0.46);
+  color: rgba(240, 240, 238, 0.46);
   display: flex;
   flex-wrap: wrap;
   gap: 9px;
@@ -112,7 +112,7 @@
 
 .project-intro-grid {
   align-items: start;
-  border-top: 1px solid rgba(241, 237, 230, 0.16);
+  border-top: 1px solid rgba(240, 240, 238, 0.16);
   display: grid;
   gap: 54px;
   grid-template-columns: minmax(0, 1.5fr) minmax(250px, 0.75fr);
@@ -120,7 +120,7 @@
 }
 
 .project-description {
-  color: rgba(241, 237, 230, 0.82);
+  color: rgba(240, 240, 238, 0.82);
   font-family: var(--display);
   font-size: clamp(28px, 3.4vw, 54px);
   line-height: 1.04;
@@ -137,7 +137,7 @@
 
 .project-meta div,
 .project-credits dl div {
-  border-bottom: 1px solid rgba(241, 237, 230, 0.12);
+  border-bottom: 1px solid rgba(240, 240, 238, 0.12);
   display: grid;
   gap: 18px;
   grid-template-columns: minmax(90px, 0.7fr) 1.3fr;
@@ -146,7 +146,7 @@
 
 .project-meta dt,
 .project-credits dt {
-  color: rgba(241, 237, 230, 0.48);
+  color: rgba(240, 240, 238, 0.48);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -155,7 +155,7 @@
 
 .project-meta dd,
 .project-credits dd {
-  color: rgba(241, 237, 230, 0.86);
+  color: rgba(240, 240, 238, 0.86);
   margin: 0;
 }
 
@@ -166,7 +166,7 @@
 }
 
 .project-frame {
-  background: #050504;
+  background: #08080a;
   grid-column: span 6;
   margin: 0;
   overflow: hidden;
@@ -184,8 +184,8 @@
 }
 
 .project-credits {
-  border-bottom: 1px solid rgba(241, 237, 230, 0.14);
-  border-top: 1px solid rgba(241, 237, 230, 0.14);
+  border-bottom: 1px solid rgba(240, 240, 238, 0.14);
+  border-top: 1px solid rgba(240, 240, 238, 0.14);
   display: grid;
   gap: 54px;
   grid-template-columns: 1fr 1fr;
@@ -209,11 +209,11 @@
 }
 
 .project-cta .section-kicker {
-  color: rgba(8, 8, 7, 0.56);
+  color: rgba(8, 8, 10, 0.56);
 }
 
 .project-cta p:not(.section-kicker) {
-  color: rgba(8, 8, 7, 0.68);
+  color: rgba(8, 8, 10, 0.68);
   margin: 26px 0 34px;
   max-width: 54ch;
 }
@@ -233,7 +233,7 @@
 }
 
 .project-sequence a {
-  background: rgba(241, 237, 230, 0.04);
+  background: rgba(240, 240, 238, 0.04);
   color: var(--porcelain);
   display: grid;
   gap: 11px;
@@ -248,11 +248,11 @@
 
 .project-sequence a:hover,
 .project-sequence a:focus-visible {
-  background: rgba(241, 237, 230, 0.09);
+  background: rgba(240, 240, 238, 0.09);
 }
 
 .project-sequence span {
-  color: rgba(241, 237, 230, 0.46);
+  color: rgba(240, 240, 238, 0.46);
 }
 
 .project-sequence strong {
@@ -263,8 +263,8 @@
 
 .project-footer {
   align-items: center;
-  border-top: 1px solid rgba(241, 237, 230, 0.12);
-  color: rgba(241, 237, 230, 0.42);
+  border-top: 1px solid rgba(240, 240, 238, 0.12);
+  color: rgba(240, 240, 238, 0.42);
   display: flex;
   justify-content: space-between;
   margin-top: 112px;
@@ -374,4 +374,53 @@
     align-items: flex-start;
     flex-wrap: wrap;
   }
+}
+
+/* Shared story and commission pages. */
+.project-site-header { padding-inline: var(--gutter); min-height: 82px; background: rgba(8,8,10,.96); }
+.project-wordmark strong { font-size: 28px; letter-spacing: -.035em; }
+.project-wordmark span, .project-site-header nav a, .project-breadcrumb, .project-sequence span, .project-footer { font-size: 12px; font-weight: 400; letter-spacing: .08em; }
+.project-site-header a { min-height: 44px; align-content: center; }
+.project-intro, .project-gallery, .project-credits, .project-cta, .project-sequence, .project-footer { width: calc(100% - 2 * var(--gutter)); max-width: 1560px; }
+.project-intro { padding: 70px 0; }
+.project-breadcrumb { color: var(--muted); margin-bottom: 60px; }
+.project-intro h1 { line-height: .96; letter-spacing: -.045em; font-size: clamp(64px, 10vw, 154px); max-width: 15ch; margin: 24px 0 54px; }
+.project-description { font-size: clamp(28px, 3.4vw, 48px); line-height: 1.15; letter-spacing: -.015em; }
+.project-meta dt, .project-credits dt { color: var(--muted); font-size: 12px; font-weight: 400; letter-spacing: .06em; }
+.project-meta dd, .project-credits dd { font-size: 16px; }
+.project-gallery { gap: 36px; align-items: start; }
+.project-credits { padding-block: 52px; margin-top: 90px; }
+.project-cta { background: var(--panel); color: var(--porcelain); border: 1px solid var(--line); margin-top: 90px; padding: clamp(32px, 6vw, 90px); }
+.project-cta .section-kicker { color: var(--muted); }
+.project-cta p:not(.section-kicker) { color: var(--soft-ink); font-size: 16px; line-height: 1.75; }
+.project-cta .hero-primary { color: var(--porcelain); background: transparent; border: 0; border-bottom: 1px solid var(--porcelain); }
+.project-cta .hero-primary:hover { color: #fff; }
+.project-cta h2 { max-width: 20ch; line-height: 1.05; }
+.project-sequence { gap: 24px; margin-top: 28px; }
+.project-sequence a { background: transparent; border-top: 1px solid var(--line); padding: 28px 0; }
+.project-sequence a:hover, .project-sequence a:focus-visible { background: transparent; border-color: var(--porcelain); }
+.project-sequence span { color: var(--muted); }
+.project-footer { padding-block: 36px; gap: 24px; }
+.project-footer a, .project-footer button { min-height: 44px; align-content: center; }
+@media (max-width: 720px) {
+  .project-site-header { min-height: 76px; gap: 15px; flex-wrap: wrap; padding-block: 14px; }
+  .project-wordmark strong { font-size: 25px; }
+  .project-site-header nav { gap: 18px; flex-wrap: wrap; }
+  .project-site-header nav a { font-size: 12px; }
+  .project-intro { padding: 42px 0 48px; }
+  .project-breadcrumb { margin-bottom: 34px; font-size: 12px; }
+  .project-intro h1 { font-size: clamp(54px, 14vw, 90px); margin-bottom: 34px; }
+  .project-intro-grid { gap: 28px; }
+  .project-gallery { gap: 24px; }
+  .project-description { font-size: 30px; }
+  .project-credits, .project-cta { margin-top: 64px; }
+  .project-sequence { gap: 20px; }
+  .project-sequence a { padding-block: 22px; min-height: 130px; }
+}
+
+/* Long service names need a different measure from short project titles. */
+.service-page .project-intro h1 { font-size: clamp(54px, 7.6vw, 110px); max-width: 22ch; }
+.service-page .project-description { font-size: clamp(26px, 3vw, 42px); line-height: 1.2; }
+@media (max-width: 720px) {
+  .project-description, .service-page .project-description { font-size: 24px; line-height: 1.3; }
 }

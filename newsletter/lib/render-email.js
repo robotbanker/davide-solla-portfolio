@@ -6,16 +6,16 @@ const issueDir = path.join(newsletterRoot, "data", "issues");
 const sourceDir = path.join(newsletterRoot, "data", "sources");
 
 const tokens = {
-  paper: "#0b0a09",
-  charcoal: "#080807",
-  panel: "#11100e",
-  bone: "#151310",
-  porcelain: "#f1ede6",
-  softInk: "#cfc6bb",
-  muted: "#a9a29a",
-  accent: "#bca66e",
-  line: "rgba(241, 237, 230, 0.16)",
-  warmLine: "rgba(188, 166, 110, 0.34)",
+  paper: "#09090b",
+  charcoal: "#08080a",
+  panel: "#101013",
+  bone: "#151518",
+  porcelain: "#f0f0ee",
+  softInk: "#cecece",
+  muted: "#a8a8aa",
+  accent: "#d6d6d8",
+  line: "rgba(240, 240, 238, 0.16)",
+  warmLine: "rgba(214, 214, 216, 0.34)",
   display: "Didot, Bodoni 72, Baskerville, Times New Roman, serif",
   sans: "Avenir Next, Neue Haas Grotesk Text, Helvetica Neue, Arial, sans-serif"
 };
@@ -379,14 +379,14 @@ const renderCta = (label, href) => {
   const safeLabel = escapeHtml(label || "View source");
 
   if (!isUsableUrl(href)) {
-    return `<span style="color:${tokens.muted};font-family:${tokens.sans};font-size:11px;font-weight:700;letter-spacing:0;text-transform:uppercase;">${safeLabel}</span>`;
+    return `<span style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;font-weight:700;letter-spacing:0;text-transform:uppercase;">${safeLabel}</span>`;
   }
 
   return `
     <table role="presentation" cellspacing="0" cellpadding="0" border="0">
       <tr>
-        <td style="border:1px solid rgba(241,237,230,0.48);padding:13px 17px;">
-          <a href="${escapeAttr(href)}" style="color:${tokens.porcelain};display:inline-block;font-family:${tokens.sans};font-size:11px;font-weight:700;line-height:1;text-decoration:none;text-transform:uppercase;">${safeLabel}</a>
+        <td style="border:1px solid rgba(240,240,238,0.48);padding:13px 17px;">
+          <a href="${escapeAttr(href)}" style="color:${tokens.porcelain};display:inline-block;font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1;text-decoration:none;text-transform:uppercase;">${safeLabel}</a>
         </td>
       </tr>
     </table>
@@ -400,7 +400,7 @@ const renderImage = (image, issue, height = 360) => {
   if (image?.src) {
     return `
       <img src="${escapeAttr(absoluteUrl(image.src, baseUrl))}" width="620" alt="${escapeAttr(image.alt || "")}" style="border:0;display:block;height:auto;max-width:620px;width:100%;">
-      ${credit ? `<p style="color:${tokens.muted};font-family:${tokens.sans};font-size:10px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">${escapeHtml(credit)}</p>` : ""}
+      ${credit ? `<p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">${escapeHtml(credit)}</p>` : ""}
     `;
   }
 
@@ -408,20 +408,20 @@ const renderImage = (image, issue, height = 360) => {
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:${tokens.bone};border:1px solid ${tokens.warmLine};">
       <tr>
         <td height="${height}" style="height:${height}px;padding:28px;text-align:center;vertical-align:middle;">
-          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:11px;font-weight:700;line-height:1.45;margin:0;text-transform:uppercase;">${escapeHtml(image?.label || "Image pending")}</p>
+          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1.45;margin:0;text-transform:uppercase;">${escapeHtml(image?.label || "Image pending")}</p>
           <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.5;margin:10px auto 0;max-width:280px;">${escapeHtml(image?.recommendedSize || "Official image required before sending")}</p>
         </td>
       </tr>
     </table>
-    <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:10px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">${escapeHtml(credit || "Image usage pending")}</p>
+    <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.4;margin:9px 0 0;text-transform:uppercase;">${escapeHtml(credit || "Image usage pending")}</p>
   `;
 };
 
 const renderSectionHeading = (label, intro) => `
   <tr>
     <td style="padding:0 0 26px;">
-      <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:11px;font-weight:700;line-height:1.35;margin:0 0 13px;text-transform:uppercase;">${escapeHtml(label)}</p>
-      ${intro ? text(intro, `color:${tokens.softInk};font-family:${tokens.sans};font-size:15px;line-height:1.65;margin:0;max-width:560px;`) : ""}
+      <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1.35;margin:0 0 13px;text-transform:uppercase;">${escapeHtml(label)}</p>
+      ${intro ? text(intro, `color:${tokens.softInk};font-family:${tokens.sans};font-size:16px;line-height:1.65;margin:0;max-width:560px;`) : ""}
     </td>
   </tr>
 `;
@@ -440,9 +440,9 @@ const renderArt = (issue) => {
     </tr>
     <tr>
       <td style="padding:0 0 26px;">
-        <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:11px;font-weight:700;line-height:1.4;margin:0 0 11px;text-transform:uppercase;">${escapeHtml(feature.institution)} / ${escapeHtml(feature.location)} / ${escapeHtml(feature.dates)}</p>
+        <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1.4;margin:0 0 11px;text-transform:uppercase;">${escapeHtml(feature.institution)} / ${escapeHtml(feature.location)} / ${escapeHtml(feature.dates)}</p>
         <h3 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:32px;font-weight:400;line-height:1.08;margin:0 0 14px;">${escapeHtml(feature.title)}</h3>
-        ${text(feature.description, `color:${tokens.softInk};font-family:${tokens.sans};font-size:15px;line-height:1.7;margin:0 0 15px;`)}
+        ${text(feature.description, `color:${tokens.softInk};font-family:${tokens.sans};font-size:16px;line-height:1.7;margin:0 0 15px;`)}
         ${text(`Why it matters visually: ${feature.whyItMatters}`, `color:${tokens.muted};font-family:${tokens.sans};font-size:13px;line-height:1.6;margin:0 0 20px;`)}
         ${renderCta(feature.ctaLabel, featureHref)}
       </td>
@@ -450,7 +450,7 @@ const renderArt = (issue) => {
     ${(art.items || []).map((item) => `
       <tr>
         <td style="border-top:1px solid ${tokens.line};padding:22px 0;">
-          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:10px;font-weight:700;line-height:1.4;margin:0 0 9px;text-transform:uppercase;">${escapeHtml(item.institution)} / ${escapeHtml(item.location)} / ${escapeHtml(item.dates)}</p>
+          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1.4;margin:0 0 9px;text-transform:uppercase;">${escapeHtml(item.institution)} / ${escapeHtml(item.location)} / ${escapeHtml(item.dates)}</p>
           <h4 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:24px;font-weight:400;line-height:1.12;margin:0 0 10px;">${escapeHtml(item.title)}</h4>
           ${text(item.description, `color:${tokens.softInk};font-family:${tokens.sans};font-size:14px;line-height:1.68;margin:0 0 12px;`)}
           ${text(`Why it matters visually: ${item.whyItMatters}`, `color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.55;margin:0 0 14px;`)}
@@ -470,9 +470,9 @@ const renderFashion = (issue) => {
       <tr>
         <td style="padding:0 0 30px;">
           ${renderImage({ ...story.image, credit: story.imageCredit }, issue, 300)}
-          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:10px;font-weight:700;line-height:1.4;margin:17px 0 9px;text-transform:uppercase;">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
+          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1.4;margin:17px 0 9px;text-transform:uppercase;">${escapeHtml(story.brand)} / ${escapeHtml(story.releaseTiming)}</p>
           <h3 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:29px;font-weight:400;line-height:1.1;margin:0 0 12px;">${escapeHtml(story.title)}</h3>
-          ${text(story.commentary, `color:${tokens.softInk};font-family:${tokens.sans};font-size:15px;line-height:1.68;margin:0 0 14px;`)}
+          ${text(story.commentary, `color:${tokens.softInk};font-family:${tokens.sans};font-size:16px;line-height:1.68;margin:0 0 14px;`)}
           ${renderCta("View official source", story.sourceUrl)}
         </td>
       </tr>
@@ -495,7 +495,7 @@ const renderOnTheField = (issue) => {
       <tr>
         <td style="padding:0 0 26px;">
           <h3 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:34px;font-weight:400;line-height:1.08;margin:0 0 15px;">${escapeHtml(field.title)}</h3>
-          ${openingParagraph ? text(openingParagraph, `color:${tokens.softInk};font-family:${tokens.sans};font-size:15px;line-height:1.72;margin:0;`) : ""}
+          ${openingParagraph ? text(openingParagraph, `color:${tokens.softInk};font-family:${tokens.sans};font-size:16px;line-height:1.72;margin:0;`) : ""}
         </td>
       </tr>
       ${fieldImages.map((image, index) => {
@@ -572,7 +572,7 @@ const renderEmail = (issue) => {
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                   <tr>
                     <td style="border-bottom:1px solid ${tokens.warmLine};padding:0 0 26px;">
-                      <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:11px;font-weight:700;line-height:1.35;margin:0 0 16px;text-transform:uppercase;">London / Fashion / Portraiture</p>
+                      <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:12px;font-weight:700;line-height:1.35;margin:0 0 16px;text-transform:uppercase;">London / Fashion / Portraiture</p>
                       <h1 style="color:${tokens.porcelain};font-family:${tokens.display};font-size:46px;font-weight:400;line-height:1;margin:0 0 14px;">${escapeHtml(issue.site.brandName)}</h1>
                       <h2 style="color:${tokens.softInk};font-family:${tokens.display};font-size:28px;font-weight:400;line-height:1.12;margin:0;">Monthly Newsletter — ${escapeHtml(issue.month)} Issue</h2>
                     </td>
@@ -590,8 +590,8 @@ const renderEmail = (issue) => {
                           <td style="padding:26px 0 0;">
                             <p style="color:${tokens.porcelain};font-family:${tokens.display};font-size:25px;line-height:1;margin:0 0 10px;">${escapeHtml(issue.footer?.wordmark || issue.site.brandName)}</p>
                             <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.7;margin:0 0 12px;">${escapeHtml(issue.site.location)} / <a href="${escapeAttr(issue.site.websiteUrl)}" style="color:${tokens.softInk};text-decoration:none;">Website</a> / <a href="${escapeAttr(issue.site.instagramUrl)}" style="color:${tokens.softInk};text-decoration:none;">Instagram</a></p>
-                            <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:11px;line-height:1.6;margin:0 0 8px;"><a href="${escapeAttr(issue.site.unsubscribeUrl)}" style="color:${tokens.muted};text-decoration:underline;">Unsubscribe</a> or <a href="${escapeAttr(issue.site.preferencesUrl)}" style="color:${tokens.muted};text-decoration:underline;">manage preferences</a>.</p>
-                            <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:11px;line-height:1.6;margin:0;">${escapeHtml(issue.footer?.copyright || "")}</p>
+                            <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.6;margin:0 0 8px;"><a href="${escapeAttr(issue.site.unsubscribeUrl)}" style="color:${tokens.muted};text-decoration:underline;">Unsubscribe</a> or <a href="${escapeAttr(issue.site.preferencesUrl)}" style="color:${tokens.muted};text-decoration:underline;">manage preferences</a>.</p>
+                            <p style="color:${tokens.muted};font-family:${tokens.sans};font-size:12px;line-height:1.6;margin:0;">${escapeHtml(issue.footer?.copyright || "")}</p>
                           </td>
                         </tr>
                       </table>

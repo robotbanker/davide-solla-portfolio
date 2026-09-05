@@ -60,7 +60,7 @@
     },
     {
       "src": "/field-notes",
-      "dest": "/api/field-notes?archive=1&public=1"
+      "dest": "/api/field-notes?public=1"
     },
     {
       "src": "/(?:api/.*\\.js|app-shell(?:/.*)?|ios(?:/.*)?|lib(?:/.*)?|tests(?:/.*)?|scripts(?:/.*)?|\\.github(?:/.*)?|newsletter/(?:lib(?:/.*)?|data/(?:issues|sources)(?:/.*)?|build-email\\.js)|data/(?:admin-site\\.(?:json|enc)|client-feedback\\.enc)|capacitor\\.config\\.json|server\\.js|package(?:-lock)?\\.json|README\\.md|NEWSLETTER_SYSTEM\\.md|\\.env.*|\\.git(?:/.*)?|vercel\\.json)$",

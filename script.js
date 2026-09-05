@@ -552,7 +552,12 @@ const layoutEditorialGrid = () => {
       ? image.naturalWidth / image.naturalHeight
       : 0;
     const { height, letterboxed } = editorialTileHeight(tile, ratio);
-    const rowSpan = Math.max(8, Math.round((height + rowGap) / (rowHeight + rowGap)));
+    // Captions sit beneath the image in the editorial layout. Include their
+    // actual height so album size controls and natural image proportions survive.
+    const caption = tile.querySelector(".tile-caption");
+    const captionHeight = caption ? caption.getBoundingClientRect().height
+      + (Number.parseFloat(window.getComputedStyle(caption).marginTop) || 0) : 0;
+    const rowSpan = Math.max(8, Math.ceil((height + captionHeight + rowGap) / (rowHeight + rowGap)));
 
     tile.style.setProperty("--tile-rows", String(rowSpan));
     tile.classList.toggle("is-letterboxed", letterboxed);

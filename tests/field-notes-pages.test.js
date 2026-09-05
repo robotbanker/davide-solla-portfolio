@@ -164,18 +164,27 @@ test("the clean issue route is crawlable, while the direct API alias is noindex"
   assert.equal(head.body, undefined);
 });
 
-test("moving and legacy aliases redirect with the correct permanence", () => {
+test("Field Notes opens the latest published issue directly on local and production routes", () => {
   const latest = response();
   handleFieldNotesPageRequest(request("/field-notes"), latest);
   assert.equal(latest.statusCode, 200);
   assert.match(latest.body, new RegExp(`href="/field-notes/${entries[0].issueId}"`));
+  assert.match(latest.body, /data-field-notes-prerendered/);
+  assert.match(latest.body, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/field-notes/${entries[0].issueId}">`));
   assert.match(latest.headers["cache-control"], /s-maxage=3600/);
 
   const productionRewrite = response();
   handleFieldNotesPageRequest(request("/api/field-notes?public=1"), productionRewrite);
   assert.equal(productionRewrite.statusCode, 200);
-  assert.match(productionRewrite.body, /Field Notes archive/);
+  assert.equal(productionRewrite.body, latest.body);
 
+  const archive = response();
+  handleFieldNotesPageRequest(request("/field-notes?archive=1"), archive);
+  assert.equal(archive.statusCode, 200);
+  assert.match(archive.body, /Field Notes archive/);
+});
+
+test("legacy aliases redirect with the correct permanence", () => {
   const legacy = response();
   handleFieldNotesPageRequest(request("/field-notes.html?issue=2026-06"), legacy);
   assert.equal(legacy.statusCode, 308);

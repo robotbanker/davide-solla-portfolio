@@ -30,7 +30,7 @@
   max-width: 860px;
 }
 
-.field-notes-hero-copy p:not(.section-kicker) {
+.field-notes-hero-copy p:not(.section-kicker, .field-notes-title) {
   color: var(--soft-ink);
   font-size: 18px;
   line-height: 1.68;
@@ -54,7 +54,7 @@
 }
 
 .field-notes-archive {
-  background: rgba(11, 10, 9, 0.62);
+  background: rgba(9, 9, 11, 0.62);
   border-right: 1px solid var(--line);
   min-width: 0;
 }
@@ -126,7 +126,7 @@
 
 .archive-link-muted span,
 .archive-link-muted small {
-  color: rgba(169, 162, 154, 0.58);
+  color: rgba(168, 168, 170, 0.58);
 }
 
 .field-notes-issue {
@@ -181,7 +181,7 @@
 }
 
 .issue-actions .text-link {
-  border: 1px solid rgba(241, 237, 230, 0.28);
+  border: 1px solid rgba(240, 240, 238, 0.28);
   min-height: 42px;
   padding: 15px 16px 0;
   transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
@@ -189,8 +189,8 @@
 
 .issue-actions .text-link:hover,
 .issue-actions .text-link:focus-visible {
-  background: rgba(241, 237, 230, 0.06);
-  border-color: rgba(241, 237, 230, 0.52);
+  background: rgba(240, 240, 238, 0.06);
+  border-color: rgba(240, 240, 238, 0.52);
   transform: translateY(-1px);
 }
 
@@ -238,8 +238,8 @@
 }
 
 .field-image {
-  background: #090807;
-  border: 1px solid rgba(241, 237, 230, 0.08);
+  background: #09090b;
+  border: 1px solid rgba(240, 240, 238, 0.08);
   margin: 0 0 26px;
   overflow: hidden;
 }
@@ -422,7 +422,7 @@
     font-size: clamp(38px, 11.5vw, 52px);
   }
 
-  .field-notes-hero-copy p:not(.section-kicker) {
+  .field-notes-hero-copy p:not(.section-kicker, .field-notes-title) {
     font-size: 16px;
     line-height: 1.68;
     margin-top: 24px;
@@ -474,4 +474,59 @@
     margin-bottom: 22px;
   }
 
+}
+
+/* Field Notes: a quiet magazine spread, with the archive as its margin. */
+.field-notes-page { --field-gutter: var(--gutter); --field-measure: 720px; --field-wide: 1100px; }
+.field-notes-hero { padding-top: 156px; padding-bottom: 76px; gap: 9%; grid-template-columns: 1.25fr .75fr; }
+.field-notes-hero .field-notes-title { font-size: clamp(70px, 8vw, 128px); letter-spacing: -.055em; line-height: .96; }
+.field-notes-hero-copy p:not(.section-kicker, .field-notes-title) { font-size: 17px; line-height: 1.75; max-width: 48ch; }
+.field-notes-signup { padding-top: 28px; }
+.field-notes-shell { grid-template-columns: minmax(210px, 20%) minmax(0, 1fr); }
+.field-notes-archive { background: transparent; }
+.archive-inner { padding-left: var(--gutter); padding-top: 56px; }
+.archive-link small, .issue-head .issue-date, .field-image figcaption, .field-source, .field-meta { font-size: 12px; font-weight: 400; letter-spacing: .06em; }
+.archive-link span { font-size: 25px; }
+.archive-link-muted span, .archive-link-muted small { color: var(--muted); }
+.field-notes-issue { padding-top: 60px; padding-left: clamp(28px, 4vw, 72px); }
+.issue-head { gap: 26px; padding-bottom: 42px; }
+.issue-head h1 { font-size: clamp(48px, 5vw, 76px); line-height: 1.05; letter-spacing: -.035em; }
+.issue-head p:not(.section-kicker) { font-size: 17px; }
+.field-section { grid-template-columns: 92px minmax(0, var(--field-measure)); gap: 0 32px; padding-top: 48px; }
+.field-section > .section-kicker { font-size: 12px; letter-spacing: .1em; }
+.field-feature h3, .field-story h3, .field-note h3, .field-editorial h3 { line-height: 1.1; letter-spacing: -.025em; }
+.field-image { border: 0; background: transparent; margin-bottom: 30px; }
+.field-image figcaption { border-bottom: 1px solid var(--line); padding: 14px 0; line-height: 1.65; }
+.field-image img { max-height: min(85vh, 1000px); }
+.field-feature p, .field-story p, .field-note p, .field-editorial p, .field-gallery-copy p { line-height: 1.85; }
+.field-why { font-size: 16px; }
+.field-section + .field-section { margin-top: 72px; }
+.field-gallery .field-image:not(:first-child) { margin-top: 32px; }
+@media (max-width: 1100px) {
+  .field-notes-shell { grid-template-columns: 1fr; }
+  .field-notes-archive { border-right: 0; border-bottom: 1px solid var(--line); }
+  .archive-inner { position: static; padding: 30px var(--gutter); }
+  .field-notes-archive nav { display: flex; gap: 30px; overflow-x: auto; }
+  .archive-link { min-width: 170px; }
+  .field-notes-issue { padding-inline: var(--gutter); }
+  .field-notes-hero { grid-template-columns: 1fr; gap: 34px; }
+  .field-notes-signup { max-width: 580px; }
+}
+@media (max-width: 720px) {
+  .field-notes-hero { padding: 134px 24px 56px; }
+  .field-notes-hero .field-notes-title { font-size: 76px; }
+  .field-notes-hero-copy p:not(.section-kicker, .field-notes-title) { font-size: 16px; }
+  .field-notes-issue { padding: 42px 24px 68px; }
+  .field-section { grid-template-columns: 1fr; padding-top: 36px; }
+  .field-section > .section-kicker { position: static; margin-bottom: 22px; }
+  .field-section > :not(.section-kicker) { grid-column: 1; }
+  .issue-head h1 { font-size: 48px; }
+  .field-feature p, .field-story p, .field-note p, .field-editorial p, .field-gallery-copy p { font-size: 16px; line-height: 1.8; }
+}
+
+.field-notes-hero-copy > .section-kicker { color: var(--porcelain); font-family: var(--display); font-size: clamp(74px, 8vw, 120px); font-weight: 400; letter-spacing: -.055em; line-height: 1; margin: 0 0 28px; text-transform: none; }
+.field-notes-hero .field-notes-title { color: var(--soft-ink); font-size: clamp(30px, 3.2vw, 44px); line-height: 1.16; letter-spacing: -.02em; max-width: 23ch; }
+@media (max-width: 720px) {
+  .field-notes-hero-copy > .section-kicker { font-size: 68px; margin-bottom: 22px; }
+  .field-notes-hero .field-notes-title { font-size: 32px; }
 }
