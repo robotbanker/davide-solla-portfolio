@@ -112,7 +112,9 @@ Clients open `client-area.html` and sign in with their own email and password. U
 
 When **Allow gallery downloads** is enabled, the client downloads a ZIP of Lightroom’s full-size edited photos directly from the website. Enable **Allow JPG downloads** in Lightroom too, and sync the full-resolution photos to Adobe; Lightroom can only deliver the resolution it holds. These are delivered edits, not original RAW files. Downloads never fall back to web-size previews.
 
-Both previews and downloads are fetched through authenticated `/api/client` endpoints. Every request rechecks the current client configuration and gallery membership; Adobe URLs and the share identifier are not returned to the browser. Download requests also recheck the download permission. Transfers use chunks of at most 3 MiB, and the ZIP is assembled in the browser to avoid a large serverless archive response. Browser ZIPs are limited to 512 MiB; individual images to 100 MiB. Download progress and errors appear beside the gallery controls. Changing credentials, gallery assignment or download permission invalidates existing sessions. Adobe’s shared-download endpoint is an upstream dependency and requires a live integration smoke test when deploying changes.
+Gallery downloads use Lightroom’s native full-size ZIP export. The website checks the signed client session and download permission, then sends the browser directly to Adobe’s attachment endpoint. The Lightroom gallery page is never opened. No photo-by-photo proxy transfer, browser ZIP assembly or website archive-size limit is involved. Adobe’s download URL is visible in browser network tools and can be reused outside the website once obtained; this is the accepted tradeoff for native download speed. Enable **Allow JPG downloads** in Lightroom.
+
+Previews still use authenticated website endpoints. Changing credentials, gallery assignment or download permission invalidates website sessions and prevents obtaining new download URLs; it cannot revoke an Adobe URL already obtained. Adobe’s download service controls archive preparation and transfer; errors after the handoff are handled by the browser/Adobe.
 
 ## Contact Form
 

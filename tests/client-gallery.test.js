@@ -560,17 +560,19 @@ test("multiple clients share a gallery with independent feedback, permissions an
     assert.equal((await media(null, "image")).statusCode, 401);
     assert.equal((await media(null, "download")).statusCode, 401);
     assert.equal((await media(second.token, "download")).statusCode, 403);
-    assert.equal((await media(first.token, "download", "someone-elses-photo")).statusCode, 404);
-    assert.equal((await media(first.token, "download", "asset-one", "&offset=-1")).statusCode, 416);
+    assert.equal((await media(first.token, "image", "someone-elses-photo")).statusCode, 404);
+    assert.equal((await media(first.token, "image", "asset-one", "&offset=-1")).statusCode, 416);
     const preview = await media(second.token, "image");
     assert.equal(preview.statusCode, 200);
     assert.equal(preview.headers["cache-control"], "private, no-store");
     const fullsize = await media(first.token, "download");
     assert.equal(fullsize.statusCode, 200);
-    assert.match(fullsize.headers["content-disposition"], /^attachment;/);
-    assert.equal(fullsize.headers.location, undefined);
-    assert.deepEqual(fullsize.bytes, Buffer.from([0xff, 0xd8, 0xff, 0x01, 0x02, 0xff, 0xd9]));
-    assert.notDeepEqual(fullsize.bytes, preview.bytes, "downloads must use full-size delivery, not preview renditions");
+    const native = new URL(json(fullsize).downloadUrl);
+    assert.equal(native.origin, "https://dl.lightroom.adobe.com");
+    assert.equal(native.pathname, "/spaces/abcdef123456/albums/album-one");
+    assert.equal(native.searchParams.get("fullsize"), "true");
+    assert.equal(native.searchParams.get("gcm"), "true");
+    assert.equal(fullsize.headers["cache-control"], "no-store");
 
     for (const [token, rating] of [[first.token, 5], [second.token, 2]]) {
       const res = response();
@@ -589,7 +591,7 @@ test("multiple clients share a gallery with independent feedback, permissions an
   });
 });
 
-test("full-size files are chunked without exposing upstream URLs or falling back to previews", async () => {
+test("authenticated previews are chunked without exposing upstream URLs", async () => {
   await withClientGalleryBackend(async ({ files }) => {
     const site = decryptAdminData(files.get("data/admin-site.enc"));
     site.clients[0].downloadEnabled = true;
@@ -600,7 +602,7 @@ test("full-size files are chunked without exposing upstream URLs or falling back
     bytes.set([0xff, 0xd8, 0xff]);
     let upstreamMode = "whole";
     global.fetch = async (url, options) => {
-      if (!String(url).startsWith("https://dl.lightroom.adobe.com/")) return originalFetch(url, options);
+      if (!String(url).includes("/renditions/asset-")) return originalFetch(url, options);
       if (upstreamMode === "error") return adobeResponse(403, "Downloads disabled");
       if (upstreamMode === "html") return adobeImageResponse(Buffer.from("<html>Sign in</html>"), String(url));
       if (upstreamMode === "partial") {
@@ -613,7 +615,7 @@ test("full-size files are chunked without exposing upstream URLs or falling back
     };
     const getChunk = async (offset) => {
       const res = response();
-      await handleClientRequest(request({ method: "GET", url: `/api/client?action=download&asset=asset-one&offset=${offset}`, authorization: `Bearer ${token}` }), res);
+      await handleClientRequest(request({ method: "GET", url: `/api/client?action=image&asset=asset-one&offset=${offset}`, authorization: `Bearer ${token}` }), res);
       return res;
     };
     for (const mode of ["whole", "partial"]) {
@@ -630,7 +632,7 @@ test("full-size files are chunked without exposing upstream URLs or falling back
       upstreamMode = mode;
       const failed = await getChunk(0);
       assert.equal(failed.statusCode, 502);
-      assert.match(json(failed).error, /full-resolution/);
+      assert.match(json(failed).error, /image/);
       assert.doesNotMatch(failed.body, /https:\/\//);
     }
     site.clients[0].downloadEnabled = false;
@@ -655,5 +657,34 @@ test("client galleries include subsequent Adobe asset pages", async () => {
     const login = await clientLogin();
     assert.equal(login.statusCode, 200);
     assert.deepEqual(json(login).client.images.map((image) => image.lightroomAssetId), ["asset-one", "asset-two"]);
+  });
+});
+
+
+test("native download authorization does not fetch asset lists or photo bytes", async () => {
+  await withClientGalleryBackend(async ({ files }) => {
+    const site = decryptAdminData(files.get("data/admin-site.enc"));
+    site.clients[0].downloadEnabled = true;
+    files.set("data/admin-site.enc", encryptAdminData(site));
+    const { token } = json(await clientLogin());
+    const upstreamFetch = global.fetch;
+    const calls = [];
+    global.fetch = async (url, options) => {
+      calls.push(String(url));
+      if (String(url).includes("/assets") || String(url).includes("/renditions") || String(url).includes("dl.lightroom")) {
+        throw new Error("Native download must not fetch photos through the website");
+      }
+      return upstreamFetch(url, options);
+    };
+    const res = response();
+    await handleClientRequest(request({ method: "GET", url: "/api/client?action=download&url=https://example.com", authorization: `Bearer ${token}` }), res);
+    assert.equal(res.statusCode, 200);
+    assert.equal(calls.length, 2);
+    assert.match(json(res).downloadUrl, /^https:\/\/dl\.lightroom\.adobe\.com\/spaces\/abcdef123456\/albums\/album-one\?/);
+    site.clients[0].downloadEnabled = false;
+    files.set("data/admin-site.enc", encryptAdminData(site));
+    const stale = response();
+    await handleClientRequest(request({ method: "GET", url: "/api/client?action=download", authorization: `Bearer ${token}` }), stale);
+    assert.equal(stale.statusCode, 401);
   });
 });

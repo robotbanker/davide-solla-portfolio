@@ -17,7 +17,7 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.match(clientHtml, /data-client-feedback-comment/);
   assert.match(clientHtml, /maxlength="1500"/);
   assert.match(clientHtml, /styles\.css\?v=20260905/);
-  assert.match(clientHtml, /client-area\.js\?v=6/);
+  assert.match(clientHtml, /client-area\.js\?v=7/);
   assert.match(clientStyles, /\.client-lightbox\s*\{/);
   assert.match(clientStyles, /body\.client-lightbox-open/);
 });
@@ -72,4 +72,12 @@ test("the encrypted feedback store is denied by the production static router", (
 test("the privacy notice discloses private gallery ratings and comments", () => {
   assert.match(privacyHtml, /image star ratings and comments/);
   assert.match(privacyHtml, /Gallery access, ratings and comments are removed when no longer needed/);
+});
+
+
+test("gallery downloads delegate directly to Lightroom after authorization", () => {
+  assert.match(clientScript, /fetch\("\/api\/client\?action=download"/);
+  assert.match(clientScript, /window\.location\.assign\(url\.href\)/);
+  assert.doesNotMatch(clientScript, /new GalleryZip|archive\.add/);
+  assert.doesNotMatch(clientHtml, /client-download\.js/);
 });

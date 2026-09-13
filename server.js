@@ -30,7 +30,7 @@ const mimeTypes = {
 };
 
 const publicFiles = new Set([
-  "404.html", "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js", "client-download.js",
+  "404.html", "admin.css", "admin.html", "admin.js", "newsletter-admin.js", "client-area.html", "client-area.js",
   "field-notes.css", "field-notes.html", "field-notes.js", "google-tag.js",
   "image-licensing.html", "index.html", "newsletter-preview.css", "newsletter-preview.html", "newsletter-preview.js",
   "newsletter-signup.js", "preferences.html", "preferences.js",

@@ -53,14 +53,14 @@ const releaseGalleryMedia = () => {
   }
 };
 
-const fetchGalleryImage = async (image, token, signal, download = false) => {
+const fetchGalleryImage = async (image, token, signal) => {
   const chunks = [];
   let offset = 0;
   let total = 0;
   let type = "image/jpeg";
   let extension = ".jpg";
   do {
-    const url = `/api/client?action=${download ? "download" : "image"}&asset=${encodeURIComponent(image.lightroomAssetId)}&offset=${offset}`;
+    const url = `/api/client?action=image&asset=${encodeURIComponent(image.lightroomAssetId)}&offset=${offset}`;
     const response = await fetch(url, { headers: { authorization: `Bearer ${token}` }, signal });
     if (!response.ok) {
       const result = await response.json().catch(() => ({}));
@@ -455,7 +455,7 @@ const closeLightbox = ({ restoreFocus = true } = {}) => {
 const showGallery = (client, token, expiresAt = activeSessionExpiresAt) => {
   const name = client.name || "Your";
   const images = Array.isArray(client.images) ? client.images : [];
-  const canDownload = client.downloadEnabled === true && images.length > 0;
+  const canDownload = client.downloadEnabled === true;
   releaseGalleryMedia();
   activeClient = {
     ...client,
@@ -753,24 +753,25 @@ downloadLink.addEventListener("click", async () => {
   downloadLink.disabled = true;
   downloadLink.setAttribute("aria-busy", "true");
   try {
-    const archive = new GalleryZip();
-    for (const [index, image] of client.images.entries()) {
-      downloadLink.textContent = `Preparing photo ${index + 1} of ${client.images.length}…`;
-      const { blob, extension } = await fetchGalleryImage(image, token, signal, true);
-      if (signal.aborted) return;
-      const name = (image.alt || "photo").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 100);
-      await archive.add(`${String(index + 1).padStart(4, "0")}-${name}${extension}`, blob);
+    downloadLink.textContent = "Starting download…";
+    const response = await fetch("/api/client?action=download", {
+      headers: { authorization: `Bearer ${token}` }, signal
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      const error = new Error(result.error || "The download could not be started. Please try again.");
+      error.status = response.status;
+      throw error;
     }
     if (signal.aborted || activeClient !== client) return;
-    const url = URL.createObjectURL(archive.finish());
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${(client.galleryTitle || "gallery").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 100)}.zip`;
-    document.body.append(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
-    galleryCopy.textContent = "Your gallery download is ready.";
+    const url = new URL(result.downloadUrl);
+    if (url.origin !== "https://dl.lightroom.adobe.com" || !/^\/spaces\/[^/]+\/albums\/[^/]+$/.test(url.pathname)) {
+      throw new Error("The download address was invalid. Please try again.");
+    }
+    // Adobe replies with an attachment, so the browser downloads it without
+    // visiting the Lightroom gallery or buffering all the photos in this page.
+    galleryCopy.textContent = "Lightroom is preparing your gallery download. It will appear in your browser’s downloads.";
+    window.location.assign(url.href);
   } catch (error) {
     if (signal.aborted) return;
     if (error.status === 401) {
