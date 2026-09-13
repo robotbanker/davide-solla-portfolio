@@ -295,10 +295,16 @@ const renderSections = () => {
 
 const renderClients = () => {
   const clients = site.clients || [];
+  const availableGalleries = new Map();
+  for (const item of [...(site.albums || []), ...clients]) {
+    const url = item.lightroomUrl?.trim();
+    if (url && !availableGalleries.has(url)) availableGalleries.set(url, item.title || item.name || item.email || "Gallery");
+  }
   const clientCards = clients.map((client) => {
     const hasPassword = Boolean(client.passwordHash || client.password);
     const hasGallery = Boolean(client.lightroomUrl);
     const feedbackCount = client.feedback?.length || 0;
+    const sharedCount = hasGallery ? clients.filter((item) => item.lightroomUrl?.trim() === client.lightroomUrl.trim()).length : 0;
 
     return `
       <article class="client-card" data-client-id="${escapeHtml(client.id)}">
@@ -308,6 +314,7 @@ const renderClients = () => {
             <h3>${escapeHtml(client.name || client.email || "New client")}</h3>
           </div>
           <div class="client-pill-row">
+            ${sharedCount > 1 ? `<span class="client-pill is-feedback">Shared with ${sharedCount} clients</span>` : ""}
             ${feedbackCount ? `<span class="client-pill is-feedback">${feedbackCount} review${feedbackCount === 1 ? "" : "s"}</span>` : ""}
             <span class="client-pill ${hasPassword ? "is-ready" : ""}">${hasPassword ? "Password set" : "Needs password"}</span>
           </div>
@@ -329,16 +336,24 @@ const renderClients = () => {
             <span>Lightroom gallery link</span>
             <input data-client-field="lightroomUrl" placeholder="https://lightroom.adobe.com/..." value="${escapeHtml(client.lightroomUrl || "")}">
           </label>
+          <label>
+            <span>Use an existing gallery</span>
+            <select data-client-existing-gallery>
+              <option value="">Select existing gallery</option>
+              ${[...availableGalleries].map(([url, name]) => `<option value="${escapeHtml(url)}">${escapeHtml(name)}</option>`).join("")}
+            </select>
+          </label>
           <label class="client-download-setting span-all">
             <input data-client-download-enabled type="checkbox" ${client.downloadEnabled ? "checked" : ""}>
             <span>
               <strong>Allow gallery downloads</strong>
-              <small>${client.downloadEnabled ? "The download button is visible to this client." : "Downloads stay hidden until you enable them."}</small>
+              <small>${client.downloadEnabled ? "Full-size downloads are enabled. Also enable “Allow JPG downloads” in Lightroom." : "Downloads stay hidden until you enable them."}</small>
             </span>
           </label>
         </div>
         <div class="row-actions client-card-actions">
           <a class="button-link secondary ${client.lightroomUrl ? "" : "is-disabled"}" href="${escapeHtml(client.lightroomUrl || "#")}" target="_blank" rel="noreferrer">Open gallery</a>
+          <button type="button" data-share-client-gallery="${escapeHtml(client.id)}" ${hasGallery ? "" : "disabled"}>Share with another client</button>
           <button class="danger" type="button" data-remove-client="${escapeHtml(client.id)}">Remove client</button>
         </div>
       </article>
@@ -347,7 +362,7 @@ const renderClients = () => {
 
   clientEditor.innerHTML = `
     <div class="client-toolbar">
-      <p class="editor-meta">Create private logins and assign the Lightroom link each client will see in the Client Area.</p>
+      <p class="editor-meta">Create private logins and share the same gallery with multiple clients. Each client keeps their own password, download permission and feedback.</p>
       <button type="button" data-create-client>Create client</button>
     </div>
     <div class="client-grid">
@@ -971,7 +986,7 @@ const createAlbum = (title) => {
   setAdminTab("gallery");
 };
 
-const createClient = () => {
+const createClient = (galleryUrl = "") => {
   const id = `client-${Date.now().toString(36)}`;
 
   site.clients.push({
@@ -980,7 +995,7 @@ const createClient = () => {
     email: "",
     password: "",
     passwordHash: "",
-    lightroomUrl: "",
+    lightroomUrl: galleryUrl,
     downloadEnabled: false,
     feedback: []
   });
@@ -1084,6 +1099,7 @@ document.addEventListener("click", async (event) => {
   const importLightroomButton = event.target.closest("[data-import-lightroom]");
   const createClientButton = event.target.closest("[data-create-client]");
   const removeClientButton = event.target.closest("[data-remove-client]");
+  const shareClientButton = event.target.closest("[data-share-client-gallery]");
   const cancelCreateAlbumButton = event.target.closest("[data-cancel-create-album]");
   const moveAlbumButton = event.target.closest("[data-move-album]");
   const verifyProjectCreditsButton = event.target.closest("[data-verify-project-credits]");
@@ -1116,6 +1132,15 @@ document.addEventListener("click", async (event) => {
       setStatus(`${selectedAlbum()?.title || "Album"} moved. Save changes to publish the new order.`);
     }
 
+    return;
+  }
+
+  if (shareClientButton) {
+    const source = site.clients.find((client) => client.id === shareClientButton.dataset.shareClientGallery);
+    if (source?.lightroomUrl) {
+      createClient(source.lightroomUrl);
+      setStatus("Shared gallery assigned to a new client draft. Set their name, email and password, choose download access, then save changes.");
+    }
     return;
   }
 
@@ -1300,6 +1325,7 @@ const handleEditableChange = (event) => {
   const sectionField = event.target.closest("[data-section-field]");
   const clientField = event.target.closest("[data-client-field]");
   const clientPassword = event.target.closest("[data-client-password]");
+  const existingGallery = event.target.closest("[data-client-existing-gallery]");
   const clientDownloadEnabled = event.target.closest("[data-client-download-enabled]");
   const albumField = event.target.closest("[data-album-field]");
   const projectField = event.target.closest("[data-project-field]");
@@ -1319,11 +1345,20 @@ const handleEditableChange = (event) => {
     return;
   }
 
-  if (clientField || clientPassword || clientDownloadEnabled) {
+  if (clientField || clientPassword || clientDownloadEnabled || existingGallery) {
     const card = event.target.closest("[data-client-id]");
     const client = site.clients.find((item) => item.id === card?.dataset.clientId);
 
     if (!client) {
+      return;
+    }
+
+    if (existingGallery) {
+      if (existingGallery.value) {
+        client.lightroomUrl = existingGallery.value;
+        markDirty();
+        renderClients();
+      }
       return;
     }
 
@@ -1344,7 +1379,7 @@ const handleEditableChange = (event) => {
       const settingCopy = clientDownloadEnabled.closest(".client-download-setting")?.querySelector("small");
       if (settingCopy) {
         settingCopy.textContent = client.downloadEnabled
-          ? "The download button is visible to this client."
+          ? "Full-size downloads are enabled. Also enable “Allow JPG downloads” in Lightroom."
           : "Downloads stay hidden until you enable them.";
       }
     }

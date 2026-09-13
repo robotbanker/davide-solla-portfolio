@@ -108,7 +108,11 @@ From Xcode, choose a signing team and run the `App` scheme on an iPhone simulato
 
 Use the Client area block in `admin.html` to create a client login, set or reset the password, and paste the client's Lightroom shared gallery link. Private client records and password hashes are authenticated-encrypted in `data/admin-site.enc`; client records are removed from the public `data/site.json`.
 
-Clients open `client-area.html`, sign in with their email and password, then view the embedded gallery or open the Lightroom link directly for downloads.
+Clients open `client-area.html` and sign in with their own email and password. Use **Share with another client** to create another login for the same Lightroom gallery, or **Use an existing gallery** to assign it to an existing client. Passwords, download permissions and image feedback remain per client. Removing one client does not remove access for other clients using that gallery.
+
+When **Allow gallery downloads** is enabled, the client downloads a ZIP of Lightroom’s full-size edited photos directly from the website. Enable **Allow JPG downloads** in Lightroom too, and sync the full-resolution photos to Adobe; Lightroom can only deliver the resolution it holds. These are delivered edits, not original RAW files. Downloads never fall back to web-size previews.
+
+Both previews and downloads are fetched through authenticated `/api/client` endpoints. Every request rechecks the current client configuration and gallery membership; Adobe URLs and the share identifier are not returned to the browser. Download requests also recheck the download permission. Transfers use chunks of at most 3 MiB, and the ZIP is assembled in the browser to avoid a large serverless archive response. Browser ZIPs are limited to 512 MiB; individual images to 100 MiB. Download progress and errors appear beside the gallery controls. Changing credentials, gallery assignment or download permission invalidates existing sessions. Adobe’s shared-download endpoint is an upstream dependency and requires a live integration smoke test when deploying changes.
 
 ## Contact Form
 

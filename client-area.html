@@ -89,10 +89,10 @@
           <div>
             <p class="section-kicker">Client gallery</p>
             <h2 id="client-gallery-heading" data-client-gallery-title tabindex="-1">Your private gallery</h2>
-            <p data-client-gallery-copy>Open any image to review it, add a rating, and leave a comment.</p>
+            <p data-client-gallery-copy aria-live="polite">Open any image to review it, add a rating, and leave a comment.</p>
           </div>
           <div class="client-gallery-actions">
-            <a class="submit-button client-download" href="#" target="_blank" rel="noreferrer" data-client-download hidden>Download gallery</a>
+            <button class="submit-button client-download" type="button" data-client-download hidden>Download gallery</button>
             <button class="gallery-back" type="button" data-client-logout>Log out</button>
           </div>
         </div>
@@ -168,6 +168,7 @@
       </div>
     </div>
 
-    <script src="client-area.js?v=5"></script>
+    <script src="client-download.js?v=1"></script>
+    <script src="client-area.js?v=6"></script>
   </body>
 </html>

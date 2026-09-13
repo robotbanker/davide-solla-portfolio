@@ -42,6 +42,74 @@ let lastLightboxTrigger = null;
 let lightboxTouchStartX = 0;
 let lightboxTouchStartY = 0;
 
+const transparentPreview = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+let galleryMediaController = new AbortController();
+
+const releaseGalleryMedia = () => {
+  galleryMediaController.abort();
+  galleryMediaController = new AbortController();
+  for (const image of activeClient?.images || []) {
+    if (image.previewUrl) URL.revokeObjectURL(image.previewUrl);
+  }
+};
+
+const fetchGalleryImage = async (image, token, signal, download = false) => {
+  const chunks = [];
+  let offset = 0;
+  let total = 0;
+  let type = "image/jpeg";
+  let extension = ".jpg";
+  do {
+    const url = `/api/client?action=${download ? "download" : "image"}&asset=${encodeURIComponent(image.lightroomAssetId)}&offset=${offset}`;
+    const response = await fetch(url, { headers: { authorization: `Bearer ${token}` }, signal });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      const error = new Error(result.error || "The image could not be downloaded. Please try again.");
+      error.status = response.status;
+      throw error;
+    }
+    total = Number(response.headers.get("x-image-size"));
+    type = response.headers.get("content-type") || type;
+    extension = response.headers.get("x-image-extension") || extension;
+    const chunk = await response.blob();
+    if (!chunk.size || !Number.isSafeInteger(total) || total <= offset || total > 100 * 1024 * 1024) {
+      throw new Error("The image download was incomplete. Please try again.");
+    }
+    chunks.push(chunk);
+    offset += chunk.size;
+  } while (offset < total);
+  if (offset !== total) throw new Error("The image download was incomplete. Please try again.");
+  return { blob: new Blob(chunks, { type }), extension };
+};
+
+const loadGalleryPreviews = async (client, token) => {
+  const signal = galleryMediaController.signal;
+  let nextIndex = 0;
+  const worker = async () => {
+    while (nextIndex < client.images.length && !signal.aborted) {
+      const index = nextIndex++;
+      const image = client.images[index];
+      try {
+        const { blob } = await fetchGalleryImage(image, token, signal);
+        if (signal.aborted || activeClient !== client) return;
+        image.previewUrl = URL.createObjectURL(blob);
+        const element = galleryGrid.querySelectorAll("img")[index];
+        if (element) element.src = image.previewUrl;
+        if (activeImageIndex === index) lightboxImage.src = image.previewUrl;
+      } catch (error) {
+        if (signal.aborted) return;
+        if (error.status === 401) {
+          sessionStorage.removeItem(clientStorageKey);
+          showLogin("Your gallery session has expired. Please sign in again.");
+          return;
+        }
+        galleryCopy.textContent = "Some images could not be loaded. Refresh the page to try again.";
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(3, client.images.length) }, worker));
+};
+
 const visibleFocusableElements = (container) => [...container.querySelectorAll(focusableSelector)]
   .filter((element) => !element.hidden && element.getClientRects().length > 0);
 
@@ -143,7 +211,7 @@ const saveClientSession = (client, token, { expiresAt: requestedExpiry = 0 } = {
 
   try {
     sessionStorage.setItem(clientStorageKey, JSON.stringify({
-      client,
+      client: { ...client, images: (client.images || []).map(({ previewUrl, ...image }) => image) },
       token,
       expiresAt
     }));
@@ -257,16 +325,11 @@ const updateThumbnailFeedbackState = (imageIndex) => {
 
 const renderGalleryImages = (client) => {
   const images = Array.isArray(client.images) ? client.images : [];
-  const canDownload = client.downloadEnabled === true && Boolean(client.lightroomUrl);
-
   if (!images.length) {
-    const fallbackLink = canDownload
-      ? `<a class="text-link text-link-light" href="${escapeHtml(client.lightroomUrl)}" target="_blank" rel="noreferrer">Open Lightroom</a>`
-      : "";
+
     galleryGrid.innerHTML = `
       <div class="client-gallery-empty">
         <p>${escapeHtml(client.embedError || "The gallery preview is not available right now. Please contact the studio if you need help.")}</p>
-        ${fallbackLink}
       </div>
     `;
     return;
@@ -287,7 +350,7 @@ const renderGalleryImages = (client) => {
 
     return `
       <button class="client-gallery-item ${index % 5 === 0 ? "is-wide" : ""} ${record ? "has-feedback" : ""}" type="button" data-client-image-index="${index}" aria-label="Open image ${index + 1} of ${images.length}: ${escapeHtml(description)}.${reviewLabel}">
-        <img src="${escapeHtml(image.src)}" alt="${escapeHtml(description)}" loading="${index < 3 ? "eager" : "lazy"}" decoding="async" draggable="false">
+        <img src="${escapeHtml(image.previewUrl || transparentPreview)}" alt="${escapeHtml(description)}" loading="${index < 3 ? "eager" : "lazy"}" decoding="async" draggable="false">
         ${badge}
       </button>
     `;
@@ -338,7 +401,7 @@ const showLightboxImage = (index, { resetScroll = false } = {}) => {
   const image = images[activeImageIndex];
   const description = image.alt || activeClient?.galleryTitle || activeClient?.name || "Client gallery image";
 
-  lightboxImage.src = image.src;
+  lightboxImage.src = image.previewUrl || transparentPreview;
   lightboxImage.alt = description;
   lightboxTitle.textContent = description;
   lightboxCounter.textContent = `Image ${activeImageIndex + 1} of ${images.length}`;
@@ -392,9 +455,11 @@ const closeLightbox = ({ restoreFocus = true } = {}) => {
 const showGallery = (client, token, expiresAt = activeSessionExpiresAt) => {
   const name = client.name || "Your";
   const images = Array.isArray(client.images) ? client.images : [];
-  const canDownload = client.downloadEnabled === true && Boolean(client.lightroomUrl);
+  const canDownload = client.downloadEnabled === true && images.length > 0;
+  releaseGalleryMedia();
   activeClient = {
     ...client,
+    images: images.map(({ previewUrl, ...image }) => image),
     feedback: Array.isArray(client.feedback) ? client.feedback : []
   };
   activeSessionToken = token;
@@ -413,13 +478,11 @@ const showGallery = (client, token, expiresAt = activeSessionExpiresAt) => {
   }
 
   downloadLink.hidden = !canDownload;
-  if (canDownload) {
-    downloadLink.href = client.lightroomUrl;
-  } else {
-    downloadLink.removeAttribute("href");
-  }
+  downloadLink.disabled = false;
+  downloadLink.textContent = "Download gallery";
 
   renderGalleryImages(activeClient);
+  loadGalleryPreviews(activeClient, token);
   loginPanel.hidden = true;
   gallerySection.hidden = false;
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -429,13 +492,14 @@ const showGallery = (client, token, expiresAt = activeSessionExpiresAt) => {
 const showLogin = (message = "") => {
   closeLightbox({ restoreFocus: false });
   feedbackDrafts.clear();
+  releaseGalleryMedia();
   activeClient = null;
   activeSessionToken = "";
   activeSessionExpiresAt = 0;
   body.classList.remove("client-gallery-active");
   galleryGrid.innerHTML = '<p class="client-gallery-message is-loading">Preparing your private gallery preview.</p>';
   downloadLink.hidden = true;
-  downloadLink.removeAttribute("href");
+  downloadLink.disabled = false;
   loginPanel.hidden = false;
   gallerySection.hidden = true;
   loginForm.reset();
@@ -678,6 +742,49 @@ loginForm.addEventListener("submit", async (event) => {
     setStatus(error.message);
   } finally {
     submitButton.disabled = false;
+  }
+});
+
+downloadLink.addEventListener("click", async () => {
+  if (!activeClient?.downloadEnabled || downloadLink.disabled) return;
+  const client = activeClient;
+  const token = activeSessionToken;
+  const signal = galleryMediaController.signal;
+  downloadLink.disabled = true;
+  downloadLink.setAttribute("aria-busy", "true");
+  try {
+    const archive = new GalleryZip();
+    for (const [index, image] of client.images.entries()) {
+      downloadLink.textContent = `Preparing photo ${index + 1} of ${client.images.length}…`;
+      const { blob, extension } = await fetchGalleryImage(image, token, signal, true);
+      if (signal.aborted) return;
+      const name = (image.alt || "photo").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 100);
+      await archive.add(`${String(index + 1).padStart(4, "0")}-${name}${extension}`, blob);
+    }
+    if (signal.aborted || activeClient !== client) return;
+    const url = URL.createObjectURL(archive.finish());
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${(client.galleryTitle || "gallery").replace(/[^a-z0-9_-]+/gi, "-").slice(0, 100)}.zip`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    galleryCopy.textContent = "Your gallery download is ready.";
+  } catch (error) {
+    if (signal.aborted) return;
+    if (error.status === 401) {
+      sessionStorage.removeItem(clientStorageKey);
+      showLogin("Your gallery session has expired. Please sign in again.");
+    } else {
+      galleryCopy.textContent = error.message || "The download failed. Please try again.";
+    }
+  } finally {
+    if (activeClient === client) {
+      downloadLink.disabled = false;
+      downloadLink.textContent = "Download gallery";
+    }
+    downloadLink.removeAttribute("aria-busy");
   }
 });
 

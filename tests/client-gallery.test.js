@@ -19,7 +19,7 @@ const response = () => {
     body: "",
     headers,
     setHeader(name, value) { headers[String(name).toLowerCase()] = value; },
-    end(value) { this.body = String(value || ""); }
+    end(value) { this.bytes = Buffer.isBuffer(value) ? value : Buffer.from(String(value || "")); this.body = String(value || ""); }
   };
 };
 
@@ -151,6 +151,10 @@ const withClientGalleryBackend = async (operation) => {
           }
         }]
       });
+    }
+
+    if (target.startsWith("https://dl.lightroom.adobe.com/spaces/abcdef123456/assets/")) {
+      return adobeImageResponse(Buffer.from([0xff, 0xd8, 0xff, 0x01, 0x02, 0xff, 0xd9]), target);
     }
 
     if (target.includes("/renditions/asset-")) {
@@ -324,7 +328,8 @@ test("client feedback is authenticated, image-scoped, encrypted, and visible onl
     assert.equal(saved.deleted, false);
     assert.equal(saved.feedback.lightroomAssetId, "asset-one");
     assert.equal(saved.feedback.rating, 5);
-    assert.match(saved.feedback.imageSrc, /renditions\/asset-one\.jpg/);
+    assert.match(saved.feedback.imageSrc, /^\/api\/client\?action=image&asset=asset-one$/);
+    assert.doesNotMatch(savedResponse.body, /adobe\.com|photos\.adobe\.io|abcdef123456/);
 
     const encryptedFeedback = files.get("data/client-feedback.enc");
     assert.ok(encryptedFeedback);
@@ -343,6 +348,7 @@ test("client feedback is authenticated, image-scoped, encrypted, and visible onl
     }), refreshedSessionResponse);
     assert.equal(refreshedSessionResponse.statusCode, 200);
     assert.equal(json(refreshedSessionResponse).client.feedback.length, 1);
+    assert.doesNotMatch(refreshedSessionResponse.body, /adobe\.com|photos\.adobe\.io|abcdef123456/);
     assert.equal(json(refreshedSessionResponse).client.feedback[0].rating, 5);
 
     const secondLoginResponse = await clientLogin();
@@ -435,7 +441,7 @@ test("client feedback is authenticated, image-scoped, encrypted, and visible onl
     assert.equal(enabledLoginResponse.statusCode, 200);
     const enabledLogin = json(enabledLoginResponse);
     assert.equal(enabledLogin.client.downloadEnabled, true);
-    assert.equal(enabledLogin.client.lightroomUrl, "https://lightroom.adobe.com/shares/abcdef123456");
+    assert.equal(enabledLogin.client.lightroomUrl, "");
 
     const disableSiteResponse = response();
     const siteToDisable = json(enableSiteResponse).site;
@@ -528,5 +534,126 @@ test("an admin save does not create an empty feedback file when there is nothing
     }), saveResponse);
     assert.equal(saveResponse.statusCode, 200);
     assert.equal(files.has("data/client-feedback.enc"), false);
+  });
+});
+
+test("multiple clients share a gallery with independent feedback, permissions and revocation", async () => {
+  await withClientGalleryBackend(async ({ files }) => {
+    const site = decryptAdminData(files.get("data/admin-site.enc"));
+    site.clients[0].downloadEnabled = true;
+    site.clients.push({ ...site.clients[0], id: "client-two", name: "Client Two", email: "second@example.test", password: "second-password", downloadEnabled: false });
+    files.set("data/admin-site.enc", encryptAdminData(site));
+    const first = json(await clientLogin());
+    const secondResponse = response();
+    await handleClientRequest(request({ url: "/api/client?action=login", body: { email: "second@example.test", password: "second-password" } }), secondResponse);
+    assert.equal(secondResponse.statusCode, 200);
+    const second = json(secondResponse);
+    assert.deepEqual(first.client.images, second.client.images);
+    assert.doesNotMatch(JSON.stringify(first), /adobe\.com|photos\.adobe\.io|abcdef123456/);
+    assert.match(first.client.images[0].src, /^\/api\/client\?action=image&asset=/);
+
+    const media = async (token, action, asset = "asset-one", extra = "") => {
+      const res = response();
+      await handleClientRequest(request({ method: "GET", url: `/api/client?action=${action}&asset=${asset}${extra}`, authorization: token ? `Bearer ${token}` : undefined }), res);
+      return res;
+    };
+    assert.equal((await media(null, "image")).statusCode, 401);
+    assert.equal((await media(null, "download")).statusCode, 401);
+    assert.equal((await media(second.token, "download")).statusCode, 403);
+    assert.equal((await media(first.token, "download", "someone-elses-photo")).statusCode, 404);
+    assert.equal((await media(first.token, "download", "asset-one", "&offset=-1")).statusCode, 416);
+    const preview = await media(second.token, "image");
+    assert.equal(preview.statusCode, 200);
+    assert.equal(preview.headers["cache-control"], "private, no-store");
+    const fullsize = await media(first.token, "download");
+    assert.equal(fullsize.statusCode, 200);
+    assert.match(fullsize.headers["content-disposition"], /^attachment;/);
+    assert.equal(fullsize.headers.location, undefined);
+    assert.deepEqual(fullsize.bytes, Buffer.from([0xff, 0xd8, 0xff, 0x01, 0x02, 0xff, 0xd9]));
+    assert.notDeepEqual(fullsize.bytes, preview.bytes, "downloads must use full-size delivery, not preview renditions");
+
+    for (const [token, rating] of [[first.token, 5], [second.token, 2]]) {
+      const res = response();
+      await handleClientRequest(request({ url: "/api/client?action=feedback", authorization: `Bearer ${token}`, body: { lightroomAssetId: "asset-one", rating, comment: "My choice" } }), res);
+      assert.equal(res.statusCode, 200);
+    }
+    const records = decryptAdminData(files.get("data/client-feedback.enc")).records;
+    assert.equal(records.find((item) => item.clientId === "client-one").rating, 5);
+    assert.equal(records.find((item) => item.clientId === "client-two").rating, 2);
+
+    site.clients = site.clients.filter((item) => item.id !== "client-one");
+    files.set("data/admin-site.enc", encryptAdminData(site));
+    assert.equal((await media(first.token, "download")).statusCode, 401);
+    assert.equal((await media(first.token, "image")).statusCode, 401);
+    assert.equal((await media(second.token, "image")).statusCode, 200);
+  });
+});
+
+test("full-size files are chunked without exposing upstream URLs or falling back to previews", async () => {
+  await withClientGalleryBackend(async ({ files }) => {
+    const site = decryptAdminData(files.get("data/admin-site.enc"));
+    site.clients[0].downloadEnabled = true;
+    files.set("data/admin-site.enc", encryptAdminData(site));
+    const { token } = json(await clientLogin());
+    const originalFetch = global.fetch;
+    const bytes = Buffer.alloc(4 * 1024 * 1024, 0x17);
+    bytes.set([0xff, 0xd8, 0xff]);
+    let upstreamMode = "whole";
+    global.fetch = async (url, options) => {
+      if (!String(url).startsWith("https://dl.lightroom.adobe.com/")) return originalFetch(url, options);
+      if (upstreamMode === "error") return adobeResponse(403, "Downloads disabled");
+      if (upstreamMode === "html") return adobeImageResponse(Buffer.from("<html>Sign in</html>"), String(url));
+      if (upstreamMode === "partial") {
+        const [, start, end] = options.headers.range.match(/bytes=(\d+)-(\d+)/);
+        const last = Math.min(Number(end), bytes.length - 1);
+        return { ...adobeImageResponse(bytes.subarray(Number(start), last + 1), String(url)), status: 206,
+          headers: { get: (name) => ({ "content-range": `bytes ${start}-${last}/${bytes.length}`, "content-type": "image/jpeg" })[name] || null } };
+      }
+      return adobeImageResponse(bytes, String(url));
+    };
+    const getChunk = async (offset) => {
+      const res = response();
+      await handleClientRequest(request({ method: "GET", url: `/api/client?action=download&asset=asset-one&offset=${offset}`, authorization: `Bearer ${token}` }), res);
+      return res;
+    };
+    for (const mode of ["whole", "partial"]) {
+      upstreamMode = mode;
+      const first = await getChunk(0);
+      const second = await getChunk(3 * 1024 * 1024);
+      assert.equal(first.statusCode, 200);
+      assert.equal(second.statusCode, 200);
+      assert.equal(first.bytes.length, 3 * 1024 * 1024);
+      assert.equal(Number(first.headers["x-image-size"]), bytes.length);
+      assert.deepEqual(Buffer.concat([first.bytes, second.bytes]), bytes);
+    }
+    for (const mode of ["error", "html"]) {
+      upstreamMode = mode;
+      const failed = await getChunk(0);
+      assert.equal(failed.statusCode, 502);
+      assert.match(json(failed).error, /full-resolution/);
+      assert.doesNotMatch(failed.body, /https:\/\//);
+    }
+    site.clients[0].downloadEnabled = false;
+    files.set("data/admin-site.enc", encryptAdminData(site));
+    assert.equal((await getChunk(0)).statusCode, 401);
+  });
+});
+
+test("client galleries include subsequent Adobe asset pages", async () => {
+  await withClientGalleryBackend(async () => {
+    const fetchOriginal = global.fetch;
+    global.fetch = async (url, options) => {
+      if (!String(url).includes("/albums/album-one/assets?")) return fetchOriginal(url, options);
+      const result = JSON.parse(await (await fetchOriginal(url, options)).text());
+      const second = new URL(url).searchParams.get("cursor") === "second";
+      return adobeResponse(200, {
+        ...result,
+        resources: [result.resources[second ? 1 : 0]],
+        links: second ? {} : { next: { href: "?cursor=second" } }
+      });
+    };
+    const login = await clientLogin();
+    assert.equal(login.statusCode, 200);
+    assert.deepEqual(json(login).client.images.map((image) => image.lightroomAssetId), ["asset-one", "asset-two"]);
   });
 });
