@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test tests/*.test.js",
-    "newsletter:build": "node newsletter/build-email.js 2026-08 --strict",
-    "newsletter:validate": "node newsletter/build-email.js 2026-08 --strict",
+    "newsletter:build": "node newsletter/build-email.js 2026-09 --strict",
+    "newsletter:validate": "node newsletter/build-email.js 2026-09 --strict",
     "homepage:build": "node scripts/build-homepage.js",
     "sitemap:build": "node scripts/build-sitemap.js",
     "build": "node scripts/build-homepage.js && node scripts/build-sitemap.js",
