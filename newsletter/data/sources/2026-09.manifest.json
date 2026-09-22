@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-09",
+  "dateChecked": "2026-09-22",
+  "status": "research-approved",
+  "manifestNotes": "Facts and links were checked against official gallery, museum and brand sources on 22 September 2026. The four external images are official page assets. Brand and institutional imagery should receive the sender’s final usage review before live email distribution. Dreamland is original Davide Studios work already published through matching davidesolla.com asset paths.",
+  "sources": [
+    {
+      "sourceId": "art-npg-portrait-award-2026",
+      "section": "Art",
+      "storyTitle": "Herbert Smith Freehills Kramer Portrait Award 2026",
+      "officialSourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+      "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/hsf-kramer-portrait-award-2026/",
+      "imageCredit": "First Prize: Jean-Denis, 2025 by Marc Dalessio. Courtesy National Portrait Gallery. © Marc Dalessio.",
+      "usageStatus": "Official exhibition-page JPEG embedded and directly verified. Confirm distribution permission before a live audience send.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "A current London exhibition focused on contemporary portraiture, with direct relevance to pose, expression, background, surface and psychological distance."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Frida: The Making of an Icon",
+      "officialSourceUrl": "https://www.tate.org.uk/whats-on/tate-modern/frida-kahlo-the-making-of-an-icon",
+      "bookingUrl": "https://www.tate.org.uk/whats-on/tate-modern/frida-kahlo-the-making-of-an-icon",
+      "imageCredit": "No newsletter image used; official installation and exhibition imagery remains on the Tate page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "The exhibition connects self-portraiture, image circulation, fashion, fandom and the construction of a public icon."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "Tim Walker’s Fairyland: Love and Legends",
+      "officialSourceUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/tim-walkers-fairyland-love-and-legends/",
+      "bookingUrl": "https://www.npg.org.uk/whatson/exhibitions/2026/tim-walkers-fairyland-love-and-legends/",
+      "imageCredit": "No newsletter image used; official preview imagery remains on the National Portrait Gallery page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "An imminent fashion-photography exhibition centred on portraiture, theatrical set-building, folklore and visual narrative."
+    },
+    {
+      "section": "Art",
+      "storyTitle": "The Evolving Studio: Artists Working with Technology",
+      "officialSourceUrl": "https://www.tate.org.uk/whats-on/tate-modern/the-evolving-studio-artists-working-with-technology",
+      "bookingUrl": "https://www.tate.org.uk/whats-on/tate-modern/the-evolving-studio-artists-working-with-technology",
+      "imageCredit": "No newsletter image used; official programme imagery remains on the Tate page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "A timely programme about technology, creative process and authorship with practical relevance to contemporary photographic practice."
+    },
+    {
+      "sourceId": "fashion-mcqueen-aw26",
+      "section": "Fashion",
+      "storyTitle": "McQueen: Autumn Winter 2026 — The Artifice Undone",
+      "officialSourceUrl": "https://www.alexandermcqueen.com/en-gb/cp/autumn-winter-2026-show",
+      "bookingUrl": null,
+      "imageCredit": "Official McQueen Autumn Winter 2026 campaign image. Photographer and director: Glen Luchford.",
+      "usageStatus": "Official brand campaign JPEG embedded and directly verified. Confirm press/send permission before live distribution.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "The campaign’s noir light, psychological tension and friction between control and tactile impulse align closely with the studio’s visual language."
+    },
+    {
+      "sourceId": "fashion-versace-fw26",
+      "section": "Fashion",
+      "storyTitle": "Versace: Versace Obsessed, Chapter II",
+      "officialSourceUrl": "https://www.versace.com/gb/en/stories/advertising-campaigns/versace-fw-2026.html",
+      "bookingUrl": null,
+      "imageCredit": "Official Versace Fall Winter 2026 campaign image from the House campaign page.",
+      "usageStatus": "Official brand campaign JPEG embedded and directly verified. Confirm press/send permission before live distribution.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "The campaign uses archive, collage and house codes as active visual material rather than passive heritage."
+    },
+    {
+      "sourceId": "fashion-paul-shark-fw26",
+      "section": "Fashion",
+      "storyTitle": "Paul & Shark: Elements in Motion",
+      "officialSourceUrl": "https://www.paulandshark.com/en_GB/new-in/new-chapters/campaign-fall-winter-2026/",
+      "bookingUrl": null,
+      "imageCredit": "Official Paul & Shark Fall/Winter 2026 campaign image. Photographer: Charlotte Lapalus.",
+      "usageStatus": "Official brand campaign JPEG embedded and directly verified. Confirm press/send permission before live distribution.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "A strong location-led campaign where Casa Corberó’s architecture structures the frame without overpowering the subject."
+    },
+    {
+      "section": "On the Field",
+      "storyTitle": "Dreamland: Tide, Light, Silhouette",
+      "officialSourceUrl": "https://www.davidesolla.com/work/dreamland",
+      "bookingUrl": null,
+      "imageCredit": "Dreamland, Portugal, 2026. Photographs: Davide Studios.",
+      "usageStatus": "Original Davide Studios photographs supplied by the user and published through matching davidesolla.com asset paths.",
+      "dateChecked": "2026-09-22",
+      "selectedBecause": "The three-frame edit creates a clear transition from ivory stillness to black silhouette, using tide, distance and movement as the narrative structure."
+    }
+  ]
+}
