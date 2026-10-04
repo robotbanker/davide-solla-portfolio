@@ -2435,6 +2435,7 @@ h2 {
 }
 
 .gallery-strip {
+  align-items: start;
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(12, 1fr);
@@ -2465,11 +2466,19 @@ h2 {
 }
 
 .gallery-frame img {
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   object-position: center;
   transition: opacity 180ms ease, transform 420ms ease;
   width: 100%;
+}
+
+.gallery-frame,
+.gallery-frame-featured,
+.gallery-frame-studio-featured,
+.gallery-frame picture {
+  aspect-ratio: auto;
+  height: auto;
 }
 
 .gallery-frame:hover img,
@@ -3743,6 +3752,8 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
 .split-heading h2 { max-width: 20ch; }
 .fine-art-copy { padding-left: 12%; }
 .fine-grid { gap: 26px; }
+.fine-image, .fine-tall, .fine-portrait { aspect-ratio: 2 / 3; }
+.fine-image img { object-fit: contain; }
 .fine-image { border: 0; }
 .fine-image .tile-caption { gap: 10px; }
 .fine-image .tile-category { font-size: 12px; font-weight: 400; letter-spacing: 0.08em; }
@@ -3752,7 +3763,7 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
 .about-copy h2 { font-size: clamp(38px, 4.1vw, 66px); max-width: 22ch; }
 .about-copy p:not(.section-kicker) { font-size: 16px; line-height: 1.8; max-width: 58ch; }
 .about-image { padding-top: 46px; }
-.about-image img { aspect-ratio: 4 / 5; object-position: 30% center;  }
+.about-image img { aspect-ratio: 1920 / 1193; object-position: center; }
 .about-image figcaption { font-size: 12px; letter-spacing: 0.08em; }
 .contact { background: var(--panel); gap: 12%; grid-template-columns: 1fr 1fr; }
 .contact h2 { max-width: 15ch; }
@@ -3871,7 +3882,7 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
   .fine-image picture { height: auto; }
   .about { grid-template-columns: 1fr; gap: 36px; }
   .about-image { padding-top: 0; max-width: none; }
-  .about-image img { aspect-ratio: 5 / 4; }
+  .about-image img { aspect-ratio: 1920 / 1193; }
   .about-copy h2 { font-size: clamp(38px, 9.4vw, 56px); }
   .contact { gap: 40px; }
   .contact p { font-size: 16px; }

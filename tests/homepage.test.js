@@ -24,6 +24,7 @@ test("the generated homepage exposes current projects and embedded public data",
   assert.match(html, /<h1 class="eyebrow">London fashion &(?:amp;)? editorial photographer<\/h1>/);
   assert.match(html, /<script id="site-data" type="application\/json">/);
   assert.doesNotMatch(html, /loading="eager"[^>]*class="fine|class="fine[^>]*loading="eager"/);
+  assert.doesNotMatch(html, /<img[^>]+src=""/);
 
   for (const album of listProjectPages(siteData)) {
     assert.match(html, new RegExp(`href="/work/${projectSlug(album)}"`));

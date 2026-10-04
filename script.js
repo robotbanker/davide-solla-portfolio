@@ -548,9 +548,13 @@ const layoutEditorialGrid = () => {
 
   tiles.forEach((tile) => {
     const image = tile.querySelector("img");
+    const declaredWidth = Number.parseFloat(image?.getAttribute("width") || "0");
+    const declaredHeight = Number.parseFloat(image?.getAttribute("height") || "0");
     const ratio = image?.naturalWidth && image?.naturalHeight
       ? image.naturalWidth / image.naturalHeight
-      : 0;
+      : declaredWidth > 0 && declaredHeight > 0
+        ? declaredWidth / declaredHeight
+        : 0;
     const { height, letterboxed } = editorialTileHeight(tile, ratio);
     // Captions sit beneath the image in the editorial layout. Include their
     // actual height so album size controls and natural image proportions survive.
