@@ -50,7 +50,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://www.davidesolla.com/field-notes</loc>
+    <loc>https://www.davidesolla.com/field-notes/archive</loc>
   </url>
   <url>
     <loc>https://www.davidesolla.com/privacy</loc>
@@ -60,18 +60,33 @@
   </url>
   <url>
     <loc>https://www.davidesolla.com/services/fashion-photographer-london</loc>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/cosmic-02.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://www.davidesolla.com/services/model-portfolio-photographer-london</loc>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/julia-01.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://www.davidesolla.com/services/beauty-photographer-london</loc>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/roxana-01.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://www.davidesolla.com/services/artist-portrait-photographer-london</loc>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/harvey-01.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://www.davidesolla.com/services/fine-art-portrait-commissions</loc>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/fine-art-01.jpg</image:loc>
+    </image:image>
   </url>
   <url>
     <loc>https://www.davidesolla.com/field-notes/2026-09</loc>

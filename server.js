@@ -96,9 +96,12 @@ const serveStatic = (req, res) => {
       return;
     }
 
-    res.statusCode = 200;
+    res.statusCode = relativePath === "404.html" ? 404 : 200;
     res.setHeader("content-type", mimeTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream");
-    if (noindexStaticPaths.has(relativePath) || relativePath.startsWith("apple-wallet/")) {
+    if (relativePath.startsWith("newsletter/dist/") && relativePath.endsWith(".html")) {
+      res.setHeader("cache-control", "no-store");
+      res.setHeader("x-robots-tag", "noindex, follow");
+    } else if (noindexStaticPaths.has(relativePath) || relativePath.startsWith("apple-wallet/") || relativePath === "404.html") {
       res.setHeader("cache-control", "no-store");
       res.setHeader("x-robots-tag", "noindex, nofollow");
       if (relativePath === "preferences.html") res.setHeader("referrer-policy", "no-referrer");

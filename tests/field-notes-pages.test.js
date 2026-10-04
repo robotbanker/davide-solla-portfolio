@@ -164,24 +164,42 @@ test("the clean issue route is crawlable, while the direct API alias is noindex"
   assert.equal(head.body, undefined);
 });
 
-test("Field Notes opens the latest published issue directly on local and production routes", () => {
+test("Field Notes redirects to the latest canonical issue on local and production routes", () => {
   const latest = response();
   handleFieldNotesPageRequest(request("/field-notes"), latest);
-  assert.equal(latest.statusCode, 200);
-  assert.match(latest.body, new RegExp(`href="/field-notes/${entries[0].issueId}"`));
-  assert.match(latest.body, /data-field-notes-prerendered/);
-  assert.match(latest.body, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/field-notes/${entries[0].issueId}">`));
-  assert.match(latest.headers["cache-control"], /s-maxage=3600/);
+  assert.equal(latest.statusCode, 307);
+  assert.equal(latest.headers.location, `/field-notes/${entries[0].issueId}`);
+  assert.equal(latest.headers["cache-control"], "no-store");
 
   const productionRewrite = response();
   handleFieldNotesPageRequest(request("/api/field-notes?public=1"), productionRewrite);
-  assert.equal(productionRewrite.statusCode, 200);
-  assert.equal(productionRewrite.body, latest.body);
+  assert.equal(productionRewrite.statusCode, 307);
+  assert.equal(productionRewrite.headers.location, latest.headers.location);
 
   const archive = response();
   handleFieldNotesPageRequest(request("/field-notes?archive=1"), archive);
-  assert.equal(archive.statusCode, 200);
-  assert.match(archive.body, /Field Notes archive/);
+  assert.equal(archive.statusCode, 308);
+  assert.equal(archive.headers.location, "/field-notes/archive");
+});
+
+test("the archive has a distinct canonical URL and links only to real published issues", () => {
+  for (const url of ["/field-notes/archive", "/api/field-notes?archive=1&public=1"]) {
+    const archive = response();
+    handleFieldNotesPageRequest(request(url), archive);
+    assert.equal(archive.statusCode, 200);
+    assert.equal(archive.headers["x-robots-tag"], undefined);
+    assert.match(archive.body, /<link rel="canonical" href="https:\/\/www.davidesolla.com\/field-notes\/archive">/);
+    const graph = JSON.parse(archive.body.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+    const list = graph.find((item) => item["@type"] === "ItemList");
+    assert.deepEqual(list.itemListElement.map((item) => item.url), entries.map((entry) => `https://www.davidesolla.com/field-notes/${entry.issueId}`));
+  }
+  const alias = response();
+  handleFieldNotesPageRequest(request("/api/field-notes?archive=1"), alias);
+  assert.equal(alias.headers["x-robots-tag"], "noindex, nofollow");
+  assert.equal(alias.headers["cache-control"], "no-store");
+  const missing = response();
+  handleFieldNotesPageRequest(request("/field-notes/2099-12?archive=1"), missing);
+  assert.equal(missing.statusCode, 404);
 });
 
 test("legacy aliases redirect with the correct permanence", () => {

@@ -105,6 +105,9 @@ test("August gallery validation and public escaping fail closed", () => {
 test("the Field Notes root opens the latest published issue in full", () => {
   const result = response();
   handleFieldNotesPageRequest({ method: "GET", url: "/field-notes", headers: {} }, result);
+  assert.equal(result.statusCode, 307);
+  assert.equal(result.headers.location, "/field-notes/2026-09");
+  handleFieldNotesPageRequest({ method: "GET", url: result.headers.location, headers: {} }, result);
   assert.equal(result.statusCode, 200);
   assert.match(result.body, /href="\/field-notes\/2026-09"/);
   assert.match(result.body, /data-field-notes-prerendered/);

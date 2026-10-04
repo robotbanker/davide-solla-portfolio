@@ -50,3 +50,11 @@ jobs:
           else
             git diff --check HEAD^ HEAD
           fi
+
+      - name: Audit rendered SEO and local assets
+        run: |
+          npm start > /tmp/website-seo-server.log 2>&1 &
+          website_server_pid=$!
+          trap 'kill "$website_server_pid" 2>/dev/null || true' EXIT
+          node -e 'async function ready() { for (let i = 0; i < 40; i++) { try { const r = await fetch("http://localhost:4173/robots.txt"); if (r.ok) return; } catch {} await new Promise(resolve => setTimeout(resolve, 250)); } process.exit(1); } ready();'
+          npm run seo:audit

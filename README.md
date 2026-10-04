@@ -86,6 +86,41 @@ Every research-approved newsletter issue that is separately marked **published**
 
 Create the deploy hook in Vercel under Project Settings -> Git -> Deploy Hooks. Choose the production branch, usually `main`, then copy the generated URL into the `VERCEL_DEPLOY_HOOK_URL` environment variable.
 
+### Technical SEO verification
+
+The complete newsletter archive has its own canonical URL at `/field-notes/archive`.
+`/field-notes?archive=1` permanently redirects there. The sitemap includes the
+archive and published issues, never the moving latest-issue alias. Browser copies
+of newsletter emails under `/newsletter/dist/*.html` carry `noindex, follow`;
+their images remain crawlable.
+
+Run `npm run build`, `npm run check`, and `npm test` after changing public page
+rendering or routing. With `npm start` running, use `npm run seo:audit` for a
+read-only HTTP crawl. To check production, run:
+
+```bash
+npm run seo:audit -- https://www.davidesolla.com
+```
+
+The audit checks every sitemap page for a successful response, a matching
+canonical URL, unique titles and descriptions, indexability, a primary heading,
+valid JSON-LD, accessible local images/styles/scripts, working internal links,
+private-page indexing controls and real 404 responses. It does not submit forms
+or contact external image publishers. Search Console's URL Inspection, indexing
+reports and field Core Web Vitals provide additional checks beyond this crawl.
+
+Sitemap modification dates come from recorded content updates; unknown, invalid
+or future portfolio dates are omitted. Builds must not manufacture freshness.
+Image rights and creator metadata describe the visible owned photographs. Keep
+credits and locations supported by published source material, and avoid hidden
+keyword text, fabricated reviews, bulk doorway pages or purchased links.
+
+After deployment, submit `https://www.davidesolla.com/sitemap.xml` in Google
+Search Console and Bing Webmaster Tools if it is not already registered. Check
+indexing and performance there over time; technical eligibility does not
+guarantee indexing or rankings. See [Google Search Essentials](https://developers.google.com/search/docs/essentials)
+and [structured-data policies](https://developers.google.com/search/docs/appearance/structured-data/sd-policies).
+
 ## iPhone App
 
 The `ios/` folder is a Capacitor iOS app that opens the live site at `https://www.davidesolla.com`. The app uses the hosted site because admin login, client galleries, contact forms, print checkout, and uploads depend on the Vercel/Node API endpoints.

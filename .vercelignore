@@ -4,3 +4,7 @@ verification-lightbox.png
 data/admin-site.json
 .git/
 node_modules/
+.env.local
+.playwright-cli/
+output/
+tmp/
