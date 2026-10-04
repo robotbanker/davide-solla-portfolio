@@ -37,12 +37,12 @@ For production, set these Vercel environment variables:
 - `GITHUB_REPO` - `davide-solla-portfolio`
 - `GITHUB_BRANCH` - `main`
 - `VERCEL_DEPLOY_HOOK_URL` - Vercel Deploy Hook URL for the production branch
-- `SMTP_USER` - Gmail address used to send website enquiries
-- `SMTP_PASS` - Gmail app password for the website enquiry sender
-- `SMTP_HOST` - optional SMTP host, defaults to `smtp.gmail.com`
+- `SMTP_USER` - Namecheap Private Email mailbox used to send website enquiries; defaults to `hello@davidesolla.com`
+- `SMTP_PASS` - Namecheap Private Email Master or Application password; keep this server-only
+- `SMTP_HOST` - optional SMTP host, defaults to `mail.privateemail.com`
 - `SMTP_PORT` - optional SMTP port, defaults to `465`
-- `CONTACT_TO_EMAIL` - private recipient address for enquiries, defaults to `SMTP_USER`
-- `CONTACT_FROM_EMAIL` - sender address, for example `Davide Solla Website <davidesollastudios@gmail.com>`
+- `CONTACT_TO_EMAIL` - private recipient address for enquiries, defaults to `hello@davidesolla.com`
+- `CONTACT_FROM_EMAIL` - sender address, defaults to `Davide Solla Website <hello@davidesolla.com>`
 - `CONTACT_SUBJECT_PREFIX` - optional email subject prefix, defaults to `Website enquiry`
 - `RADAR_ENQUIRY_ENDPOINT` - private Radar intake URL for durable enquiry persistence
 - `WEBSITE_ENQUIRY_WEBHOOK_SECRET` - shared server-only HMAC secret; use the same value in Radar
@@ -120,11 +120,11 @@ Previews still use authenticated website endpoints. Changing credentials, galler
 
 The public form posts to `/api/contact`, so the visitor never sees the recipient address in the page HTML. Configure the recipient and sender with `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in the hosting environment.
 
-ID-bearing browser enquiries are sent through the Resend API with a deterministic idempotency
-key, so a retry cannot create a duplicate notification. Configure `RESEND_API_KEY`,
-`CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL` before enabling the Radar integration. Gmail SMTP
-remains available only for legacy internal notifications that do not enter the enquiry funnel;
-use a Gmail app password for `SMTP_PASS`, not the normal account password.
+Website enquiries are delivered to `hello@davidesolla.com`. When `RESEND_API_KEY` is configured,
+browser enquiries use the Resend API with a deterministic idempotency key so a retry cannot
+create a duplicate notification. Otherwise the endpoint sends through Namecheap Private Email
+using `mail.privateemail.com` on SSL port 465. Set `SMTP_PASS` to the mailbox's Master or
+Application password in the hosting environment; never commit it to this repository.
 
 Browser submissions carry a stable opaque enquiry ID and submission timestamp. The backend
 validates and HMAC-signs a privacy-minimised event, then Radar stores an immutable private

@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const crypto = require("node:crypto");
 const fs = require("node:fs");
 const http = require("node:http");
+const nodemailer = require("nodemailer");
 const { Readable } = require("node:stream");
 const test = require("node:test");
 
@@ -179,7 +180,7 @@ test("provider acceptance is not acknowledged until Radar records it and remains
   });
 });
 
-test("ID-bearing enquiries use a stable Resend idempotency key even when SMTP is configured", async () => {
+test("ID-bearing enquiries prefer a stable Resend idempotency key when Resend is configured", async () => {
   const previous = {
     fetch: global.fetch,
     apiKey: process.env.RESEND_API_KEY,
@@ -235,6 +236,83 @@ test("ID-bearing enquiries use a stable Resend idempotency key even when SMTP is
     [`website-enquiry/${fixture.enquiry_id}`, `website-enquiry/${fixture.enquiry_id}`]
   );
   assert.ok(calls.every((call) => call.options.headers.authorization === "Bearer fixture-resend-key"));
+});
+
+test("enquiries fall back to the Namecheap mailbox when Resend is not configured", async () => {
+  const previous = {
+    createTransport: nodemailer.createTransport,
+    apiKey: process.env.RESEND_API_KEY,
+    toEmail: process.env.CONTACT_TO_EMAIL,
+    fromEmail: process.env.CONTACT_FROM_EMAIL,
+    smtpHost: process.env.SMTP_HOST,
+    smtpPort: process.env.SMTP_PORT,
+    smtpSecure: process.env.SMTP_SECURE,
+    smtpUser: process.env.SMTP_USER,
+    smtpPass: process.env.SMTP_PASS,
+    smtpFromEmail: process.env.SMTP_FROM_EMAIL
+  };
+  let transportOptions;
+  let message;
+  nodemailer.createTransport = (options) => {
+    transportOptions = options;
+    return {
+      sendMail: async (value) => {
+        message = value;
+        return { messageId: "fixture-namecheap-message" };
+      }
+    };
+  };
+  delete process.env.RESEND_API_KEY;
+  delete process.env.CONTACT_TO_EMAIL;
+  delete process.env.CONTACT_FROM_EMAIL;
+  delete process.env.SMTP_HOST;
+  delete process.env.SMTP_PORT;
+  delete process.env.SMTP_SECURE;
+  delete process.env.SMTP_USER;
+  process.env.SMTP_PASS = "fixture-private-email-password";
+  delete process.env.SMTP_FROM_EMAIL;
+
+  try {
+    const result = await sendEnquiry({
+      enquiryId: fixture.enquiry_id,
+      submittedAt: fixture.submitted_at,
+      name: fixture.contact.name,
+      email: fixture.contact.email,
+      project: fixture.project.type,
+      message: fixture.project.message,
+      attribution: fixture.attribution
+    });
+
+    assert.deepEqual(result, { provider: "smtp", message_id: "fixture-namecheap-message" });
+    assert.deepEqual(transportOptions, {
+      host: "mail.privateemail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "hello@davidesolla.com",
+        pass: "fixture-private-email-password"
+      }
+    });
+    assert.equal(message.from, "Davide Solla Website <hello@davidesolla.com>");
+    assert.equal(message.to, "hello@davidesolla.com");
+    assert.equal(message.replyTo, fixture.contact.email);
+  } finally {
+    nodemailer.createTransport = previous.createTransport;
+    for (const [key, value] of Object.entries({
+      RESEND_API_KEY: previous.apiKey,
+      CONTACT_TO_EMAIL: previous.toEmail,
+      CONTACT_FROM_EMAIL: previous.fromEmail,
+      SMTP_HOST: previous.smtpHost,
+      SMTP_PORT: previous.smtpPort,
+      SMTP_SECURE: previous.smtpSecure,
+      SMTP_USER: previous.smtpUser,
+      SMTP_PASS: previous.smtpPass,
+      SMTP_FROM_EMAIL: previous.smtpFromEmail
+    })) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
 });
 
 test("a failed notification remains retryable and is recorded after acceptance", async () => {
