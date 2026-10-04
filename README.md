@@ -120,11 +120,12 @@ Previews still use authenticated website endpoints. Changing credentials, galler
 
 The public form posts to `/api/contact`, so the visitor never sees the recipient address in the page HTML. Configure the recipient and sender with `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` in the hosting environment.
 
-Website enquiries are delivered to `hello@davidesolla.com`. When `RESEND_API_KEY` is configured,
-browser enquiries use the Resend API with a deterministic idempotency key so a retry cannot
-create a duplicate notification. Otherwise the endpoint sends through Namecheap Private Email
-using `mail.privateemail.com` on SSL port 465. Set `SMTP_PASS` to the mailbox's Master or
-Application password in the hosting environment; never commit it to this repository.
+Website enquiries are delivered to `hello@davidesolla.com`. When `SMTP_PASS` is configured,
+the endpoint sends through Namecheap Private Email using `mail.privateemail.com` on SSL port 465.
+Resend is retained only as a fallback when SMTP is unavailable and uses a deterministic
+idempotency key so a retry cannot create a duplicate notification. Set `SMTP_PASS` to the
+mailbox's Master or Application password in the hosting environment; never commit it to this
+repository.
 
 Browser submissions carry a stable opaque enquiry ID and submission timestamp. The backend
 validates and HMAC-signs a privacy-minimised event, then Radar stores an immutable private

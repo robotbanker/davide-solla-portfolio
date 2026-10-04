@@ -180,7 +180,7 @@ test("provider acceptance is not acknowledged until Radar records it and remains
   });
 });
 
-test("ID-bearing enquiries prefer a stable Resend idempotency key when Resend is configured", async () => {
+test("enquiries use a stable Resend idempotency key when SMTP is not configured", async () => {
   const previous = {
     fetch: global.fetch,
     apiKey: process.env.RESEND_API_KEY,
@@ -200,8 +200,8 @@ test("ID-bearing enquiries prefer a stable Resend idempotency key when Resend is
   process.env.RESEND_API_KEY = "fixture-resend-key";
   process.env.CONTACT_TO_EMAIL = "studio@example.test";
   process.env.CONTACT_FROM_EMAIL = "Davide Studios <studio@example.test>";
-  process.env.SMTP_USER = "configured-smtp@example.test";
-  process.env.SMTP_PASS = "configured-smtp-password";
+  delete process.env.SMTP_USER;
+  delete process.env.SMTP_PASS;
   const enquiry = {
     enquiryId: fixture.enquiry_id,
     submittedAt: fixture.submitted_at,
@@ -238,7 +238,7 @@ test("ID-bearing enquiries prefer a stable Resend idempotency key when Resend is
   assert.ok(calls.every((call) => call.options.headers.authorization === "Bearer fixture-resend-key"));
 });
 
-test("enquiries fall back to the Namecheap mailbox when Resend is not configured", async () => {
+test("enquiries prefer the configured Namecheap mailbox over Resend", async () => {
   const previous = {
     createTransport: nodemailer.createTransport,
     apiKey: process.env.RESEND_API_KEY,
@@ -262,7 +262,7 @@ test("enquiries fall back to the Namecheap mailbox when Resend is not configured
       }
     };
   };
-  delete process.env.RESEND_API_KEY;
+  process.env.RESEND_API_KEY = "fixture-resend-key";
   delete process.env.CONTACT_TO_EMAIL;
   delete process.env.CONTACT_FROM_EMAIL;
   delete process.env.SMTP_HOST;
