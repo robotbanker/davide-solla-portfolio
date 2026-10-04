@@ -3785,8 +3785,12 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
 .newsletter-confirmation { background: var(--charcoal); }
 .newsletter-confirmation section { border-top: 1px solid var(--line); padding-top: 42px; max-width: 780px; }
 .newsletter-confirmation h1 { letter-spacing: -0.04em; line-height: 1.02; }
-.client-login-media { left: 38%; }
-.client-login-shade { background: linear-gradient(90deg, #08080a 20%, rgba(8,8,10,.78) 50%, rgba(8,8,10,.35)); }
+.client-login-media { left: 0; }
+.client-login-shade {
+  background:
+    linear-gradient(90deg, rgba(8,8,10,.9) 0%, rgba(8,8,10,.72) 34%, rgba(8,8,10,.42) 58%, rgba(8,8,10,.56) 100%),
+    linear-gradient(0deg, rgba(8,8,10,.58), rgba(8,8,10,.08) 64%);
+}
 .client-login-content { padding: 166px var(--gutter) 100px; gap: 12%; }
 .client-login-copy h1 { font-size: clamp(68px, 8vw, 124px); letter-spacing: -0.05em; }
 .client-login-form { background: rgba(8,8,10,.9); border: 1px solid var(--line); padding: 36px; }

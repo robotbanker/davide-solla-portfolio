@@ -16,7 +16,7 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.equal((clientHtml.match(/data-client-rating="[1-5]"/g) || []).length, 5);
   assert.match(clientHtml, /data-client-feedback-comment/);
   assert.match(clientHtml, /maxlength="1500"/);
-  assert.match(clientHtml, /styles\.css\?v=20260905/);
+  assert.match(clientHtml, /styles\.css\?v=20261004-client-fullbleed/);
   assert.match(clientHtml, /client-area\.js\?v=7/);
   assert.match(clientStyles, /\.client-lightbox\s*\{/);
   assert.match(clientStyles, /body\.client-lightbox-open/);
