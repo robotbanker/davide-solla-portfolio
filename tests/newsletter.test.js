@@ -8,6 +8,7 @@ const test = require("node:test");
 const {
   createConfirmationToken,
   createPreferencesToken,
+  enrollContactFormSubscriber,
   handleNewsletterRequest
 } = require("../lib/newsletter");
 const {
@@ -599,6 +600,41 @@ test("confirmation POST creates a Resend contact using the raw REST field names"
     const payload = JSON.parse(calls[0].options.body);
     assert.equal(payload.first_name, "Reader");
     assert.equal(Object.hasOwn(payload, "firstName"), false);
+    assert.deepEqual(payload.topics, [{ id: "topic_field_notes", subscription: "opt_in" }]);
+  });
+});
+
+test("contact-form consent enrolls directly without sending a confirmation email", async () => {
+  await withNewsletterEnv(async () => {
+    const originalFetch = global.fetch;
+    const calls = [];
+    global.fetch = async (url, options) => {
+      calls.push({ url: String(url), options });
+      return providerResponse(200, { id: "contact_direct" });
+    };
+
+    try {
+      const result = await enrollContactFormSubscriber({
+        req: request(),
+        email: "reader@example.test",
+        firstName: "Reader",
+        consentAt: "2026-10-18T09:00:00.000Z"
+      });
+      assert.deepEqual(result, { subscribed: true });
+    } finally {
+      global.fetch = originalFetch;
+    }
+
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].url, "https://api.resend.com/contacts");
+    assert.equal(calls.some((call) => call.url.endsWith("/emails")), false);
+    const payload = JSON.parse(calls[0].options.body);
+    assert.equal(payload.email, "reader@example.test");
+    assert.equal(payload.first_name, "Reader");
+    assert.equal(payload.properties.source, "website_contact_form");
+    assert.equal(payload.properties.consent_method, "contact_form_checkbox");
+    assert.match(payload.properties.consent_text, /one monthly Field Notes email/);
+    assert.deepEqual(payload.segments, [{ id: "segment_test" }]);
     assert.deepEqual(payload.topics, [{ id: "topic_field_notes", subscription: "opt_in" }]);
   });
 });

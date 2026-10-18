@@ -175,15 +175,17 @@ ID, so it remains an internal notification and cannot loop back into the commerc
 Acquisition data is limited to landing path, referrer hostname, and the five standard UTM
 fields. The form does not retain IP addresses, user agents, full URLs, `gclid`, `fbclid`, or
 other advertising identifiers. Enquiry details are used only to answer and manage the
-requested project and do not subscribe the sender to Field Notes. Radar assigns a two-year
-retention review date; this is an operational default that should be confirmed during the
-studio's focused privacy review.
+requested project. An optional, unticked Field Notes checkbox records separate newsletter
+consent. When selected, the contact endpoint enrolls the email directly in the configured
+Resend Segment and Topic without sending the standalone signup flow's confirmation email.
+Radar assigns a two-year retention review date; this is an operational default that should
+be confirmed during the studio's focused privacy review.
 
 ## Newsletter Signup
 
 The Field Notes page posts newsletter signups to `/api/newsletter`. The form asks for email, optional first name, and explicit consent, with a hidden honeypot field and per-IP rate limiting.
 
-Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the backend sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link.
+Subscriber records are managed in Resend Contacts rather than stored in this repository. Set `RESEND_API_KEY`, `NEWSLETTER_TOKEN_SECRET`, and a verified `NEWSLETTER_FROM_EMAIL` in production. By default the standalone Field Notes form sends a confirmation email and only creates or re-subscribes the Resend Contact after the visitor clicks the confirmation link. The explicit checkbox on the commission enquiry form is a separate single-step consent path and enrolls the contact immediately without a confirmation email.
 
 Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public Resend Topic named `Field Notes` with its default subscription set to `opt_out`, then set `NEWSLETTER_RESEND_TOPIC_ID`. The website explicitly opts in only confirmed subscribers, so enrollment, provider-hosted preferences, and live sends share the same consent boundary without silently enrolling existing Contacts.
 

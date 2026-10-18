@@ -71,7 +71,7 @@ Recommended approach implemented:
   Shared browser behaviour for the Field Notes signup form.
 
 - `lib/newsletter.js` / `api/newsletter.js`  
-  Public enrollment endpoint. It validates consent, sends confirmation email, and creates or re-subscribes a Resend Contact after confirmation.
+  Public enrollment endpoint. The standalone Field Notes form validates consent, sends a confirmation email, and creates or re-subscribes a Resend Contact after confirmation. The optional commission-enquiry checkbox uses the same Resend Segment and Topic but records its own explicit consent and enrolls immediately without a confirmation email.
 
 - `lib/newsletter-metrics.js`
   Builds a strict privacy-minimised lifecycle fact, derives pseudonymous event and campaign keys with a dedicated identifier secret, signs the exact JSON body with a separate transport secret, and sends it to the private Radar endpoint after a confirmed subscription, opt-out request, or accepted Broadcast. It never includes a raw subscriber or provider identifier.

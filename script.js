@@ -1774,7 +1774,13 @@ form.addEventListener("submit", (event) => {
         throw new Error(result.error || "Message could not be sent.");
       }
 
-      statusMessage.textContent = "Thanks, your enquiry has been sent.";
+      if (result.newsletter?.requested && result.newsletter?.subscribed) {
+        statusMessage.textContent = "Thanks, your enquiry has been sent and you're subscribed to Field Notes.";
+      } else if (result.newsletter?.requested) {
+        statusMessage.textContent = "Thanks, your enquiry has been sent, but the Field Notes signup could not be completed. Please try again later.";
+      } else {
+        statusMessage.textContent = "Thanks, your enquiry has been sent.";
+      }
       if (result.enquiry_id) {
         window.trackStudioEvent?.("generate_lead", {
           form_name: "commission_enquiry",

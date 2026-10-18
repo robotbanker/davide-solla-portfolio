@@ -131,6 +131,86 @@ test("an accepted notification is not resent on enquiry replay", async () => {
   assert.equal(sent, 0);
 });
 
+test("an explicit contact-form checkbox enrolls the sender without a confirmation step", async () => {
+  let enrollment;
+  const handler = createContactHandler({
+    now: () => new Date(fixture.submitted_at),
+    rateLimit: allow,
+    sync: async () => ({
+      configured: true,
+      receipt_created: true,
+      notification_status: "accepted",
+      notification_attempts: 1
+    }),
+    subscribe: async (value) => { enrollment = value; }
+  });
+  const req = request(bodyFor({ newsletter_consent: "yes" }));
+  const res = response();
+
+  await handler(req, res);
+
+  assert.equal(enrollment.req, req);
+  assert.equal(enrollment.email, fixture.contact.email);
+  assert.equal(enrollment.firstName, fixture.contact.name.split(/\s+/)[0]);
+  assert.equal(enrollment.consentAt, fixture.submitted_at);
+  assert.deepEqual(JSON.parse(res.body), {
+    ok: true,
+    enquiry_id: fixture.enquiry_id,
+    newsletter: { requested: true, subscribed: true }
+  });
+});
+
+test("an unchecked contact form never invokes newsletter enrollment", async () => {
+  let enrollments = 0;
+  const handler = createContactHandler({
+    rateLimit: allow,
+    sync: async () => ({
+      configured: true,
+      receipt_created: true,
+      notification_status: "accepted",
+      notification_attempts: 1
+    }),
+    subscribe: async () => { enrollments += 1; }
+  });
+  const res = response();
+
+  await handler(request(bodyFor()), res);
+
+  assert.equal(enrollments, 0);
+  assert.deepEqual(JSON.parse(res.body), {
+    ok: true,
+    enquiry_id: fixture.enquiry_id
+  });
+});
+
+test("newsletter enrollment failure does not hide a successfully delivered enquiry", async () => {
+  const handler = createContactHandler({
+    rateLimit: allow,
+    sync: async () => ({
+      configured: true,
+      receipt_created: true,
+      notification_status: "accepted",
+      notification_attempts: 1
+    }),
+    subscribe: async () => {
+      const error = new Error("private provider response");
+      error.statusCode = 503;
+      throw error;
+    }
+  });
+  const res = response();
+
+  await handler(request(bodyFor({ newsletter_consent: true })), res);
+
+  assert.equal(res.statusCode, 200);
+  assert.deepEqual(JSON.parse(res.body), {
+    ok: true,
+    enquiry_id: fixture.enquiry_id,
+    newsletter: { requested: true, subscribed: false }
+  });
+  assert.equal(res.body.includes("private provider response"), false);
+});
+
 test("provider acceptance is not acknowledged until Radar records it and remains retryable", async () => {
   const sentEnquiryIds = [];
   let notificationAttempts = 0;
@@ -562,8 +642,8 @@ test("the real transport refuses redirects for the signed PII body", async () =>
 
 test("the homepage cache keys include the current script and stylesheet revisions", () => {
   const html = fs.readFileSync("index.html", "utf8");
-  assert.match(html, /script\.js\?v=20261004-image-layout-v2/);
-  assert.match(html, /styles\.css\?v=20261004-image-layout-v2/);
+  assert.match(html, /script\.js\?v=20261018-contact-newsletter/);
+  assert.match(html, /styles\.css\?v=20261018-contact-newsletter/);
   assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
   assert.match(html, /google-tag\.js\?v=3/);
 });
