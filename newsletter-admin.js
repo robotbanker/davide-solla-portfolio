@@ -571,7 +571,7 @@ const dryRunEmail = async () => {
       body: "{}"
     });
     const delivery = payload.delivery || {};
-    setStatus(`Dry run sent to ${delivery.recipient || "davidesolla@outlook.it"} via ${delivery.provider || "email provider"}.`);
+    setStatus(`Dry run sent to ${delivery.recipient || "the configured recipient"} via ${delivery.provider || "email provider"}.`);
   } finally {
     applyValidationControls();
   }

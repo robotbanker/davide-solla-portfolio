@@ -80,7 +80,7 @@ Recommended approach implemented:
   Private, durable live-send lock and outcome record. A live attempt is acquired before Resend is called and remains fail-closed when delivery is sent, rejected, or ambiguous. Reconcile this record with Resend before any manual intervention; never delete it merely to retry.
 
 - Newsletter tab in `admin.html`  
-  Includes `Dry Run`, which sends only to `davidesolla@outlook.it`, and `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through a Topic-scoped Resend Broadcast. SMTP is restricted to dry runs.
+  Includes `Dry Run`, which sends only to the configured `NEWSLETTER_DRY_RUN_RECIPIENT`, and `Send issue now`, which saves the issue, requires issue-ID confirmation, runs strict validation, builds the email, and sends it through a Topic-scoped Resend Broadcast. SMTP is restricted to dry runs.
 
 ## Public Enrollment Setup
 
@@ -109,7 +109,7 @@ Email confirmation is two-step: opening the confirmation URL performs no write, 
 
 `NEWSLETTER_TOKEN_SECRET` is a dedicated newsletter-only secret of at least 32 bytes. It must never fall back to or reuse `ADMIN_SESSION_SECRET`.
 
-The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `davidesolla@outlook.it`; live sends fail closed unless Resend, the Segment and the public opt-out-by-default Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
+The website does not store subscriber email addresses in project files. `NEWSLETTER_RESEND_SEGMENT_ID` is required because Broadcasts target a Segment. The admin `Dry Run` button sends only to `NEWSLETTER_DRY_RUN_RECIPIENT` (falling back to the configured contact recipient); live sends fail closed unless Resend, the Segment and the public opt-out-by-default Topic are all configured. The Topic-scoped Broadcast swaps both footer links to Resend's recipient-specific preference URL.
 
 Resend is the subscriber system of record. Lifecycle measurement is deliberately separate: the website sends Radar only `subscription.confirmed`, topic/global opt-out requests, and `broadcast.accepted`. `NEWSLETTER_METRICS_WEBHOOK_SECRET` signs the exact request body and `NEWSLETTER_METRICS_ID_SECRET` independently derives pseudonymous event and campaign keys; both are required when the integration is enabled and both must match Radar. Generate them independently with a cryptographically random value such as `openssl rand -hex 32`, and do not reuse newsletter-token or admin secrets.
 

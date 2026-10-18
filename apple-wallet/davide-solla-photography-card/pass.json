@@ -50,9 +50,9 @@
         "value": "+44 (0) 7493429959"
       },
       {
-        "key": "email",
-        "label": "Email",
-        "value": "davidesolla@outlook.it"
+        "key": "enquiries",
+        "label": "Enquiries",
+        "value": "https://www.davidesolla.com/#contact"
       }
     ],
     "backFields": [
@@ -64,7 +64,7 @@
       {
         "key": "contact",
         "label": "Contact",
-        "value": "Phone: +44 (0) 7493429959\nEmail: davidesolla@outlook.it\nInstagram: @davide.studios"
+        "value": "Phone: +44 (0) 7493429959\nEnquiries: https://www.davidesolla.com/#contact\nInstagram: @davide.studios"
       },
       {
         "key": "services",

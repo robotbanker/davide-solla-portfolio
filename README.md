@@ -54,6 +54,7 @@ For production, set these Vercel environment variables:
 - `RESEND_API_KEY` - required for idempotent browser-enquiry notifications; also the fallback when legacy SMTP is not configured
 - `NEWSLETTER_FROM_EMAIL` - sender for Field Notes confirmation emails, defaults to `CONTACT_FROM_EMAIL` or SMTP sender
 - `NEWSLETTER_REPLY_TO_EMAIL` - optional reply-to address for newsletter confirmations
+- `NEWSLETTER_DRY_RUN_RECIPIENT` - private recipient for newsletter test sends, defaults to `CONTACT_TO_EMAIL` or `hello@davidesolla.com`
 - `NEWSLETTER_TOKEN_SECRET` - stable secret used to sign double opt-in confirmation links
 - `NEWSLETTER_DOUBLE_OPT_IN` - defaults to `true`; set to `false` only if another consent confirmation process exists
 - `NEWSLETTER_RESEND_SEGMENT_ID` - Resend Segment ID used for enrollment and required for live Broadcast sends
@@ -186,7 +187,7 @@ Subscriber records are managed in Resend Contacts rather than stored in this rep
 
 Set `NEWSLETTER_RESEND_SEGMENT_ID` so new contacts are added to the same Resend Segment used by the admin send button. Create a public Resend Topic named `Field Notes` with its default subscription set to `opt_out`, then set `NEWSLETTER_RESEND_TOPIC_ID`. The website explicitly opts in only confirmed subscribers, so enrollment, provider-hosted preferences, and live sends share the same consent boundary without silently enrolling existing Contacts.
 
-The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to `davidesolla@outlook.it` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict research, source and content validation, builds the email HTML, and creates a Topic-scoped Resend Broadcast. Davide reviews all imagery manually at issue level before publishing or sending; there is no per-image approval gate. Live delivery fails closed without the Resend API key, Segment and Topic; SMTP is never used for an audience send.
+The Newsletter tab in `admin.html` has a `Dry Run` button and a `Send issue now` button. `Dry Run` saves the current issue and sends a test email only to the configured `NEWSLETTER_DRY_RUN_RECIPIENT` through Resend email sending or SMTP. `Send issue now` saves the current issue, requires typing the selected issue ID as confirmation, runs strict research, source and content validation, builds the email HTML, and creates a Topic-scoped Resend Broadcast. Davide reviews all imagery manually at issue level before publishing or sending; there is no per-image approval gate. Live delivery fails closed without the Resend API key, Segment and Topic; SMTP is never used for an audience send.
 
 `NEWSLETTER_TOKEN_SECRET` must be a dedicated secret of at least 32 bytes and must not reuse the admin session secret. Live delivery creates a private per-issue state record in `lib/newsletter-send-state/` before calling Resend. A repeated, concurrent, or ambiguous attempt remains locked for manual reconciliation rather than risking a duplicate audience send.
 
