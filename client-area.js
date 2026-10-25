@@ -710,9 +710,9 @@ ratingButtons.forEach((button) => {
 
   button.addEventListener("keydown", (event) => {
     const current = Number(button.dataset.clientRating);
-    const next = event.key === "ArrowRight" || event.key === "ArrowUp"
+    const next = event.key === "ArrowUp"
       ? Math.min(current + 1, 5)
-      : event.key === "ArrowLeft" || event.key === "ArrowDown"
+      : event.key === "ArrowDown"
         ? Math.max(current - 1, 1)
         : event.key === "Home"
           ? 1
@@ -772,13 +772,13 @@ document.addEventListener("keydown", (event) => {
       return;
     }
 
-    const insideFeedbackControl = Boolean(event.target.closest?.("[data-client-feedback-form]"));
-    if (!insideFeedbackControl && event.key === "ArrowLeft") {
+    const isEditingComment = event.target === feedbackComment;
+    if (!isEditingComment && event.key === "ArrowLeft") {
       event.preventDefault();
       stepLightboxImage(-1);
       return;
     }
-    if (!insideFeedbackControl && event.key === "ArrowRight") {
+    if (!isEditingComment && event.key === "ArrowRight") {
       event.preventDefault();
       stepLightboxImage(1);
     }

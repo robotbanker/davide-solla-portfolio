@@ -13,6 +13,8 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.match(clientHtml, /data-client-lightbox[^>]+role="dialog"[^>]+aria-modal="true"/);
   assert.match(clientHtml, /data-client-lightbox-prev/);
   assert.match(clientHtml, /data-client-lightbox-next/);
+  assert.match(clientHtml, /aria-keyshortcuts="ArrowLeft"/);
+  assert.match(clientHtml, /aria-keyshortcuts="ArrowRight"/);
   assert.equal((clientHtml.match(/data-client-rating="[1-5]"/g) || []).length, 5);
   assert.match(clientHtml, /data-client-feedback-comment/);
   assert.match(clientHtml, /maxlength="1500"/);
@@ -20,7 +22,8 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.doesNotMatch(clientHtml, /data-client-feedback-save/);
   assert.doesNotMatch(clientHtml, /<img[^>]+src=""/);
   assert.match(clientHtml, /styles\.css\?v=20261004-image-layout-v2/);
-  assert.match(clientHtml, /client-area\.js\?v=8/);
+  assert.match(clientHtml, /Rating is optional/);
+  assert.match(clientHtml, /client-area\.js\?v=9/);
   assert.match(clientStyles, /\.client-lightbox\s*\{/);
   assert.match(clientStyles, /body\.client-lightbox-open/);
 });
@@ -34,6 +37,8 @@ test("client interactions use the signed session and keep downloads permission-g
   assert.match(clientScript, /downloadLink\.hidden = !canDownload/);
   assert.match(clientScript, /event\.key === "ArrowLeft"/);
   assert.match(clientScript, /event\.key === "ArrowRight"/);
+  assert.match(clientScript, /const isEditingComment = event\.target === feedbackComment/);
+  assert.doesNotMatch(clientScript, /insideFeedbackControl/);
   assert.match(clientScript, /trapFocus\(event, lightbox\)/);
   assert.match(clientScript, /setLightboxBackgroundInert\(true\)/);
   assert.match(clientScript, /document\.addEventListener\("contextmenu"/);
