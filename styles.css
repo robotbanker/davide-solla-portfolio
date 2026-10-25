@@ -3593,13 +3593,6 @@ body.client-lightbox-open {
   gap: 20px;
 }
 
-.client-feedback-actions .submit-button {
-  background: #dedee0;
-  border-color: #dedee0;
-  color: #090909;
-  margin: 0;
-}
-
 .client-feedback-actions .text-button {
   color: #090909;
 }

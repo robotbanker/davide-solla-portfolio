@@ -22,17 +22,20 @@ const lightboxNextButton = document.querySelector("[data-client-lightbox-next]")
 const feedbackForm = document.querySelector("[data-client-feedback-form]");
 const feedbackComment = document.querySelector("[data-client-feedback-comment]");
 const feedbackStatus = document.querySelector("[data-client-feedback-status]");
-const feedbackSaveButton = document.querySelector("[data-client-feedback-save]");
 const feedbackClearButton = document.querySelector("[data-client-feedback-clear]");
 const commentCount = document.querySelector("[data-client-comment-count]");
 const ratingValue = document.querySelector("[data-client-rating-value]");
 const ratingButtons = [...document.querySelectorAll("[data-client-rating]")];
 const clientStorageKey = "davide-client-gallery";
 const clientSessionMs = 8 * 60 * 60 * 1000;
+const feedbackAutosaveDelayMs = 700;
 const focusableSelector = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), input:not([disabled]):not([type="hidden"]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])';
 const menuBackgroundState = new Map();
 const lightboxBackgroundState = new Map();
 const feedbackDrafts = new Map();
+const feedbackAutosaveTimers = new Map();
+const feedbackSavesInFlight = new Set();
+const feedbackRetryAttempts = new Map();
 
 let activeClient = null;
 let activeSessionToken = "";
@@ -269,24 +272,66 @@ const feedbackForImage = (image, index) => {
 
 const feedbackDraftForImage = (image, index) => feedbackDrafts.get(imageIdentifier(image, index)) || null;
 
+const normalizedFeedback = (feedback = {}) => ({
+  rating: Math.min(Math.max(Number(feedback.rating) || 0, 0), 5),
+  comment: String(feedback.comment || "").trim()
+});
+
+const feedbackMatches = (left, right) => {
+  const normalizedLeft = normalizedFeedback(left);
+  const normalizedRight = normalizedFeedback(right);
+  return normalizedLeft.rating === normalizedRight.rating
+    && normalizedLeft.comment === normalizedRight.comment;
+};
+
+const activeFeedbackAssetId = () => {
+  const image = galleryImages()[activeImageIndex];
+  return image ? imageIdentifier(image, activeImageIndex) : "";
+};
+
+const setFeedbackStatusForAsset = (lightroomAssetId, message) => {
+  if (!lightbox.hidden && activeFeedbackAssetId() === lightroomAssetId) {
+    feedbackStatus.textContent = message;
+  }
+};
+
+const clearScheduledFeedbackSave = (lightroomAssetId) => {
+  const timer = feedbackAutosaveTimers.get(lightroomAssetId);
+  if (timer) window.clearTimeout(timer);
+  feedbackAutosaveTimers.delete(lightroomAssetId);
+};
+
+const resetFeedbackAutosaveState = () => {
+  feedbackAutosaveTimers.forEach((timer) => window.clearTimeout(timer));
+  feedbackAutosaveTimers.clear();
+  feedbackDrafts.clear();
+  feedbackRetryAttempts.clear();
+};
+
 const updateCurrentFeedbackDraft = () => {
   const image = galleryImages()[activeImageIndex];
-  if (!image) return;
+  if (!image) return "";
   const lightroomAssetId = imageIdentifier(image, activeImageIndex);
   const saved = feedbackForImage(image, activeImageIndex);
-  const rating = selectedRating();
-  const comment = feedbackComment.value;
-  const matchesSaved = rating === Number(saved?.rating || 0)
-    && comment === String(saved?.comment || "");
+  const draft = {
+    imageIndex: activeImageIndex,
+    rating: selectedRating(),
+    comment: feedbackComment.value.trim()
+  };
+  const matchesSaved = feedbackMatches(draft, saved);
+  const hadPendingChanges = feedbackDrafts.has(lightroomAssetId)
+    || feedbackAutosaveTimers.has(lightroomAssetId);
 
-  if (matchesSaved) {
+  if (matchesSaved && !feedbackSavesInFlight.has(lightroomAssetId)) {
     feedbackDrafts.delete(lightroomAssetId);
-    feedbackStatus.textContent = "";
+    clearScheduledFeedbackSave(lightroomAssetId);
+    if (hadPendingChanges) feedbackStatus.textContent = "All changes saved.";
   } else {
-    feedbackDrafts.set(lightroomAssetId, { rating, comment });
-    feedbackStatus.textContent = "Unsaved changes.";
+    feedbackDrafts.set(lightroomAssetId, draft);
+    feedbackStatus.textContent = "Saving changes…";
   }
-  feedbackClearButton.hidden = !saved && matchesSaved;
+  feedbackClearButton.hidden = !saved && draft.rating === 0 && !draft.comment;
+  return lightroomAssetId;
 };
 
 const isProtectedImageTarget = (target) => Boolean(
@@ -387,7 +432,9 @@ const hydrateFeedbackForm = () => {
   setSelectedRating(draft ? draft.rating : record?.rating || 0);
   feedbackComment.value = draft ? draft.comment : record?.comment || "";
   feedbackClearButton.hidden = !record && !draft;
-  feedbackStatus.textContent = draft ? "Unsaved changes." : "";
+  feedbackStatus.textContent = draft || feedbackSavesInFlight.has(imageIdentifier(image, activeImageIndex))
+    ? "Saving changes…"
+    : "Changes save automatically.";
   updateCommentCount();
 };
 
@@ -395,7 +442,7 @@ const showLightboxImage = (index, { resetScroll = false } = {}) => {
   const images = galleryImages();
   if (!images.length) return;
   if (activeImageIndex >= 0 && activeImageIndex !== Number(index)) {
-    updateCurrentFeedbackDraft();
+    scheduleCurrentFeedbackSave(0);
   }
   activeImageIndex = Math.min(Math.max(Number(index) || 0, 0), images.length - 1);
   const image = images[activeImageIndex];
@@ -437,7 +484,7 @@ const openLightbox = (index, trigger) => {
 const closeLightbox = ({ restoreFocus = true } = {}) => {
   if (lightbox.hidden) return;
   const trigger = lastLightboxTrigger;
-  updateCurrentFeedbackDraft();
+  scheduleCurrentFeedbackSave(0);
   lightbox.setAttribute("aria-hidden", "true");
   lightbox.inert = true;
   lightbox.hidden = true;
@@ -456,6 +503,7 @@ const showGallery = (client, token, expiresAt = activeSessionExpiresAt) => {
   const name = client.name || "Your";
   const images = Array.isArray(client.images) ? client.images : [];
   const canDownload = client.downloadEnabled === true;
+  resetFeedbackAutosaveState();
   releaseGalleryMedia();
   activeClient = {
     ...client,
@@ -491,7 +539,7 @@ const showGallery = (client, token, expiresAt = activeSessionExpiresAt) => {
 
 const showLogin = (message = "") => {
   closeLightbox({ restoreFocus: false });
-  feedbackDrafts.clear();
+  resetFeedbackAutosaveState();
   releaseGalleryMedia();
   activeClient = null;
   activeSessionToken = "";
@@ -516,76 +564,120 @@ const replaceFeedbackRecord = (record, deleted = false, submittedAssetId = "") =
   activeClient.feedback = nextRecords;
 };
 
-const setFeedbackPending = (isPending) => {
-  feedbackSaveButton.disabled = isPending;
-  feedbackClearButton.disabled = isPending;
-  feedbackComment.disabled = isPending;
-  ratingButtons.forEach((button) => {
-    button.disabled = isPending;
-  });
-};
-
-const submitFeedback = async ({ clear = false } = {}) => {
-  const image = galleryImages()[activeImageIndex];
-  if (!image || !activeSessionToken) return;
-  const submittedImageIndex = activeImageIndex;
-  const submittedAssetId = imageIdentifier(image, submittedImageIndex);
-  const rating = clear ? 0 : selectedRating();
-  const comment = clear ? "" : feedbackComment.value.trim();
-
-  if (!clear && rating === 0 && !comment) {
-    feedbackStatus.textContent = "Choose a star rating or add a comment before saving.";
-    feedbackComment.focus({ preventScroll: true });
+const persistFeedback = async (lightroomAssetId, { keepalive = true } = {}) => {
+  const draft = feedbackDrafts.get(lightroomAssetId);
+  if (!draft || !activeSessionToken || !activeClient) return;
+  if (feedbackSavesInFlight.has(lightroomAssetId)) {
+    scheduleFeedbackSave(lightroomAssetId, 100);
     return;
   }
 
-  setFeedbackPending(true);
-  feedbackStatus.textContent = clear ? "Clearing feedback..." : "Saving feedback...";
+  clearScheduledFeedbackSave(lightroomAssetId);
+  feedbackSavesInFlight.add(lightroomAssetId);
+  setFeedbackStatusForAsset(lightroomAssetId, "Saving changes…");
+  const submittedFeedback = normalizedFeedback(draft);
+  const submittedImageIndex = draft.imageIndex;
+  const submittedClient = activeClient;
+  const submittedToken = activeSessionToken;
+  let saveLatestDraft = false;
 
   try {
     const response = await fetch("/api/client?action=feedback", {
       method: "POST",
       headers: {
-        authorization: `Bearer ${activeSessionToken}`,
+        authorization: `Bearer ${submittedToken}`,
         "content-type": "application/json"
       },
       body: JSON.stringify({
-        lightroomAssetId: submittedAssetId,
-        rating,
-        comment
-      })
+        lightroomAssetId,
+        rating: submittedFeedback.rating,
+        comment: submittedFeedback.comment
+      }),
+      keepalive
     });
     const responseBody = await response.json();
 
     if (!response.ok) {
       if (response.status === 401) {
         clearClientSession();
-        showLogin("Your gallery session has expired. Please sign in again.");
+        if (activeClient === submittedClient) {
+          showLogin("Your gallery session has expired. Please sign in again.");
+        }
         return;
       }
-      throw new Error(responseBody.error || "Feedback could not be saved.");
+      const error = new Error(responseBody.error || "Feedback could not be saved.");
+      error.retryable = response.status === 429 || response.status >= 500;
+      throw error;
     }
 
-    const wasDeleted = Boolean(responseBody.deleted || clear);
-    replaceFeedbackRecord(responseBody.feedback, wasDeleted, submittedAssetId);
-    feedbackDrafts.delete(submittedAssetId);
+    if (activeClient !== submittedClient || activeSessionToken !== submittedToken) return;
+
+    const wasDeleted = Boolean(responseBody.deleted);
+    replaceFeedbackRecord(responseBody.feedback, wasDeleted, lightroomAssetId);
     saveClientSession(activeClient, activeSessionToken, { expiresAt: activeSessionExpiresAt });
     updateThumbnailFeedbackState(submittedImageIndex);
-    const activeImage = galleryImages()[activeImageIndex];
-    if (!lightbox.hidden && imageIdentifier(activeImage, activeImageIndex) === submittedAssetId) {
-      hydrateFeedbackForm();
-      feedbackStatus.textContent = wasDeleted
-        ? "Feedback cleared."
-        : "Your feedback has been saved.";
+    feedbackRetryAttempts.delete(lightroomAssetId);
+
+    const latestDraft = feedbackDrafts.get(lightroomAssetId);
+    const confirmedFeedback = wasDeleted ? { rating: 0, comment: "" } : responseBody.feedback;
+    if (latestDraft && feedbackMatches(latestDraft, confirmedFeedback)) {
+      feedbackDrafts.delete(lightroomAssetId);
+      setFeedbackStatusForAsset(lightroomAssetId, "All changes saved.");
+    } else if (latestDraft) {
+      saveLatestDraft = true;
+      setFeedbackStatusForAsset(lightroomAssetId, "Saving changes…");
+    }
+
+    if (activeFeedbackAssetId() === lightroomAssetId) {
+      feedbackClearButton.hidden = !feedbackForImage(galleryImages()[activeImageIndex], activeImageIndex)
+        && !feedbackDrafts.has(lightroomAssetId);
     }
   } catch (error) {
-    const activeImage = galleryImages()[activeImageIndex];
-    if (!lightbox.hidden && imageIdentifier(activeImage, activeImageIndex) === submittedAssetId) {
-      feedbackStatus.textContent = error.message || "Feedback could not be saved.";
+    if (activeClient !== submittedClient || activeSessionToken !== submittedToken) return;
+    const latestDraft = feedbackDrafts.get(lightroomAssetId);
+    if (latestDraft) {
+      if (error.retryable !== false) {
+        const attempt = (feedbackRetryAttempts.get(lightroomAssetId) || 0) + 1;
+        feedbackRetryAttempts.set(lightroomAssetId, attempt);
+        const retryDelay = Math.min(30000, 2000 * (2 ** Math.min(attempt - 1, 4)));
+        scheduleFeedbackSave(lightroomAssetId, retryDelay);
+        setFeedbackStatusForAsset(lightroomAssetId, "Couldn’t save yet. We’ll keep trying.");
+      } else {
+        setFeedbackStatusForAsset(lightroomAssetId, error.message || "Feedback could not be saved.");
+      }
     }
   } finally {
-    setFeedbackPending(false);
+    feedbackSavesInFlight.delete(lightroomAssetId);
+    if (saveLatestDraft && activeClient === submittedClient && activeSessionToken === submittedToken) {
+      scheduleFeedbackSave(lightroomAssetId, 0);
+    }
   }
+};
+
+const scheduleFeedbackSave = (lightroomAssetId, delay = feedbackAutosaveDelayMs) => {
+  if (!lightroomAssetId || !feedbackDrafts.has(lightroomAssetId)) return;
+  clearScheduledFeedbackSave(lightroomAssetId);
+  if (delay <= 0) {
+    void persistFeedback(lightroomAssetId);
+    return;
+  }
+  const timer = window.setTimeout(() => {
+    feedbackAutosaveTimers.delete(lightroomAssetId);
+    void persistFeedback(lightroomAssetId);
+  }, delay);
+  feedbackAutosaveTimers.set(lightroomAssetId, timer);
+};
+
+const scheduleCurrentFeedbackSave = (delay = feedbackAutosaveDelayMs) => {
+  const lightroomAssetId = updateCurrentFeedbackDraft();
+  scheduleFeedbackSave(lightroomAssetId, delay);
+};
+
+const flushFeedbackDrafts = ({ keepalive = false } = {}) => {
+  if (!lightbox.hidden) updateCurrentFeedbackDraft();
+  feedbackDrafts.forEach((draft, lightroomAssetId) => {
+    void persistFeedback(lightroomAssetId, { keepalive });
+  });
 };
 
 menuToggle?.addEventListener("click", () => {
@@ -613,7 +705,7 @@ lightboxNextButton.addEventListener("click", () => stepLightboxImage(1));
 ratingButtons.forEach((button) => {
   button.addEventListener("click", () => {
     setSelectedRating(Number(button.dataset.clientRating));
-    updateCurrentFeedbackDraft();
+    scheduleCurrentFeedbackSave(0);
   });
 
   button.addEventListener("keydown", (event) => {
@@ -630,22 +722,27 @@ ratingButtons.forEach((button) => {
     if (!next) return;
     event.preventDefault();
     setSelectedRating(next, { focus: true });
-    updateCurrentFeedbackDraft();
+    scheduleCurrentFeedbackSave(0);
   });
 });
 
 feedbackComment.addEventListener("input", () => {
   updateCommentCount();
-  updateCurrentFeedbackDraft();
+  scheduleCurrentFeedbackSave();
 });
+
+feedbackComment.addEventListener("blur", () => scheduleCurrentFeedbackSave(0));
 
 feedbackForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  submitFeedback();
+  scheduleCurrentFeedbackSave(0);
 });
 
 feedbackClearButton.addEventListener("click", () => {
-  submitFeedback({ clear: true });
+  setSelectedRating(0);
+  feedbackComment.value = "";
+  updateCommentCount();
+  scheduleCurrentFeedbackSave(0);
 });
 
 lightboxMedia.addEventListener("touchstart", (event) => {
@@ -735,7 +832,6 @@ loginForm.addEventListener("submit", async (event) => {
       throw new Error("A secure gallery session could not be created. Please try again.");
     }
 
-    feedbackDrafts.clear();
     const expiresAt = saveClientSession(responseBody.client, responseBody.token);
     showGallery(responseBody.client, responseBody.token, expiresAt);
   } catch (error) {
@@ -790,10 +886,16 @@ downloadLink.addEventListener("click", async () => {
 });
 
 logoutButton.addEventListener("click", () => {
+  flushFeedbackDrafts({ keepalive: true });
   clearClientSession();
   showLogin();
 });
 
+window.addEventListener("online", () => flushFeedbackDrafts());
+window.addEventListener("pagehide", () => flushFeedbackDrafts({ keepalive: true }));
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") flushFeedbackDrafts({ keepalive: true });
+});
 window.addEventListener("scroll", setHeaderState, { passive: true });
 setHeaderState();
 

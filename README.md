@@ -144,7 +144,7 @@ From Xcode, choose a signing team and run the `App` scheme on an iPhone simulato
 
 Use the Client area block in `admin.html` to create a client login, set or reset the password, and paste the client's Lightroom shared gallery link. Private client records and password hashes are authenticated-encrypted in `data/admin-site.enc`; client records are removed from the public `data/site.json`.
 
-Clients open `client-area.html` and sign in with their own email and password. Use **Share with another client** to create another login for the same Lightroom gallery, or **Use an existing gallery** to assign it to an existing client. Passwords, download permissions and image feedback remain per client. Removing one client does not remove access for other clients using that gallery.
+Clients open `client-area.html` and sign in with their own email and password. Ratings save immediately, while comments save automatically after a short typing pause and again when the client leaves the comment field or image. Use **Share with another client** to create another login for the same Lightroom gallery, or **Use an existing gallery** to assign it to an existing client. Passwords, download permissions and image feedback remain per client. Removing one client does not remove access for other clients using that gallery.
 
 When **Allow gallery downloads** is enabled, the client downloads a ZIP of Lightroom’s full-size edited photos directly from the website. Enable **Allow JPG downloads** in Lightroom too, and sync the full-resolution photos to Adobe; Lightroom can only deliver the resolution it holds. These are delivered edits, not original RAW files. Downloads never fall back to web-size previews.
 

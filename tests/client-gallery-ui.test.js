@@ -16,9 +16,11 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.equal((clientHtml.match(/data-client-rating="[1-5]"/g) || []).length, 5);
   assert.match(clientHtml, /data-client-feedback-comment/);
   assert.match(clientHtml, /maxlength="1500"/);
+  assert.match(clientHtml, /save automatically/);
+  assert.doesNotMatch(clientHtml, /data-client-feedback-save/);
   assert.doesNotMatch(clientHtml, /<img[^>]+src=""/);
   assert.match(clientHtml, /styles\.css\?v=20261004-image-layout-v2/);
-  assert.match(clientHtml, /client-area\.js\?v=7/);
+  assert.match(clientHtml, /client-area\.js\?v=8/);
   assert.match(clientStyles, /\.client-lightbox\s*\{/);
   assert.match(clientStyles, /body\.client-lightbox-open/);
 });
@@ -26,8 +28,8 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
 test("client interactions use the signed session and keep downloads permission-gated", () => {
   assert.match(clientScript, /!session\.client \|\| !session\.token/);
   assert.match(clientScript, /fetch\("\/api\/client\?action=session"/);
-  assert.match(clientScript, /authorization: `Bearer \$\{activeSessionToken\}`/);
-  assert.match(clientScript, /lightroomAssetId: submittedAssetId/);
+  assert.match(clientScript, /authorization: `Bearer \$\{submittedToken\}`/);
+  assert.match(clientScript, /body: JSON\.stringify\(\{\s*lightroomAssetId,/);
   assert.match(clientScript, /client\.downloadEnabled === true/);
   assert.match(clientScript, /downloadLink\.hidden = !canDownload/);
   assert.match(clientScript, /event\.key === "ArrowLeft"/);
@@ -37,7 +39,11 @@ test("client interactions use the signed session and keep downloads permission-g
   assert.match(clientScript, /document\.addEventListener\("contextmenu"/);
   assert.match(clientScript, /document\.addEventListener\("dragstart"/);
   assert.match(clientScript, /const feedbackDrafts = new Map\(\)/);
-  assert.match(clientScript, /feedbackStatus\.textContent = "Unsaved changes\."/);
+  assert.match(clientScript, /const feedbackAutosaveDelayMs = 700/);
+  assert.match(clientScript, /scheduleCurrentFeedbackSave\(0\)/);
+  assert.match(clientScript, /feedbackComment\.addEventListener\("blur"/);
+  assert.match(clientScript, /keepalive/);
+  assert.doesNotMatch(clientScript, /Unsaved changes\./);
   assert.match(clientStyles, /-webkit-touch-callout:\s*none/);
 });
 
