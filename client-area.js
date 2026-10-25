@@ -272,10 +272,13 @@ const feedbackForImage = (image, index) => {
 
 const feedbackDraftForImage = (image, index) => feedbackDrafts.get(imageIdentifier(image, index)) || null;
 
-const normalizedFeedback = (feedback = {}) => ({
-  rating: Math.min(Math.max(Number(feedback.rating) || 0, 0), 5),
-  comment: String(feedback.comment || "").trim()
-});
+const normalizedFeedback = (feedback) => {
+  const value = feedback || {};
+  return {
+    rating: Math.min(Math.max(Number(value.rating) || 0, 0), 5),
+    comment: String(value.comment || "").trim()
+  };
+};
 
 const feedbackMatches = (left, right) => {
   const normalizedLeft = normalizedFeedback(left);

@@ -23,7 +23,7 @@ test("the client gallery exposes an accessible per-image review lightbox", () =>
   assert.doesNotMatch(clientHtml, /<img[^>]+src=""/);
   assert.match(clientHtml, /styles\.css\?v=20261004-image-layout-v2/);
   assert.match(clientHtml, /Rating is optional/);
-  assert.match(clientHtml, /client-area\.js\?v=9/);
+  assert.match(clientHtml, /client-area\.js\?v=10/);
   assert.match(clientStyles, /\.client-lightbox\s*\{/);
   assert.match(clientStyles, /body\.client-lightbox-open/);
 });
@@ -45,6 +45,7 @@ test("client interactions use the signed session and keep downloads permission-g
   assert.match(clientScript, /document\.addEventListener\("dragstart"/);
   assert.match(clientScript, /const feedbackDrafts = new Map\(\)/);
   assert.match(clientScript, /const feedbackAutosaveDelayMs = 700/);
+  assert.match(clientScript, /const value = feedback \|\| \{\}/);
   assert.match(clientScript, /scheduleCurrentFeedbackSave\(0\)/);
   assert.match(clientScript, /feedbackComment\.addEventListener\("blur"/);
   assert.match(clientScript, /keepalive/);
