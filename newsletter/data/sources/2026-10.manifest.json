@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-10",
+  "dateChecked": "2026-11-07",
+  "status": "research-approved",
+  "manifestNotes": "Retrospective October 2026 edit checked against first-party institution and brand pages on 7 November 2026. Direct image files were browser-verified after replacing hotlinks that did not render. External imagery is embedded from official hosts; confirm distribution permission before a live audience send. The studio image is selected from the Davide Studios website archive by the existing rotation rule.",
+  "sources": [
+    {
+      "sourceId": "art-sanle-sory",
+      "section": "Art",
+      "storyTitle": "Sanlé Sory: Colour Years",
+      "officialSourceUrl": "https://thephotographersgallery.org.uk/whats-on/sanle-sory-colour-years",
+      "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/sanle-sory-colour-years",
+      "imageCredit": "Sanlé Sory, Volta Photo Studio, Bobo-Dioulasso, Burkina Faso. © Sanlé Sory, 2026. Courtesy of Tezeta.",
+      "usageStatus": "Official institution image embedded; verify distribution permission before live send.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "Backdrop, dress and pose become a shared language between photographer and sitter; colour lets the details of self-presentation speak with particular force."
+    },
+    {
+      "sourceId": null,
+      "section": "Art",
+      "storyTitle": "William Eggleston: All that goes unnoticed",
+      "officialSourceUrl": "https://thephotographersgallery.org.uk/whats-on/william-eggleston-all-goes-unnoticed",
+      "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/william-eggleston-all-goes-unnoticed",
+      "imageCredit": "No newsletter image used; official exhibition imagery remains on the source page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "It makes a case for looking longer at the unremarkable, where colour and composition can expose the tension beneath a quiet surface."
+    },
+    {
+      "sourceId": null,
+      "section": "Art",
+      "storyTitle": "Justin Caguiat: Change Ringing",
+      "officialSourceUrl": "https://www.serpentinegalleries.org/whats-on/justin-caguiat-change-ringing/",
+      "bookingUrl": "https://www.serpentinegalleries.org/whats-on/justin-caguiat-change-ringing/",
+      "imageCredit": "No newsletter image used; official exhibition imagery remains on the source page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "The exhibition treats surface, light and architecture as active materials, inviting attention to how an image changes over time."
+    },
+    {
+      "sourceId": null,
+      "section": "Art",
+      "storyTitle": "Amar Kanwar",
+      "officialSourceUrl": "https://www.serpentinegalleries.org/whats-on/amar-kanwar-exhibition/",
+      "bookingUrl": "https://www.serpentinegalleries.org/whats-on/amar-kanwar-exhibition/",
+      "imageCredit": "No newsletter image used; official exhibition imagery remains on the source page.",
+      "usageStatus": "Official source verified. No external image embedded.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "Kanwar’s pacing asks the viewer to stay with an image and its silences, rather than reach for an immediate conclusion."
+    },
+    {
+      "sourceId": "fashion-valentino-interferenze",
+      "section": "Fashion",
+      "storyTitle": "Valentino: Interferenze: Ancient and Modern",
+      "officialSourceUrl": "https://www.valentino.com/en-th/v-universe/valentino-diary/news/interferenze-2026-27-campaign",
+      "bookingUrl": null,
+      "imageCredit": "Official Valentino Interferenze Fall/Winter 2026–27 campaign image. Photograph: Glen Luchford.",
+      "usageStatus": "Official brand image embedded and browser-verified; verify distribution permission before live send.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "Valentino places its Interferenze Fall/Winter 2026–27 campaign inside Rome’s Centrale Montemartini, where antique sculpture and industrial machinery share the same rooms. Photographed and filmed by Glen Luchford, the images make the setting more than a backdrop. Tailoring, ornament and gesture move between old stone and dark metal, allowing different scales of history to meet within a single frame."
+    },
+    {
+      "sourceId": "fashion-loewe-fw26",
+      "section": "Fashion",
+      "storyTitle": "LOEWE: Fall Winter 2026: High Altitude",
+      "officialSourceUrl": "https://www.loewe.com/int/en/pd/stories-collection/fw26-collection-campaign.html",
+      "bookingUrl": null,
+      "imageCredit": "Official LOEWE Fall Winter 2026 campaign image. Photograph: Talia Chetrit.",
+      "usageStatus": "Official brand image embedded and browser-verified; verify distribution permission before live send.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "Talia Chetrit photographs LOEWE’s Fall Winter 2026 collection against the Mont Blanc Massif. Julia Garner and a wider cast move through snow and rock, where bold colour and sculptural volume meet a vast, pale landscape. The scale is theatrical, yet the images keep a sense of physical movement: clothes are seen against weather, altitude and the changing texture of the ground."
+    },
+    {
+      "sourceId": "fashion-dior-winter-2026",
+      "section": "Fashion",
+      "storyTitle": "Dior: Winter 2026–2027: A Still Landscape",
+      "officialSourceUrl": "https://www.dior.com/en_gb/fashion/news-savoir-faire/folder-news-and-events/winter-2026-2027-campaign",
+      "bookingUrl": null,
+      "imageCredit": "Official Dior Winter 2026-2027 campaign image. Photograph: David Sims.",
+      "usageStatus": "Official brand image embedded and browser-verified; verify distribution permission before live send.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "David Sims photographs Dior’s winter collection in a dreamlike French countryside, placing a violin, delphiniums, polka dots and check within spare, carefully composed frames. Clothing and landscape hold equal weight; the props interrupt any easy pastoral reading. There is a poised stillness to the series, but the slightly unexpected pairings keep the image alive with visual tension."
+    },
+    {
+      "section": "On the Field",
+      "storyTitle": "October studio portrait archive",
+      "officialSourceUrl": "https://www.davidesolla.com/",
+      "bookingUrl": null,
+      "imageCredit": "Image: Davide Studios archive",
+      "usageStatus": "Davide Studios website archive image selected by issue rotation.",
+      "dateChecked": "2026-11-07",
+      "selectedBecause": "One studio-led image keeps the section rooted in Davide Studios’ existing portrait practice.",
+      "selectedImageUrl": "https://www.davidesolla.com/assets/images/responsive/roxana-01-1200.jpg"
+    }
+  ]
+}
