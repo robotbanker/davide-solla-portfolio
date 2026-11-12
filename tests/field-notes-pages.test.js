@@ -81,6 +81,7 @@ test("an issue is fully rendered in the initial HTML with unique Article metadat
   const article = graph.find((node) => node["@type"] === "Article");
   const person = graph.find((node) => node["@type"] === "Person");
   const organization = graph.find((node) => node["@type"] === "Organization");
+  const breadcrumb = graph.find((node) => node["@type"] === "BreadcrumbList");
   assert.equal(article.url, "https://www.davidesolla.com/field-notes/2026-07");
   assert.equal(article.datePublished, metadata.publishedAt);
   assert.equal(article.dateModified, metadata.updatedAt);
@@ -88,6 +89,7 @@ test("an issue is fully rendered in the initial HTML with unique Article metadat
   assert.equal(article.publisher["@id"], "https://www.davidesolla.com/#organization");
   assert.equal(person.name, "Davide Solla");
   assert.equal(organization.name, "Davide Solla Studios");
+  assert.equal(breadcrumb.itemListElement[1].item, "https://www.davidesolla.com/field-notes/archive");
 
   assert.match(html, /href="\/field-notes\/2026-07" aria-current="page"/);
   assert.match(html, /href="\/field-notes\/2026-06"/);

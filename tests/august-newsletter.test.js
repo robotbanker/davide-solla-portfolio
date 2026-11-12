@@ -10,6 +10,7 @@ const {
 } = require("../newsletter/lib/render-email");
 const {
   handleFieldNotesPageRequest,
+  listPublishedIssueEntries,
   renderFieldNotesIssue,
   socialImageForIssue
 } = require("../lib/field-notes-pages");
@@ -103,13 +104,14 @@ test("August gallery validation and public escaping fail closed", () => {
 });
 
 test("the Field Notes root opens the latest published issue in full", () => {
+  const latestIssueId = listPublishedIssueEntries(index)[0].issueId;
   const result = response();
   handleFieldNotesPageRequest({ method: "GET", url: "/field-notes", headers: {} }, result);
   assert.equal(result.statusCode, 307);
-  assert.equal(result.headers.location, "/field-notes/2026-09");
+  assert.equal(result.headers.location, `/field-notes/${latestIssueId}`);
   handleFieldNotesPageRequest({ method: "GET", url: result.headers.location, headers: {} }, result);
   assert.equal(result.statusCode, 200);
-  assert.match(result.body, /href="\/field-notes\/2026-09"/);
+  assert.match(result.body, new RegExp(`href="/field-notes/${latestIssueId}"`));
   assert.match(result.body, /data-field-notes-prerendered/);
-  assert.match(result.body, /<link rel="canonical" href="https:\/\/www\.davidesolla\.com\/field-notes\/2026-09">/);
+  assert.match(result.body, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/field-notes/${latestIssueId}">`));
 });
