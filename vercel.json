@@ -16,6 +16,11 @@
       "source": "/image-licensing.html",
       "destination": "/image-licensing",
       "permanent": true
+    },
+    {
+      "source": "/newsletter/dist/2026-07.html",
+      "destination": "/field-notes/2026-07",
+      "permanent": true
     }
   ],
   "routes": [

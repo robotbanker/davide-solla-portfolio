@@ -69,7 +69,8 @@ test("every service page is fully rendered with unique metadata and useful visib
     assert.equal((html.match(/<h1>/g) || []).length, 1);
     assert.match(html, new RegExp(`<h1>${escapeRegex(page.h1)}</h1>`));
     assert.match(html, /Discuss the brief/);
-    assert.match(html, /href="\/#contact">Discuss the brief<\/a>/);
+    assert.match(html, new RegExp(`href="/\\?service=${escapeRegex(page.slug)}#contact">Discuss the brief</a>`));
+    assert.match(html, new RegExp(`href="/\\?service=${escapeRegex(page.slug)}#contact">Enquire</a>`));
     assert.doesNotMatch(html, /utm_source=website/);
     assert.doesNotMatch(html, /testimonial|guaranteed turnaround|starting (?:at|from) £|five-star/i);
 

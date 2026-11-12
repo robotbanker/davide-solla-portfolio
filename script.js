@@ -40,6 +40,23 @@ const statusMessage = document.querySelector("[data-form-status]");
 const sectionNavLinks = [...document.querySelectorAll('.site-nav a[href^="#"]')];
 const protectedImageSelector = "img, picture, source";
 
+const serviceProjectTypes = {
+  "fashion-photographer-london": "Fashion editorial",
+  "model-portfolio-photographer-london": "Model portfolio",
+  "beauty-photographer-london": "Beauty portrait",
+  "artist-portrait-photographer-london": "Artist or performer portrait",
+  "fine-art-portrait-commissions": "Fine art portrait commission"
+};
+const requestedService = new URLSearchParams(window.location.search).get("service");
+const requestedProjectType = Object.hasOwn(serviceProjectTypes, requestedService)
+  ? serviceProjectTypes[requestedService]
+  : "";
+const projectSelect = form?.elements?.namedItem?.("project");
+if (requestedProjectType && projectSelect?.options) {
+  const matchingOption = [...projectSelect.options].find((option) => option.value === requestedProjectType);
+  if (matchingOption) projectSelect.value = requestedProjectType;
+}
+
 let galleries = {};
 let galleryOrder = [];
 let activeGallery = null;
