@@ -35,8 +35,10 @@ test("every already-public album has one unique, server-rendered project URL", (
     const html = renderProjectPage(siteData, slug);
     assert.match(html, new RegExp(`<link rel="canonical" href="https://www\\.davidesolla\\.com/work/${slug}">`));
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
+    assert.match(html, /privacy-consent\.js\?v=20261112-attribution/);
     assert.match(html, /google-tag\.js\?v=3/);
+    assert.match(html, /href="\/#contact">Start an enquiry<\/a>/);
+    assert.doesNotMatch(html, /utm_source=website/);
     assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large">/);
     assert.match(html, /<script type="application\/ld\+json">/);
   }
@@ -96,6 +98,14 @@ test("Dreamland and Kihaya Blues preserve their authored covers, image order, an
     assert.equal(gallery.image.length, details.count);
     assert.ok(gallery.image.every((image) => image.width > 0 && image.height > 0));
   }
+});
+
+test("uploaded gallery leads use complete responsive variants and other uploads fall back to originals", () => {
+  const html = renderProjectPage(siteData, "dreamland");
+  assert.match(html, /<link rel="preload" as="image" href="\/assets\/images\/responsive\/dreamland-1-799451ec-1200\.avif"/);
+  assert.match(html, /<source type="image\/avif" srcset="\/assets\/images\/responsive\/dreamland-1-799451ec-720\.avif 720w/);
+  assert.match(html, /<img src="\/assets\/images\/uploads\/2026-08-31\/dreamland-3-209c5ba6\.jpg"[^>]+loading="lazy"/);
+  assert.doesNotMatch(html, /responsive\/dreamland-3-209c5ba6-/);
 });
 
 test("project pages omit location metadata when the public source has no evidence", () => {

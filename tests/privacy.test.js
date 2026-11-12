@@ -100,7 +100,7 @@ test("public analytics pages use the consent controller and contain no eager Goo
   for (const file of ["index.html", "field-notes.html"]) {
     const html = fs.readFileSync(file, "utf8");
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
+    assert.match(html, /privacy-consent\.js\?v=20261112-attribution/);
     assert.match(html, /google-tag\.js\?v=3/);
     assert.doesNotMatch(html, /<script[^>]+src="https:\/\/www\.googletagmanager\.com/);
     assert.doesNotMatch(html, /gtag\('config'/);
@@ -109,16 +109,18 @@ test("public analytics pages use the consent controller and contain no eager Goo
   }
 });
 
-test("every rendered privacy controller URL is cache-busted with the notice version", () => {
+test("privacy controller URLs use the current asset revision without resetting the consent notice", () => {
   const noticeVersion = consentSource.match(/const noticeVersion = "([^"]+)";/)?.[1];
   assert.equal(noticeVersion, "2026-07-18");
-  const expectedAsset = `privacy-consent.js?v=${noticeVersion}`;
+  const expectedAsset = "privacy-consent.js?v=20261112-attribution";
 
   for (const file of [
     "index.html",
     "field-notes.html",
     "privacy.html",
+    "image-licensing.html",
     "lib/project-pages.js",
+    "lib/service-pages.js",
     "lib/field-notes-pages.js"
   ]) {
     assert.ok(
@@ -141,9 +143,10 @@ test("the privacy route and notice version are wired through the local server", 
   assert.match(server, /"privacy-consent\.js", "privacy\.html"/);
   assert.match(server, /requestUrl\.pathname === "\/privacy"/);
   assert.match(contact, /privacyNoticeVersion = "2026-07-18"/);
-  assert.match(privacy, /Last updated 18 July 2026/);
-  assert.equal((privacy.match(/18 July 2026/g) || []).length, 2);
-  assert.doesNotMatch(privacy, /14 July 2026/);
+  assert.match(privacy, /Last updated 12 November 2026/);
+  assert.equal((privacy.match(/12 November 2026/g) || []).length, 2);
+  assert.match(privacy, /first public landing path, referrer host and campaign tags/);
+  assert.doesNotMatch(privacy, /18 July 2026|14 July 2026/);
   assert.match(privacy, /privacy-minimised, pseudonymous/);
   assert.match(privacy, /no more than 24 months/);
   assert.doesNotMatch(privacy, /anonymous (?:confirmation|event|Field Notes)/i);

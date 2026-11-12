@@ -20,6 +20,7 @@
   "albums": [
     {
       "id": "dreamland",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
       "section": "editorials",
       "title": "Dreamland",
       "kicker": "Editorial story",
@@ -27,7 +28,7 @@
       "covers": [
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
-          "alt": "Dreamland 2",
+          "alt": "Model in an ivory dress seated on a rock beside the Atlantic shore",
           "previewPosition": "51% 50%",
           "className": "tile-large"
         }
@@ -35,47 +36,47 @@
       "images": [
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-1-799451ec.jpg",
-          "alt": "Dreamland 1",
+          "alt": "Coastal portrait in an ivory dress with one hand raised toward the sun",
           "previewPosition": "82% 34%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-2-2a42749a.jpg",
-          "alt": "Dreamland 2",
+          "alt": "Model in an ivory dress seated on a rock beside the Atlantic shore",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-3-209c5ba6.jpg",
-          "alt": "Dreamland 3",
+          "alt": "Seated coastal portrait in an ivory dress against blue sky and rocky shore",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-4-53c4863e.jpg",
-          "alt": "Dreamland 4",
+          "alt": "Model raising both arms in an ivory dress on coastal rocks",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-5-562662aa.jpg",
-          "alt": "Dreamland 5",
+          "alt": "Portrait in a black dress against a textured coastal cliff",
           "previewPosition": "48% 58%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-6-f4bf8e9a.jpg",
-          "alt": "Dreamland 6",
+          "alt": "Model in a flowing black dress crossing a sandy cove",
           "previewPosition": "55% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-7-f3f17967.jpg",
-          "alt": "Dreamland 7",
+          "alt": "Full-length portrait in a black dress with arms raised on the beach",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-8-c14f2cd3.jpg",
-          "alt": "Dreamland 8",
+          "alt": "Black-dress coastal portrait with outstretched arms under blue sky",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-31/dreamland-9-f8b31fdb.jpg",
-          "alt": "Dreamland 9",
+          "alt": "Side view of a model in black moving across a sandy cove",
           "previewPosition": "80% 51%"
         }
       ],
@@ -83,6 +84,8 @@
     },
     {
       "id": "cosmic",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/fashion-photographer-london",
       "section": "editorials",
       "title": "Cosmic Girl",
       "kicker": "Fashion editorial",
@@ -129,6 +132,8 @@
     },
     {
       "id": "sophie",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/fashion-photographer-london",
       "section": "editorials",
       "title": "Sophie",
       "kicker": "Night editorial",
@@ -182,14 +187,15 @@
     },
     {
       "id": "inna",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
       "section": "editorials",
       "title": "Inna",
       "kicker": "Studio Portrait",
-      "description": "A portraiture experiment between light and emotions",
+      "description": "A studio portrait study of Inna moving between dark clothing and a white shirt, with striped window light, restrained poses and reflective shadows.",
       "covers": [
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
-          "alt": "Inna Gallery 1",
+          "alt": "Inna in a dark outfit with striped window light across her face",
           "previewPosition": "50% 50%",
           "className": "tile-large"
         }
@@ -197,42 +203,42 @@
       "images": [
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-1-531a1cb0.jpg",
-          "alt": "Inna Gallery 1",
+          "alt": "Inna in a dark outfit with striped window light across her face",
           "previewPosition": "50% 27%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-2-bca1ffd6.jpg",
-          "alt": "Inna Gallery 2",
+          "alt": "Inna looking upward beside bands of light on a studio wall",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-3-4c2c263a.jpg",
-          "alt": "Inna Gallery 3",
+          "alt": "Inna raising one arm in a dark studio portrait",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-4-22adb185.jpg",
-          "alt": "Inna Gallery 4",
+          "alt": "Inna crouching in a dark outfit beside striped studio light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-6-970964d6.jpg",
-          "alt": "Inna Gallery 6",
+          "alt": "Inna seated in a white shirt and boots with one hand above her head",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-8-6e5d6ce3.jpg",
-          "alt": "Inna Gallery 8",
+          "alt": "Inna seated on a stool in a white shirt and black boots",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-13-2c3440e9.jpg",
-          "alt": "Inna Gallery 13",
+          "alt": "Inna curled forward in a white shirt on a reflective floor",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-06-23/inna-gallery-16-623de7ad.jpg",
-          "alt": "Inna Gallery 16",
+          "alt": "Inna seated on a reflective floor in a white shirt",
           "previewPosition": "50% 50%"
         }
       ]
@@ -305,6 +311,8 @@
     },
     {
       "id": "kintsugi",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/fine-art-portrait-commissions",
       "section": "fine-art",
       "title": "Kintsugi",
       "kicker": "Fine art collection",
@@ -351,6 +359,8 @@
     },
     {
       "id": "petals",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/fine-art-portrait-commissions",
       "section": "fine-art",
       "title": "Petals",
       "kicker": "Fine art portrait",
@@ -385,6 +395,8 @@
     },
     {
       "id": "dark-baroque",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/fashion-photographer-london",
       "section": "editorials",
       "title": "Dark Baroque",
       "kicker": "Editorial story",
@@ -426,6 +438,8 @@
     },
     {
       "id": "kihaya-blues",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/artist-portrait-photographer-london",
       "section": "editorials",
       "title": "Kihaya Blues",
       "kicker": "Editorial story",
@@ -433,7 +447,7 @@
       "covers": [
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
-          "alt": "Khiazy - Jazz Editoria 7",
+          "alt": "Kyazi Lugangira looking down over a white electric guitar in blue studio light",
           "previewPosition": "50% 50%",
           "className": "tile-large"
         }
@@ -441,72 +455,72 @@
       "images": [
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-1-b91dfd12.jpg",
-          "alt": "Khiazy - Jazz Editoria 1",
+          "alt": "Kyazi Lugangira standing in a black suit and hat against a dark background",
           "previewPosition": "44% 18%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-2-c934557f.jpg",
-          "alt": "Khiazy - Jazz Editoria 2",
+          "alt": "Kyazi Lugangira holding a white electric guitar in a dark studio portrait",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-3-8bf117c1.jpg",
-          "alt": "Khiazy - Jazz Editoria 3",
+          "alt": "Side profile of Kyazi Lugangira in a hat against a black background",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-4-8fbfd349.jpg",
-          "alt": "Khiazy - Jazz Editoria 4",
+          "alt": "Low-key close portrait of Kyazi Lugangira looking down in a dark suit",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-5-4e04d925.jpg",
-          "alt": "Khiazy - Jazz Editoria 5",
+          "alt": "Kyazi Lugangira in a dark suit with a guitar neck in the foreground",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-6-0d7654f7.jpg",
-          "alt": "Khiazy - Jazz Editoria 6",
+          "alt": "Full-length portrait of Kyazi Lugangira under a studio spotlight",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-7-c40fc4b3.jpg",
-          "alt": "Khiazy - Jazz Editoria 7",
+          "alt": "Kyazi Lugangira looking down over a white electric guitar in blue studio light",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-8-c8c88e64.jpg",
-          "alt": "Khiazy - Jazz Editoria 8",
+          "alt": "Kyazi Lugangira smiling while holding a white electric guitar",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-9-b86bd885.jpg",
-          "alt": "Khiazy - Jazz Editoria 9",
+          "alt": "Full-length musician portrait with a white electric guitar and backlight",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-10-f79d29a3.jpg",
-          "alt": "Khiazy - Jazz Editoria 10",
+          "alt": "Side-lit portrait of Kyazi Lugangira with a white electric guitar",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-11-3a923662.jpg",
-          "alt": "Khiazy - Jazz Editoria 11",
+          "alt": "Kyazi Lugangira standing in shadow with one hand on a guitar neck",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-12-6355dc8e.jpg",
-          "alt": "Khiazy - Jazz Editoria 12",
+          "alt": "Close detail of a white electric guitar headstock and the musician’s hand",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-13-fdefd3ee.jpg",
-          "alt": "Khiazy - Jazz Editoria 13",
+          "alt": "Close view of Kyazi Lugangira playing a white electric guitar",
           "previewPosition": "50% 50%"
         },
         {
           "src": "assets/images/uploads/2026-08-29/khiazy-jazz-editoria-14-4d8a23ff.jpg",
-          "alt": "Khiazy - Jazz Editoria 14",
+          "alt": "Kyazi Lugangira playing a white electric guitar under blue studio light",
           "previewPosition": "50% 50%"
         }
       ],
@@ -514,6 +528,8 @@
     },
     {
       "id": "roxana",
+      "updatedAt": "2026-11-12T08:18:58.000Z",
+      "servicePath": "/services/beauty-photographer-london",
       "section": "editorials",
       "title": "Roxana",
       "kicker": "Editorial story",
@@ -547,5 +563,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-10-25T10:35:36.889Z"
+  "updatedAt": "2026-11-12T08:18:58.000Z"
 }

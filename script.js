@@ -57,7 +57,7 @@ let activePrintOrderDraft = null;
 let activeDeliveryOption = null;
 let lastPrintOrderTrigger = null;
 let editorialLayoutFrame = null;
-const enquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v1";
+const enquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v2";
 const pendingEnquiryStorageKey = "davide-studios-pending-enquiry-v1";
 
 const boundedAttributionValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
@@ -67,6 +67,9 @@ const analyticsConsentState = () => {
 };
 
 const captureEnquiryAttribution = () => {
+  const firstLanding = window.StudioPrivacy?.getEnquiryAttribution?.();
+  if (firstLanding) return firstLanding;
+
   const consentState = analyticsConsentState();
   try {
     const stored = JSON.parse(sessionStorage.getItem(enquiryAttributionStorageKey) || "null");

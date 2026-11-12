@@ -5,6 +5,8 @@
 
   const analyticsId = "G-1T625VVZL2";
   const storageKey = "davide-studios-privacy-v1";
+  const enquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v2";
+  const oldEnquiryAttributionStorageKey = "davide-studios-enquiry-attribution-v1";
   const noticeVersion = "2026-07-18";
   const analyticsEnabled = document.documentElement.dataset.analytics === "enabled";
   const validChoices = new Set(["granted", "denied"]);
@@ -30,6 +32,90 @@
 
   const analyticsState = () => decision.analytics;
   const hasAnalyticsConsent = () => analyticsState() === "granted";
+  const boundedAttributionValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
+  const publicAttributionPage = () => {
+    const pathname = window.location.pathname;
+    return pathname === "/"
+      || pathname === "/privacy"
+      || pathname === "/image-licensing"
+      || /^\/(?:work|services)\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(pathname)
+      || pathname === "/field-notes/archive"
+      || /^\/field-notes\/\d{4}-(?:0[1-9]|1[0-2])$/.test(pathname);
+  };
+
+  const currentEnquiryAttribution = () => {
+    const params = new URLSearchParams(window.location.search);
+    let referrerHost = "";
+    try {
+      const referrer = document.referrer ? new URL(document.referrer) : null;
+      const currentHost = window.location.hostname.toLowerCase().replace(/^www\./, "");
+      const candidateHost = referrer?.hostname.toLowerCase().replace(/^www\./, "");
+      if (candidateHost && candidateHost !== currentHost && /^[a-z0-9.-]+$/.test(candidateHost)) {
+        referrerHost = candidateHost;
+      }
+    } catch (error) {
+      referrerHost = "";
+    }
+    return {
+      landing_path: boundedAttributionValue(window.location.pathname || "/", 240),
+      referrer_host: boundedAttributionValue(referrerHost, 253),
+      utm_source: boundedAttributionValue(params.get("utm_source"), 120),
+      utm_medium: boundedAttributionValue(params.get("utm_medium"), 120),
+      utm_campaign: boundedAttributionValue(params.get("utm_campaign"), 160),
+      utm_content: boundedAttributionValue(params.get("utm_content"), 160),
+      utm_term: boundedAttributionValue(params.get("utm_term"), 160),
+      consent_state: analyticsState()
+    };
+  };
+
+  const clearEnquiryAttribution = () => {
+    try {
+      sessionStorage.removeItem(enquiryAttributionStorageKey);
+      sessionStorage.removeItem(oldEnquiryAttributionStorageKey);
+    } catch (error) {
+      // Browser storage can be blocked; the form still works without it.
+    }
+  };
+
+  const storedEnquiryAttribution = () => {
+    try {
+      const stored = JSON.parse(sessionStorage.getItem(enquiryAttributionStorageKey) || "null");
+      if (stored?.consent_state !== "granted" || typeof stored.landing_path !== "string") return null;
+      return {
+        landing_path: boundedAttributionValue(stored.landing_path, 240),
+        referrer_host: boundedAttributionValue(stored.referrer_host, 253),
+        utm_source: boundedAttributionValue(stored.utm_source, 120),
+        utm_medium: boundedAttributionValue(stored.utm_medium, 120),
+        utm_campaign: boundedAttributionValue(stored.utm_campaign, 160),
+        utm_content: boundedAttributionValue(stored.utm_content, 160),
+        utm_term: boundedAttributionValue(stored.utm_term, 160),
+        consent_state: "granted"
+      };
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const captureFirstLanding = () => {
+    if (!hasAnalyticsConsent() || !publicAttributionPage()) return null;
+    try { sessionStorage.removeItem(oldEnquiryAttributionStorageKey); } catch (error) {}
+    const stored = storedEnquiryAttribution();
+    if (stored) return stored;
+    const attribution = currentEnquiryAttribution();
+    try { sessionStorage.setItem(enquiryAttributionStorageKey, JSON.stringify(attribution)); } catch (error) {}
+    return attribution;
+  };
+
+  const getEnquiryAttribution = () => {
+    if (hasAnalyticsConsent()) {
+      const firstLanding = storedEnquiryAttribution() || captureFirstLanding();
+      if (firstLanding) return firstLanding;
+    }
+    // An enquiry can include current-page context without analytics consent,
+    // but this context is not stored before the visitor submits the form.
+    return currentEnquiryAttribution();
+  };
+
   const disableAnalytics = () => {
     window[`ga-disable-${analyticsId}`] = true;
   };
@@ -121,8 +207,10 @@
     persistDecision(analytics);
 
     if (analytics === "granted") {
+      captureFirstLanding();
       initialiseGoogleTag();
     } else {
+      clearEnquiryAttribution();
       disableAnalytics();
       clearAnalyticsCookies();
     }
@@ -244,13 +332,16 @@
 
   window.StudioPrivacy = Object.freeze({
     getAnalyticsState: analyticsState,
+    getEnquiryAttribution,
     hasAnalyticsConsent,
     openSettings: () => openSettings(document.activeElement)
   });
 
   if (hasAnalyticsConsent()) {
+    captureFirstLanding();
     initialiseGoogleTag();
   } else {
+    clearEnquiryAttribution();
     disableAnalytics();
     clearAnalyticsCookies();
   }

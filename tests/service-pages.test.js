@@ -64,12 +64,13 @@ test("every service page is fully rendered with unique metadata and useful visib
     assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
     assert.match(html, /<meta name="robots" content="index, follow, max-image-preview:large">/);
     assert.match(html, /data-analytics="enabled"/);
-    assert.match(html, /privacy-consent\.js\?v=2026-07-18/);
+    assert.match(html, /privacy-consent\.js\?v=20261112-attribution/);
     assert.match(html, /google-tag\.js\?v=3/);
     assert.equal((html.match(/<h1>/g) || []).length, 1);
     assert.match(html, new RegExp(`<h1>${escapeRegex(page.h1)}</h1>`));
     assert.match(html, /Discuss the brief/);
-    assert.match(html, /utm_medium=service_page/);
+    assert.match(html, /href="\/#contact">Discuss the brief<\/a>/);
+    assert.doesNotMatch(html, /utm_source=website/);
     assert.doesNotMatch(html, /testimonial|guaranteed turnaround|starting (?:at|from) £|five-star/i);
 
     for (const project of page.projects) {
