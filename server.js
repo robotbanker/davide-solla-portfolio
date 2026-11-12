@@ -120,7 +120,8 @@ const server = http.createServer((req, res) => {
   const redirects = new Map([
     ["/index.html", "/"],
     ["/privacy.html", "/privacy"],
-    ["/image-licensing.html", "/image-licensing"]
+    ["/image-licensing.html", "/image-licensing"],
+    ["/newsletter/dist/2026-07.html", "/field-notes/2026-07"]
   ]);
   if (redirects.has(pathname)) {
     res.statusCode = 308;
