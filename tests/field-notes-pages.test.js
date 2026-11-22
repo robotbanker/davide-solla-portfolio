@@ -91,10 +91,26 @@ test("an issue is fully rendered in the initial HTML with unique Article metadat
   assert.equal(organization.name, "Davide Solla Studios");
   assert.equal(breadcrumb.itemListElement[1].item, "https://www.davidesolla.com/field-notes/archive");
 
-  assert.match(html, /href="\/field-notes\/2026-07" aria-current="page"/);
-  assert.match(html, /href="\/field-notes\/2026-06"/);
+  const issueNavigation = html.match(/<nav data-field-notes-archive>([\s\S]*?)<\/nav>/)?.[1] || "";
+  assert.match(issueNavigation, /href="\/field-notes\/2026-11"/);
+  assert.match(issueNavigation, /href="\/field-notes\/archive"/);
+  assert.doesNotMatch(issueNavigation, /href="\/field-notes\/2026-07"/);
+  assert.doesNotMatch(issueNavigation, /href="\/field-notes\/2026-06"/);
   assert.doesNotMatch(html, /<h3>Studio note<\/h3>/);
   assert.doesNotMatch(html, /<p>\s*<\/p>/);
+});
+
+test("the current issue navigation leaves earlier issues to the archive", () => {
+  const currentIssue = readJson("newsletter/data/issues/2026-11.json");
+  const currentManifest = readJson("newsletter/data/sources/2026-11.manifest.json");
+  const currentEntry = entries.find((entry) => entry.issueId === currentIssue.issueId);
+  const html = renderFieldNotesIssue(currentIssue, currentManifest, { entries, indexEntry: currentEntry });
+  const issueNavigation = html.match(/<nav data-field-notes-archive>([\s\S]*?)<\/nav>/)?.[1] || "";
+
+  assert.match(issueNavigation, /href="\/field-notes\/2026-11" aria-current="page"/);
+  assert.match(issueNavigation, /href="\/field-notes\/archive"/);
+  assert.doesNotMatch(issueNavigation, /href="\/field-notes\/2026-10"/);
+  assert.doesNotMatch(issueNavigation, /href="\/field-notes\/2026-09"/);
 });
 
 test("a non-empty studio note is rendered without publishing an empty editorial block", () => {
