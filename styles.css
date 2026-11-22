@@ -3782,7 +3782,7 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
   grid-row: auto;
 }
 .fine-grid:has(> .fine-image:nth-child(7):last-child) > .fine-image:nth-last-child(-n + 4) {
-  grid-column: span 3;
+  grid-column: span 6;
 }
 .fine-image, .fine-tall, .fine-portrait { aspect-ratio: 2 / 3; }
 .fine-image img { object-fit: contain; }
