@@ -49,6 +49,14 @@
       "publicationStatus": "published",
       "publishedAt": "2026-11-07T22:27:12.416Z",
       "updatedAt": "2026-11-07T22:27:12.416Z"
+    },
+    {
+      "issueId": "2026-11",
+      "month": "November",
+      "year": 2026,
+      "title": "Davide Studios: Monthly Newsletter — November Issue",
+      "status": "research-approved",
+      "publicationStatus": "draft"
     }
   ]
 }

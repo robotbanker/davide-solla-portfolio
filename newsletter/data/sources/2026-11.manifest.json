@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-11",
+  "dateChecked": "2026-11-22",
+  "status": "research-approved",
+  "manifestNotes": "Official institution and brand pages checked 22 November 2026. The three studio images and team links were supplied by Davide Studios. External imagery is linked from official hosts; live distribution permission and hosting of the three studio assets need confirmation before sending.",
+  "sources": [
+    {
+      "sourceId": "art-nue-black-aesthetic",
+      "section": "Art",
+      "storyTitle": "The Nue Black Aesthetic",
+      "officialSourceUrl": "https://designmuseum.org/exhibitions/the-nue-black-aesthetic",
+      "bookingUrl": "https://designmuseum.org/exhibitions/the-nue-black-aesthetic",
+      "imageCredit": "Installation view, The Nue Black Aesthetic. Photograph: Christian Cassiel / Design Museum.",
+      "usageStatus": "Official page image embedded; verify distribution permission before live send.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "The show foregrounds the individual point of view behind each object, then lets those voices meet in one shared space."
+    },
+    {
+      "sourceId": null,
+      "section": "Art",
+      "storyTitle": "Juno Calypso: Empty Pleasures",
+      "officialSourceUrl": "https://thephotographersgallery.org.uk/whats-on/juno-calypso-empty-pleasures",
+      "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/juno-calypso-empty-pleasures",
+      "imageCredit": "No image embedded; official exhibition imagery stays on the source page.",
+      "usageStatus": "Official source verified. No image embedded.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "Calypso uses styling, repetition and the set itself to expose the pressure behind a seemingly perfect image."
+    },
+    {
+      "sourceId": null,
+      "section": "Art",
+      "storyTitle": "Es Devlin: Other Worlds",
+      "officialSourceUrl": "https://designmuseum.org/exhibitions/es-devlin-other-worlds",
+      "bookingUrl": "https://designmuseum.org/exhibitions/es-devlin-other-worlds",
+      "imageCredit": "No image embedded; official exhibition imagery stays on the source page.",
+      "usageStatus": "Official source verified. No image embedded.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "The studio archive shows how image-making grows through sketches, materials, spatial decisions and collaboration."
+    },
+    {
+      "sourceId": "fashion-miumiu-holiday",
+      "section": "Fashion",
+      "storyTitle": "Miu Miu: An Uptown Fairytale",
+      "officialSourceUrl": "https://www.pradagroup.com/en/news-media/news-section/26-10-26-miumiu-holiday-26-campaign.html",
+      "bookingUrl": null,
+      "imageCredit": "Official Miu Miu Holiday 2026 campaign image. Photograph: Tina Barney.",
+      "usageStatus": "Official brand image embedded; verify distribution permission before live send.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "Tina Barney photographs Miu Miu’s holiday cast inside a townhouse dressed with fir branches, polished wood and winter light. The scenes have the formality of a family portrait, loosened by plush animals and unexpected pairings of tailoring, sequins and outerwear. Barney’s eye for domestic theatre gives each person room to occupy the frame, while styling and setting turn a seasonal gathering into a layered picture of character."
+    },
+    {
+      "sourceId": "fashion-loewe-ss27-preco",
+      "section": "Fashion",
+      "storyTitle": "LOEWE: Madrid, in Motion",
+      "officialSourceUrl": "https://www.loewe.com/int/en/pd/stories-collection/ss27-precollection-campaign.html",
+      "bookingUrl": null,
+      "imageCredit": "Official LOEWE Spring Summer 2027 precollection campaign image. Photography: Talia Chetrit and Julian Klincewicz.",
+      "usageStatus": "Official brand image embedded; verify distribution permission before live send.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "LOEWE’s precollection follows Diego Calva, Victoria Luengo, Kristine Frøseth and Jiang Qiming through Madrid’s markets, modernist buildings and tiled bars. Talia Chetrit and Julian Klincewicz photograph bold colour and hybrid materials against the city’s changing surfaces. The campaign’s value lies in the relationship between wardrobe and location: a garment shifts character as a person moves through different rooms, streets and moments of the day."
+    },
+    {
+      "sourceId": "fashion-burberry-festive",
+      "section": "Fashion",
+      "storyTitle": "Burberry: Wrapped in Burberry",
+      "officialSourceUrl": "https://www.burberryplc.com/news/brand/2026/burberry-celebrates-the-festive-season",
+      "bookingUrl": null,
+      "imageCredit": "Official Burberry Festive 2026 campaign image. Film direction: Harmony Korine.",
+      "usageStatus": "Official brand image embedded; verify distribution permission before live send.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "For its 170th year, Burberry gathers a cast at Longleat House for a playful country-house celebration directed by Harmony Korine. Fiona Shaw and Pierce Brosnan welcome guests from film, fashion and sport, making the campaign feel populated rather than posed in isolation. Checks, outerwear and the rooms themselves create a shared visual language. Its energy comes from the way distinct personalities inhabit one setting, each adding a note to the larger picture."
+    },
+    {
+      "sourceId": "studio-of-earth-and-ether",
+      "section": "On the Field",
+      "storyTitle": "Of Earth and Ether / Studio Notes",
+      "officialSourceUrl": "https://www.davidesolla.com/",
+      "bookingUrl": null,
+      "imageCredit": "Photography: Davide Studios. Model, styling, assistant styling and hair linked in the issue.",
+      "usageStatus": "Images supplied by Davide Studios; local derivatives created for newsletter. Public asset URLs need deployment before a live send.",
+      "dateChecked": "2026-11-22",
+      "selectedBecause": "Pre-Raphaelite-inspired studio work illustrates how open exchange in a strong editorial team shapes the final images.",
+      "localImagePaths": [
+        "assets/images/newsletter/2026-11/ivory-portrait.jpg",
+        "assets/images/newsletter/2026-11/ivory-detail.jpg",
+        "assets/images/newsletter/2026-11/of-earth-and-ether.jpg"
+      ]
+    }
+  ]
+}

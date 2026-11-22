@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "issueId": "2026-11",
+  "status": "research-approved",
+  "allowPlaceholders": false,
+  "publication": {
+    "status": "draft"
+  },
+  "month": "November",
+  "year": "2026",
+  "title": "Davide Studios: Monthly Newsletter — November Issue",
+  "preheader": "November in images: collaborative portraiture, new London exhibitions, and fashion campaigns built through distinct creative voices.",
+  "site": {
+    "brandName": "Davide Studios",
+    "baseUrl": "https://www.davidesolla.com",
+    "previewBaseUrl": "https://www.davidesolla.com",
+    "websiteUrl": "https://www.davidesolla.com/",
+    "instagramUrl": "https://www.instagram.com/davide.studios/",
+    "location": "London",
+    "unsubscribeUrl": "https://www.davidesolla.com/preferences",
+    "preferencesUrl": "https://www.davidesolla.com/preferences"
+  },
+  "research": {
+    "dateChecked": "2026-11-22",
+    "validationStatus": "research-approved",
+    "notes": "November 2026 edit researched from official institution and brand pages on 22 November. Davide Studios supplied the three studio portraits and team profile links. External images are credited and should be cleared for distribution before a live send; new studio asset URLs require hosting before a live send."
+  },
+  "openingNote": "November’s images return to the people who make them. A new studio portrait series draws on Pre-Raphaelite detail, while London exhibitions consider identity, self-portraiture and the making of worlds. In fashion, an intimate festive tableau, a city in motion and a country-house gathering offer three ways to build a story through setting and collaboration.",
+  "sections": {
+    "art": {
+      "label": "01 — Art",
+      "intro": "Portraiture, design and the construction of a visual world in London.",
+      "featured": {
+        "title": "The Nue Black Aesthetic",
+        "institution": "Design Museum",
+        "dates": "6 November 2026 – 8 August 2027",
+        "location": "224–238 Kensington High Street, London W8 6AG",
+        "description": "Guest-curated by Charlene Prempeh, The Nue Black Aesthetic brings together more than 100 objects across fashion, furniture, architecture, product design and sculpture. The exhibition resists a single definition of Black design, allowing distinct practices and diasporic histories to sit alongside one another. Its installations make a case for seeing identity as a source of many visual languages, rather than one fixed style.",
+        "sourceUrl": "https://designmuseum.org/exhibitions/the-nue-black-aesthetic",
+        "bookingUrl": "https://designmuseum.org/exhibitions/the-nue-black-aesthetic",
+        "ctaLabel": "View exhibition",
+        "whyItMatters": "The show foregrounds the individual point of view behind each object, then lets those voices meet in one shared space.",
+        "image": {
+          "type": "official-page-image",
+          "sourceId": "art-nue-black-aesthetic",
+          "src": "https://designmuseum.org/image/13d8a041-a7be-4dbc-8905-918e9f596866?height=606&width=980",
+          "alt": "Installation view of work in The Nue Black Aesthetic at the Design Museum",
+          "credit": "Installation view, The Nue Black Aesthetic. Photograph: Christian Cassiel / Design Museum."
+        }
+      },
+      "items": [
+        {
+          "title": "Juno Calypso: Empty Pleasures",
+          "institution": "The Photographers’ Gallery, Print Sales Gallery",
+          "dates": "26 November 2026 – 24 January 2027",
+          "location": "16–18 Ramillies Street, London W1F 7LW",
+          "description": "Juno Calypso’s staged self-portraits return alongside new collage and found imagery. Pastel interiors, mirrored figures and fragments from photographs of the 1970s and 1980s form an uneasy theatre of beauty and aspiration. Her solitary performances make the work feel both intimate and constructed, asking how much of a portrait belongs to the person in it and how much to the image they are expected to perform.",
+          "sourceUrl": "https://thephotographersgallery.org.uk/whats-on/juno-calypso-empty-pleasures",
+          "bookingUrl": "https://thephotographersgallery.org.uk/whats-on/juno-calypso-empty-pleasures",
+          "ctaLabel": "View exhibition",
+          "whyItMatters": "Calypso uses styling, repetition and the set itself to expose the pressure behind a seemingly perfect image."
+        },
+        {
+          "title": "Es Devlin: Other Worlds",
+          "institution": "Design Museum",
+          "dates": "2 October 2026 – 4 April 2027",
+          "location": "224–238 Kensington High Street, London W8 6AG",
+          "description": "The Design Museum traces three decades of Es Devlin’s work across sculpture, stage design, film, language and light. A replica of her studio places books, objects and maquettes beside early drawings and collages; a circular desk gathers projects from theatre, concerts and public installations. The exhibition makes visible the patient thinking behind large-scale spectacle, from an initial mark on paper to a space experienced by many people.",
+          "sourceUrl": "https://designmuseum.org/exhibitions/es-devlin-other-worlds",
+          "bookingUrl": "https://designmuseum.org/exhibitions/es-devlin-other-worlds",
+          "ctaLabel": "View exhibition",
+          "whyItMatters": "The studio archive shows how image-making grows through sketches, materials, spatial decisions and collaboration."
+        }
+      ]
+    },
+    "fashion": {
+      "label": "02 — Fashion",
+      "intro": "Three campaigns in which people, place and styling build the narrative together.",
+      "stories": [
+        {
+          "brand": "Miu Miu",
+          "title": "An Uptown Fairytale",
+          "releaseTiming": "Holiday 2026 campaign",
+          "commentary": "Tina Barney photographs Miu Miu’s holiday cast inside a townhouse dressed with fir branches, polished wood and winter light. The scenes have the formality of a family portrait, loosened by plush animals and unexpected pairings of tailoring, sequins and outerwear. Barney’s eye for domestic theatre gives each person room to occupy the frame, while styling and setting turn a seasonal gathering into a layered picture of character.",
+          "sourceUrl": "https://www.pradagroup.com/en/news-media/news-section/26-10-26-miumiu-holiday-26-campaign.html",
+          "imageCredit": "Official Miu Miu Holiday 2026 campaign image. Photograph: Tina Barney.",
+          "image": {
+            "type": "official-page-image",
+            "sourceId": "fashion-miumiu-holiday",
+            "src": "https://www.pradagroup.com/content/dam/pradagroup/immagini/newsandmedia/2026-news/Ottobre/2026-10-26-miumiu-holiday-campaign-26/02_gallery.jpg/_jcr_content/renditions/cq5dam.web.1920.1920.jpeg",
+            "alt": "Miu Miu Holiday 2026 campaign in a decorated townhouse"
+          }
+        },
+        {
+          "brand": "LOEWE",
+          "title": "Madrid, in Motion",
+          "releaseTiming": "Spring Summer 2027 precollection, available from 12 November 2026",
+          "commentary": "LOEWE’s precollection follows Diego Calva, Victoria Luengo, Kristine Frøseth and Jiang Qiming through Madrid’s markets, modernist buildings and tiled bars. Talia Chetrit and Julian Klincewicz photograph bold colour and hybrid materials against the city’s changing surfaces. The campaign’s value lies in the relationship between wardrobe and location: a garment shifts character as a person moves through different rooms, streets and moments of the day.",
+          "sourceUrl": "https://www.loewe.com/int/en/pd/stories-collection/ss27-precollection-campaign.html",
+          "imageCredit": "Official LOEWE Spring Summer 2027 precollection campaign image. Photography: Talia Chetrit and Julian Klincewicz.",
+          "image": {
+            "type": "official-page-image",
+            "sourceId": "fashion-loewe-ss27-preco",
+            "src": "https://www.loewe.com/dw/image/v2/BBPC_PRD/on/demandware.static/-/Library-Sites-LOW_SharedLibrary/default/dwf3344802/0%20SS27%20PRECO/MAIN%20CAMPAIGN/LOEWE_SS27_PRECO_MAIN_CAMPAIGN_STILL_LIFE_RGB_CROPPED_16x9_6.jpg?sfrm=jpg&sw=1300",
+            "alt": "LOEWE Spring Summer 2027 precollection campaign still life with colour and material contrast"
+          }
+        },
+        {
+          "brand": "Burberry",
+          "title": "Wrapped in Burberry",
+          "releaseTiming": "Festive 2026 campaign, launched 3 November",
+          "commentary": "For its 170th year, Burberry gathers a cast at Longleat House for a playful country-house celebration directed by Harmony Korine. Fiona Shaw and Pierce Brosnan welcome guests from film, fashion and sport, making the campaign feel populated rather than posed in isolation. Checks, outerwear and the rooms themselves create a shared visual language. Its energy comes from the way distinct personalities inhabit one setting, each adding a note to the larger picture.",
+          "sourceUrl": "https://www.burberryplc.com/news/brand/2026/burberry-celebrates-the-festive-season",
+          "imageCredit": "Official Burberry Festive 2026 campaign image. Film direction: Harmony Korine.",
+          "image": {
+            "type": "official-page-image",
+            "sourceId": "fashion-burberry-festive",
+            "src": "https://www.burberryplc.com/news/brand/2026/burberry-celebrates-the-festive-season/_jcr_content/root/responsivegrid/container_312007747/image.coreimg.jpeg/1793699018061/burberry-2026-festive-hero-srgb-cropped-clean-02-16x9.jpeg",
+            "alt": "Burberry Festive 2026 campaign gathering at Longleat House"
+          }
+        }
+      ]
+    },
+    "onTheField": {
+      "label": "03 — On the Field",
+      "intro": "A portrait made through shared imagination.",
+      "title": "Studio Notes: Of Earth and Ether",
+      "paragraphs": [
+        "This month’s portrait series takes its cue from Pre-Raphaelite portraiture: unbound hair, flowers, layered fabric and a gaze that holds the frame. We followed those details into a contemporary studio image, looking for a balance between quiet theatricality and the presence of the person in front of the camera.",
+        "The first portrait lets the hair and small flowers fill the space around Julianna. Styling, texture and pose were developed together, with every adjustment changing the shape of the picture. An editorial set becomes stronger when a trusted team can respond to what is happening in front of them, rather than simply execute a fixed plan.",
+        "The closer frame brings the exchange into focus. Each person’s opinion matters: a suggestion about a sleeve, a shift in the hair, or a different way to hold the light can open a better image. Speaking up gives the whole team a chance to build on an idea, and gives the subject room to shape it too.",
+        "In the final frame, the flowers travel through the hair against a darker ground. What began as a reference to painting became something made by this particular group of people. Strong editorial photographs carry the decisions of everyone who helped make them."
+      ],
+      "gallery": [
+        {
+          "type": "internal",
+          "src": "assets/images/newsletter/2026-11/ivory-portrait.jpg",
+          "alt": "Julianna reclining in an ivory dress and pearls, with flowers woven through her long hair",
+          "credit": "Photograph: Davide Studios / Of Earth and Ether"
+        },
+        {
+          "type": "internal",
+          "src": "assets/images/newsletter/2026-11/ivory-detail.jpg",
+          "alt": "Close portrait of Julianna framed by flowers, soft fabric and strands of pearls",
+          "credit": "Photograph: Davide Studios / Of Earth and Ether"
+        },
+        {
+          "type": "internal",
+          "src": "assets/images/newsletter/2026-11/of-earth-and-ether.jpg",
+          "alt": "Julianna in profile against a dark ground, with small white flowers threaded through her hair",
+          "credit": "Photograph: Davide Studios / Of Earth and Ether"
+        }
+      ],
+      "credits": [
+        {
+          "role": "Model",
+          "name": "@emperorjulianna",
+          "url": "https://www.instagram.com/emperorjulianna/"
+        },
+        {
+          "role": "Styling",
+          "name": "@Azra.sed",
+          "url": "https://www.instagram.com/Azra.sed/"
+        },
+        {
+          "role": "Assistant styling",
+          "name": "@estelleeber",
+          "url": "https://www.instagram.com/estelleeber/"
+        },
+        {
+          "role": "Hair",
+          "name": "@kat_astrophes",
+          "url": "https://www.instagram.com/kat_astrophes/"
+        }
+      ],
+      "cta": {
+        "label": "Explore Davide Studios",
+        "url": "https://www.davidesolla.com/"
+      }
+    }
+  },
+  "footer": {
+    "wordmark": "Davide Studios",
+    "copyright": "© 2026 Davide Studios. All rights reserved."
+  }
+}

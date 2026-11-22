@@ -340,6 +340,13 @@ const validateIssue = (issue, manifest, options = {}) => {
       requireField(errors, image?.alt, `onTheField.gallery.${index}.alt`);
       requireField(errors, image?.credit, `onTheField.gallery.${index}.credit`);
     });
+    (onTheField.credits || []).forEach((credit, index) => {
+      requireField(errors, credit?.role, `onTheField.credits.${index}.role`);
+      requireField(errors, credit?.name, `onTheField.credits.${index}.name`);
+      if (strict && !isUsableUrl(credit?.url)) {
+        errors.push(`onTheField.credits.${index}.url must be a profile URL.`);
+      }
+    });
   } else if (!onTheField?.image?.src && !onTheField?.imageRotation?.pool?.length) {
     errors.push("onTheField needs gallery images, image.src or imageRotation.pool.");
   }
@@ -513,6 +520,12 @@ const renderOnTheField = (issue) => {
           ` : ""}
         `;
       }).join("")}
+      ${Array.isArray(field.credits) && field.credits.length ? `
+        <tr><td style="border-top:1px solid ${tokens.warmLine};padding:22px 0 26px;">
+          <p style="color:${tokens.accent};font-family:${tokens.sans};font-size:11px;font-weight:700;letter-spacing:1.5px;margin:0 0 13px;text-transform:uppercase;">The team</p>
+          ${field.credits.map((credit) => `<p style="color:${tokens.softInk};font-family:${tokens.sans};font-size:13px;line-height:1.7;margin:0 0 5px;">${escapeHtml(credit.role)}: <a href="${escapeAttr(credit.url)}" style="color:${tokens.porcelain};text-decoration:underline;">${escapeHtml(credit.name)}</a></p>`).join("")}
+        </td></tr>
+      ` : ""}
       ${field.cta ? `
         <tr>
           <td style="padding:2px 0 0;">${renderCta(field.cta.label || "Visit Davide Studios", field.cta.url)}</td>
