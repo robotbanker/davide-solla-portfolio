@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.davidesolla.com/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-22</lastmod>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/hero-cosmic-girl.jpg</image:loc>
     </image:image>
@@ -38,6 +38,9 @@
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/petals-03.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/dark-baroque-06.jpg</image:loc>
@@ -386,6 +389,46 @@
     </image:image>
     <image:image>
       <image:loc>https://www.davidesolla.com/assets/images/petals-03.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.davidesolla.com/work/of-earth-and-ether</loc>
+    <lastmod>2026-11-22</lastmod>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-01.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-02.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-03.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-04.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-05.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-06.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-07.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-08.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-09.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-10.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-11.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.davidesolla.com/assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg</image:loc>
     </image:image>
   </url>
   <url>

@@ -394,6 +394,72 @@
       ]
     },
     {
+      "id": "of-earth-and-ether",
+      "updatedAt": "2026-11-22T15:07:37.000Z",
+      "servicePath": "/services/fine-art-portrait-commissions",
+      "section": "fine-art",
+      "title": "Of Earth and Ether",
+      "kicker": "Fine art portrait",
+      "description": "A fine-art portrait series shaped by ivory and rose silk, cascading curls, baby's breath, pearls, and painterly studio light.",
+      "covers": [
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg",
+          "alt": "Of Earth and Ether full-length portrait in rose silk with cascading curls",
+          "previewPosition": "50% 50%"
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-01.jpg",
+          "alt": "Of Earth and Ether close portrait with baby's breath woven through long curls"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-02.jpg",
+          "alt": "Of Earth and Ether direct-gaze portrait in ivory with baby's breath"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-03.jpg",
+          "alt": "Of Earth and Ether three-quarter portrait in an ivory dress"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-04.jpg",
+          "alt": "Of Earth and Ether full-length portrait in flowing ivory fabric"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-05.jpg",
+          "alt": "Of Earth and Ether reclining portrait framed by a halo of baby's breath"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-06.jpg",
+          "alt": "Of Earth and Ether reclining beauty portrait with layered pearls"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-07.jpg",
+          "alt": "Of Earth and Ether reclining portrait with a raised hand and pearl necklace"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-08.jpg",
+          "alt": "Of Earth and Ether intimate beauty portrait through soft dried flowers"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-09.jpg",
+          "alt": "Of Earth and Ether hand study on softly gathered ivory fabric"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-10.jpg",
+          "alt": "Of Earth and Ether portrait in rose silk with pearls and cascading curls"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-11.jpg",
+          "alt": "Of Earth and Ether seated portrait in rose silk and ivory stockings"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg",
+          "alt": "Of Earth and Ether full-length portrait in rose silk with cascading curls"
+        }
+      ]
+    },
+    {
       "id": "dark-baroque",
       "updatedAt": "2026-11-12T08:18:58.000Z",
       "servicePath": "/services/fashion-photographer-london",
@@ -563,5 +629,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-11-12T08:18:58.000Z"
+  "updatedAt": "2026-11-22T15:07:37.000Z"
 }

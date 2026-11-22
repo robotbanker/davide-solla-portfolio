@@ -100,6 +100,20 @@ test("Dreamland and Kihaya Blues preserve their authored covers, image order, an
   }
 });
 
+test("Of Earth and Ether publishes as a complete fine-art story", () => {
+  const album = siteData.albums.find((item) => item.id === "of-earth-and-ether");
+  assert.ok(album);
+  assert.equal(album.section, "fine-art");
+  assert.equal(album.images.length, 12);
+  assert.equal(album.covers[0].src, "assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg");
+  assert.ok(album.images.every((image) => fs.existsSync(image.src)));
+
+  const html = renderProjectPage(siteData, "of-earth-and-ether");
+  assert.match(html, /<link rel="canonical" href="https:\/\/www\.davidesolla\.com\/work\/of-earth-and-ether">/);
+  assert.match(html, /A fine-art portrait series shaped by ivory and rose silk/);
+  assert.equal((html.match(/class="project-frame/g) || []).length, 12);
+});
+
 test("uploaded gallery leads use complete responsive variants and other uploads fall back to originals", () => {
   const html = renderProjectPage(siteData, "dreamland");
   assert.match(html, /<link rel="preload" as="image" href="\/assets\/images\/responsive\/dreamland-1-799451ec-1200\.avif"/);
