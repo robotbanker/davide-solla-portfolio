@@ -395,7 +395,7 @@
     },
     {
       "id": "of-earth-and-ether",
-      "updatedAt": "2026-11-22T15:07:37.000Z",
+      "updatedAt": "2026-11-22T15:17:24.000Z",
       "servicePath": "/services/fine-art-portrait-commissions",
       "section": "fine-art",
       "title": "Of Earth and Ether",
@@ -403,8 +403,13 @@
       "description": "A fine-art portrait series shaped by ivory and rose silk, cascading curls, baby's breath, pearls, and painterly studio light.",
       "covers": [
         {
-          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg",
-          "alt": "Of Earth and Ether full-length portrait in rose silk with cascading curls",
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-05.jpg",
+          "alt": "Of Earth and Ether reclining portrait framed by a halo of baby's breath",
+          "previewPosition": "50% 50%"
+        },
+        {
+          "src": "assets/images/uploads/2026-11-22/of-earth-and-ether-01.jpg",
+          "alt": "Of Earth and Ether close portrait with baby's breath woven through long curls",
           "previewPosition": "50% 50%"
         }
       ],
@@ -629,5 +634,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-11-22T15:07:37.000Z"
+  "updatedAt": "2026-11-22T15:17:24.000Z"
 }

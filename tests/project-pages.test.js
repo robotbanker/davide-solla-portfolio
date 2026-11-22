@@ -105,7 +105,10 @@ test("Of Earth and Ether publishes as a complete fine-art story", () => {
   assert.ok(album);
   assert.equal(album.section, "fine-art");
   assert.equal(album.images.length, 12);
-  assert.equal(album.covers[0].src, "assets/images/uploads/2026-11-22/of-earth-and-ether-12.jpg");
+  assert.deepEqual(album.covers.map((cover) => cover.src), [
+    "assets/images/uploads/2026-11-22/of-earth-and-ether-05.jpg",
+    "assets/images/uploads/2026-11-22/of-earth-and-ether-01.jpg"
+  ]);
   assert.ok(album.images.every((image) => fs.existsSync(image.src)));
 
   const html = renderProjectPage(siteData, "of-earth-and-ether");

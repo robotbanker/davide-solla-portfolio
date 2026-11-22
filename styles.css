@@ -3773,6 +3773,17 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
 .split-heading h2 { max-width: 20ch; }
 .fine-art-copy { padding-left: 12%; }
 .fine-grid { gap: 26px; }
+.fine-grid:has(> .fine-image:nth-child(7):last-child) {
+  align-items: start;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.fine-grid:has(> .fine-image:nth-child(7):last-child) > .fine-image {
+  grid-column: span 4;
+  grid-row: auto;
+}
+.fine-grid:has(> .fine-image:nth-child(7):last-child) > .fine-image:nth-last-child(-n + 4) {
+  grid-column: span 3;
+}
 .fine-image, .fine-tall, .fine-portrait { aspect-ratio: 2 / 3; }
 .fine-image img { object-fit: contain; }
 .fine-image { border: 0; }
@@ -3862,6 +3873,15 @@ h2 { font-size: clamp(38px, 4.4vw, 72px); letter-spacing: -0.035em; line-height:
 
   .service-grid, .service-detail > .section-cta { margin-left: 0; }
   .fine-art-copy { padding: 0; max-width: 540px; }
+  .fine-grid:has(> .fine-image:nth-child(7):last-child) {
+    grid-template-columns: 1fr;
+  }
+  .fine-grid:has(> .fine-image:nth-child(7):last-child) > .fine-image,
+  .fine-grid:has(> .fine-image:nth-child(7):last-child) > .fine-image:nth-last-child(-n + 4) {
+    aspect-ratio: auto;
+    grid-column: 1;
+    grid-row: auto;
+  }
   .about { grid-template-columns: 1fr 0.8fr; gap: 7%; }
   .contact { grid-template-columns: 1fr; gap: 50px; }
   .contact h2 { max-width: 23ch; }
