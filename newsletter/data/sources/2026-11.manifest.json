@@ -3,7 +3,7 @@
   "issueId": "2026-11",
   "dateChecked": "2026-11-22",
   "status": "research-approved",
-  "manifestNotes": "Official institution and brand pages checked 22 November 2026. The three studio images and team links were supplied by Davide Studios. External imagery is linked from official hosts; live distribution permission and hosting of the three studio assets need confirmation before sending.",
+  "manifestNotes": "Official institution and brand pages checked 22 November 2026. The three studio images and team links were supplied by Davide Studios. Studio assets are staged with the website issue. External imagery is linked from official hosts; distribution permission needs sender review before an audience email send.",
   "sources": [
     {
       "sourceId": "art-nue-black-aesthetic",
@@ -78,7 +78,7 @@
       "officialSourceUrl": "https://www.davidesolla.com/",
       "bookingUrl": null,
       "imageCredit": "Photography: Davide Studios. Model, styling, assistant styling and hair linked in the issue.",
-      "usageStatus": "Images supplied by Davide Studios; local derivatives created for newsletter. Public asset URLs need deployment before a live send.",
+      "usageStatus": "Images supplied by Davide Studios; compressed metadata-free derivatives included with the website issue.",
       "dateChecked": "2026-11-22",
       "selectedBecause": "Pre-Raphaelite-inspired studio work illustrates how open exchange in a strong editorial team shapes the final images.",
       "localImagePaths": [

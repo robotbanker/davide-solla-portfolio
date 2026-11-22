@@ -4,7 +4,7 @@
   "status": "research-approved",
   "allowPlaceholders": false,
   "publication": {
-    "status": "draft"
+    "status": "published"
   },
   "month": "November",
   "year": "2026",
@@ -23,7 +23,7 @@
   "research": {
     "dateChecked": "2026-11-22",
     "validationStatus": "research-approved",
-    "notes": "November 2026 edit researched from official institution and brand pages on 22 November. Davide Studios supplied the three studio portraits and team profile links. External images are credited and should be cleared for distribution before a live send; new studio asset URLs require hosting before a live send."
+    "notes": "November 2026 edit researched from official institution and brand pages on 22 November. Davide Studios supplied the three studio portraits and team profile links. Official external images are credited; distribution permission remains recorded in the source manifest for sender review."
   },
   "openingNote": "November’s images return to the people who make them. A new studio portrait series draws on Pre-Raphaelite detail, while London exhibitions consider identity, self-portraiture and the making of worlds. In fashion, an intimate festive tableau, a city in motion and a country-house gathering offer three ways to build a story through setting and collaboration.",
   "sections": {
