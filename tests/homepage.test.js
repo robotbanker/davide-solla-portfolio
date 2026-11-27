@@ -54,12 +54,12 @@ test("the clean homepage is cacheable while the direct API alias is noindex", ()
   assert.equal(alias.headers["x-robots-tag"], "noindex, nofollow");
 });
 
-test("the cover pairs seven published stories with their service and responsive photographs", () => {
+test("the cover pairs eight published stories with their service and responsive photographs", () => {
   const hero = renderHomepage().split("<!-- homepage-hero:start -->")[1].split("<!-- homepage-hero:end -->")[0];
   const frames = [...hero.matchAll(/<article\b[^>]*data-series="([^"]+)"[^>]*>([\s\S]*?)<\/article>/g)];
   const expected = {
     "of-earth-and-ether": "Fine art", kintsugi: "Fine art", roxana: "Fashion", sophie: "Fashion",
-    dreamland: "Location shoots", julia: "Location shoots", "kihaya-blues": "Studio work"
+    cosmic: "Studio work", dreamland: "Location shoots", julia: "Location shoots", "kihaya-blues": "Studio work"
   };
   assert.equal(frames.length, Object.keys(expected).length);
   assert.deepEqual(new Set(frames.map(([, id]) => id)), new Set(Object.keys(expected)));
