@@ -47,7 +47,14 @@
 
   async function move(direction, manual) {
     const start = requested;
-    if (manual) setPaused(true);
+    if (manual) {
+      setPaused(true);
+      // Keep the new composition in view when the visitor reaches the arrows by scrolling.
+      const header = document.querySelector("[data-header]");
+      if (header && stage.getBoundingClientRect().top < header.getBoundingClientRect().bottom - 12) {
+        carousel.closest(".portfolio-cover").scrollIntoView({ block: "start", behavior: "instant" });
+      }
+    }
     clearTimeout(timer);
     const ticket = ++revision;
     for (let step = 1; step <= slides.length; step++) {

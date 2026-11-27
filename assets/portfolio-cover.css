@@ -147,6 +147,11 @@
   .cover-actions { gap: clamp(12px, 4vw, 24px); }
   .cover-actions a { font-size: 11px; white-space: nowrap; }
 }
+@media (min-width: 741px) and (max-height: 500px) {
+  .cover-stage .eyebrow { top: 14px; max-width: none; font-size: 10px; }
+  .cover-legend { bottom: 12px; }
+  .cover-legend h2 { margin-bottom: 2px; font-size: clamp(42px, 6vw, 72px); }
+}
 @media (prefers-reduced-motion: reduce) {
   .cover-slide, .cover-legend h2, .cover-legend a, [data-current] .cover-legend h2, [data-current] .cover-legend a { transition: none; transform: none; }
 }
