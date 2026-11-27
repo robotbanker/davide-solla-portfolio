@@ -42,7 +42,8 @@ test("homepage cards exclude incomplete and duplicate projects that cannot resol
   const html = renderHomepage(data);
   assert.doesNotMatch(html, /href="\/work\/incomplete"/);
   const slug = data.albums[0].projectPage?.slug || data.albums[0].id;
-  assert.equal((html.match(new RegExp(`href="/work/${slug}"`, "g")) || []).length, 1);
+  const cards = html.split("<!-- homepage-editorials:start -->")[1].split("<!-- homepage-editorials:end -->")[0];
+  assert.equal((cards.match(new RegExp(`href="/work/${slug}"`, "g")) || []).length, 1);
 });
 
 test("non-indexable API copies and missing project responses cannot persist in shared caches", () => {
