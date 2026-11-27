@@ -9,7 +9,8 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  height: clamp(480px, calc(100svh - var(--header-height) - 70px), 900px);
+  container-type: size;
+  height: clamp(230px, calc(100svh - var(--header-height) - 70px), 900px);
   touch-action: pan-y pinch-zoom;
 }
 .cover-stage .eyebrow {
@@ -28,6 +29,7 @@
 .cover-slide {
   --matte: #171d1a;
   --aperture: 75%;
+  --max-aperture: 180cqh;
   --focus: 50% 50%;
   position: absolute;
   inset: 0;
@@ -39,17 +41,18 @@
   pointer-events: none;
 }
 .cover-slide[data-current] { z-index: 1; opacity: 1; pointer-events: auto; }
-.cover-slide[data-series="of-earth-and-ether"] { --aperture: 58%; --focus: 50% 21%; }
-.cover-slide[data-series="sophie"] { --matte: #1c1015; --focus: 53% 35%; }
-.cover-slide[data-series="dreamland"] { --matte: #16191a; --focus: 55% 47%; }
-.cover-slide[data-series="kintsugi"] { --matte: #100e0e; --aperture: 58%; --focus: 50% 28%; }
+.cover-slide[data-series="of-earth-and-ether"] { --aperture: 58%; --max-aperture: 120cqh; --focus: 50% 21%; }
+.cover-slide[data-series="sophie"] { --matte: #201923; --focus: 57% 16%; }
+.cover-slide[data-series="dreamland"] { --matte: #202721; --focus: 54% 50%; }
+.cover-slide[data-series="kintsugi"] { --matte: #100e0e; --aperture: 58%; --max-aperture: 120cqh; --focus: 50% 28%; }
 .cover-slide[data-series="roxana"] { --matte: #241117; --focus: 66% 38%; }
-.cover-slide[data-series="julia"] { --matte: #201c1a; --focus: 25% 32%; }
+.cover-slide[data-series="julia"] { --matte: #211e1c; --aperture: 58%; --max-aperture: 120cqh; --focus: 42% 24%; }
 .cover-slide[data-series="kihaya-blues"] { --matte: #101421; --focus: 53% 38%; }
 .cover-slide picture {
   position: absolute;
   inset: 0 0 0 auto;
   width: var(--aperture);
+  width: min(var(--aperture), var(--max-aperture));
 }
 .cover-slide picture::after {
   content: "";
@@ -129,7 +132,7 @@
 @media (max-width: 1280px) { .portfolio-cover { --header-height: 80px; } }
 @media (max-width: 740px) {
   .portfolio-cover { --header-height: 76px; }
-  .cover-stage { height: clamp(405px, calc(100svh - var(--header-height) - 116px), min(135vw, 770px)); }
+  .cover-stage { height: clamp(220px, calc(100svh - var(--header-height) - 116px), min(135vw, 770px)); }
   .cover-slide { top: 32px; }
   .cover-slide picture { width: 100%; }
   .cover-slide img { object-position: center; }

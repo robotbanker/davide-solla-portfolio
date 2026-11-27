@@ -68,8 +68,8 @@ test("the cover pairs seven published stories with their service and responsive 
     assert.ok(frame.includes('<h2>' + expected[id] + '</h2>'));
     assert.ok(frame.includes('href="/work/' + id + '"'));
     for (const size of ["wide", "phone"]) {
-      const file = 'assets/images/cover-series/' + id + '-' + size + '.webp';
-      assert.ok(frame.includes(file) && fs.existsSync(file));
+      const source = frame.match(new RegExp('assets/images/cover-series/' + id + '-' + size + '(?:-[0-9]+)?\\.webp'));
+      assert.ok(source && fs.existsSync(source[0]));
     }
   }
 });
